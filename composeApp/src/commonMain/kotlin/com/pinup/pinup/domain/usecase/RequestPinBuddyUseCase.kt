@@ -1,0 +1,13 @@
+package com.pinup.pinup.domain.usecase
+
+import com.pinup.pinup.domain.model.PResult
+import com.pinup.pinup.domain.repository.PinBuddyRepository
+import javax.inject.Inject
+
+class RequestPinBuddyUseCase (
+    private val pinBuddyRepository: PinBuddyRepository,
+) {
+    suspend operator fun invoke(receiverId: Int): PResult<Unit> {
+        return pinBuddyRepository.requestPinBuddy(receiverId)
+    }
+}

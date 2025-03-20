@@ -1,0 +1,227 @@
+package com.pinup.pinup
+
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.*
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.pinup.pinup.event.DetailPlaceEventBus
+import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
+import com.pinup.pinup.ui.component.LogoutDialog
+import com.pinup.pinup.ui.login.compose.LoginRoute
+import com.pinup.pinup.ui.main.compose.MainNavHost
+import com.pinup.pinup.ui.pinbuddy.PinBuddyRoute
+import com.pinup.pinup.ui.reviewwrite.compose.WriteReviewNavHost
+import com.pinup.pinup.ui.setting.SettingNavHost
+import com.pinup.pinup.ui.signup.compose.SignUpRoute
+import com.pinup.pinup.ui.userprofile.UserProfileRoute
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.koin.compose.viewmodel.koinViewModel
+
+@Composable
+@Preview
+fun PinUpApp(
+    navHostController: NavHostController = rememberNavController(),
+    startAppViewModel: StartAppViewModel = koinViewModel(),
+    scope: CoroutineScope = rememberCoroutineScope()
+) {
+    val uiState = startAppViewModel.uiState.collectAsStateWithLifecycle()
+    val startDestination = when (uiState.value.isLogin) {
+        true -> {
+            PinUpAppDestination.Main
+        }
+        false -> {
+            PinUpAppDestination.Login
+        }
+        else -> {
+            return
+        }
+    }
+
+    fun moveMain() {
+        navHostController.navigate(PinUpAppDestination.Main) {
+            popUpTo(navHostController.graph.id) {
+                inclusive = true
+            }
+        }
+    }
+
+    MaterialTheme {
+        Box {
+            NavHost(
+                startDestination = startDestination,
+                navController = navHostController
+            ) {
+                composable<PinUpAppDestination.Login>(
+                    enterTransition = {
+                        slideInHorizontally(initialOffsetX = { it })
+                    },
+                    popEnterTransition = {
+                        fadeIn(animationSpec = tween(200))
+                    },
+                    popExitTransition = {
+                        slideOutHorizontally(targetOffsetX = { it })
+                    }
+                ){
+                    LoginRoute(
+                        onMoveSignUp = {
+                            val snsUserInfoString = Json.encodeToString(it)
+                            navHostController.navigate(PinUpAppDestination.SignUp(snsUserInfoString))
+                        },
+                        onMoveMain = {
+                            moveMain()
+                        }
+                    )
+                }
+
+                composable<PinUpAppDestination.SignUp>(
+                    enterTransition = {
+                        slideInHorizontally(initialOffsetX = { it })
+                    },
+                    popEnterTransition = {
+                        fadeIn(animationSpec = tween(200))
+                    },
+                    popExitTransition = {
+                        slideOutHorizontally(targetOffsetX = { it })
+                    }
+                ) {
+                    SignUpRoute(
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
+                        onMoveMain = {
+                            moveMain()
+                        }
+                    )
+                }
+
+                composable<PinUpAppDestination.Main> {
+                    MainNavHost(
+                        onMoveWriteReview = {
+                            navHostController.navigate(PinUpAppDestination.WriteReview)
+                        },
+                        onMoveAddPinBuddy = {
+                            navHostController.navigate(PinUpAppDestination.AddPinBuddy)
+                        },
+                        onMovePinBuddy = {
+                            navHostController.navigate(PinUpAppDestination.PinBuddy)
+                        },
+                        onMoveSetting = {
+                            navHostController.navigate(PinUpAppDestination.Setting)
+                        }
+                    )
+                }
+
+                composable<PinUpAppDestination.WriteReview> {
+                    WriteReviewNavHost(
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
+                        onMoveDetailPlace = {
+                            scope.launch {
+                                DetailPlaceEventBus.sendEvent(it)
+                                navHostController.popBackStack()
+                            }
+                        }
+                    )
+                }
+
+                composable<PinUpAppDestination.AddPinBuddy> {
+                    AddPinBuddyRoute(
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
+                        onMoveUserProfile = {
+                            navHostController.navigate(PinUpAppDestination.UserProfile(it))
+                        }
+                    )
+                }
+
+                composable<PinUpAppDestination.UserProfile> {
+                    UserProfileRoute(
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        }
+                    )
+                }
+
+                composable<PinUpAppDestination.PinBuddy> {
+                    PinBuddyRoute(
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
+                        onMoveUserProfile = {
+                            navHostController.navigate(PinUpAppDestination.UserProfile(it))
+                        }
+                    )
+                }
+
+                composable<PinUpAppDestination.Setting> {
+                    SettingNavHost(
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
+                        onMoveLoginScreen = {
+                            navHostController.navigate(PinUpAppDestination.Login) {
+                                popUpTo(navHostController.graph.id) {
+                                    inclusive = true
+                                }
+                            }
+                        }
+                    )
+                }
+            }
+
+            LogoutDialog(
+                alertState = uiState.value.alertState,
+                onLogoutClick = {
+                    navHostController.navigate(PinUpAppDestination.Login) {
+                        popUpTo(navHostController.graph.id) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onDisMissRequest = startAppViewModel::dismissAlert
+            )
+        }
+    }
+}
+
+
+sealed interface PinUpAppDestination {
+    @Serializable
+    data object Main : PinUpAppDestination {
+        @Serializable
+        data class DetailPlace(val kakaoPlaceId: String) : PinUpAppDestination
+    }
+    @Serializable
+    data object WriteReview : PinUpAppDestination
+    @Serializable
+    data object AddPinBuddy : PinUpAppDestination
+    @Serializable
+    data class UserProfile(
+        val memberId: Int,
+    ) : PinUpAppDestination
+    @Serializable
+    data object PinBuddy : PinUpAppDestination
+    @Serializable
+    data object Setting : PinUpAppDestination
+    @Serializable
+    data object Login : PinUpAppDestination
+    @Serializable
+    data class SignUp(
+        val snsUserInfo: String
+    ) : PinUpAppDestination
+}

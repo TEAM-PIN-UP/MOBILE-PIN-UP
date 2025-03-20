@@ -1,0 +1,23 @@
+package com.pinup.pinup.ui.addpinbuddy
+
+import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.toPersistentList
+
+@Composable
+fun AddPinBuddyRoute(
+    onBackPressed: () -> Unit,
+    onMoveUserProfile: (Int) -> Unit,
+    viewModel: AddPinBuddyViewModel = hiltViewModel()
+) {
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    AddPinBuddyScreen(
+        query = uiState.value.query,
+        pinBuddies = uiState.value.pinBuddies?.toPersistentList(),
+        onValueChange = viewModel::updateQuery,
+        onBackPressed = onBackPressed,
+        onSearch = viewModel::search,
+        onProfileClick = onMoveUserProfile,
+    )
+}
