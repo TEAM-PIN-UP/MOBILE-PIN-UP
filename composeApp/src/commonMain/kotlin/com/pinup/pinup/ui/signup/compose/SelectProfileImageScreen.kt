@@ -1,8 +1,5 @@
 package com.pinup.pinup.ui.signup.compose
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -25,25 +22,30 @@ import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.component.PButton
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
+import com.preat.peekaboo.image.picker.SelectionMode
+import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
+import androidx.compose.runtime.rememberCoroutineScope
 
 @Composable
 fun SelectProfileImageScreen(
-    profileImage: String,
+    profileImage: ByteArray,
     nickname: String,
-    onUpdateProfileImage: (String) -> Unit,
-    onMoveTermsOfService: () -> Unit
-
+    onUpdateProfileImage: (ByteArray) -> Unit,
+    onMoveTermsOfService: () -> Unit,
 ) {
-    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri ->
-            if (uri != null) {
-                onUpdateProfileImage(uri.toString())
+    val scope = rememberCoroutineScope()
+    val singleImagePicker = rememberImagePickerLauncher(
+        selectionMode = SelectionMode.Single,
+        scope = scope,
+        onResult = { byteArrays ->
+            byteArrays.firstOrNull()?.let {
+                onUpdateProfileImage(it)
             }
         }
     )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,9 +76,7 @@ fun SelectProfileImageScreen(
                 Image(
                     modifier = Modifier
                         .clickableSingleWithNoRipple {
-                            singlePhotoPickerLauncher.launch(
-                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                            )
+                            singleImagePicker.launch()
                         },
                     painter = painterResource(Res.drawable.ic_profile_select),
                     contentDescription = null,
@@ -88,9 +88,7 @@ fun SelectProfileImageScreen(
                             .clip(CircleShape)
                             .size(100.dp)
                             .clickableSingleWithNoRipple {
-                                singlePhotoPickerLauncher.launch(
-                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                                )
+                                singleImagePicker.launch()
                             },
                         model = profileImage,
                         contentScale = ContentScale.Crop,
@@ -125,9 +123,7 @@ fun SelectProfileImageScreen(
             PButton(
                 text = "사진 선택하기",
                 onClick = {
-                    singlePhotoPickerLauncher.launch(
-                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                    )
+                    singleImagePicker.launch()
                 }
             )
 

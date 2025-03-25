@@ -6,25 +6,44 @@ import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SortType
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.delete
+import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.parameters
+import io.ktor.http.path
 
-interface BookmarksApi {
-    @POST("api/bookmarks")
-    suspend fun addBookmark(@Body request: AddBookmarksRequest): PResult<PResponse<Int>>
+class BookmarksApi(
+    private val httpClient: HttpClient
+) {
+    suspend fun addBookmark(request: AddBookmarksRequest): PResult<PResponse<Int>> {
+        val response = httpClient.post("api/bookmarks") {
+            setBody(request)
+        }
+        return response.body()
+    }
 
-    @DELETE("api/bookmarks/{kakaoPlaceId}")
-    suspend fun deleteBookmark(@Path("kakaoPlaceId") kakaoPlaceId: String): PResult<PResponse<Unit>>
+    suspend fun deleteBookmark(kakaoPlaceId: String): PResult<PResponse<Unit>> {
+        val response = httpClient.delete("api/bookmarks/$kakaoPlaceId")
+        return response.body()
+    }
 
-    @GET("api/bookmarks")
     suspend fun getBookmarks(
-        @Query("category") category: Category,
-        @Query("sort") sort: SortType,
-        @Query("currentLatitude") currentLatitude: String,
-        @Query("currentLongitude") currentLongitude: String,
-        ): PResult<PResponse<List<GetBookmarksResponse>>>
+        category: Category,
+        sort: SortType,
+        currentLatitude: String,
+        currentLongitude: String,
+    ): PResult<PResponse<List<GetBookmarksResponse>>> {
+        val response = httpClient.get("api/bookmarks") {
+            parameters {
+                append("category", category.toString())
+                append("sort", sort.toString())
+                append("currentLatitude", currentLatitude)
+                append("currentLongitude", currentLongitude)
+            }
+        }
+        return response.body()
+    }
 }

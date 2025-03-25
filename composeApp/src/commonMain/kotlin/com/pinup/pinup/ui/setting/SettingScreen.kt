@@ -39,9 +39,9 @@ fun SettingScreen(
     onLogoutClick: () -> Unit = {}
 ) {
     val context = LocalPlatformContext.current
-    val packageInfo = remember {
-        context.packageManager.getPackageInfo(context.packageName, 0)
-    }
+//    val packageInfo = remember {
+//        context.packageManager.getPackageInfo(context.packageName, 0)
+//    }
     val isShowLogoutDialog = remember { mutableStateOf(false) }
 
     Column(
@@ -147,7 +147,7 @@ fun SettingScreen(
                 text = "앱버전",
                 content = {
                     Text(
-                        text = "V ${packageInfo.versionName}",
+                        text = "V ${1.0}",
                         style = Typography.H6,
                         color = Colors.Neutral400
                     )

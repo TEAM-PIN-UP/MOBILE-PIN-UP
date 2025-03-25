@@ -4,11 +4,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
+
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
+
 
 @Composable
 fun ReviewImage(
@@ -28,13 +28,5 @@ fun ReviewImage(
                 contentDescription = "default profile image"
             )
         }
-    }
-}
-
-@Composable
-@Preview
-private fun ReviewImagePreview() {
-    PinUPTheme {
-        ReviewImage("")
     }
 }

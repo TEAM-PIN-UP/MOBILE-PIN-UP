@@ -1,11 +1,9 @@
 package com.pinup.pinup.ui.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,9 +11,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,15 +33,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
+
 import com.pinup.pinup.ui.theme.Typography
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ReviewTextField(
     modifier: Modifier = Modifier,
@@ -129,7 +127,7 @@ fun ReviewTextField(
                 visualTransformation = visualTransformation,
                 interactionSource = interactionSource,
                 decorationBox = @Composable { innerTextField ->
-                    TextFieldDefaults.DecorationBox(
+                    TextFieldDefaults.TextFieldDecorationBox(
                         value = textFieldValue.text,
                         visualTransformation = visualTransformation,
                         innerTextField = @Composable {
@@ -155,9 +153,8 @@ fun ReviewTextField(
                         enabled = enabled,
                         shape = RoundedCornerShape(cornerRounded.dp),
                         interactionSource = interactionSource,
-                        colors = TextFieldDefaults.colors(
-                            focusedContainerColor = backgroundColor,
-                            unfocusedContainerColor = backgroundColor,
+                        colors = TextFieldDefaults.textFieldColors(
+                            backgroundColor = backgroundColor,
                             cursorColor = cursorColor,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
@@ -189,35 +186,5 @@ fun ReviewTextField(
                 )
             }
         }
-    }
-}
-
-@Composable
-@Preview
-private fun ReviewTextFieldPreview1() {
-    PinUPTheme {
-        ReviewTextField(
-            text = "테스트",
-            placeholder = "테스트입니당 ㅎㅎㅎ",
-            maxLength = 400,
-            onValueChange = {}
-        )
-    }
-}
-
-@Composable
-@Preview
-private fun ReviewTextFieldPreview2() {
-    PinUPTheme {
-        ReviewTextField(
-            text = "테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트\n" +
-                    "테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트\n" +
-                    "테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트\n" +
-                    "테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트\n" +
-                    "테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트\n" +
-                    "테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트\n",
-            maxLength = 400,
-            onValueChange = {}
-        )
     }
 }

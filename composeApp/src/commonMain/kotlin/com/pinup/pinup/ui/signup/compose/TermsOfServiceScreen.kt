@@ -20,10 +20,7 @@ import com.pinup.pinup.ui.signup.TermsOfService
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
-import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_check
-import pinup.composeapp.generated.resources.ic_chevron_right
-import pinup.composeapp.generated.resources.ic_uncheck
+import pinup.composeapp.generated.resources.*
 
 
 @Composable

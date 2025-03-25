@@ -7,20 +7,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.pinup.pinup.R
 import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
 import com.pinup.pinup.ui.theme.Typography
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun TextReview(
@@ -114,25 +112,6 @@ fun TextReview(
             text = "방문 날짜 ${review.visitedDate}",
             style = Typography.B6,
             color = Colors.Neutral400,
-        )
-    }
-}
-
-@Composable
-@Preview
-private fun TextReviewPreview() {
-    PinUPTheme {
-        TextReview(
-            review = Review(
-                content = "새우 들어간 딤섬이 젤 마싯음!! 매장도 깔끔",
-                createdAt = "",
-                kakaoPlaceId = "",
-                placeName = "잠실새내 딤딤섬",
-                reviewId = 1,
-                reviewImageUrls = emptyList(),
-                starRating = 4.0,
-                visitedDate = "2024년 10월 31일"
-            )
         )
     }
 }

@@ -9,24 +9,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.SearchedPlaceCard
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun SearchPlaceScreen(
@@ -128,17 +127,5 @@ fun SearchPlaceScreen(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun SearchPlaceScreenPreview() {
-    PinUPTheme {
-        SearchPlaceScreen(
-            query = "",
-            places = persistentListOf(),
-            onValueChange = {}
-        )
     }
 }

@@ -1,9 +1,7 @@
 package com.pinup.pinup.ui.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,9 +16,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.TextSelectionColors
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.theme.Typography
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RoundedTextField(
     modifier: Modifier = Modifier,
@@ -133,7 +131,7 @@ fun RoundedTextField(
             visualTransformation = visualTransformation,
             interactionSource = interactionSource,
             decorationBox = @Composable { innerTextField ->
-                TextFieldDefaults.DecorationBox(
+                TextFieldDefaults.TextFieldDecorationBox(
                     value = textFieldValue.text,
                     visualTransformation = visualTransformation,
                     innerTextField = @Composable {
@@ -194,9 +192,8 @@ fun RoundedTextField(
                     enabled = enabled,
                     shape = RoundedCornerShape(cornerRounded.dp),
                     interactionSource = interactionSource,
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = backgroundColor,
-                        unfocusedContainerColor = backgroundColor,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = backgroundColor,
                         cursorColor = cursorColor,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,

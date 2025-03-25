@@ -9,18 +9,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.pinup.pinup.R
 import com.pinup.pinup.domain.model.PlaceReview
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
 import com.pinup.pinup.ui.theme.Typography
 
 @Composable
@@ -116,26 +114,5 @@ fun ReviewCard(
                 ReviewImage(it)
             }
         }
-    }
-}
-
-@Composable
-@Preview
-private fun ReviewCardPreview() {
-    PinUPTheme {
-        ReviewCard(
-            placeReview = PlaceReview(
-                content = "새우 들어간 딤섬이 젤 마싯음",
-                reviewId = 0,
-                reviewImageUrls = listOf("","","",""),
-                starRating = 4.1,
-                visitedDate = "24.10.07",
-                writerName = "하니",
-                writerProfileImageUrl = "",
-                writerTotalReviewCount = 32
-            ),
-            modifier = Modifier
-                .background(color = Colors.White)
-        )
     }
 }

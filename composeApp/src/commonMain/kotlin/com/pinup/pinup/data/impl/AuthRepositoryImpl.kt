@@ -7,11 +7,8 @@ import com.pinup.pinup.data.request.SignUpRequest
 import com.pinup.pinup.data.response.LoginResponse
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SignUpInfo
-import com.pinup.pinup.domain.model.TokenInfo
-import com.pinup.pinup.domain.model.map
 import com.pinup.pinup.domain.repository.AuthRepository
 import com.pinup.pinup.extentions.toYnString
-import javax.inject.Inject
 
 class AuthRepositoryImpl (
     private val authRemoteDataSource: AuthRemoteDataSource,

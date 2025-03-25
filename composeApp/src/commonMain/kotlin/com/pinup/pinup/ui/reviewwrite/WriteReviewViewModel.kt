@@ -2,6 +2,7 @@ package com.pinup.pinup.ui.reviewwrite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pinup.pinup.PlatformFile
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.WriteReview
@@ -16,7 +17,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.io.File
 
 
 class WriteReviewViewModel (
@@ -84,8 +84,8 @@ class WriteReviewViewModel (
 
     fun registerReview() = viewModelScope.launch {
         val files = _uiState.value.imagePaths.map {
-            val path = getRealPathFromUri(it, context) ?: return@launch
-            File(path)
+            val path = getRealPathFromUri(it) ?: return@launch
+            PlatformFile(path).toByteArray()
         }
         val writeReview = WriteReview(
             content = _uiState.value.content,

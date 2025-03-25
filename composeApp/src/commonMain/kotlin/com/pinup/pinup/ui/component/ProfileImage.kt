@@ -6,14 +6,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.pinup.pinup.R
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
 
 @Composable
 fun ReviewedProfileImageView(
@@ -96,13 +94,5 @@ fun ProfileImageView(
                 contentDescription = "default profile image"
             )
         }
-    }
-}
-
-@Composable
-@Preview
-private fun ProfileImageViewPreview() {
-    PinUPTheme {
-        ReviewedProfileImageView("")
     }
 }

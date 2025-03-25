@@ -23,10 +23,10 @@ import kotlinx.serialization.Serializable
 fun SignUpScreen(
     navHostController: NavHostController,
     nicknameState: NickNameState,
-    profileUrl: String,
+    profileUrl: ByteArray,
     termsOfServiceState: TermsOfServiceState,
     onValueChange: (String) -> Unit,
-    onProfileImageChange: (String) -> Unit,
+    onProfileImageChange: (ByteArray) -> Unit,
     onAllAgreeClick: (TermsOfService) -> Unit,
     onUsingServiceAgreeClick: (TermsOfService) -> Unit,
     onCollectDataAgreeClick: (TermsOfService) -> Unit,

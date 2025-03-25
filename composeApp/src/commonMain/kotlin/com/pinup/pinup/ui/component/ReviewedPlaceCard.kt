@@ -11,18 +11,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.*
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.pinup.pinup.R
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
 import com.pinup.pinup.ui.theme.Typography
 
 @Composable
@@ -151,24 +149,5 @@ fun ReviewedPlaceCard(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun PlaceCardPreview4() {
-    PinUPTheme {
-        ReviewedPlaceCard(
-            name = "하우스서울 잠실새내",
-            rating = 4.0,
-            distance = "2.4km",
-            reviewCount = 35,
-            reviewerProfileImageUrls = listOf(
-                "", "", "", ""
-            ),
-            reviewImageUrls = listOf(
-                "", "", "", ""
-            )
-        )
     }
 }

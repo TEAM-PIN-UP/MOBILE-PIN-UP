@@ -10,21 +10,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.pinup.pinup.extentions.clickableSingle
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
 import com.pinup.pinup.ui.theme.Typography
 
 @Composable
@@ -114,42 +111,5 @@ fun PDialog(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun PDialogPreview() {
-    PinUPTheme {
-        PDialog(
-            titleText = "테스트",
-            leftButtonText = "취소",
-            rightButtonText = "허용"
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun PDialogPreview2() {
-    PinUPTheme {
-        PDialog(
-            titleText = "테스트",
-            descriptionText = "안녕하세요 테스트 입니다.\n잘부탁 드립니다.",
-            leftButtonText = "취소",
-            rightButtonText = "허용"
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun PDialogPreview3() {
-    PinUPTheme {
-        PDialog(
-            titleText = "테스트",
-            descriptionText = "안녕하세요 테스트 입니다.\n잘부탁 드립니다.",
-            rightButtonText = "허용"
-        )
     }
 }

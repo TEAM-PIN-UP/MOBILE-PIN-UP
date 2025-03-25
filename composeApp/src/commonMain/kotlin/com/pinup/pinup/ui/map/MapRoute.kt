@@ -1,13 +1,13 @@
 package com.pinup.pinup.ui.map
 
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
 
 @Composable
 fun MapRoute(
-    mapViewModel: MapViewModel = hiltViewModel()
+    mapViewModel: MapViewModel = koinViewModel()
 ) {
     val mapUiState = mapViewModel.mapUiState.collectAsStateWithLifecycle()
 

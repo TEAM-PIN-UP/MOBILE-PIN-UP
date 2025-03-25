@@ -9,19 +9,18 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.*
 import androidx.compose.ui.unit.dp
-import com.pinup.pinup.R
 import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
+import com.pinup.pinup.ui.theme.Typography
 
 @Composable
 fun BookmarkedPlaceCard(
@@ -94,28 +93,6 @@ fun BookmarkedPlaceCard(
             text = bookmarkedPlace.placeAddress,
             style = Typography.B5,
             color = Colors.Neutral400
-        )
-    }
-}
-
-@Composable
-@Preview
-private fun BookmarkedPlaceCardPreview() {
-    PinUPTheme {
-        BookmarkedPlaceCard(
-            bookmarkedPlace = BookmarkedPlace(
-                id = 0,
-                kakaoPlaceId = "",
-                placeAddress = "서울 성수동",
-                placeCategory = Category.CAFE,
-                placeFirstReviewImageUrl = "",
-                placeId = 0,
-                placeLatitude = 0.0,
-                placeLongitude = 0.0,
-                placeName = "성수 카페",
-                placeRoadAddress = "",
-                placeStatus = ""
-            )
         )
     }
 }

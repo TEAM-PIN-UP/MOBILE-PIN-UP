@@ -7,17 +7,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.pinup.pinup.R
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
 import com.pinup.pinup.ui.theme.Typography
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun SearchedPlaceCard(
@@ -62,18 +60,6 @@ fun SearchedPlaceCard(
             text = "리뷰 $reviewCount",
             style = Typography.B5,
             color = Colors.Neutral600,
-        )
-    }
-}
-
-@Composable
-@Preview
-fun SearchedPlaceCardPreview() {
-    PinUPTheme {
-        SearchedPlaceCard(
-            name = "잠실새내 딤딤섬",
-            address = "서울 송파구 백제고분로7길 28-7 1층",
-            reviewCount = 35
         )
     }
 }

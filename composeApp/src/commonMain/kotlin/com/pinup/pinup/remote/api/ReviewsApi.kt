@@ -2,19 +2,38 @@ package com.pinup.pinup.remote.api
 
 import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.domain.model.PResult
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 
-interface ReviewsApi {
+class ReviewsApi(
+    private val httpClient: HttpClient
+) {
 
-    @Multipart
-    @POST("api/reviews")
     suspend fun registerReviews(
-        @Part files: List<MultipartBody.Part>,
-        @Part("reviewRequest") reviewRequest: RequestBody,
-        @Part("placeRequest") placeRequest: RequestBody,
-    ): PResult<PResponse<String>>
+        files: List<ByteArray>,
+        reviewRequest: String,
+        placeRequest: String,
+    ): PResult<PResponse<String>> {
+        val response = httpClient.post("api/reviews") {
+            contentType(ContentType.MultiPart.FormData)
+            setBody(
+                MultiPartFormDataContent(
+                    formData {
+                        for (file in files) {
+                            append("multipartFiles", file)
+                        }
+                        append("reviewRequest", reviewRequest)
+                        append("placeRequest", placeRequest)
+                    }
+                )
+            )
+        }
+        return response.body()
+    }
 }

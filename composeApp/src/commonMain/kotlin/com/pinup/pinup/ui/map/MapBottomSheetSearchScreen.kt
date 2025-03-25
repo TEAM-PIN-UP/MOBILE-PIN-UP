@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -30,9 +30,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
-import androidx.compose.ui.res.painterResource
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.*
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.R
@@ -47,7 +48,7 @@ import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.SortBottomSheet
 import com.pinup.pinup.ui.model.ChipState
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
+
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList

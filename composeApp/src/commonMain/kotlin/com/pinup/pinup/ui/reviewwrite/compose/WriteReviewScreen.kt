@@ -1,8 +1,5 @@
 package com.pinup.pinup.ui.reviewwrite.compose
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +18,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -38,6 +36,8 @@ import com.pinup.pinup.ui.component.ReviewTextField
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
+import com.preat.peekaboo.image.picker.SelectionMode
+import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 
@@ -53,18 +53,20 @@ fun WriteReviewScreen(
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit = {},
     onRatingSelected: (Int) -> Unit = {},
-    onAddImage: (String) -> Unit = {},
+    onAddImage: (ByteArray) -> Unit = {},
     onRemoveImage: (String) -> Unit = {},
     onRegisterClick: () -> Unit = {},
 ) {
     val maxImageSize = 3
     val scrollState = rememberScrollState()
     val isShowRatingDialog = remember { mutableStateOf(false) }
-    val singlePhotoPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-        onResult = { uri ->
-            if (uri != null) {
-                onAddImage(uri.toString())
+    val scope = rememberCoroutineScope()
+    val singleImagePicker = rememberImagePickerLauncher(
+        selectionMode = SelectionMode.Single,
+        scope = scope,
+        onResult = { byteArrays ->
+            byteArrays.firstOrNull()?.let {
+                onAddImage(it)
             }
         }
     )
@@ -164,9 +166,7 @@ fun WriteReviewScreen(
                                 modifier = modifier
                                     .size(100.dp)
                                     .clickableSingleWithNoRipple {
-                                        singlePhotoPickerLauncher.launch(
-                                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                                        )
+                                        singleImagePicker.launch()
                                     },
                                 cornerRounded = 8,
                                 backgroundColor = Colors.Neutral100,

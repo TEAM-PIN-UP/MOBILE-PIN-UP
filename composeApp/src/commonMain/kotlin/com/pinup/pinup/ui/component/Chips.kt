@@ -6,21 +6,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.model.ChipState
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
 import com.pinup.pinup.ui.theme.Typography
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun Chips(
@@ -85,26 +83,5 @@ fun Chip(
                 color = if (isSelected) selectedTextColor else unSelectedTextColor
             )
         }
-    }
-}
-
-@Preview
-@Composable
-private fun ChipsPreview() {
-    PinUPTheme {
-        Chips(
-            chipStates = ChipState.default
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun ChipPreview() {
-    PinUPTheme {
-        Chip(
-            text = "테스트",
-            isSelected = false,
-        )
     }
 }

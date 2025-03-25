@@ -10,14 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.*
 import androidx.compose.ui.unit.dp
-import com.pinup.pinup.R
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
 
 @Composable
 fun BottomBar(
@@ -114,17 +112,5 @@ fun BottomBar(
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BottomBarPreview() {
-    PinUPTheme {
-        BottomBar(
-            selectedMenu = MainDestination.Map,
-            profileImage = "",
-            onBottomMenuClick = {}
-        )
     }
 }

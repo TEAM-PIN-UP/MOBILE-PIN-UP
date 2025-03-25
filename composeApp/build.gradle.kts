@@ -37,6 +37,8 @@ kotlin {
             // Koin support for Android
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+            // ktor
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -48,7 +50,16 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.navigation.compose)
+            implementation(libs.compose.constraintlayout)
+
+            // ktor
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.auth)
+            implementation(libs.ktor.negotiation)
+            implementation(libs.ktor.serialization)
+            implementation(libs.ktor.logging)
             //kotlinx
+            implementation(libs.kotlinx.immutable)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             // coil
@@ -57,6 +68,15 @@ kotlin {
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeVM)
+            // datastore
+            implementation(libs.androidx.data.store.core)
+            // image picker
+            implementation(libs.peekaboo.ui)
+            implementation(libs.peekaboo.image.picker)
+        }
+        iosMain.dependencies {
+            // ktor
+            implementation(libs.ktor.client.darwin)
         }
     }
 }
@@ -89,6 +109,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.constraintlayout)
     debugImplementation(compose.uiTooling)
 }
 

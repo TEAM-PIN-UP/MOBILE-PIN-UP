@@ -49,13 +49,7 @@ import com.pinup.pinup.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
-import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_add_pinbuddy
-import pinup.composeapp.generated.resources.ic_alarm
-import pinup.composeapp.generated.resources.ic_empty_review
-import pinup.composeapp.generated.resources.ic_my_description
-import pinup.composeapp.generated.resources.ic_setting
-import pinup.composeapp.generated.resources.ic_share_profile
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun MyScreen(

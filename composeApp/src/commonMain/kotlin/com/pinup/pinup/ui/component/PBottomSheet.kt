@@ -1,7 +1,5 @@
 package com.pinup.pinup.ui.component
 
-import android.os.SystemClock
-import android.util.Log
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -13,9 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,13 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.util.VelocityTracker
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil3.compose.LocalPlatformContext
 import com.pinup.pinup.extentions.toDp
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
+import kotlinx.datetime.Clock
 import kotlin.math.abs
 
 @Composable
@@ -45,7 +40,7 @@ fun PBottomSheet(
     onSheetHeightChanged: (Dp) -> Unit = {},
     content: @Composable () -> Unit,
 ) {
-    val context = LocalContext.current
+    val context = LocalPlatformContext.current
     var currentTargetValue by remember { mutableStateOf(pBottomSheetTargetValue) }
     var realHeight by remember(expandedHeight, halfHeight, hiddenHeight) {
         mutableStateOf(
@@ -131,7 +126,7 @@ fun PBottomSheet(
                     onDrag = { change, dragAmount ->
                         change.consume()
                         dragOffset = dragAmount
-                        velocityTracker.addPosition(SystemClock.uptimeMillis(), dragAmount)
+                        velocityTracker.addPosition(Clock.System.now().toEpochMilliseconds(), dragAmount)
                         if (expandedHeight >= realHeight - dragAmount.y.toDp(context).dp) {
                             realHeight -= dragAmount.y.toDp(context).dp
                         }
@@ -161,21 +156,4 @@ fun PBottomSheet(
 
 enum class PBottomSheetTargetValue {
     EXPANDED, HALF, HIDDEN
-}
-
-@Preview
-@Composable
-private fun PBottomSheetPreview() {
-    PinUPTheme {
-        Column {
-            PBottomSheet(
-                content = {
-                    Text("테스트")
-                },
-                expandedHeight = TODO(),
-                halfHeight = TODO(),
-                hiddenHeight = TODO(),
-            )
-        }
-    }
 }

@@ -1,6 +1,5 @@
 package com.pinup.pinup.local.impl
 
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -9,12 +8,12 @@ import com.pinup.pinup.data.local.MembersLocalDataSource
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.TokenInfo
 import com.pinup.pinup.domain.model.UserInfo
+import com.pinup.pinup.hLog
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 class MembersLocalDataSourceImpl (
     private val dataStore: DataStore<Preferences>

@@ -1,26 +1,21 @@
 package com.pinup.pinup.ui.login
 
-import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.usecase.LoginUseCase
+import com.pinup.pinup.hLog
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.login.model.SNSUserInfo
 import com.pinup.pinup.ui.login.sns.SNSLoginResultFactory
 import com.pinup.pinup.ui.login.sns.SNSLoginResultListener
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 class LoginViewModel (
-    @ApplicationContext private val context: Context,
     private val loginUseCase: LoginUseCase,
 ) : ViewModel() {
     private val _uiEvent = MutableSharedFlow<LoginUiEvent>()

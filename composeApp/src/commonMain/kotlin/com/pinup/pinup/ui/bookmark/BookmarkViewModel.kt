@@ -1,38 +1,26 @@
 package com.pinup.pinup.ui.bookmark
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Looper
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
-import com.google.android.gms.tasks.CancellationTokenSource
-import com.naver.maps.geometry.LatLng
 import com.pinup.pinup.domain.model.BookmarkedPlace
-import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.domain.usecase.GetBookmarksUseCase
 import com.pinup.pinup.ui.model.ChipState
-import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 class BookmarkViewModel (
-    @ApplicationContext private val context: Context,
     private val getBookmarksUseCase: GetBookmarksUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(BookmarkUiState())

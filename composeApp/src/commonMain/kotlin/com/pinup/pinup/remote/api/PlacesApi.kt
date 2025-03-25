@@ -7,30 +7,71 @@ import com.pinup.pinup.data.response.SearchPlacesResponse
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SortType
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.http.parameters
 
-interface PlacesApi {
-    @GET("api/places")
+class PlacesApi(
+    private val httpClient: HttpClient
+) {
     suspend fun getPlaces(
-        @Query("sort") sort: SortType,
-        @Query("category") category: Category,
-        @Query("swLatitude") swLatitude: String,
-        @Query("swLongitude") swLongitude: String,
-        @Query("neLatitude") neLatitude: String,
-        @Query("neLongitude") neLongitude: String,
-        @Query("currentLatitude") currentLatitude: String?,
-        @Query("currentLongitude") currentLongitude: String?,
-    ): PResult<PResponse<List<GetReviewedPlacesResponse>>>
+        sort: SortType,
+        category: Category,
+        swLatitude: String,
+        swLongitude: String,
+        neLatitude: String,
+        neLongitude: String,
+        currentLatitude: String?,
+        currentLongitude: String?,
+    ): PResult<PResponse<List<GetReviewedPlacesResponse>>> {
+        val response = httpClient.get("api/places") {
+            url {
+                parameters {
+                    append("sort", sort.toString())
+                    append("category", category.toString())
+                    append("swLatitude", swLatitude)
+                    append("swLongitude", swLongitude)
+                    append("neLatitude", neLatitude)
+                    append("neLongitude", neLongitude)
+                    currentLatitude?.let {
+                        append("currentLatitude", currentLatitude)
+                    }
+                    currentLongitude?.let {
+                        append("currentLongitude", currentLongitude)
+                    }
+                }
+            }
+        }
+        return response.body()
+    }
 
-    @GET("api/places/keyword")
-    suspend fun searchPlaces(@Query("query") query: String): PResult<PResponse<List<SearchPlacesResponse>>>
+    suspend fun searchPlaces(query: String): PResult<PResponse<List<SearchPlacesResponse>>> {
+        val response = httpClient.get("api/places/keyword") {
+            url {
+                parameters.append("query", query)
+            }
+        }
+        return response.body()
+    }
 
-    @GET("api/places/{kakaoPlaceId}")
     suspend fun getDetailPlace(
-        @Path("kakaoPlaceId") kakaoPlaceId: String,
-        @Query("currentLatitude") currentLatitude: String?,
-        @Query("currentLongitude") currentLongitude: String?,
-    ): PResult<PResponse<GetDetailPlaceResponse>>
+        kakaoPlaceId: String,
+        currentLatitude: String?,
+        currentLongitude: String?,
+    ): PResult<PResponse<GetDetailPlaceResponse>> {
+        val response = httpClient.get("api/places/$kakaoPlaceId") {
+            url {
+                parameters {
+                    currentLatitude?.let {
+                        append("currentLatitude", currentLatitude)
+                    }
+                    currentLongitude?.let {
+                        append("currentLongitude", currentLongitude)
+                    }
+                }
+            }
+        }
+        return response.body()
+    }
 }

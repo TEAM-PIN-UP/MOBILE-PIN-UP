@@ -1,7 +1,7 @@
 package com.pinup.pinup.ui.addpinbuddy
 
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
+import org.koin.compose.viewmodel.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.toPersistentList
 
@@ -9,7 +9,7 @@ import kotlinx.collections.immutable.toPersistentList
 fun AddPinBuddyRoute(
     onBackPressed: () -> Unit,
     onMoveUserProfile: (Int) -> Unit,
-    viewModel: AddPinBuddyViewModel = hiltViewModel()
+    viewModel: AddPinBuddyViewModel = koinViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     AddPinBuddyScreen(

@@ -3,6 +3,7 @@ package com.pinup.pinup.ui.signup
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pinup.pinup.PlatformFile
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SignUpInfo
 import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
@@ -26,7 +27,6 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import java.io.File
 
 @OptIn(FlowPreview::class)
 
@@ -69,7 +69,7 @@ class SignUpViewModel (
         updateNickName(_uiState.value.nicknameState.nickname)
     }
 
-    fun updateProfile(profileUrl: String) {
+    fun updateProfile(profileUrl: ByteArray) {
         _uiState.update {
             it.copy(
                 profileUrl = profileUrl
@@ -146,7 +146,6 @@ class SignUpViewModel (
     }
 
     fun signUp() = viewModelScope.launch {
-        val profileImageRealPath = getRealPathFromUri(_uiState.value.profileUrl, context = context) ?: return@launch
         val request = SignUpInfo(
             email = _uiState.value.email,
             socialId = _uiState.value.socialId,
@@ -154,7 +153,7 @@ class SignUpViewModel (
             name = _uiState.value.name,
             loginType = _uiState.value.snsType,
             termsOfMarketing = _uiState.value.termsOfServiceState.isMarketingAgreeAgree,
-            profileImage = File(profileImageRealPath)
+            profileImage = _uiState.value.profileUrl
         )
         when (val result = signUpUseCase(request)) {
             is PResult.Fail -> {
@@ -190,7 +189,7 @@ data class SignUpUiState(
     val snsType: SNSType = SNSType.KAKAO,
     val nicknameState: NickNameState = NickNameState(),
     val socialId: String = "",
-    val profileUrl: String = "",
+    val profileUrl: ByteArray = ByteArray(0),
     val email: String = "",
     val name: String = "",
     val termsOfServiceState: TermsOfServiceState = TermsOfServiceState(),

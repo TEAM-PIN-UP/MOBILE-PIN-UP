@@ -10,14 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.pinup.pinup.R
 import com.pinup.pinup.domain.model.PinBuddy
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.component.PHorizontalDivider
@@ -26,10 +22,11 @@ import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.component.UserCard
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.PinUPTheme
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
+import androidx.compose.material.Text
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun AddPinBuddyScreen(
@@ -153,16 +150,5 @@ fun AddPinBuddyScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-@Preview
-private fun AddPinBuddyScreenPreview() {
-    PinUPTheme {
-        AddPinBuddyScreen(
-            query = "",
-            pinBuddies = persistentListOf()
-        )
     }
 }
