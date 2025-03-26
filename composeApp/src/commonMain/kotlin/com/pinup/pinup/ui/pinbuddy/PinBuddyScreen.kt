@@ -42,6 +42,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
+import androidx.compose.foundation.lazy.items
 
 @Composable
 fun PinBuddyScreen(

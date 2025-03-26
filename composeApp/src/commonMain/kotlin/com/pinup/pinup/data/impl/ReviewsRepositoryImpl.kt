@@ -8,14 +8,13 @@ import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.WriteReview
 import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.domain.repository.ReviewsRepository
-import java.io.File
-import javax.inject.Inject
+
 
 class ReviewsRepositoryImpl (
     private val reviewsRemoteDataSource: ReviewsRemoteDataSource,
 ) : ReviewsRepository {
     override suspend fun registerReviews(
-        files: List<File>,
+        files: List<ByteArray>,
         writeReview: WriteReview,
         place: Place
     ): PResult<String> {

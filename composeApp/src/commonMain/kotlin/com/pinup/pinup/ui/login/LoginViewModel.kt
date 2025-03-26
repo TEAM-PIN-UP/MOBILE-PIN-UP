@@ -7,7 +7,6 @@ import com.pinup.pinup.domain.usecase.LoginUseCase
 import com.pinup.pinup.hLog
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.login.model.SNSUserInfo
-import com.pinup.pinup.ui.login.sns.SNSLoginResultFactory
 import com.pinup.pinup.ui.login.sns.SNSLoginResultListener
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -36,11 +35,11 @@ class LoginViewModel (
 
     }
     fun doSNSLogin(snsType: SNSType) {
-        val snsLoginController = SNSLoginResultFactory.initialize(snsType)
-        snsLoginController.doLogin(
-            context = context,
-            resultListener = loginResultListener
-        )
+//        val snsLoginController = SNSLoginResultFactory.initialize(snsType)
+//        snsLoginController.doLogin(
+//            context = context,
+//            resultListener = loginResultListener
+//        )
     }
 
     private fun login(snsLoginInfo: SNSUserInfo) = viewModelScope.launch {

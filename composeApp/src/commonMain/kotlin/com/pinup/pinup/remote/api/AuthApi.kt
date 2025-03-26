@@ -34,23 +34,21 @@ class AuthApi(
         return response.body()
     }
 
-    suspend fun logout(token: String): PResult<PResponse<LoginResponse>> {
+    suspend fun logout(token: String): PResult<PResponse<Unit>> {
         val response = httpClient.post("api/auth/logout") {
             headersOf("Access", token)
         }
         return response.body()
     }
 
-    suspend fun signUp(byteArray: ByteArray, request: SignUpRequest): PResult<PResponse<Unit>> {
-        val jsonData = Json.encodeToString(request)
-
+    suspend fun signUp(byteArray: ByteArray, request: String): PResult<PResponse<Unit>> {
         val response = httpClient.post("api/auth/sign-up") {
             contentType(ContentType.MultiPart.FormData)
             setBody(
                 MultiPartFormDataContent(
                     formData {
                         append("multipartFile", byteArray)
-                        append("signUpRequest", jsonData)
+                        append("signUpRequest", request)
                     }
                 )
             )

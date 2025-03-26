@@ -4,17 +4,13 @@ import com.pinup.pinup.data.remote.PinBuddyRemoteDataSource
 import com.pinup.pinup.data.request.RequestPinBuddyRequest
 import com.pinup.pinup.data.response.GetPinBuddiesResponse.Companion.toModel
 import com.pinup.pinup.data.response.GetPinBuddyRequestsResponse.Companion.toModel
-import com.pinup.pinup.data.response.MemberResponse.Companion.toModel
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.PagingPinBuddy
 import com.pinup.pinup.domain.model.PagingPinBuddyRequest
-import com.pinup.pinup.domain.model.PinBuddyRequest
-import com.pinup.pinup.domain.model.Profile
 import com.pinup.pinup.domain.model.map
 import com.pinup.pinup.domain.repository.PinBuddyRepository
-import javax.inject.Inject
 
-class PinBuddyRepositoryImpl (
+class PinBuddyRepositoryImpl(
     private val pinBuddyRemoteDataSource: PinBuddyRemoteDataSource,
 ) : PinBuddyRepository {
     override suspend fun getPinBuddies(page: Int, size: Int): PResult<PagingPinBuddy> {
@@ -24,14 +20,20 @@ class PinBuddyRepositoryImpl (
             }
     }
 
-    override suspend fun getSentPinBuddyRequests(page: Int, size: Int): PResult<PagingPinBuddyRequest> {
+    override suspend fun getSentPinBuddyRequests(
+        page: Int,
+        size: Int
+    ): PResult<PagingPinBuddyRequest> {
         return pinBuddyRemoteDataSource.getSentPinBuddyRequests(page, size)
             .map { response ->
                 response.toModel()
             }
     }
 
-    override suspend fun getReceivedPinBuddyRequests(page: Int, size: Int): PResult<PagingPinBuddyRequest> {
+    override suspend fun getReceivedPinBuddyRequests(
+        page: Int,
+        size: Int
+    ): PResult<PagingPinBuddyRequest> {
         return pinBuddyRemoteDataSource.getReceivedPinBuddyRequests(page, size)
             .map { response ->
                 response.toModel()

@@ -6,7 +6,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import coil3.compose.LocalPlatformContext
 import com.pinup.pinup.domain.model.SortType
-import com.pinup.pinup.ui.map.getNavigationBarHeight
 
 @Composable
 fun SortBottomSheet(
@@ -19,7 +18,7 @@ fun SortBottomSheet(
     val scope = rememberCoroutineScope()
 //    val sheetState = rememberModalBottomSheetState()
     val navigationBarHeight = remember {
-        derivedStateOf { getNavigationBarHeight(context) }
+//        derivedStateOf { getNavigationBarHeight(context) }
     }
 //    ModalBottomSheetLayout(
 //        containerColor = Colors.White,

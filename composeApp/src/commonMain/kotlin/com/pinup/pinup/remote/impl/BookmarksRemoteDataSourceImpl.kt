@@ -8,7 +8,7 @@ import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.remote.api.BookmarksApi
-import javax.inject.Inject
+
 
 class BookmarksRemoteDataSourceImpl (
     private val bookmarksApi: BookmarksApi,

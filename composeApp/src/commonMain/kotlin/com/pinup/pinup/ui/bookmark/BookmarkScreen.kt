@@ -1,6 +1,5 @@
 package com.pinup.pinup.ui.bookmark
 
-import android.Manifest
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,8 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.extentions.clickableWithNoRipple
@@ -45,28 +42,23 @@ import com.pinup.pinup.ui.model.ChipState
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
-import pinup.composeapp.generated.resources.*
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.ic_chevron_bottom
 
 @Composable
 fun BookmarkScreen(
     bookmarkedPlaces: PersistentList<BookmarkedPlace>,
     chipStates: PersistentList<ChipState>,
     sortType: SortType,
+    permissionState: Boolean,
     modifier: Modifier = Modifier,
     onChipClick: (ChipState) -> Unit = {},
     onUpdateSortType: (SortType) -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
-    val permissionState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
-    )
     var showBottomSheet by remember { mutableStateOf(false) }
     val pages = remember { listOf("전체","지역별") }
     val pagerState = rememberPagerState{ pages.size }
@@ -147,7 +139,7 @@ fun BookmarkScreen(
     if (showBottomSheet) {
         SortBottomSheet(
             selectedSortType = sortType,
-            allPermissionsGranted = permissionState.allPermissionsGranted,
+            allPermissionsGranted = permissionState,
             onDismissRequest = { showBottomSheet = false },
             onSortTypeSelect = {
                 onUpdateSortType(it)

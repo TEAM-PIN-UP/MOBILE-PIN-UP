@@ -2,20 +2,18 @@ package com.pinup.pinup.data.impl
 
 import com.pinup.pinup.data.local.MembersLocalDataSource
 import com.pinup.pinup.data.remote.MembersRemoteDataSource
-import com.pinup.pinup.data.response.GetMemberInfoResponse
 import com.pinup.pinup.data.response.GetMemberInfoResponse.Companion.toModel
 import com.pinup.pinup.data.response.GetReviewsResponse.Companion.toModel
 import com.pinup.pinup.data.response.SearchUserResponse.Companion.toModel
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.PagingReview
-import com.pinup.pinup.domain.model.TokenInfo
 import com.pinup.pinup.domain.model.PinBuddy
+import com.pinup.pinup.domain.model.TokenInfo
 import com.pinup.pinup.domain.model.UserInfo
 import com.pinup.pinup.domain.model.map
 import com.pinup.pinup.domain.repository.MembersRepository
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
 
 class MembersRepositoryImpl (
     private val membersRemoteDataSource: MembersRemoteDataSource,

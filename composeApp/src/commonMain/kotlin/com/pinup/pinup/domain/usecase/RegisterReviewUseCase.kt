@@ -4,14 +4,13 @@ import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.WriteReview
 import com.pinup.pinup.domain.repository.ReviewsRepository
-import java.io.File
-import javax.inject.Inject
+
 
 class RegisterReviewUseCase (
     private val reviewsRepository: ReviewsRepository,
 ) {
     suspend operator fun invoke(
-        files: List<File>,
+        files: List<ByteArray>,
         writeReview: WriteReview,
         place: Place,
     ): PResult<String> {

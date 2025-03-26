@@ -4,14 +4,13 @@ import com.pinup.pinup.domain.model.UserInfo
 import com.pinup.pinup.domain.model.getSuccessOrNull
 import com.pinup.pinup.domain.repository.MembersRepository
 import com.pinup.pinup.ui.login.model.SNSType
-import javax.inject.Inject
 
-class IsLoginUseCase (
+class IsLoginUseCase(
     private val membersRepository: MembersRepository,
     private val getMemberInfoUseCase: GetMemberInfoUseCase,
     private val saveUserInfoUseCase: SaveUserInfoUseCase
 ) {
-    suspend operator fun invoke() : Boolean {
+    suspend operator fun invoke(): Boolean {
         val isLogin = membersRepository.getAccessToken().isNotEmpty()
 
         if (isLogin) {

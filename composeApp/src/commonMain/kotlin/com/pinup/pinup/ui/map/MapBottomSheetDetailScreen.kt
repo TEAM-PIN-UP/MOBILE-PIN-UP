@@ -1,7 +1,5 @@
 package com.pinup.pinup.ui.map
 
-import android.util.Log
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,32 +23,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
-import org.jetbrains.compose.resources.painterResource
-import pinup.composeapp.generated.resources.*
-
 import androidx.compose.ui.unit.dp
-import com.pinup.pinup.R
-import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.DetailPlace
-import com.pinup.pinup.domain.model.RatingGraph
-import com.pinup.pinup.domain.model.PlaceReview
-import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
-import com.pinup.pinup.extentions.isScrollingDown
-import com.pinup.pinup.extentions.isScrollingUp
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.RatingGraphView
 import com.pinup.pinup.ui.component.ReviewCard
 import com.pinup.pinup.ui.component.ReviewedPlaceCard
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.theme.Colors
-
 import com.pinup.pinup.ui.theme.Typography
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.*
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun MapBottomSheetDetailScreen(
     detailPlace: DetailPlace?,
@@ -281,45 +273,5 @@ fun MapBottomSheetDetailScreen(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun MapBottomSheetDetailScreenPreview() {
-    PinUPTheme {
-        MapBottomSheetDetailScreen(
-            isExpanded = false,
-            detailPlace = DetailPlace(
-                mapPlace = ReviewedPlace(
-                    averageStarRating = 4.8,
-                    bookmark = false,
-                    distance = "2.4km",
-                    kakaoPlaceId = "",
-                    latitude = 0.0,
-                    longitude = 0.0,
-                    name = "잠실새내 딤딤섬",
-                    placeCategory = Category.RESTAURANT,
-                    reviewCount = 3,
-                    reviewImageUrls = emptyList(),
-                    reviewerProfileImageUrls = listOf("", "", "")
-                ),
-                ratingGraph = RatingGraph(
-                    ratingArray = listOf(1, 1, 2, 0, 1)
-                ),
-                placeReviews = Array(3) {
-                    PlaceReview(
-                        content = "새우 들어간 딤섬이 젤 마싯음",
-                        reviewId = 0,
-                        reviewImageUrls = emptyList(),
-                        starRating = 4.1,
-                        visitedDate = "24.10.07",
-                        writerName = "하니",
-                        writerProfileImageUrl = "",
-                        writerTotalReviewCount = 32
-                    )
-                }.toList()
-            )
-        )
     }
 }

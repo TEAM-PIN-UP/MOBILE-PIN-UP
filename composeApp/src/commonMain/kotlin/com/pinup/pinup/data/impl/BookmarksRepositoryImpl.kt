@@ -9,7 +9,6 @@ import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.domain.model.map
 import com.pinup.pinup.domain.repository.BookmarksRepository
-import javax.inject.Inject
 
 class BookmarksRepositoryImpl (
     private val bookmarksRemoteDataSource: BookmarksRemoteDataSource,

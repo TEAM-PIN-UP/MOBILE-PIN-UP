@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material.Text
@@ -43,6 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.LifecycleResumeEffect
+import coil3.compose.LocalPlatformContext
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.isGranted
@@ -62,11 +64,14 @@ import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.overlay.OverlayImage
+import com.pinup.pinup.PlatformNaverMap
 import com.pinup.pinup.R
 import com.pinup.pinup.domain.model.Category
+import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.hLog
 import com.pinup.pinup.ui.component.PBottomSheet
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.component.RoundedBox
@@ -75,15 +80,14 @@ import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalNaverMapApi::class)
 @Composable
 fun MapScreen(
     searchUiState: SearchUiState,
     placeDetailUiState: PlaceDetailUiState,
     isFocusLocation: Boolean,
     isShowBookmarks: Boolean,
-    position: LatLng = LatLng.INVALID,
-    cameraPosition: LatLng? = null,
+    position: Position = Position.INVALID,
+    cameraPosition: Position? = null,
     onCameraStateChange: (CameraPositionState) -> Unit = { },
     onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
@@ -95,9 +99,7 @@ fun MapScreen(
     onUpdateShowBookmarks: () -> Unit = {},
     onUpdateFocusLocation: (Boolean) -> Unit = {},
 ) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val cameraPositionState = rememberCameraPositionState()
+    val context = LocalPlatformContext.current
     var parentHeightPx by remember { mutableIntStateOf(0) }
     val parentHeightDp = with(LocalDensity.current) { parentHeightPx.toDp() }
     val expandedHeight by remember(parentHeightDp) {
@@ -174,109 +176,21 @@ fun MapScreen(
         onPauseOrDispose { }
     }
 
-    LaunchedEffect(cameraPosition) {
-        hLog("cameraPosition >>> $cameraPosition")
-        cameraPosition?.let {
-            scope.launch {
-                cameraPositionState.animate(
-                    CameraUpdate.scrollTo(it)
-                )
-            }
-        }
-    }
-
-    LaunchedEffect(cameraPositionState.isMoving) {
-        hLog( "MapScreen: ${cameraPositionState.cameraUpdateReason}")
-        onCameraStateChange(cameraPositionState)
-    }
-
     Box(
         modifier = Modifier
             .onSizeChanged {
                 parentHeightPx = it.height
             }
     ) {
-        NaverMap(
-            modifier = Modifier
-                .fillMaxSize(),
-            cameraPositionState = cameraPositionState,
-            properties = MapProperties(
-                extent = LatLngBounds(
-                    LatLng(33.0, 124.0),
-                    LatLng(38.5, 132.0)
-                ),
-                minZoom = 5.0,
-                locationTrackingMode = LocationTrackingMode.Follow
-            ),
-            uiSettings = MapUiSettings(
-                isLocationButtonEnabled = false,
-                isCompassEnabled = false,
-                isZoomControlEnabled = false,
-                isScaleBarEnabled = false,
-                isRotateGesturesEnabled = false,
-                logoGravity = Gravity.TOP and Gravity.START
-            ),
-        ) {
-            if (position.isValid) {
-                LocationOverlay(
-                    position = position,
-                    icon = OverlayImage.fromResource(Res.drawable.ic_my_position)
-                )
-            }
-
-            searchUiState.reviewedPlaces.filter { if (isShowBookmarks) it.bookmark else true }.forEach {
-                MarkerComposable(
-                    keys = arrayOf(it.kakaoPlaceId),
-                    state = MarkerState(
-                        position = LatLng(it.latitude, it.longitude),
-                    ),
-                    anchor = Offset(0.5f, 0.25f),
-                    onClick = { _ ->
-                        onPlaceClick(it.kakaoPlaceId)
-                        true
-                    }
-                ) {
-                    Column(
-                        modifier = Modifier,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        if (it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
-
-                        } else {
-                            Image(
-                                painter = when (it.placeCategory) {
-                                    Category.RESTAURANT -> {
-                                        painterResource(Res.drawable.ic_food_marker)
-                                    }
-
-                                    else -> {
-                                        painterResource(Res.drawable.ic_cafe_marker)
-                                    }
-                                },
-                                contentDescription = "marker"
-                            )
-                        }
-
-                        RoundedBox(
-                            modifier = Modifier,
-                            backgroundColor = Colors.Black_25,
-                            cornerRounded = 100
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(vertical = 2.dp, horizontal = 7.dp)
-                                    .widthIn(max = 44.dp),
-                                text = it.name,
-                                style = Typography.B6,
-                                color = Colors.White,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1
-                            )
-                        }
-                    }
-                }
-            }
-        }
+        PlatformNaverMap(
+            modifier = Modifier,
+            position = position,
+            searchUiState = searchUiState,
+            placeDetailUiState = placeDetailUiState,
+            isShowBookmarks = isShowBookmarks,
+            cameraPosition = cameraPosition,
+            onPlaceClick = onPlaceClick,
+        )
 
         ConstraintLayout(
             modifier = Modifier
@@ -298,12 +212,8 @@ fun MapScreen(
                             onUpdateShowBookmarks()
                         },
                     shape = RoundedCornerShape(8.dp),
-                    colors = CardDefaults.cardColors().copy(
-                        containerColor = Colors.White
-                    ),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 1.dp,
-                    )
+                    backgroundColor = Colors.White,
+                    elevation = 1.dp
                 ) {
                     Image(
                         modifier = Modifier
@@ -325,12 +235,8 @@ fun MapScreen(
                             getCurrentLocation()
                         },
                     shape = RoundedCornerShape(8.dp),
-                    colors = CardDefaults.cardColors().copy(
-                        containerColor = Colors.White
-                    ),
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 1.dp
-                    )
+                    backgroundColor = Colors.White,
+                    elevation = 1.dp
                 ) {
                     Image(
                         modifier = Modifier

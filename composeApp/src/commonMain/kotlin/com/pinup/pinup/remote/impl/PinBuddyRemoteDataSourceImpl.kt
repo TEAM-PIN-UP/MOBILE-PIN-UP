@@ -9,7 +9,7 @@ import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.remote.api.PinBuddyApi
-import javax.inject.Inject
+
 
 class PinBuddyRemoteDataSourceImpl (
     private val pinBuddyApi: PinBuddyApi,

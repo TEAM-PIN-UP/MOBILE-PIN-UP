@@ -5,7 +5,7 @@ import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.PagingReview
 import com.pinup.pinup.domain.repository.MembersRepository
-import javax.inject.Inject
+
 
 class GetTextReviewsUseCase (
     private val membersRepositoryImpl: MembersRepository

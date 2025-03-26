@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naver.maps.geometry.LatLng
+import com.pinup.pinup.domain.model.Position
 
 @Composable
 fun MapRoute(
@@ -14,7 +15,7 @@ fun MapRoute(
     MapScreen(
         searchUiState = mapUiState.value.searchUiState,
         placeDetailUiState = mapUiState.value.placeDetailUiState,
-        position = mapUiState.value.currentLatLng ?: LatLng.INVALID,
+        position = mapUiState.value.currentLatLng ?: Position.INVALID,
         cameraPosition = mapUiState.value.cameraPosition,
         isFocusLocation = mapUiState.value.isFocusLocation,
         isShowBookmarks = mapUiState.value.isShowBookmarks,

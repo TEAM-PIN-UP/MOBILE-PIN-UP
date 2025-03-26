@@ -1,8 +1,8 @@
 [versions]
-agp = "8.5.2"
-android-compileSdk = "34"
+agp = "8.6.1"
+android-compileSdk = "35"
 android-minSdk = "24"
-android-targetSdk = "34"
+android-targetSdk = "35"
 androidx-activityCompose = "1.9.3"
 androidx-appcompat = "1.7.0"
 androidx-constraintlayout = "2.2.0"
@@ -11,10 +11,11 @@ androidx-espresso-core = "3.6.1"
 androidx-lifecycle = "2.8.4"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
-compose-multiplatform = "1.7.0"
+compose-multiplatform = "1.8.0-beta01"
 junit = "4.13.2"
 kotlin = "2.1.0"
 navigation = "2.8.0-alpha10"
+backHandler = "1.8.0-rc01"
 kotlin-serialization = "1.7.3"
 koin = "4.0.0"
 kotlin-datetime = "0.6.2"
@@ -23,8 +24,14 @@ ktor = "3.0.3"
 androidx-data-store = "1.1.1"
 kotlinxImmutable = "0.3.8"
 peekaboo = "0.5.2"
-composeConstraintlayout = "1.1.0"
 constraintlayout = "0.5.1"
+# FragmentActivity 참조 이슈로 인한 다운그레이드 1.19.1 -> 0.17.0
+mokoPermission = "0.17.0"
+mokoMedia = "0.11.0"
+mokoGeo = "0.8.0"
+filePicker = "3.1.0"
+naverMapCompose = "1.7.3"
+naverMapIos = "3.19.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -41,11 +48,18 @@ androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", nam
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 androidx-navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 androidx-data-store-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx-data-store" }
+ui-backhandler = { group = "org.jetbrains.compose.ui", name = "ui-backhandler", version.ref = "backHandler" }
 
 kotlinx-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutable" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlin-datetime" }
 compose-constraintlayout = { module = "tech.annexflow.compose:constraintlayout-compose-multiplatform", version.ref = "constraintlayout" }
+
+permissions = { module = "dev.icerock.moko:permissions", version.ref = "mokoPermission" }
+permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "mokoPermission" }
+media-compose = { module = "dev.icerock.moko:media-compose", version.ref = "mokoMedia" }
+geo-compose = { module = "dev.icerock.moko:geo-compose", version.ref = "mokoGeo" }
+file-picker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "filePicker" }
 
 coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil"}
 
@@ -68,7 +82,9 @@ koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", versi
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 koin-composeVM = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
+# naver map
+naver-map-compose = { group = "io.github.fornewid",name = "naver-map-compose", version.ref = "naverMapCompose" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -5,7 +5,7 @@ import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.domain.repository.BookmarksRepository
-import javax.inject.Inject
+
 
 class GetBookmarksUseCase (
     private val bookmarksRepository: BookmarksRepository

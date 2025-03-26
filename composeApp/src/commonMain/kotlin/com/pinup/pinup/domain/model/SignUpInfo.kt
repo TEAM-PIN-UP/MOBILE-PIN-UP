@@ -1,7 +1,6 @@
 package com.pinup.pinup.domain.model
 
 import com.pinup.pinup.ui.login.model.SNSType
-import java.io.File
 
 data class SignUpInfo(
     val email: String,
@@ -9,6 +8,6 @@ data class SignUpInfo(
     val nickname: String,
     val socialId: String,
     val loginType: SNSType,
-    val profileImage: File,
+    val profileImage: ByteArray,
     val termsOfMarketing: Boolean,
 )

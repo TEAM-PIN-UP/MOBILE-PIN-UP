@@ -2,7 +2,6 @@ package com.pinup.pinup.ui.login.compose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,17 +14,19 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.jetbrains.compose.resources.painterResource
-import pinup.composeapp.generated.resources.*
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.pinup.pinup.R
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.theme.Colors
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.ic_google
+import pinup.composeapp.generated.resources.ic_kakao
+import pinup.composeapp.generated.resources.ic_naver
+import pinup.composeapp.generated.resources.ic_sns_login
 
 
 @Composable
@@ -102,14 +103,5 @@ fun LoginScreen(
 //                contentDescription = "애플 로그인"
 //            )
         }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    PinUPTheme {
-        LoginScreen()
     }
 }

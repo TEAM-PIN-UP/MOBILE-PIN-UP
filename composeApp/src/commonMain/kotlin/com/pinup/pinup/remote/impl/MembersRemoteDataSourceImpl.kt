@@ -7,7 +7,7 @@ import com.pinup.pinup.data.response.SearchUserResponse
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.remote.api.MembersApi
-import javax.inject.Inject
+
 
 class MembersRemoteDataSourceImpl (
     private val membersApi: MembersApi

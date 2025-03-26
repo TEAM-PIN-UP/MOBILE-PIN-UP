@@ -8,7 +8,7 @@ import com.pinup.pinup.data.response.SearchPlacesResponse
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.remote.api.PlacesApi
-import javax.inject.Inject
+
 
 class PlacesRemoteDataSourceImpl (
     private val placesApi: PlacesApi

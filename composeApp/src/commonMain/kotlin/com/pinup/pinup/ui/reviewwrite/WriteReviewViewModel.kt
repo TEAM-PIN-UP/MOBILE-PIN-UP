@@ -58,7 +58,7 @@ class WriteReviewViewModel (
         _uiEvent.emit(WriteReviewUiEvent.MoveWriteReview)
     }
 
-    fun addImage(imgPath: String) = viewModelScope.launch {
+    fun addImage(imgPath: ByteArray) = viewModelScope.launch {
         _uiState.update {
             it.copy(
                 imagePaths = it.imagePaths + imgPath
@@ -66,7 +66,7 @@ class WriteReviewViewModel (
         }
     }
 
-    fun removeImage(imgPath: String) = viewModelScope.launch {
+    fun removeImage(imgPath: ByteArray) = viewModelScope.launch {
         _uiState.update {
             it.copy(
                 imagePaths = it.imagePaths - imgPath
@@ -83,10 +83,7 @@ class WriteReviewViewModel (
     }
 
     fun registerReview() = viewModelScope.launch {
-        val files = _uiState.value.imagePaths.map {
-            val path = getRealPathFromUri(it) ?: return@launch
-            PlatformFile(path).toByteArray()
-        }
+        val files = _uiState.value.imagePaths
         val writeReview = WriteReview(
             content = _uiState.value.content,
             starRating = _uiState.value.starRating.toDouble(),
@@ -114,7 +111,7 @@ data class WriteReviewUiState(
     val visitedDate: String = "",
     val starRating: Int = 0,
     val content: String = "",
-    val imagePaths: List<String> = emptyList()
+    val imagePaths: List<ByteArray> = emptyList()
 )
 
 sealed interface WriteReviewUiEvent {

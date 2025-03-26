@@ -5,7 +5,7 @@ import com.pinup.pinup.domain.model.TokenInfo
 import com.pinup.pinup.domain.model.UserInfo
 import com.pinup.pinup.domain.repository.AuthRepository
 import com.pinup.pinup.ui.login.model.SNSUserInfo
-import javax.inject.Inject
+
 
 class LoginUseCase (
     private val authRepository: AuthRepository,

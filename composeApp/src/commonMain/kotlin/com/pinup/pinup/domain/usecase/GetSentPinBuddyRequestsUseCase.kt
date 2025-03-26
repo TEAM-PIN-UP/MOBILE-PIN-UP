@@ -4,7 +4,7 @@ import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.PagingPinBuddyRequest
 import com.pinup.pinup.domain.model.PinBuddyRequest
 import com.pinup.pinup.domain.repository.PinBuddyRepository
-import javax.inject.Inject
+
 
 class GetSentPinBuddyRequestsUseCase (
     private val pinBuddyRepository: PinBuddyRepository,

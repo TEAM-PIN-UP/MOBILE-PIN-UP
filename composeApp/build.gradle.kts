@@ -39,6 +39,8 @@ kotlin {
             implementation(libs.koin.androidx.compose)
             // ktor
             implementation(libs.ktor.client.okhttp)
+            // naver map
+            implementation(libs.naver.map.compose)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -68,11 +70,16 @@ kotlin {
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeVM)
+            // backHandler
+            implementation(libs.ui.backhandler)
             // datastore
             implementation(libs.androidx.data.store.core)
-            // image picker
-            implementation(libs.peekaboo.ui)
-            implementation(libs.peekaboo.image.picker)
+            // moko library(geo, permission, media)
+            implementation(libs.permissions)
+            implementation(libs.permissions.compose)
+            implementation(libs.media.compose)
+            implementation(libs.geo.compose)
+            implementation(libs.file.picker)
         }
         iosMain.dependencies {
             // ktor
@@ -109,7 +116,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.constraintlayout)
     debugImplementation(compose.uiTooling)
 }
 

@@ -16,6 +16,7 @@ import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.LocationBound
 import com.pinup.pinup.domain.model.PResult
+import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.domain.usecase.AddBookmarkUseCase
@@ -290,8 +291,8 @@ data class MapUiState(
     val placeDetailUiState: PlaceDetailUiState = PlaceDetailUiState(),
     val isFocusLocation: Boolean = false,
     val isShowBookmarks: Boolean = false,
-    val currentLatLng: LatLng? = null,
-    val cameraPosition: LatLng? = null,
+    val currentLatLng: Position? = null,
+    val cameraPosition: Position? = null,
 )
 
 sealed interface MapUiEvent {

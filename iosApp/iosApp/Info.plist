@@ -46,5 +46,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+    <key>NMFNcpKeyId</key>
+    <string>9v600b96lo</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>moko-permissions demo usage</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>moko-media demo usage</string>
 </dict>
 </plist>

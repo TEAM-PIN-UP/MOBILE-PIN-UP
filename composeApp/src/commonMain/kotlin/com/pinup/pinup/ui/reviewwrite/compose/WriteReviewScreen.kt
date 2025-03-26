@@ -48,13 +48,13 @@ fun WriteReviewScreen(
     rating: Double,
     reviewCount: Int,
     reviewText: String,
-    imagePaths: List<String>,
+    imagePaths: List<ByteArray>,
     myRating: Int,
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit = {},
     onRatingSelected: (Int) -> Unit = {},
     onAddImage: (ByteArray) -> Unit = {},
-    onRemoveImage: (String) -> Unit = {},
+    onRemoveImage: (ByteArray) -> Unit = {},
     onRegisterClick: () -> Unit = {},
 ) {
     val maxImageSize = 3

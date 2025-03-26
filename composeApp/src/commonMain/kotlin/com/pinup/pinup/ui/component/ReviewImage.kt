@@ -12,6 +12,27 @@ import com.pinup.pinup.ui.theme.Colors
 
 @Composable
 fun ReviewImage(
+    imgUrl: ByteArray,
+    modifier: Modifier = Modifier,
+) {
+    RoundedBox(
+        modifier = modifier
+            .size(100.dp),
+        cornerRounded = 8,
+        backgroundColor = Colors.Neutral100,
+    ) {
+        if (imgUrl.isNotEmpty()) {
+            AsyncImage(
+                model = imgUrl,
+                contentScale = ContentScale.Crop,
+                contentDescription = "default profile image"
+            )
+        }
+    }
+}
+
+@Composable
+fun ReviewImage(
     imgUrl: String,
     modifier: Modifier = Modifier,
 ) {

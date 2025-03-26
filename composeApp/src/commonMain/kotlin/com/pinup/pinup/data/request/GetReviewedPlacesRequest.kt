@@ -1,6 +1,6 @@
 package com.pinup.pinup.data.request
 
-import com.naver.maps.geometry.LatLng
+import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.LocationBound
 import com.pinup.pinup.domain.model.SortType
@@ -18,14 +18,14 @@ data class GetReviewedPlacesRequest(
     val category: Category,
 ) {
     companion object {
-        fun of(locationBound: LocationBound, currentLatLng: LatLng?, sort: SortType, category: Category): GetReviewedPlacesRequest {
+        fun of(locationBound: LocationBound, currentPosition: Position?, sort: SortType, category: Category): GetReviewedPlacesRequest {
             return GetReviewedPlacesRequest(
                 swLatitude = locationBound.swLatitude,
                 swLongitude = locationBound.swLongitude,
                 neLatitude = locationBound.neLatitude,
                 neLongitude = locationBound.neLongitude,
-                currentLatitude = currentLatLng?.latitude?.toString() ?: "",
-                currentLongitude = currentLatLng?.longitude?.toString() ?: "",
+                currentLatitude = currentPosition?.latitude?.toString() ?: "",
+                currentLongitude = currentPosition?.longitude?.toString() ?: "",
                 sort = sort,
                 category = category
             )
