@@ -6,19 +6,17 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.DisplayMetrics
 import android.util.Log
 import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import coil3.PlatformContext
 import org.koin.java.KoinJavaComponent
-import java.io.File
 
 class AndroidPlatform : Platform {
     override val name: String = "Android ${Build.VERSION.SDK_INT}"
 }
-
-actual fun getPlatform(): Platform = AndroidPlatform()
 
 actual fun openBrowser(url: String, context: PlatformContext) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
@@ -50,11 +48,9 @@ actual fun dataStorePreferences(): DataStore<Preferences> {
         producePath = { context.filesDir.resolve(DATA_STORE_PREFERENCE).absolutePath }
     )
 }
-actual class PlatformFile actual constructor(private val uri: String) {
-    private val context: Context = KoinJavaComponent.getKoin().get()
-    actual val name: String = File(uri).name
 
-    actual suspend fun toByteArray(): ByteArray {
-        return context.contentResolver.openInputStream(uri.toUri())?.use { it.readBytes() } ?: ByteArray(0)
-    }
+actual fun pxToDp(px: Float): Float {
+    val context: Context = KoinJavaComponent.getKoin().get()
+    val metric = context.resources.displayMetrics
+    return (px / (metric.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT))
 }

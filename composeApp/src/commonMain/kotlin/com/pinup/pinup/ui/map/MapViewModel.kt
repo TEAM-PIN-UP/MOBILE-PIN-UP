@@ -1,17 +1,8 @@
 package com.pinup.pinup.ui.map
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Looper
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.compose.CameraPositionState
-import com.naver.maps.map.compose.CameraUpdateReason
+import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.LocationBound
@@ -26,8 +17,10 @@ import com.pinup.pinup.domain.usecase.GetReviewedPlacesUseCase
 import com.pinup.pinup.event.DetailPlaceEventBus
 import com.pinup.pinup.hLog
 import com.pinup.pinup.ui.model.ChipState
+import dev.icerock.moko.geo.LocationTracker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -45,6 +38,7 @@ class MapViewModel (
     private val getDetailPlaceUseCase: GetDetailPlaceUseCase,
     private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
+    private val locationTracker: LocationTracker
 ) : ViewModel() {
     private val _mapUiState = MutableStateFlow(MapUiState())
     val mapUiState: StateFlow<MapUiState>
@@ -52,10 +46,22 @@ class MapViewModel (
     private val _uiEvent = MutableSharedFlow<MapUiEvent>()
     val uiEvent: SharedFlow<MapUiEvent>
         get() = _uiEvent.asSharedFlow()
-    private val locationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
     init {
         initDetailPlaceEventBus()
+        initCollectLocation()
+    }
+
+    private fun initCollectLocation() = viewModelScope.launch {
+        locationTracker.getLocationsFlow()
+            .collectLatest {
+                val myLocation = Position(it.latitude, it.longitude)
+                hLog( "myLocation >>> ${myLocation}")
+                if (_mapUiState.value.currentPosition == null || _mapUiState.value.isFocusLocation) {
+                    updateCameraPosition(myLocation)
+                }
+                updatePosition(myLocation)
+            }
     }
 
     @OptIn(FlowPreview::class)
@@ -67,10 +73,10 @@ class MapViewModel (
             }
     }
 
-    private fun updatePosition(position: LatLng) = viewModelScope.launch {
+    private fun updatePosition(position: Position) = viewModelScope.launch {
         _mapUiState.update {
             it.copy(
-                currentLatLng = position
+                currentPosition = position
             )
         }
     }
@@ -92,53 +98,51 @@ class MapViewModel (
         }
 
         if (value) {
-            updateCameraPosition(_mapUiState.value.currentLatLng)
+            updateCameraPosition(_mapUiState.value.currentPosition)
         }
     }
 
-    private fun updateCameraPosition(latLng: LatLng?) = viewModelScope.launch {
-        hLog("updateCameraPosition >>> ${latLng}")
+    private fun updateCameraPosition(position: Position?) = viewModelScope.launch {
+        hLog("updateCameraPosition >>> ${position}")
         _mapUiState.update {
             it.copy(
-                cameraPosition = latLng
+                cameraPosition = position
             )
         }
     }
 
 
-    fun getPlaces(cameraPositionState: CameraPositionState) = viewModelScope.launch {
-        if (cameraPositionState.isMoving.not()) {
-            updateCameraPosition(cameraPositionState.position.target)
-            val latLngBounds = cameraPositionState.contentBounds
-            if (latLngBounds != null) {
-                val request = _mapUiState.value.locationBound.copy(
-                    neLatitude = latLngBounds.northEast.latitude.toString(),
-                    neLongitude = latLngBounds.northEast.longitude.toString(),
-                    swLatitude = latLngBounds.southWest.latitude.toString(),
-                    swLongitude = latLngBounds.southWest.longitude.toString(),
-                )
-                _mapUiState.value.locationBound = request
-                val filter = _mapUiState.value.searchUiState.chipStates.find { it.isSelected }?.type ?: Category.ALL
-                val sortType = _mapUiState.value.searchUiState.sortType
-                val currentLatLng = if (sortType == SortType.NEAR) _mapUiState.value.currentLatLng else null
-                when (val result = getReviewedPlacesUseCase(request, currentLatLng, sortType, filter)) {
-                    is PResult.Fail -> {
-                        hLog( "fail >> ${result.failState}")
-                    }
+    fun getPlaces(cameraState: CameraState) = viewModelScope.launch {
+        if (cameraState.isMoving.not()) {
+            updateCameraPosition(cameraState.position)
+            val latLngBounds = cameraState.contentBounds
+            val request = _mapUiState.value.locationBound.copy(
+                neLatitude = latLngBounds.northEast.latitude.toString(),
+                neLongitude = latLngBounds.northEast.longitude.toString(),
+                swLatitude = latLngBounds.southWest.latitude.toString(),
+                swLongitude = latLngBounds.southWest.longitude.toString(),
+            )
+            _mapUiState.value.locationBound = request
+            val filter = _mapUiState.value.searchUiState.chipStates.find { it.isSelected }?.type ?: Category.ALL
+            val sortType = _mapUiState.value.searchUiState.sortType
+            val currentLatLng = if (sortType == SortType.NEAR) _mapUiState.value.currentPosition else null
+            when (val result = getReviewedPlacesUseCase(request, currentLatLng, sortType, filter)) {
+                is PResult.Fail -> {
+                    hLog( "fail >> ${result.failState}")
+                }
 
-                    is PResult.Success -> {
-                        _mapUiState.update {
-                            it.copy(
-                                searchUiState = it.searchUiState.copy(
-                                    reviewedPlaces = result.data
-                                ),
-                            )
-                        }
+                is PResult.Success -> {
+                    _mapUiState.update {
+                        it.copy(
+                            searchUiState = it.searchUiState.copy(
+                                reviewedPlaces = result.data
+                            ),
+                        )
                     }
                 }
             }
         } else {
-            if (cameraPositionState.cameraUpdateReason == CameraUpdateReason.GESTURE && _mapUiState.value.isFocusLocation) {
+            if (cameraState.reason == CameraState.Reason.GESTURE && _mapUiState.value.isFocusLocation) {
                 hLog("3")
                 updateFocusLocation(false)
             }
@@ -148,7 +152,7 @@ class MapViewModel (
     fun updateChipState(chipState: ChipState) = viewModelScope.launch(Dispatchers.IO) {
         val request = _mapUiState.value.locationBound
         val sortType = _mapUiState.value.searchUiState.sortType
-        val currentLatLng = if (sortType == SortType.NEAR) _mapUiState.value.currentLatLng else null
+        val currentLatLng = if (sortType == SortType.NEAR) _mapUiState.value.currentPosition else null
         when (val result = getReviewedPlacesUseCase(request, currentLatLng, sortType, chipState.type)) {
             is PResult.Fail -> {
                 hLog( "fail >> ${result.failState}")
@@ -175,8 +179,8 @@ class MapViewModel (
         if (_mapUiState.value.placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId == kakaoPlaceId) return@launch
         when (val result = getDetailPlaceUseCase(
             kakaoPlaceId = kakaoPlaceId,
-            currentLatitude = _mapUiState.value.currentLatLng?.latitude?.toString(),
-            currentLongitude = _mapUiState.value.currentLatLng?.longitude?.toString()
+            currentLatitude = _mapUiState.value.currentPosition?.latitude?.toString(),
+            currentLongitude = _mapUiState.value.currentPosition?.longitude?.toString()
         )) {
             is PResult.Fail -> {
                 hLog( "fail >> ${result.failState}")
@@ -186,7 +190,7 @@ class MapViewModel (
                 _mapUiState.update {
                     it.copy(
                         placeDetailUiState = PlaceDetailUiState(result.data),
-                        cameraPosition = LatLng(result.data.mapPlace.latitude, result.data.mapPlace.longitude),
+                        cameraPosition = Position(result.data.mapPlace.latitude, result.data.mapPlace.longitude),
                         isFocusLocation = false
                     )
                 }
@@ -233,7 +237,7 @@ class MapViewModel (
     fun updateSortType(sortType: SortType) = viewModelScope.launch {
         val request = _mapUiState.value.locationBound
         val chipState = _mapUiState.value.searchUiState.chipStates.first { it.isSelected }
-        val currentLatLng = if (sortType == SortType.NEAR) _mapUiState.value.currentLatLng else null
+        val currentLatLng = if (sortType == SortType.NEAR) _mapUiState.value.currentPosition else null
         when (val result = getReviewedPlacesUseCase(request, currentLatLng, sortType, chipState.type)) {
             is PResult.Fail -> {
                 hLog( "fail >> ${result.failState}")
@@ -252,24 +256,9 @@ class MapViewModel (
         }
     }
 
-    fun collectPosition() {
-        if (ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED && _mapUiState.value.currentLatLng == null
-        ) {
-            locationProviderClient.requestLocationUpdates(
-                LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5_000)
-                    .setIntervalMillis(5_000).build(),
-                { location ->
-                    val myLocation = LatLng(location.latitude, location.longitude)
-                    hLog( "myLocation >>> ${myLocation}")
-                    if (_mapUiState.value.currentLatLng == null || _mapUiState.value.isFocusLocation) {
-                        updateCameraPosition(myLocation)
-                    }
-                    updatePosition(myLocation)
-                },
-                Looper.getMainLooper()
-            )
+    fun collectPosition() = viewModelScope.launch {
+        if (_mapUiState.value.currentPosition == null) {
+            locationTracker.startTracking()
         }
     }
 }
@@ -291,7 +280,7 @@ data class MapUiState(
     val placeDetailUiState: PlaceDetailUiState = PlaceDetailUiState(),
     val isFocusLocation: Boolean = false,
     val isShowBookmarks: Boolean = false,
-    val currentLatLng: Position? = null,
+    val currentPosition: Position? = null,
     val cameraPosition: Position? = null,
 )
 

@@ -1,26 +1,13 @@
 package com.pinup.pinup.ui.map
 
-import android.Manifest
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
-import android.util.Log
-import android.view.Gravity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -33,40 +20,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import org.jetbrains.compose.resources.painterResource
-import pinup.composeapp.generated.resources.*
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import coil3.compose.LocalPlatformContext
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionStatus
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
-import com.naver.maps.geometry.LatLng
-import com.naver.maps.geometry.LatLngBounds
-import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.compose.CameraPositionState
-import com.naver.maps.map.compose.ExperimentalNaverMapApi
-import com.naver.maps.map.compose.LocationOverlay
-import com.naver.maps.map.compose.LocationTrackingMode
-import com.naver.maps.map.compose.MapProperties
-import com.naver.maps.map.compose.MapUiSettings
-import com.naver.maps.map.compose.MarkerComposable
-import com.naver.maps.map.compose.MarkerState
-import com.naver.maps.map.compose.NaverMap
-import com.naver.maps.map.compose.rememberCameraPositionState
-import com.naver.maps.map.overlay.OverlayImage
 import com.pinup.pinup.PlatformNaverMap
-import com.pinup.pinup.R
-import com.pinup.pinup.domain.model.Category
+import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
@@ -74,11 +36,24 @@ import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.hLog
 import com.pinup.pinup.ui.component.PBottomSheet
 import com.pinup.pinup.ui.component.PDialog
-import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.model.ChipState
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.Typography
+import dev.icerock.moko.permissions.DeniedAlwaysException
+import dev.icerock.moko.permissions.DeniedException
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.PermissionState
+import dev.icerock.moko.permissions.RequestCanceledException
+import dev.icerock.moko.permissions.compose.BindEffect
+import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
+import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
+import dev.icerock.moko.permissions.location.LOCATION
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.ic_bookmark_off
+import pinup.composeapp.generated.resources.ic_bookmark_on
+import pinup.composeapp.generated.resources.ic_focus
 
 @Composable
 fun MapScreen(
@@ -88,7 +63,7 @@ fun MapScreen(
     isShowBookmarks: Boolean,
     position: Position = Position.INVALID,
     cameraPosition: Position? = null,
-    onCameraStateChange: (CameraPositionState) -> Unit = { },
+    onCameraStateChange: (CameraState) -> Unit = { },
     onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
     onPlaceClick: (String) -> Unit = { },
@@ -99,6 +74,7 @@ fun MapScreen(
     onUpdateShowBookmarks: () -> Unit = {},
     onUpdateFocusLocation: (Boolean) -> Unit = {},
 ) {
+    val scope: CoroutineScope = rememberCoroutineScope()
     val context = LocalPlatformContext.current
     var parentHeightPx by remember { mutableIntStateOf(0) }
     val parentHeightDp = with(LocalDensity.current) { parentHeightPx.toDp() }
@@ -125,52 +101,56 @@ fun MapScreen(
     }
     val isShowPermissionDialog = remember { mutableStateOf(false) }
 
-    val launcherMultiplePermissions = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissionsMap ->
-        hLog("permissionsMap >>> ${permissionsMap.values}")
-        val areGranted = permissionsMap.values.reduce { acc, next -> acc && next }
-        if (areGranted) {
-            onUpdatePosition()
-        }
-    }
-
-    val permissionState = rememberPermissionState(Manifest.permission.ACCESS_FINE_LOCATION)
+    val permissionsControllerFactory: PermissionsControllerFactory =
+        rememberPermissionsControllerFactory()
+    val permissionsController = remember { permissionsControllerFactory.createPermissionsController() }
+    BindEffect(permissionsController)
+    val allPermissionsGranted = remember { mutableStateOf(false) }
 
     fun requestPermission() {
-        launcherMultiplePermissions.launch(
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        )
+        scope.launch {
+            try {
+                permissionsController.providePermission(Permission.LOCATION)
+                onUpdatePosition()
+            } catch (exc: RequestCanceledException) {
+
+            } catch (exc: DeniedException) {
+
+            } catch (exc: DeniedAlwaysException) {
+
+            }
+        }
     }
 
     fun getCurrentLocation() {
-        when (permissionState.status) {
-            is PermissionStatus.Denied -> {
-                hLog( "shouldShowRationale >>> ${permissionState.status.shouldShowRationale}")
-                if (permissionState.status.shouldShowRationale) {
+        scope.launch {
+            when (permissionsController.getPermissionState(Permission.LOCATION)) {
+                PermissionState.Granted -> {
+                    hLog( "allRequiredPermission >>> ${position}")
+                    hLog("2")
+                    onUpdateFocusLocation(isFocusLocation.not())
+                }
+                PermissionState.Denied -> {
                     requestPermission()
-                } else {
+                }
+                else -> {
                     isShowPermissionDialog.value = true
                 }
-            }
-            PermissionStatus.Granted -> {
-                hLog( "allRequiredPermission >>> ${position}")
-                hLog("2")
-                onUpdateFocusLocation(isFocusLocation.not())
             }
         }
     }
 
+    LaunchedEffect(permissionsController) {
+        allPermissionsGranted.value = permissionsController.isPermissionGranted(Permission.LOCATION)
+    }
+
     LifecycleResumeEffect(Unit) {
-        hLog( "allRequiredPermission >>> ${permissionState.status.isGranted}")
-        hLog( "shouldShowRationale >>> ${permissionState.status.shouldShowRationale}")
-        if (permissionState.status.isGranted) {
-            onUpdatePosition()
-        } else if (permissionState.status.shouldShowRationale) {
-            requestPermission()
+        scope.launch {
+            val isPermissionGranted = permissionsController.isPermissionGranted(Permission.LOCATION)
+            hLog( "isPermissionGranted >>> $isPermissionGranted")
+            if (isPermissionGranted) {
+                onUpdatePosition()
+            }
         }
 
         onPauseOrDispose { }
@@ -190,6 +170,7 @@ fun MapScreen(
             isShowBookmarks = isShowBookmarks,
             cameraPosition = cameraPosition,
             onPlaceClick = onPlaceClick,
+            onCameraStateChange = onCameraStateChange
         )
 
         ConstraintLayout(
@@ -268,7 +249,7 @@ fun MapScreen(
                 MapBottomSheetNavHost(
                     searchUiState = searchUiState,
                     placeDetailUiState = placeDetailUiState,
-                    allPermissionsGranted = permissionState.status.isGranted,
+                    allPermissionsGranted = allPermissionsGranted.value,
                     isScrollable = alpha == 0f,
                     onValueChange = onValueChange,
                     onChipClick = onChipClick,
@@ -294,10 +275,7 @@ fun MapScreen(
             },
             onRightButtonClick = {
                 isShowPermissionDialog.value = false
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.parse("package:" + context.packageName)
-                }
-                context.startActivity(intent)
+                permissionsController.openAppSettings()
             },
         )
     }

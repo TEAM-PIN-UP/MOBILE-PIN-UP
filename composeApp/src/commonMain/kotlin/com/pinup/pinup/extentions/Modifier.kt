@@ -11,6 +11,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.semantics.Role
+import kotlinx.datetime.Clock
 
 
 fun Modifier.clickableWithNoRipple(
@@ -113,7 +114,7 @@ internal fun MultipleEventsCutter.Companion.get(): MultipleEventsCutter =
 
 private class MultipleEventsCutterImpl : MultipleEventsCutter {
     private val now: Long
-        get() = System.currentTimeMillis()
+        get() = Clock.System.now().epochSeconds
 
     private var lastEventTimeMs: Long = 0
 

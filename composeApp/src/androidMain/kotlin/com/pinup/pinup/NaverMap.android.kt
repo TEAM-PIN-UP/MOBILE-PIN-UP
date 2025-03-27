@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraUpdate
+import com.naver.maps.map.compose.CameraUpdateReason
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.LocationOverlay
 import com.naver.maps.map.compose.LocationTrackingMode
@@ -30,8 +30,10 @@ import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.overlay.OverlayImage
+import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Position
+import com.pinup.pinup.domain.model.PositionBounds
 import com.pinup.pinup.extentions.toLatLng
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.map.PlaceDetailUiState
@@ -55,7 +57,8 @@ actual fun PlatformNaverMap(
     placeDetailUiState: PlaceDetailUiState,
     isShowBookmarks: Boolean,
     cameraPosition: Position?,
-    onPlaceClick: (String) -> Unit
+    onPlaceClick: (String) -> Unit,
+    onCameraStateChange: (CameraState) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val cameraPositionState = rememberCameraPositionState()
@@ -71,8 +74,33 @@ actual fun PlatformNaverMap(
     }
 
     LaunchedEffect(cameraPositionState.isMoving) {
-        hLog( "MapScreen: ${cameraPositionState.cameraUpdateReason}")
-        onCameraStateChange(cameraPositionState)
+        hLog("MapScreen: ${cameraPositionState.cameraUpdateReason}")
+        cameraPositionState.contentBounds?.let {
+            onCameraStateChange(
+                CameraState(
+                    isMoving = cameraPositionState.isMoving,
+                    contentBounds = PositionBounds(
+                        southWest = Position(
+                            latitude = it.southWest.latitude,
+                            longitude = it.southWest.longitude
+                        ),
+                        northEast = Position(
+                            latitude = it.northEast.latitude,
+                            longitude = it.northEast.longitude
+                        )
+                    ),
+                    reason = if (cameraPositionState.cameraUpdateReason == CameraUpdateReason.GESTURE) {
+                        CameraState.Reason.GESTURE
+                    } else {
+                        CameraState.Reason.ELSE
+                    },
+                    position = Position(
+                        latitude = cameraPositionState.position.target.latitude,
+                        longitude = cameraPositionState.position.target.longitude
+                    )
+                )
+            )
+        }
     }
 
     NaverMap(

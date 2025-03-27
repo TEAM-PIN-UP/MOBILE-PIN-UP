@@ -14,16 +14,11 @@ interface Platform {
     val name: String
 }
 
-expect fun getPlatform(): Platform
-
 expect fun openBrowser(url: String, context: PlatformContext)
 expect fun getRealPathFromUri(contentUri: String): String?
 expect fun hLog(message: String)
 expect fun dataStorePreferences(): DataStore<Preferences>
-expect class PlatformFile(uri: String) {
-    val name: String
-    suspend fun toByteArray(): ByteArray
-}
+expect fun pxToDp(px: Float): Float
 
 fun createDataStore(
     producePath: () -> String,

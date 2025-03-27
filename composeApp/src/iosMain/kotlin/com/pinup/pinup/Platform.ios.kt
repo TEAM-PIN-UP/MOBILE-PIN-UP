@@ -13,12 +13,12 @@ import platform.Foundation.NSURL
 import platform.Foundation.NSUserDomainMask
 import platform.UIKit.UIApplication
 import platform.UIKit.UIDevice
+import platform.UIKit.UIScreen
 
 class IOSPlatform: Platform {
     override val name: String = UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
 }
 
-actual fun getPlatform(): Platform = IOSPlatform()
 
 actual fun openBrowser(url: String, context: PlatformContext) {
     val nsUrl = NSURL.URLWithString(url)
@@ -39,13 +39,10 @@ actual fun dataStorePreferences(): DataStore<Preferences> {
         producePath = { producePath() }
     )
 }
-actual class PlatformFile actual constructor(private val uri: String) {
-    actual val name: String = uri.split("/").last()
 
-    actual suspend fun toByteArray(): ByteArray {
-        val file = NSFileManager.defaultManager.contentsAtPath(uri)
-        return file?.toByteString()?.toByteArray() ?: ByteArray(0)
-    }
+actual fun pxToDp(px: Float): Float {
+    val scale = UIScreen.mainScreen.scale.toFloat()
+    return px / scale
 }
 
 @OptIn(ExperimentalForeignApi::class)

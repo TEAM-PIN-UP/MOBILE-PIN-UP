@@ -3,6 +3,7 @@ package com.pinup.pinup
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.ui.map.PlaceDetailUiState
 import com.pinup.pinup.ui.map.SearchUiState
@@ -16,5 +17,6 @@ expect fun PlatformNaverMap(
     placeDetailUiState: PlaceDetailUiState,
     isShowBookmarks: Boolean,
     cameraPosition: Position?,
-    onPlaceClick: (String) -> Unit
+    onPlaceClick: (String) -> Unit,
+    onCameraStateChange: (CameraState) -> Unit
 )

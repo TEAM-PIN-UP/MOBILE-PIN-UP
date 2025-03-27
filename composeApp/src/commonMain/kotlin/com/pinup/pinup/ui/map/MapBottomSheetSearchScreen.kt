@@ -26,12 +26,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.extentions.clickableWithNoRipple
-import com.pinup.pinup.extentions.toDp
 import com.pinup.pinup.ui.component.Chips
 import com.pinup.pinup.ui.component.ReviewedPlaceCard
 import com.pinup.pinup.ui.component.RoundedTextField
@@ -41,7 +39,10 @@ import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.resources.painterResource
-import pinup.composeapp.generated.resources.*
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.ic_chevron_bottom
+import pinup.composeapp.generated.resources.ic_search
+import pinup.composeapp.generated.resources.ic_search_back
 
 @Composable
 fun MapBottomSheetSearchScreen(

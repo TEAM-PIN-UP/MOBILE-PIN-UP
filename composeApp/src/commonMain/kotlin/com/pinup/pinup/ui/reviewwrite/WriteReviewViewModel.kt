@@ -2,12 +2,10 @@ package com.pinup.pinup.ui.reviewwrite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pinup.pinup.PlatformFile
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.WriteReview
 import com.pinup.pinup.domain.usecase.RegisterReviewUseCase
-import com.pinup.pinup.getRealPathFromUri
 import com.pinup.pinup.hLog
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

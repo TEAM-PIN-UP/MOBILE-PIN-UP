@@ -6,6 +6,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitView
+import cocoapods.NMapsMap.NMFMapView
+import cocoapods.NMapsMap.NMFMarker
+import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.ui.map.PlaceDetailUiState
 import com.pinup.pinup.ui.map.SearchUiState
@@ -20,7 +23,8 @@ actual fun PlatformNaverMap(
     placeDetailUiState: PlaceDetailUiState,
     isShowBookmarks: Boolean,
     cameraPosition: Position?,
-    onPlaceClick: (String) -> Unit
+    onPlaceClick: (String) -> Unit,
+    onCameraStateChange: (CameraState) -> Unit
 ) {
     val naverMapView = remember { NMFMapView() }
     val markers = remember { mutableMapOf<Long, NMFMarker>() }

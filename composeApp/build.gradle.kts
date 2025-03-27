@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -25,8 +26,22 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
+            isStatic = false
+        }
+    }
+
+    cocoapods {
+        summary = "Some description for the Shared Module"
+        homepage = "Link to the Shared Module homepage"
+        version = "1.0"
+        ios.deploymentTarget = "16.0"
+
+        framework {
+            baseName = "NMapsMap"
             isStatic = true
         }
+
+        pod("NMapsMap")
     }
     
     sourceSets {
@@ -53,6 +68,10 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.navigation.compose)
             implementation(libs.compose.constraintlayout)
+
+            // image, camera
+            implementation(libs.peekaboo.image.picker)
+            implementation(libs.peekaboo.ui)
 
             // ktor
             implementation(libs.ktor.client.core)

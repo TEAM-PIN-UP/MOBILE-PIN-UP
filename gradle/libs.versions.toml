@@ -8,16 +8,16 @@ androidx-appcompat = "1.7.0"
 androidx-constraintlayout = "2.2.0"
 androidx-core-ktx = "1.15.0"
 androidx-espresso-core = "3.6.1"
-androidx-lifecycle = "2.8.4"
+androidx-lifecycle = "2.9.0-alpha14"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
 compose-multiplatform = "1.8.0-beta01"
 junit = "4.13.2"
 kotlin = "2.1.0"
-navigation = "2.8.0-alpha10"
+navigation = "2.9.0-alpha15"
 backHandler = "1.8.0-rc01"
 kotlin-serialization = "1.7.3"
-koin = "4.0.0"
+koin = "4.1.0-Beta5"
 kotlin-datetime = "0.6.2"
 coil = "3.0.4"
 ktor = "3.0.3"
@@ -91,5 +91,6 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}

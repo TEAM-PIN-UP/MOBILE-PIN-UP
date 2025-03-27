@@ -1,21 +1,26 @@
 package com.pinup.pinup.ui.map
 
 import androidx.compose.runtime.Composable
-import org.koin.compose.viewmodel.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.naver.maps.geometry.LatLng
 import com.pinup.pinup.domain.model.Position
+import dev.icerock.moko.geo.compose.LocationTrackerAccuracy
+import dev.icerock.moko.geo.compose.LocationTrackerFactory
+import dev.icerock.moko.geo.compose.rememberLocationTrackerFactory
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
-fun MapRoute(
-    mapViewModel: MapViewModel = koinViewModel()
-) {
+fun MapRoute() {
+    val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
+        accuracy = LocationTrackerAccuracy.Best
+    )
+    val mapViewModel: MapViewModel = koinViewModel(parameters = { parametersOf(locationTrackerFactory.createLocationTracker()) })
     val mapUiState = mapViewModel.mapUiState.collectAsStateWithLifecycle()
 
     MapScreen(
         searchUiState = mapUiState.value.searchUiState,
         placeDetailUiState = mapUiState.value.placeDetailUiState,
-        position = mapUiState.value.currentLatLng ?: Position.INVALID,
+        position = mapUiState.value.currentPosition ?: Position.INVALID,
         cameraPosition = mapUiState.value.cameraPosition,
         isFocusLocation = mapUiState.value.isFocusLocation,
         isShowBookmarks = mapUiState.value.isShowBookmarks,

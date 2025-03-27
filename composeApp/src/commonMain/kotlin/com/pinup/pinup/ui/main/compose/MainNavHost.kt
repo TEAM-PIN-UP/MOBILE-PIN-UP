@@ -1,6 +1,5 @@
 package com.pinup.pinup.ui.main.compose
 
-import android.util.Log
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Column
