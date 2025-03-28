@@ -1,0 +1,135 @@
+package com.pinup.pinup.ui.reviewwrite.compose
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.pinup.pinup.ui.component.PDialog
+import com.pinup.pinup.ui.component.PHorizontalDivider
+import com.pinup.pinup.ui.component.TitleBar
+import com.pinup.pinup.ui.reviewwrite.WriteReviewUiEvent
+import com.pinup.pinup.ui.reviewwrite.WriteReviewViewModel
+import com.pinup.pinup.ui.reviewwrite.searchplace.SearchPlaceRoute
+import com.pinup.pinup.ui.theme.Colors
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.serialization.Serializable
+import org.koin.compose.viewmodel.koinViewModel
+
+@Composable
+fun WriteReviewNavHost(
+    writeReviewViewModel: WriteReviewViewModel = koinViewModel(),
+    onBackPressed: () -> Unit,
+    onMoveDetailPlace: (String) -> Unit,
+) {
+    val uiState = writeReviewViewModel.uiState.collectAsStateWithLifecycle()
+    val navHostController = rememberNavController()
+    val isShowCompleteDialog = remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        writeReviewViewModel.uiEvent
+            .collectLatest {
+                when (it) {
+                    WriteReviewUiEvent.MoveSelectDate -> {
+                        navHostController.navigate(WriteReviewDestination.SelectDate)
+                    }
+
+                    WriteReviewUiEvent.MoveWriteReview -> {
+                        navHostController.navigate(WriteReviewDestination.WriteReview)
+                    }
+
+                    WriteReviewUiEvent.SuccessWriteReview -> {
+                        isShowCompleteDialog.value = true
+                    }
+                }
+            }
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                color = Colors.White
+            )
+    ) {
+        TitleBar(
+            title = "리뷰 작성",
+            onLeftButtonClick = {
+                onBackPressed()
+            }
+        )
+
+        PHorizontalDivider()
+
+        NavHost(
+            navController = navHostController,
+            startDestination = WriteReviewDestination.SearchPlace
+        ) {
+            composable<WriteReviewDestination.SearchPlace> {
+                SearchPlaceRoute(
+                    onPlaceClick = writeReviewViewModel::selectPlace
+                )
+            }
+
+            composable<WriteReviewDestination.SelectDate> {
+                uiState.value.selectedPlace?.let {
+                    SelectDateScreen(
+                        placeName = it.name,
+                        onSelectedDate = writeReviewViewModel::selectDate
+                    )
+                }
+            }
+
+            composable<WriteReviewDestination.WriteReview> {
+                uiState.value.selectedPlace?.let {
+                    WriteReviewScreen(
+                        placeName = it.name,
+                        address = it.address,
+                        reviewText = uiState.value.content,
+                        rating = it.averageStarRating,
+                        reviewCount = it.reviewCount,
+                        imagePaths = uiState.value.imagePaths,
+                        myRating = uiState.value.starRating,
+                        onValueChange = writeReviewViewModel::updateContent,
+                        onRemoveImage = writeReviewViewModel::removeImage,
+                        onAddImage = writeReviewViewModel::addImage,
+                        onRatingSelected = writeReviewViewModel::updateRating,
+                        onRegisterClick = writeReviewViewModel::registerReview,
+                    )
+                }
+            }
+        }
+    }
+
+    if (isShowCompleteDialog.value) {
+        PDialog(
+            titleText = "리뷰 작성 완료!",
+            descriptionText = "등록한 리뷰를\n확인하시겠어요?",
+            leftButtonText = "아니요",
+            rightButtonText = "확인",
+            onLeftButtonClick = {
+                isShowCompleteDialog.value = false
+                onBackPressed()
+            },
+            onRightButtonClick = {
+                isShowCompleteDialog.value = false
+                writeReviewViewModel.kakaoPlaceId?.let(onMoveDetailPlace)
+            },
+        )
+    }
+}
+
+sealed interface WriteReviewDestination {
+    @Serializable
+    data object SearchPlace : WriteReviewDestination
+    @Serializable
+    data object SelectDate : WriteReviewDestination
+    @Serializable
+    data object WriteReview : WriteReviewDestination
+}

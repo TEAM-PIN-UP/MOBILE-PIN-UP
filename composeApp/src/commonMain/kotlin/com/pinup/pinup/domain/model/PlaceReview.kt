@@ -1,0 +1,15 @@
+package com.pinup.pinup.domain.model
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class PlaceReview(
+    val content: String,
+    val reviewId: Int,
+    val reviewImageUrls: List<String>,
+    val starRating: Double,
+    val visitedDate: String,
+    val writerName: String,
+    val writerProfileImageUrl: String?,
+    val writerTotalReviewCount: Int
+)

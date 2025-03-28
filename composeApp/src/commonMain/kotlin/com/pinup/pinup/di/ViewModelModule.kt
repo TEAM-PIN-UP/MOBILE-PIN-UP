@@ -1,0 +1,33 @@
+package com.pinup.pinup.di
+
+import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.module
+import com.pinup.pinup.ui.userprofile.UserProfileViewModel
+import com.pinup.pinup.ui.login.LoginViewModel
+import com.pinup.pinup.ui.signup.SignUpViewModel
+import com.pinup.pinup.ui.setting.SettingViewModel
+import com.pinup.pinup.ui.reviewwrite.WriteReviewViewModel
+import com.pinup.pinup.ui.pinbuddy.PinBuddyViewModel
+import com.pinup.pinup.ui.my.MyViewModel
+import com.pinup.pinup.ui.map.MapViewModel
+import com.pinup.pinup.ui.main.MainViewModel
+import com.pinup.pinup.ui.bookmark.BookmarkViewModel
+import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyViewModel
+import com.pinup.pinup.ui.reviewwrite.searchplace.SearchPlaceViewModel
+import com.pinup.pinup.StartAppViewModel
+
+val viewModelModule = module {
+    viewModelOf(::UserProfileViewModel)
+    viewModelOf(::LoginViewModel)
+    viewModelOf(::SignUpViewModel)
+    viewModelOf(::SettingViewModel)
+    viewModelOf(::WriteReviewViewModel)
+    viewModelOf(::SearchPlaceViewModel)
+    viewModelOf(::PinBuddyViewModel)
+    viewModelOf(::MyViewModel)
+    viewModelOf(::MapViewModel)
+    viewModelOf(::MainViewModel)
+    viewModelOf(::BookmarkViewModel)
+    viewModelOf(::AddPinBuddyViewModel)
+    viewModelOf(::StartAppViewModel)
+}
