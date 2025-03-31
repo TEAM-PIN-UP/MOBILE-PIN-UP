@@ -26,7 +26,7 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
-            isStatic = false
+            isStatic = true
         }
     }
 
@@ -35,11 +35,7 @@ kotlin {
         homepage = "Link to the Shared Module homepage"
         version = "1.0"
         ios.deploymentTarget = "16.0"
-
-        framework {
-            baseName = "NMapsMap"
-            isStatic = true
-        }
+        podfile = project.file("../iosApp/Podfile")
 
         pod("NMapsMap")
     }
@@ -90,7 +86,7 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.composeVM)
             // backHandler
-            implementation(libs.ui.backhandler)
+//            implementation(libs.ui.backhandler)
             // datastore
             implementation(libs.androidx.data.store.core)
             // moko library(geo, permission, media)

@@ -25,7 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.backhandler.BackHandler
+//import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.unit.dp
@@ -74,10 +74,10 @@ fun MapBottomSheetDetailScreen(
         userScrollable = isExpanded && (firstItemVisible.not() || isDragUp)
     }
 
-    BackHandler {
-        onClearDetailPlace()
-        onBackPressed()
-    }
+//    BackHandler {
+//        onClearDetailPlace()
+//        onBackPressed()
+//    }
 
     if (detailPlace == null) {
 
