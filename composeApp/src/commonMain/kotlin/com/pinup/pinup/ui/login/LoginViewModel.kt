@@ -35,11 +35,11 @@ class LoginViewModel (
 
     }
     fun doSNSLogin(snsType: SNSType) {
-//        val snsLoginController = SNSLoginResultFactory.initialize(snsType)
-//        snsLoginController.doLogin(
-//            context = context,
-//            resultListener = loginResultListener
-//        )
+        val snsLoginController = SNSLoginResultFactory.initialize(snsType)
+        snsLoginController.doLogin(
+            context = context,
+            resultListener = loginResultListener
+        )
     }
 
     private fun login(snsLoginInfo: SNSUserInfo) = viewModelScope.launch {
