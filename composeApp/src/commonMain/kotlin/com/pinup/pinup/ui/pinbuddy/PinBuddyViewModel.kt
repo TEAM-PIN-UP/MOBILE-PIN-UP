@@ -14,7 +14,7 @@ import com.pinup.pinup.domain.usecase.GetPinBuddiesUseCase
 import com.pinup.pinup.domain.usecase.GetReceivePinBuddyRequestsUseCase
 import com.pinup.pinup.domain.usecase.GetSentPinBuddyRequestsUseCase
 import com.pinup.pinup.domain.usecase.RejectPinBuddyUseCase
-import com.pinup.pinup.hLog
+import com.pinup.pinup.platform.hLog
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

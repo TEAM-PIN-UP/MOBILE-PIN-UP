@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.LocalPlatformContext
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
-import com.pinup.pinup.openBrowser
+import com.pinup.pinup.platform.openBrowser
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.TitleBar
@@ -28,7 +28,8 @@ import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import com.pinup.pinup.util.Const
 import org.jetbrains.compose.resources.painterResource
-import pinup.composeapp.generated.resources.*
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.ic_chevron_right
 
 @Composable
 fun SettingScreen(

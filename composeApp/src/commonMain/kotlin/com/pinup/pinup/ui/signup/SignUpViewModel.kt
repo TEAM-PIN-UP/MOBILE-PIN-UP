@@ -9,7 +9,7 @@ import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
 import com.pinup.pinup.domain.usecase.LoginUseCase
 import com.pinup.pinup.domain.usecase.SignUpUseCase
 import com.pinup.pinup.domain.validator.NickNameValidator
-import com.pinup.pinup.hLog
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.login.model.SNSUserInfo
 import kotlinx.coroutines.FlowPreview

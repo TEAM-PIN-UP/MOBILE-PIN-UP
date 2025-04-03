@@ -12,7 +12,7 @@ import com.pinup.pinup.domain.model.getSuccessOrNull
 import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPhotoReviewsUseCase
 import com.pinup.pinup.domain.usecase.GetTextReviewsUseCase
-import com.pinup.pinup.hLog
+import com.pinup.pinup.platform.hLog
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

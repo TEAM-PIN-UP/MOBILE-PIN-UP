@@ -27,13 +27,13 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import coil3.compose.LocalPlatformContext
-import com.pinup.pinup.PlatformNaverMap
+import com.pinup.pinup.platform.PlatformNaverMap
 import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
-import com.pinup.pinup.hLog
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.PBottomSheet
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.model.ChipState
@@ -126,7 +126,7 @@ fun MapScreen(
         scope.launch {
             when (permissionsController.getPermissionState(Permission.LOCATION)) {
                 PermissionState.Granted -> {
-                    hLog( "allRequiredPermission >>> ${position}")
+                    hLog("allRequiredPermission >>> ${position}")
                     hLog("2")
                     onUpdateFocusLocation(isFocusLocation.not())
                 }
@@ -147,7 +147,7 @@ fun MapScreen(
     LifecycleResumeEffect(Unit) {
         scope.launch {
             val isPermissionGranted = permissionsController.isPermissionGranted(Permission.LOCATION)
-            hLog( "isPermissionGranted >>> $isPermissionGranted")
+            hLog("isPermissionGranted >>> $isPermissionGranted")
             if (isPermissionGranted) {
                 onUpdatePosition()
             }

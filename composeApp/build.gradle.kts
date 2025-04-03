@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -38,6 +39,7 @@ kotlin {
         podfile = project.file("../iosApp/Podfile")
 
         pod("NMapsMap")
+        pod("GoogleSignIn")
     }
     
     sourceSets {
@@ -52,6 +54,14 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             // naver map
             implementation(libs.naver.map.compose)
+            // google login
+            implementation(libs.androidx.credentials)
+            implementation(libs.google.api)
+            implementation(libs.googleid)
+            // kakao login
+            implementation(libs.kakao.user)
+            // naver login
+            implementation(libs.naver.oauth)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -113,6 +123,35 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+
+        buildConfigField(
+            "String",
+            "NAVER_CLIENT_ID",
+            getApiKey("naver.client.id")
+        )
+
+        buildConfigField(
+            "String",
+            "NAVER_CLIENT_SECRET",
+            getApiKey("naver.client.secret")
+        )
+
+        buildConfigField(
+            "String",
+            "GOOGLE_CLIENT_ID",
+            getApiKey("google.client.id")
+        )
+
+        buildConfigField(
+            "String",
+            "KAKAO_APP_KEY",
+            getApiKey("kakao.app.key")
+        )
+        manifestPlaceholders["NATIVE_APP_KEY"] = getApiKey("kakao.app.key")
+        manifestPlaceholders["NAVER_MAP_CLIENT_ID"] = getApiKey("naver.map.client.id")
+    }
+    buildFeatures {
+        buildConfig = true
     }
     packaging {
         resources {
@@ -128,6 +167,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+}
+
+fun getApiKey(propertyKey: String): String {
+    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }
 
 dependencies {

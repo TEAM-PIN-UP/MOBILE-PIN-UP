@@ -1,4 +1,4 @@
-package com.pinup.pinup
+package com.pinup.pinup.platform
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory

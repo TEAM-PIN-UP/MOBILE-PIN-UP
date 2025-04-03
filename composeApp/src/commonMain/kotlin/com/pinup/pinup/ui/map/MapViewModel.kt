@@ -15,7 +15,7 @@ import com.pinup.pinup.domain.usecase.DeleteBookmarkUseCase
 import com.pinup.pinup.domain.usecase.GetDetailPlaceUseCase
 import com.pinup.pinup.domain.usecase.GetReviewedPlacesUseCase
 import com.pinup.pinup.event.DetailPlaceEventBus
-import com.pinup.pinup.hLog
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.model.ChipState
 import dev.icerock.moko.geo.LocationTracker
 import kotlinx.coroutines.Dispatchers
@@ -56,7 +56,7 @@ class MapViewModel (
         locationTracker.getLocationsFlow()
             .collectLatest {
                 val myLocation = Position(it.latitude, it.longitude)
-                hLog( "myLocation >>> ${myLocation}")
+                hLog("myLocation >>> ${myLocation}")
                 if (_mapUiState.value.currentPosition == null || _mapUiState.value.isFocusLocation) {
                     updateCameraPosition(myLocation)
                 }
@@ -128,7 +128,7 @@ class MapViewModel (
             val currentLatLng = if (sortType == SortType.NEAR) _mapUiState.value.currentPosition else null
             when (val result = getReviewedPlacesUseCase(request, currentLatLng, sortType, filter)) {
                 is PResult.Fail -> {
-                    hLog( "fail >> ${result.failState}")
+                    hLog("fail >> ${result.failState}")
                 }
 
                 is PResult.Success -> {
@@ -155,7 +155,7 @@ class MapViewModel (
         val currentLatLng = if (sortType == SortType.NEAR) _mapUiState.value.currentPosition else null
         when (val result = getReviewedPlacesUseCase(request, currentLatLng, sortType, chipState.type)) {
             is PResult.Fail -> {
-                hLog( "fail >> ${result.failState}")
+                hLog("fail >> ${result.failState}")
             }
 
             is PResult.Success -> {
@@ -183,7 +183,7 @@ class MapViewModel (
             currentLongitude = _mapUiState.value.currentPosition?.longitude?.toString()
         )) {
             is PResult.Fail -> {
-                hLog( "fail >> ${result.failState}")
+                hLog("fail >> ${result.failState}")
             }
 
             is PResult.Success -> {
@@ -215,10 +215,10 @@ class MapViewModel (
 
         when (result) {
             is PResult.Fail -> {
-                hLog( "fail >> ${result.failState}")
+                hLog("fail >> ${result.failState}")
             }
             is PResult.Success -> {
-                hLog( "success >")
+                hLog("success >")
                 _mapUiState.update {
                     it.copy(
                         placeDetailUiState = it.placeDetailUiState.copy(
@@ -240,7 +240,7 @@ class MapViewModel (
         val currentLatLng = if (sortType == SortType.NEAR) _mapUiState.value.currentPosition else null
         when (val result = getReviewedPlacesUseCase(request, currentLatLng, sortType, chipState.type)) {
             is PResult.Fail -> {
-                hLog( "fail >> ${result.failState}")
+                hLog("fail >> ${result.failState}")
             }
 
             is PResult.Success -> {

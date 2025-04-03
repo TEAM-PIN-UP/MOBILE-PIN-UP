@@ -1,4 +1,4 @@
-package com.pinup.pinup
+package com.pinup.pinup.platform
 
 import android.content.Context
 import android.content.Intent
@@ -12,6 +12,9 @@ import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import coil3.PlatformContext
+import com.pinup.pinup.platform.DATA_STORE_PREFERENCE
+import com.pinup.pinup.platform.Platform
+import com.pinup.pinup.platform.createDataStore
 import org.koin.java.KoinJavaComponent
 
 class AndroidPlatform : Platform {

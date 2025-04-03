@@ -6,7 +6,7 @@ import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.WriteReview
 import com.pinup.pinup.domain.usecase.RegisterReviewUseCase
-import com.pinup.pinup.hLog
+import com.pinup.pinup.platform.hLog
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -90,9 +90,9 @@ class WriteReviewViewModel (
         val place = _uiState.value.selectedPlace ?: return@launch
         when (val result = registerReviewUseCase(files = files, writeReview = writeReview, place = place)) {
             is PResult.Fail -> {
-                hLog( "fail >>> ${result.failState}")
-                hLog( "writeReview >>> ${writeReview}")
-                hLog( "fail >>> ${place}")
+                hLog("fail >>> ${result.failState}")
+                hLog("writeReview >>> ${writeReview}")
+                hLog("fail >>> ${place}")
 
             }
 

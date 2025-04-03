@@ -1,4 +1,4 @@
-package com.pinup.pinup
+package com.pinup.pinup.platform
 
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable

@@ -1,4 +1,4 @@
-package com.pinup.pinup
+package com.pinup.pinup.platform
 
 import android.view.Gravity
 import androidx.compose.foundation.Image

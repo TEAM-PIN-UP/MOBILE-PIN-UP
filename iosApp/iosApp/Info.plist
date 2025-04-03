@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -16,12 +18,64 @@
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
+	<key>CFBundleURLSchemes</key>
+	<array>
+		<string>com.googleusercontent.apps.260271399045-hju2qsak4evpvic6u4qq77qo0d3k1ggi</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>KakaoLogin</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>kakao16861d355e1d003cba9138948b8a11f5</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>GoogleLogin</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.260271399045-hju2qsak4evpvic6u4qq77qo0d3k1ggi</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>NaverLogin</string>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>GIDClientID</key>
+	<string>260271399045-hju2qsak4evpvic6u4qq77qo0d3k1ggi.apps.googleusercontent.com</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>naversearchapp</string>
+		<string>naversearchthirdlogin</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
+	<key>NMFNcpKeyId</key>
+	<string>9v600b96lo</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>moko-permissions demo usage</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>moko-media demo usage</string>
+	<key>NidAppName</key>
+	<string>핀업</string>
+	<key>NidClientID</key>
+	<string>pq5e9ZctR6BjVodHiFWx</string>
+	<key>NidClientSecret</key>
+	<string>YizfCTl8_9</string>
+	<key>NidUrlScheme</key>
+	<string>test</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -46,11 +100,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <key>NMFNcpKeyId</key>
-    <string>9v600b96lo</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>moko-permissions demo usage</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>moko-media demo usage</string>
 </dict>
 </plist>

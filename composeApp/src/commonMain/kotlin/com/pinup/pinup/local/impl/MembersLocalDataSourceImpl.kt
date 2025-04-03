@@ -8,7 +8,7 @@ import com.pinup.pinup.data.local.MembersLocalDataSource
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.TokenInfo
 import com.pinup.pinup.domain.model.UserInfo
-import com.pinup.pinup.hLog
+import com.pinup.pinup.platform.hLog
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

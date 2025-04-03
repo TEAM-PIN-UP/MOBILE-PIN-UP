@@ -25,7 +25,7 @@ import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.LocalPlatformContext
-import com.pinup.pinup.pxToDp
+import com.pinup.pinup.platform.pxToDp
 import com.pinup.pinup.ui.theme.Colors
 import kotlinx.datetime.Clock
 import kotlin.math.abs
