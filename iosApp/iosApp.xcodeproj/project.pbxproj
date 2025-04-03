@@ -14,6 +14,7 @@
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		AE0824D42D9D588800E53D9A /* LoginBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0824D32D9D588200E53D9A /* LoginBridge.swift */; };
 		AE0824DC2D9E4A0A00E53D9A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AE0824DB2D9E4A0A00E53D9A /* GoogleService-Info.plist */; };
+		AE0824E12D9ECA5A00E53D9A /* Untitled.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0824E02D9ECA5A00E53D9A /* Untitled.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,8 +31,17 @@
 		AE0824D32D9D588200E53D9A /* LoginBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginBridge.swift; sourceTree = "<group>"; };
 		AE0824DB2D9E4A0A00E53D9A /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		AE0824DD2D9E50DC00E53D9A /* ComposeApp.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ComposeApp.framework; path = ../composeApp/build/bin/iosSimulatorArm64/debugFramework/ComposeApp.framework; sourceTree = "<group>"; };
+		AE0824E02D9ECA5A00E53D9A /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
 		AE8398F22D9AA885004B3462 /* NMapsMap.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = NMapsMap.xcframework; path = Pods/NMapsMap/framework/NMapsMap.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		AE0824E22D9ECA6B00E53D9A /* loginController */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = loginController;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		B92378962B6B1156000C7307 /* Frameworks */ = {
@@ -85,6 +95,8 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				AE0824E22D9ECA6B00E53D9A /* loginController */,
+				AE0824E02D9ECA5A00E53D9A /* Untitled.swift */,
 				AE0824DB2D9E4A0A00E53D9A /* GoogleService-Info.plist */,
 				AE0824D32D9D588200E53D9A /* LoginBridge.swift */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
@@ -131,6 +143,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AE0824E22D9ECA6B00E53D9A /* loginController */,
 			);
 			name = iosApp;
 			productName = iosApp;
@@ -268,6 +283,7 @@
 			files = (
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
+				AE0824E12D9ECA5A00E53D9A /* Untitled.swift in Sources */,
 				AE0824D42D9D588800E53D9A /* LoginBridge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

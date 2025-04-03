@@ -7,29 +7,27 @@ import com.pinup.pinup.domain.usecase.LoginUseCase
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.login.model.SNSUserInfo
-import com.pinup.pinup.ui.login.sns.KaKaoLoginController
-import com.pinup.pinup.ui.login.sns.SNSLoginResultFactory
+import com.pinup.pinup.ui.login.sns.SNSLoginFactory
 import com.pinup.pinup.ui.login.sns.SNSLoginResultListener
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
-
 class LoginViewModel (
     private val loginUseCase: LoginUseCase,
-    private val kakaoLoginController: KaKaoLoginController
+    private val snsLoginFactory: SNSLoginFactory
 ) : ViewModel() {
     private val _uiEvent = MutableSharedFlow<LoginUiEvent>()
     val uiEvent: SharedFlow<LoginUiEvent>
         get() = _uiEvent.asSharedFlow()
     private val loginResultListener = object : SNSLoginResultListener {
         override fun onCancel() {
-            TODO("Not yet implemented")
+            hLog("login cancel")
         }
 
         override fun onFail(message: String?) {
-            TODO("Not yet implemented")
+            hLog(message ?: "error")
         }
 
         override fun onSuccess(snsLoginInfo: SNSUserInfo) {
@@ -38,11 +36,7 @@ class LoginViewModel (
 
     }
     fun doSNSLogin(snsType: SNSType) {
-        kakaoLoginController.doLogin(loginResultListener)
-//        val snsLoginController = SNSLoginResultFactory.initialize(snsType)
-//        snsLoginController.doLogin(
-//            resultListener = loginResultListener
-//        )
+        snsLoginFactory.doLogin(snsType, loginResultListener)
     }
 
     private fun login(snsLoginInfo: SNSUserInfo) = viewModelScope.launch {

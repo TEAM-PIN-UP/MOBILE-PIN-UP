@@ -39,15 +39,3 @@ actual class GoogleLoginController : SNSLoginController {
         }
     }
 }
-
-actual class KakaoLoginController : SNSLoginController {
-    override fun doLogin(resultListener: SNSLoginResultListener) {
-//        LoginBridge.kakaoLogin()
-    }
-}
-
-actual class NaverLoginController : SNSLoginController {
-    override fun doLogin(resultListener: SNSLoginResultListener) {
-
-    }
-}

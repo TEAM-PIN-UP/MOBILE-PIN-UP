@@ -49,6 +49,10 @@
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string>NaverLogin</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.pinup.pinup.PinUp</string>
+			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
@@ -75,7 +79,7 @@
 	<key>NidClientSecret</key>
 	<string>YizfCTl8_9</string>
 	<key>NidUrlScheme</key>
-	<string>test</string>
+	<string>com.pinup.pinup.PinUp</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
