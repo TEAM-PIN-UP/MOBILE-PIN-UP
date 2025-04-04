@@ -14,22 +14,22 @@ import com.pinup.pinup.ui.login.sns.SNSLoginResultListener
 import org.koin.java.KoinJavaComponent
 
 class AndroidKaKaoLoginController: KaKaoLoginController {
-    override fun doLogin(resultListener: SNSLoginResultListener) {
-        val context: Context = KoinJavaComponent.getKoin().get()
+    override fun doLogin(resultListener: SNSLoginResultListener, context: Any) {
+        val activityContext = context as Context
         UserApiClient.instance.run {
-            if (isKakaoTalkLoginAvailable(context)) {
-                loginWithKakaoTalk(context) { token, error ->
+            if (isKakaoTalkLoginAvailable(activityContext)) {
+                loginWithKakaoTalk(activityContext) { token, error ->
                     handleCallback(
-                        context = context,
+                        context = activityContext,
                         oAuthToken = token,
                         throwable = error,
                         resultListener = resultListener
                     )
                 }
             } else {
-                loginWithKakaoAccount(context) { token, error ->
+                loginWithKakaoAccount(activityContext) { token, error ->
                     handleCallback(
-                        context = context,
+                        context = activityContext,
                         oAuthToken = token,
                         throwable = error,
                         resultListener = resultListener

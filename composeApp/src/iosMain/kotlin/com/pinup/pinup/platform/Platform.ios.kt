@@ -30,7 +30,7 @@ actual fun getRealPathFromUri(contentUri: String): String? {
 }
 
 actual fun hLog(message: String) {
-    return NSLog(message)
+    return println(message)
 }
 actual fun dataStorePreferences(): DataStore<Preferences> {
     return createDataStore(

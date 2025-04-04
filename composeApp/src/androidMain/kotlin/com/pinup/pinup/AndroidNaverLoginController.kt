@@ -14,9 +14,9 @@ import com.pinup.pinup.ui.login.sns.SNSLoginResultListener
 import org.koin.java.KoinJavaComponent
 
 class AndroidNaverLoginController: NaverLoginController {
-    override fun doLogin(resultListener: SNSLoginResultListener) {
-        val context: Context = KoinJavaComponent.getKoin().get()
-        NaverIdLoginSDK.authenticate(context, NaverLoginCallback(resultListener))
+    override fun doLogin(resultListener: SNSLoginResultListener, context: Any) {
+        val activityContext = context as Context
+        NaverIdLoginSDK.authenticate(activityContext, NaverLoginCallback(resultListener))
     }
 
     inner class NaverLoginCallback(

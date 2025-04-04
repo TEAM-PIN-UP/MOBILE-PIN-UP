@@ -9,7 +9,6 @@ import com.pinup.pinup.domain.usecase.GetBookmarksUseCase
 import com.pinup.pinup.ui.model.ChipState
 import dev.icerock.moko.geo.LocationTracker
 import dev.icerock.moko.permissions.Permission
-import dev.icerock.moko.permissions.location.LOCATION
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow

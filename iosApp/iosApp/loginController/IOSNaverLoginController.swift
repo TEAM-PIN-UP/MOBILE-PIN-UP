@@ -10,7 +10,7 @@ import ComposeApp
 import NidThirdPartyLogin
 
 class IOSNaverLoginController: NaverLoginController {
-    func doLogin(resultListener: SNSLoginResultListener) {
+    func doLogin(resultListener: SNSLoginResultListener, context: Any) {
         if let accessToken = NidOAuth.shared.accessToken,
         !accessToken.isExpired {
             // 접근 토큰이 유효하다면 바로 프로필 API 호출

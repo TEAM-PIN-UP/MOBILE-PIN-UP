@@ -26,7 +26,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.LifecycleResumeEffect
-import coil3.compose.LocalPlatformContext
 import com.pinup.pinup.platform.PlatformNaverMap
 import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Position
@@ -42,11 +41,11 @@ import dev.icerock.moko.permissions.DeniedAlwaysException
 import dev.icerock.moko.permissions.DeniedException
 import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.PermissionState
+import dev.icerock.moko.permissions.PermissionsController
 import dev.icerock.moko.permissions.RequestCanceledException
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
-import dev.icerock.moko.permissions.location.LOCATION
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -75,7 +74,6 @@ fun MapScreen(
     onUpdateFocusLocation: (Boolean) -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
-    val context = LocalPlatformContext.current
     var parentHeightPx by remember { mutableIntStateOf(0) }
     val parentHeightDp = with(LocalDensity.current) { parentHeightPx.toDp() }
     val expandedHeight by remember(parentHeightDp) {
@@ -101,9 +99,11 @@ fun MapScreen(
     }
     val isShowPermissionDialog = remember { mutableStateOf(false) }
 
-    val permissionsControllerFactory: PermissionsControllerFactory =
-        rememberPermissionsControllerFactory()
-    val permissionsController = remember { permissionsControllerFactory.createPermissionsController() }
+    val permissionFactory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
+    val permissionsController: PermissionsController = remember(permissionFactory) {
+        permissionFactory.createPermissionsController()
+    }
+
     BindEffect(permissionsController)
     val allPermissionsGranted = remember { mutableStateOf(false) }
 

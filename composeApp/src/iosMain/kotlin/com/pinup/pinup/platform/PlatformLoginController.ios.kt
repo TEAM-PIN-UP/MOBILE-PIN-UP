@@ -15,6 +15,7 @@ actual class GoogleLoginController : SNSLoginController {
             resultListener.onCancel()
             return
         }
+
         GIDSignIn.sharedInstance.signInWithPresentingViewController(rootViewController) { result, error ->
             when {
                 result != null -> {

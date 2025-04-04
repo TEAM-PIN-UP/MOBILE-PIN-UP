@@ -7,6 +7,14 @@ import com.pinup.pinup.data.response.LoginResponse
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.remote.api.AuthApi
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
+import io.ktor.utils.io.InternalAPI
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -23,10 +31,17 @@ class AuthRemoteDataSourceImpl (
     }
 
     override suspend fun signUp(profileImage: ByteArray, request: SignUpRequest): PResult<Unit> {
-        val requestBody = Json.encodeToString(request)
+        val timeStamp = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).nanosecond
+        val signUpRequestString = Json.encodeToString(request)
+        val multipart = MultiPartFormDataContent(formData {
+            append("signUpRequest", signUpRequestString)
+            append("multipartFile", profileImage, Headers.build {
+                append(HttpHeaders.ContentType, "image/png")
+                append(HttpHeaders.ContentDisposition, "filename=$timeStamp.png")
+            })
+        })
         return authApi.signUp(
-            request = requestBody,
-            byteArray = profileImage
+            multipart = multipart
         ).mapSuccessData()
     }
 }

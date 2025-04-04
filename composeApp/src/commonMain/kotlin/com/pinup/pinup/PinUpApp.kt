@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.event.DetailPlaceEventBus
+import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
 import com.pinup.pinup.ui.component.LogoutDialog
 import com.pinup.pinup.ui.login.compose.LoginRoute
@@ -33,6 +34,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 @Preview
 fun PinUpApp(
+    contextFactory: ContextFactory,
     navHostController: NavHostController = rememberNavController(),
     startAppViewModel: StartAppViewModel = koinViewModel(),
     scope: CoroutineScope = rememberCoroutineScope()
@@ -76,6 +78,7 @@ fun PinUpApp(
                     }
                 ){
                     LoginRoute(
+                        contextFactory = contextFactory,
                         onMoveSignUp = {
                             val snsUserInfoString = Json.encodeToString(it)
                             navHostController.navigate(PinUpAppDestination.SignUp(snsUserInfoString))

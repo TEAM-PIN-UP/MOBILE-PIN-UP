@@ -14,6 +14,7 @@ androidx-test-junit = "1.2.1"
 compose-multiplatform = "1.7.0"
 junit = "4.13.2"
 kotlin = "2.1.0"
+ksp = "2.1.0-1.0.29"
 navigation = "2.8.0-alpha10"
 backHandler = "1.8.0-rc01"
 kotlin-serialization = "1.7.3"
@@ -21,6 +22,7 @@ koin = "4.1.0-Beta5"
 kotlin-datetime = "0.6.2"
 coil = "3.0.4"
 ktor = "3.0.3"
+ktorfit = "2.5.0"
 androidx-data-store = "1.1.1"
 kotlinxImmutable = "0.3.8"
 peekaboo = "0.5.2"
@@ -28,7 +30,7 @@ constraintlayout = "0.5.1"
 # FragmentActivity 참조 이슈로 인한 다운그레이드 1.19.1 -> 0.17.0
 mokoPermission = "0.17.0"
 mokoMedia = "0.11.0"
-mokoGeo = "0.8.0"
+mokoGeo = "0.6.0"
 filePicker = "3.1.0"
 naverMapCompose = "1.7.3"
 naverMapIos = "3.19.1"
@@ -67,6 +69,7 @@ geo-compose = { module = "dev.icerock.moko:geo-compose", version.ref = "mokoGeo"
 file-picker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "filePicker" }
 
 coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil"}
+coil-network = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil"}
 
 # Ktor
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -76,6 +79,7 @@ ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktorfit = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
 
 #image, camera
 peekaboo-image-picker = { module = "io.github.onseok:peekaboo-ui", version.ref = "peekaboo"}
@@ -110,3 +114,5 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
+ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit"}

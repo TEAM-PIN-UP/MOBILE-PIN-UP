@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.ktorfit)
 }
 
 kotlin {
@@ -85,12 +87,14 @@ kotlin {
             implementation(libs.ktor.negotiation)
             implementation(libs.ktor.serialization)
             implementation(libs.ktor.logging)
+            implementation(libs.ktorfit)
             //kotlinx
             implementation(libs.kotlinx.immutable)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             // coil
             implementation(libs.coil)
+            implementation(libs.coil.network)
             // koin
             api(libs.koin.core)
             implementation(libs.koin.compose)
@@ -156,6 +160,7 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/DEPENDENCIES"
         }
     }
     buildTypes {

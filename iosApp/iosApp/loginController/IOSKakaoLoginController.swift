@@ -12,7 +12,7 @@ import KakaoSDKCommon
 import KakaoSDKUser
 
 class IOSKaKaoLoginController: KaKaoLoginController {
-    func doLogin(resultListener: SNSLoginResultListener) {
+    func doLogin(resultListener: SNSLoginResultListener, context: Any) {
         print("IOSKaKaoLoginController call")
         // 카카오톡 실행 가능 여부 확인
         if (UserApi.isKakaoTalkLoginAvailable()) {

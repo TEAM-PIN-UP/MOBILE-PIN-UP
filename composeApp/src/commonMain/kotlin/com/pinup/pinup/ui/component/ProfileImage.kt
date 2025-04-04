@@ -6,11 +6,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.theme.Colors
 
 @Composable
@@ -91,7 +95,8 @@ fun ProfileImageView(
         ) {
             AsyncImage(
                 model = imgUrl,
-                contentDescription = "default profile image"
+                contentScale = ContentScale.Crop,
+                contentDescription = "profile image"
             )
         }
     }

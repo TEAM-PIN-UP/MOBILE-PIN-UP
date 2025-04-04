@@ -5,6 +5,7 @@ import ComposeApp
 import KakaoSDKAuth
 import KakaoSDKCommon
 import NidThirdPartyLogin
+import NMapsMap
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,

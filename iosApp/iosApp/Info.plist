@@ -66,7 +66,7 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NMFNcpKeyId</key>
+	<key>NMFClientId</key>
 	<string>9v600b96lo</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>moko-permissions demo usage</string>

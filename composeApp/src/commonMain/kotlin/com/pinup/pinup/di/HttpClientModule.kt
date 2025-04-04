@@ -1,12 +1,21 @@
 package com.pinup.pinup.di
 
 import com.pinup.pinup.data.local.MembersLocalDataSource
+import com.pinup.pinup.data.response.PResponse
+import com.pinup.pinup.domain.model.FailState
+import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.TokenInfo
 import com.pinup.pinup.domain.model.getSuccessOrNull
 import com.pinup.pinup.domain.model.mapSuccessData
+import com.pinup.pinup.event.LogoutEventBus
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.remote.api.AuthApi
+import de.jensklingenberg.ktorfit.Ktorfit
+import de.jensklingenberg.ktorfit.converter.Converter
+import de.jensklingenberg.ktorfit.converter.KtorfitResult
+import de.jensklingenberg.ktorfit.converter.TypeData
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
@@ -15,24 +24,32 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.headers
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
+import io.ktor.http.append
 import io.ktor.http.contentType
+import io.ktor.http.headersOf
 import io.ktor.http.withCharset
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.charsets.Charsets
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import org.koin.dsl.module
 
 val httpClientModule = module {
     single {
-        HttpClient {
+        val client = HttpClient {
+            val membersLocalDataSource: MembersLocalDataSource = get()
             install(ContentNegotiation) {
                 json(
                     json = Json {
                         prettyPrint = true
                         isLenient = true
                         encodeDefaults = true
+                        ignoreUnknownKeys = true
                     }
                 )
             }
@@ -45,17 +62,12 @@ val httpClientModule = module {
                 level = LogLevel.BODY
             }
             install(Auth) {
-                val membersLocalDataSource: MembersLocalDataSource = get()
-                val accessToken = runBlocking { membersLocalDataSource.getAccessToken() }
-                val refreshToken = runBlocking { membersLocalDataSource.getRefreshToken() }
                 bearer {
-                    loadTokens {
-                        BearerTokens(accessToken, refreshToken)
-                    }
-
                     refreshTokens {
+                        val refreshToken = runBlocking { membersLocalDataSource.getRefreshToken() }
                         val authApi: AuthApi = get()
-                        val response = authApi.refreshToken(refreshToken).mapSuccessData().getSuccessOrNull()
+                        val response =
+                            authApi.refreshToken(refreshToken).mapSuccessData().getSuccessOrNull()
                         if (response != null) {
                             membersLocalDataSource.saveToken(
                                 TokenInfo(
@@ -63,15 +75,72 @@ val httpClientModule = module {
                                     refreshToken = response.refreshToken
                                 )
                             )
+                        } else {
+                            LogoutEventBus.sendEvent()
                         }
                         BearerTokens(response?.accessToken!!, response.refreshToken)
                     }
                 }
             }
             defaultRequest {
+                val accessToken = runBlocking { membersLocalDataSource.getAccessToken() }
+                headers {
+                    append("Authorization", "Bearer $accessToken")
+                }
                 contentType(ContentType.Application.Json.withCharset(Charsets.UTF_8))
-                url("https://api.kwonyonghyun.p-e.kr/")
             }
         }
+
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
+        Ktorfit.Builder()
+            .baseUrl("https://api.kwonyonghyun.p-e.kr/")
+            .httpClient(client)
+            .converterFactories(PResultConverterFactory(json))
+            .build()
+    }
+}
+
+class PResultConverterFactory(
+    private val json: Json
+) : Converter.Factory {
+    override fun suspendResponseConverter(
+        typeData: TypeData,
+        ktorfit: Ktorfit
+    ): Converter.SuspendResponseConverter<HttpResponse, *>? {
+        if (typeData.typeInfo.type == PResult::class) {
+            return object : Converter.SuspendResponseConverter<HttpResponse, Any> {
+                override suspend fun convert(result: KtorfitResult): Any {
+                    return when (result) {
+                        is KtorfitResult.Failure -> {
+                            PResult.Fail(
+                                FailState.default.copy(
+                                    message = result.throwable.message ?: "error"
+                                )
+                            )
+                        }
+
+                        is KtorfitResult.Success -> {
+                            if (result.response.status.value == 200) {
+                                val bodyText = result.response.bodyAsText()
+                                val deserializer = json.serializersModule.serializer(typeData.typeArgs.first().typeInfo.kotlinType!!)
+                                PResult.Success(json.decodeFromString(deserializer, bodyText))
+                            } else {
+                                val response = json.decodeFromString<PResponse<Nothing>>(result.response.bodyAsText())
+                                PResult.Fail(
+                                    FailState(
+                                        status = response.status,
+                                        code = response.code,
+                                        message = response.message
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null
     }
 }

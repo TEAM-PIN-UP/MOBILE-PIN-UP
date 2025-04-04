@@ -1,5 +1,6 @@
 package com.pinup.pinup.platform
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,7 +35,8 @@ actual fun PlatformNaverMap(
     }
 
     UIKitView(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxSize(),
         factory = {
             naverMapView
         },
