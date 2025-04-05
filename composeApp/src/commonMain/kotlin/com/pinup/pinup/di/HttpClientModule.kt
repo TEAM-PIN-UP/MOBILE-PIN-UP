@@ -10,6 +10,7 @@ import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.event.LogoutEventBus
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.remote.api.AuthApi
+import com.pinup.pinup.remote.api.createAuthApi
 import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.converter.Converter
 import de.jensklingenberg.ktorfit.converter.KtorfitResult
@@ -59,13 +60,13 @@ val httpClientModule = module {
                         hLog(message)
                     }
                 }
-                level = LogLevel.BODY
+                level = LogLevel.ALL
             }
             install(Auth) {
                 bearer {
                     refreshTokens {
                         val refreshToken = runBlocking { membersLocalDataSource.getRefreshToken() }
-                        val authApi: AuthApi = get()
+                        val authApi: AuthApi = getKtorfit().createAuthApi()
                         val response =
                             authApi.refreshToken(refreshToken).mapSuccessData().getSuccessOrNull()
                         if (response != null) {
@@ -100,6 +101,40 @@ val httpClientModule = module {
             .converterFactories(PResultConverterFactory(json))
             .build()
     }
+}
+
+fun getKtorfit(): Ktorfit {
+    val client = HttpClient {
+        install(ContentNegotiation) {
+            json(
+                json = Json {
+                    prettyPrint = true
+                    isLenient = true
+                    encodeDefaults = true
+                    ignoreUnknownKeys = true
+                }
+            )
+        }
+        install(Logging) {
+            logger = object : Logger {
+                override fun log(message: String) {
+                    hLog(message)
+                }
+            }
+            level = LogLevel.ALL
+        }
+        defaultRequest {
+            contentType(ContentType.Application.Json.withCharset(Charsets.UTF_8))
+        }
+    }
+    val json = Json {
+        ignoreUnknownKeys = true
+    }
+    return Ktorfit.Builder()
+        .baseUrl("https://api.kwonyonghyun.p-e.kr/")
+        .httpClient(client)
+        .converterFactories(PResultConverterFactory(json))
+        .build()
 }
 
 class PResultConverterFactory(

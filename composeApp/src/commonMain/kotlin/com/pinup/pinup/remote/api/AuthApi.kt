@@ -30,7 +30,7 @@ interface AuthApi {
     @POST("api/auth/login")
     suspend fun login(@Body request: LoginRequest): PResult<PResponse<LoginResponse>>
 
-    @POST("api/auth/login")
+    @POST("api/auth/logout")
     suspend fun logout(@Header("Access") token: String): PResult<PResponse<Unit>>
 
     @Multipart

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.usecase.IsLoginUseCase
 import com.pinup.pinup.domain.usecase.LogoutUseCase
 import com.pinup.pinup.event.LogoutEventBus
+import com.pinup.pinup.platform.hLog
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,6 +41,7 @@ class StartAppViewModel(
         LogoutEventBus.logoutEvent
             .debounce(300)
             .collectLatest { message ->
+                hLog("logout")
                 logoutUseCase()
                 _uiState.update {
                     it.copy(
