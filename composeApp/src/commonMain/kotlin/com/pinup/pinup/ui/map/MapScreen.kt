@@ -56,6 +56,7 @@ import pinup.composeapp.generated.resources.ic_focus
 
 @Composable
 fun MapScreen(
+    viewModel: MapViewModel,
     searchUiState: SearchUiState,
     placeDetailUiState: PlaceDetailUiState,
     isFocusLocation: Boolean,
@@ -164,6 +165,7 @@ fun MapScreen(
     ) {
         PlatformNaverMap(
             modifier = Modifier,
+            viewModel = viewModel,
             position = position,
             searchUiState = searchUiState,
             placeDetailUiState = placeDetailUiState,

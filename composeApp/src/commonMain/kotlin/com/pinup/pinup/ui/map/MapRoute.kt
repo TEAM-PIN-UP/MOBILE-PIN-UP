@@ -18,6 +18,7 @@ fun MapRoute() {
     val mapUiState = mapViewModel.mapUiState.collectAsStateWithLifecycle()
 
     MapScreen(
+        viewModel = mapViewModel,
         searchUiState = mapUiState.value.searchUiState,
         placeDetailUiState = mapUiState.value.placeDetailUiState,
         position = mapUiState.value.currentPosition ?: Position.INVALID,

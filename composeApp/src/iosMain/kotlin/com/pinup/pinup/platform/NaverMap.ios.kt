@@ -4,21 +4,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitView
-import cocoapods.NMapsMap.NMFMapView
-import cocoapods.NMapsMap.NMFMarker
+import androidx.compose.ui.viewinterop.UIKitViewController
+import com.pinup.pinup.LocalNativeViewFactory
 import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Position
+import com.pinup.pinup.ui.map.MapViewModel
 import com.pinup.pinup.ui.map.PlaceDetailUiState
 import com.pinup.pinup.ui.map.SearchUiState
 import kotlinx.cinterop.ExperimentalForeignApi
 
-@OptIn(ExperimentalForeignApi::class, ExperimentalMaterialApi::class)
 @Composable
 actual fun PlatformNaverMap(
     modifier: Modifier,
+    viewModel: MapViewModel,
     position: Position,
     searchUiState: SearchUiState,
     placeDetailUiState: PlaceDetailUiState,
@@ -27,18 +27,19 @@ actual fun PlatformNaverMap(
     onPlaceClick: (String) -> Unit,
     onCameraStateChange: (CameraState) -> Unit
 ) {
-    val naverMapView = remember { NMFMapView() }
-    val markers = remember { mutableMapOf<Long, NMFMarker>() }
-
-    LaunchedEffect(key1 = Unit) {
+    val factory = LocalNativeViewFactory.current
+    LaunchedEffect(key1 = cameraPosition) {
         // some logic
+        hLog("cameraPosition>>> $cameraPosition")
     }
 
-    UIKitView(
+    UIKitViewController(
         modifier = modifier
             .fillMaxSize(),
         factory = {
-            naverMapView
+            factory.createNaverMap(
+                viewModel = viewModel
+            )
         },
         update = {
             // some logic

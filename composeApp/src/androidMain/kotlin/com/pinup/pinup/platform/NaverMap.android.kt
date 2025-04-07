@@ -36,6 +36,7 @@ import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.PositionBounds
 import com.pinup.pinup.extentions.toLatLng
 import com.pinup.pinup.ui.component.RoundedBox
+import com.pinup.pinup.ui.map.MapViewModel
 import com.pinup.pinup.ui.map.PlaceDetailUiState
 import com.pinup.pinup.ui.map.SearchUiState
 import com.pinup.pinup.ui.theme.Colors
@@ -52,6 +53,7 @@ import pinup.composeapp.generated.resources.ic_my_position
 @Composable
 actual fun PlatformNaverMap(
     modifier: Modifier,
+    viewModel: MapViewModel,
     position: Position,
     searchUiState: SearchUiState,
     placeDetailUiState: PlaceDetailUiState,
