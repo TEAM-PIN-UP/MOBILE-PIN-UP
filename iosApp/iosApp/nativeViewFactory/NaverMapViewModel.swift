@@ -8,10 +8,12 @@
 
 import SwiftUI
 import ComposeApp
+import NMapsMap
 
 class NaverMapViewModel: ObservableObject {
     private var viewModel: MapViewModel
     @Published var mapUiState: MapUiState
+    private var markers: [NMFMarker] = [NMFMarker]()
     
     init(viewModel: MapViewModel) {
         self.viewModel = viewModel
@@ -23,6 +25,16 @@ class NaverMapViewModel: ObservableObject {
         }) { error in
             // code which is executed if the Flow object completed
             print("error: \(String(describing: error?.localizedDescription))")
+        }
+    }
+    
+    func addMarker(marker: NMFMarker) {
+        markers.append(marker)
+    }
+    
+    func clearMarker() {
+        markers.forEach { NMFMarker in
+            NMFMarker.mapView = nil
         }
     }
     

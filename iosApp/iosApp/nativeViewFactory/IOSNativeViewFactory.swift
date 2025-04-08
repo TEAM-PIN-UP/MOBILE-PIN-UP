@@ -29,7 +29,10 @@ struct MapView: View {
                 position: viewModel.mapUiState.currentPosition,
                 cameraPosition: viewModel.mapUiState.cameraPosition,
                 searchUiState: viewModel.mapUiState.searchUiState,
-                onCameraStateChange: viewModel.onCameraStateChange
+                isShowBookmarks: viewModel.mapUiState.isShowBookmarks,
+                onCameraStateChange: viewModel.onCameraStateChange,
+                addMarker: viewModel.addMarker,
+                clearMarker: viewModel.clearMarker
             ).ignoresSafeArea(.all, edges: .top)
         }
     }
@@ -39,7 +42,10 @@ struct NaverMap: UIViewRepresentable {
     var position: Position?
     var cameraPosition: Position?
     var searchUiState: SearchUiState
+    var isShowBookmarks: Bool
     var onCameraStateChange: (CameraState) -> Void
+    var addMarker: (NMFMarker) -> Void
+    var clearMarker: () -> Void
     
     func makeCoordinator() -> Coordinator {
         Coordinator(
@@ -48,30 +54,48 @@ struct NaverMap: UIViewRepresentable {
     }
     
     func makeUIView(context: Context) -> NMFNaverMapView {
-        print("position >>> \(position)")
-        return context.coordinator.getNaverMapView()
+        // 초기 카메라 위치 설정
+        let cameraPosition = NMFCameraPosition(
+            NMGLatLng(lat: 37.5666102, lng: 126.9783881),
+            zoom: 14.0
+        )
+        let view = NMFNaverMapView(frame: .zero)
+        view.mapView.minZoomLevel = 5.0
+        view.showCompass = false
+        view.showZoomControls = false
+        view.showScaleBar = false
+        view.mapView.addCameraDelegate(delegate: context.coordinator)
+        view.mapView.touchDelegate = context.coordinator
+        view.mapView.moveCamera(NMFCameraUpdate(position: cameraPosition))
+        return view
     }
     
-    func updateUIView(_ uiView: NMFNaverMapView, context: Context) {}
+    func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
+        print("updateUIView")
+        clearMarker()
+        searchUiState.reviewedPlaces.filter { reviewedPlace in
+            if (isShowBookmarks) {
+                reviewedPlace.bookmark
+            } else {
+                true
+            }
+        }.forEach { reviewedPlace in
+            var customMarker = CustomMarker(name: reviewedPlace.name, iconName: "ic_food_marker")
+            let marker = NMFMarker()
+            marker.position = .init(lat: reviewedPlace.latitude, lng: reviewedPlace.longitude)
+            marker.iconImage = NMFOverlayImage.init(image: customMarker.asImage())
+            marker.mapView = uiView.mapView
+            addMarker(marker)
+        }
+    }
     
 }
 
 final class Coordinator: NSObject, ObservableObject, NMFMapViewCameraDelegate, NMFMapViewTouchDelegate, CLLocationManagerDelegate {
     var onCameraStateChange: (CameraState) -> Void
+    
     init(onCameraStateChange: @escaping (CameraState) -> Void) {
         self.onCameraStateChange = onCameraStateChange
-    }
-    
-    let view = NMFNaverMapView(frame: .zero)
-    func getNaverMapView() -> NMFNaverMapView {
-        view.mapView.minZoomLevel = 5.0
-        view.showCompass = false
-        view.showZoomControls = false
-        view.showScaleBar = false
-        view.mapView.addCameraDelegate(delegate: self)
-        view.mapView.touchDelegate = self
-        
-        return view
     }
     
     // 카메라 움직임
@@ -135,14 +159,38 @@ struct CustomMarker: View {
     var name: String
     var iconName: String
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 2) {
             Image(iconName)
             Text(name)
+                .frame(maxWidth: 45)
+                .lineLimit(1)
                 .padding(.horizontal, 7)
                 .padding(.vertical, 2)
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .clipShape(Capsule())
+                .font(.system(size: 11, weight: Font.Weight.medium))
+                .foregroundColor(Color.white)
+                .background(Color.init(UIColor(red: 0, green: 0, blue: 0, alpha: 0.25)))
+                .cornerRadius(100)
+        }
+    }
+}
+
+extension View {
+    func asImage() -> UIImage {
+        let controller = UIHostingController(rootView: self)
+        let view = controller.view
+
+        let width = controller.view.intrinsicContentSize.width
+        let height = UIScreen.main.scale * 45
+        print("size >>> \(width) / \(height)")
+        let size = CGSize(width: width, height: height)
+        print("size: \(size)")
+        view?.bounds = CGRect(origin: .zero, size: size)
+        view?.backgroundColor = .clear
+
+        let renderer = UIGraphicsImageRenderer(size: size)
+
+        return renderer.image { _ in
+            view?.drawHierarchy(in: controller.view.bounds, afterScreenUpdates: true)
         }
     }
 }
