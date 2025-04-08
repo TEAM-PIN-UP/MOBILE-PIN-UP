@@ -26,12 +26,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.LifecycleResumeEffect
-import com.pinup.pinup.platform.PlatformNaverMap
 import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.SortType
-import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.platform.PlatformNaverMap
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.PBottomSheet
 import com.pinup.pinup.ui.component.PDialog
@@ -46,6 +45,9 @@ import dev.icerock.moko.permissions.RequestCanceledException
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
+import dev.icerock.moko.permissions.location.BACKGROUND_LOCATION
+import dev.icerock.moko.permissions.location.COARSE_LOCATION
+import dev.icerock.moko.permissions.location.LOCATION
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -92,8 +94,8 @@ fun MapScreen(
             parentHeightDp / 4
         }
     }
-    var bottomSheetHeight by remember { mutableStateOf(halfHeight) }
-    val alpha by remember(bottomSheetHeight) {
+    var bottomSheetHeight by remember { mutableStateOf(hiddenHeight) }
+    val alpha by remember(parentHeightDp) {
         derivedStateOf {
             ((expandedHeight - bottomSheetHeight) / (parentHeightDp * 1 / 4)).coerceIn(0f, 1f)
         }
@@ -106,29 +108,32 @@ fun MapScreen(
     }
 
     BindEffect(permissionsController)
-    val allPermissionsGranted = remember { mutableStateOf(false) }
+    val isPermissionGranted = remember { mutableStateOf(false) }
 
     fun requestPermission() {
         scope.launch {
             try {
                 permissionsController.providePermission(Permission.LOCATION)
-                onUpdatePosition()
             } catch (exc: RequestCanceledException) {
-
+                hLog("RequestCanceledException")
             } catch (exc: DeniedException) {
-
+                hLog("DeniedException")
+                isShowPermissionDialog.value = true
             } catch (exc: DeniedAlwaysException) {
-
+                hLog("DeniedAlwaysException")
+                isShowPermissionDialog.value = true
             }
         }
     }
 
     fun getCurrentLocation() {
         scope.launch {
+            hLog("1 >>> ${permissionsController.isPermissionGranted(Permission.LOCATION)}")
+            hLog("2 >>> ${permissionsController.isPermissionGranted(Permission.COARSE_LOCATION)}")
+            hLog("3 >>> ${permissionsController.isPermissionGranted(Permission.BACKGROUND_LOCATION)}")
             when (permissionsController.getPermissionState(Permission.LOCATION)) {
                 PermissionState.Granted -> {
                     hLog("allRequiredPermission >>> ${position}")
-                    hLog("2")
                     onUpdateFocusLocation(isFocusLocation.not())
                 }
                 PermissionState.Denied -> {
@@ -142,14 +147,27 @@ fun MapScreen(
     }
 
     LaunchedEffect(permissionsController) {
-        allPermissionsGranted.value = permissionsController.isPermissionGranted(Permission.LOCATION)
+        isPermissionGranted.value = permissionsController.isPermissionGranted(Permission.LOCATION)
+        hLog("처음 권한 확인 >>> ${isPermissionGranted.value}")
+        if (isPermissionGranted.value.not()) {
+            hLog("권한 요청")
+            try {
+                permissionsController.providePermission(Permission.LOCATION)
+            } catch (exc: RequestCanceledException) {
+                hLog("RequestCanceledException")
+            } catch (exc: DeniedException) {
+                hLog("DeniedException")
+            } catch (exc: DeniedAlwaysException) {
+                hLog("DeniedAlwaysException")
+            }
+        }
     }
 
     LifecycleResumeEffect(Unit) {
         scope.launch {
-            val isPermissionGranted = permissionsController.isPermissionGranted(Permission.LOCATION)
-            hLog("isPermissionGranted >>> $isPermissionGranted")
-            if (isPermissionGranted) {
+            isPermissionGranted.value = permissionsController.isPermissionGranted(Permission.LOCATION)
+            hLog("권한 수정하고 앱으로 돌아옴 >>> ${isPermissionGranted.value}")
+            if (isPermissionGranted.value) {
                 onUpdatePosition()
             }
         }
@@ -214,7 +232,7 @@ fun MapScreen(
                 Card(
                     modifier = Modifier
                         .padding(top = 12.dp)
-                        .clickableSingleWithNoRipple {
+                        .clickableWithNoRipple {
                             getCurrentLocation()
                         },
                     shape = RoundedCornerShape(8.dp),
@@ -251,7 +269,7 @@ fun MapScreen(
                 MapBottomSheetNavHost(
                     searchUiState = searchUiState,
                     placeDetailUiState = placeDetailUiState,
-                    allPermissionsGranted = allPermissionsGranted.value,
+                    allPermissionsGranted = isPermissionGranted.value,
                     isScrollable = alpha == 0f,
                     onValueChange = onValueChange,
                     onChipClick = onChipClick,

@@ -3,6 +3,7 @@ package com.pinup.pinup.ui.map
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.pinup.domain.model.Position
+import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
 import dev.icerock.moko.geo.compose.LocationTrackerAccuracy
 import dev.icerock.moko.geo.compose.LocationTrackerFactory
 import dev.icerock.moko.geo.compose.rememberLocationTrackerFactory
@@ -17,6 +18,7 @@ fun MapRoute() {
     val mapViewModel: MapViewModel = koinViewModel(parameters = { parametersOf(locationTrackerFactory.createLocationTracker()) })
     val mapUiState = mapViewModel.mapUiState.collectAsStateWithLifecycle()
 
+    BindLocationTrackerEffect(mapViewModel.locationTracker)
     MapScreen(
         viewModel = mapViewModel,
         searchUiState = mapUiState.value.searchUiState,

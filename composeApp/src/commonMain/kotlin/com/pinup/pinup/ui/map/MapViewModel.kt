@@ -18,6 +18,7 @@ import com.pinup.pinup.event.DetailPlaceEventBus
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.model.ChipState
 import dev.icerock.moko.geo.LocationTracker
+import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.IO
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
@@ -38,7 +40,7 @@ class MapViewModel (
     private val getDetailPlaceUseCase: GetDetailPlaceUseCase,
     private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
-    private val locationTracker: LocationTracker
+    val locationTracker: LocationTracker
 ) : ViewModel() {
     private val _mapUiState = MutableStateFlow(MapUiState())
     val mapUiState: StateFlow<MapUiState>
@@ -103,7 +105,6 @@ class MapViewModel (
     }
 
     private fun updateCameraPosition(position: Position?) = viewModelScope.launch {
-        hLog("updateCameraPosition >>> ${position}")
         _mapUiState.update {
             it.copy(
                 cameraPosition = position
@@ -143,7 +144,6 @@ class MapViewModel (
             }
         } else {
             if (cameraState.reason == CameraState.Reason.GESTURE && _mapUiState.value.isFocusLocation) {
-                hLog("3")
                 updateFocusLocation(false)
             }
         }

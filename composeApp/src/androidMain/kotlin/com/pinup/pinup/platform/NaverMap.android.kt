@@ -1,5 +1,6 @@
 package com.pinup.pinup.platform
 
+import android.graphics.BitmapFactory
 import android.view.Gravity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.naver.maps.geometry.LatLng
@@ -62,11 +64,19 @@ actual fun PlatformNaverMap(
     onPlaceClick: (String) -> Unit,
     onCameraStateChange: (CameraState) -> Unit
 ) {
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val cameraPositionState = rememberCameraPositionState()
     LaunchedEffect(cameraPosition) {
-        hLog("cameraPosition >>> $cameraPosition")
         cameraPosition?.let {
+            val nowCameraPosition = Position(
+                latitude = cameraPositionState.position.target.latitude,
+                longitude = cameraPositionState.position.target.longitude
+            )
+            hLog("카메라 이동됨 >>> 현재 카메라: $nowCameraPosition")
+            hLog("카메라 이동됨 >>> 바뀐 카메라: $cameraPosition")
+            hLog("카메라 이동됨 >>> 결과: ${if(it == nowCameraPosition) "같음, 취소 됨" else "다름, 이동 됨"}")
+            if (it == nowCameraPosition) return@let
             scope.launch {
                 cameraPositionState.animate(
                     CameraUpdate.scrollTo(it.toLatLng())
@@ -129,7 +139,6 @@ actual fun PlatformNaverMap(
         if (position.isValid) {
             LocationOverlay(
                 position = position.toLatLng(),
-                icon = OverlayImage.fromBitmap(imageResource(Res.drawable.ic_my_position).asAndroidBitmap())
             )
         }
 

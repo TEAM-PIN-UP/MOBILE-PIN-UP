@@ -61,6 +61,7 @@ fun ReviewedProfileImageView(
         ) {
             AsyncImage(
                 model = imgUrl,
+                contentScale = ContentScale.Crop,
                 contentDescription = "default profile image"
             )
         }
