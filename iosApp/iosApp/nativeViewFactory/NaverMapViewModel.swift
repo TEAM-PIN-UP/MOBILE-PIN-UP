@@ -14,6 +14,11 @@ class NaverMapViewModel: ObservableObject {
     private var viewModel: MapViewModel
     @Published var mapUiState: MapUiState
     private var markers: [NMFMarker] = [NMFMarker]()
+    lazy var touchHandler =  { (overlay : NMFOverlay) -> Bool in
+        let kakaoPlaceId = overlay.userInfo["kakaoPlaceId"] as! String
+        self.viewModel.getDetailPlace(kakaoPlaceId: kakaoPlaceId)
+        return true
+    }
     
     init(viewModel: MapViewModel) {
         self.viewModel = viewModel
@@ -29,6 +34,7 @@ class NaverMapViewModel: ObservableObject {
     }
     
     func addMarker(marker: NMFMarker) {
+        marker.touchHandler = self.touchHandler
         markers.append(marker)
     }
     
@@ -36,6 +42,7 @@ class NaverMapViewModel: ObservableObject {
         markers.forEach { NMFMarker in
             NMFMarker.mapView = nil
         }
+        markers.removeAll()
     }
     
     func onCameraStateChange(cameraState: CameraState) {

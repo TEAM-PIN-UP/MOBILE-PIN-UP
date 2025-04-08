@@ -84,8 +84,23 @@ struct NaverMap: UIViewRepresentable {
             let marker = NMFMarker()
             marker.position = .init(lat: reviewedPlace.latitude, lng: reviewedPlace.longitude)
             marker.iconImage = NMFOverlayImage.init(image: customMarker.asImage())
+            marker.userInfo = [
+                "kakaoPlaceId" : reviewedPlace.kakaoPlaceId,
+            ]
             marker.mapView = uiView.mapView
             addMarker(marker)
+        }
+        
+        if let position = cameraPosition {
+            if (position.isValid) {
+                let cameraPosition = NMFCameraPosition(
+                    NMGLatLng(lat: position.latitude, lng: position.longitude),
+                    zoom: 14.0
+                )
+                let cameraUpdate = NMFCameraUpdate(position: cameraPosition)
+                cameraUpdate.animation = .easeIn
+                uiView.mapView.moveCamera(cameraUpdate)
+            }
         }
     }
     
