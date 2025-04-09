@@ -1,15 +1,14 @@
 package com.pinup.pinup
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.fragment.app.FragmentActivity
 import com.pinup.pinup.platform.ContextFactory
 
 
-class MainActivity : FragmentActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val contextFactory = ContextFactory(this)
         setContent {
             PinUpApp(

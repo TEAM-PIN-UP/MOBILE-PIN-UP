@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -20,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +42,8 @@ import com.pinup.pinup.ui.model.ChipState
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_chevron_bottom
@@ -50,14 +56,12 @@ fun MapBottomSheetSearchScreen(
     query: String,
     chipStates: PersistentList<ChipState>,
     sortType: SortType,
-    allPermissionsGranted: Boolean,
     isExpanded: Boolean,
     onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
     onPlaceClick: (ReviewedPlace) -> Unit = {},
-    onUpdateSortType: (SortType) -> Unit = {}
+    onSelectSortTypeClick: () -> Unit = {}
 ) {
-    var showBottomSheet by remember { mutableStateOf(false) }
     val scrollState = rememberLazyListState()
     var dragOffset by remember {
         mutableFloatStateOf(0f)
@@ -119,7 +123,7 @@ fun MapBottomSheetSearchScreen(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .clickableWithNoRipple {
-                        showBottomSheet = true
+                        onSelectSortTypeClick()
                     },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -186,16 +190,17 @@ fun MapBottomSheetSearchScreen(
         }
     }
 
-    if (showBottomSheet) {
-        SortBottomSheet(
-            selectedSortType = sortType,
-            allPermissionsGranted = allPermissionsGranted,
-            onDismissRequest = { showBottomSheet = false },
-            onSortTypeSelect = {
-                onUpdateSortType(it)
-            }
-        )
-    }
+//    if (showBottomSheet) {
+//        SortBottomSheet(
+//            content = {},
+//            selectedSortType = sortType,
+//            allPermissionsGranted = allPermissionsGranted,
+//            onDismissRequest = { showBottomSheet = false },
+//            onSortTypeSelect = {
+//                onUpdateSortType(it)
+//            }
+//        )
+//    }
 }
 //
 //fun getNavigationBarHeight(context: Context): Dp {

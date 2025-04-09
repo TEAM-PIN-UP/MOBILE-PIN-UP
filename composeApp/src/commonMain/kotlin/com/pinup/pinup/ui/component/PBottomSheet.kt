@@ -40,7 +40,6 @@ fun PBottomSheet(
     onSheetHeightChanged: (Dp) -> Unit = {},
     content: @Composable () -> Unit,
 ) {
-    val context = LocalPlatformContext.current
     var currentTargetValue by remember { mutableStateOf(pBottomSheetTargetValue) }
     var realHeight by remember(expandedHeight, halfHeight, hiddenHeight) {
         mutableStateOf(

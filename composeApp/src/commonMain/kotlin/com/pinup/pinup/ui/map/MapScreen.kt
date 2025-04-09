@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -29,11 +32,13 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.SortType
+import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.platform.PlatformNaverMap
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.PBottomSheet
 import com.pinup.pinup.ui.component.PDialog
+import com.pinup.pinup.ui.component.SortBottomSheet
 import com.pinup.pinup.ui.model.ChipState
 import com.pinup.pinup.ui.theme.Colors
 import dev.icerock.moko.permissions.DeniedAlwaysException
@@ -77,6 +82,9 @@ fun MapScreen(
     onUpdateFocusLocation: (Boolean) -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(
+        ModalBottomSheetValue.Hidden
+    )
     var parentHeightPx by remember { mutableIntStateOf(0) }
     val parentHeightDp = with(LocalDensity.current) { parentHeightPx.toDp() }
     val expandedHeight by remember(parentHeightDp) {
@@ -128,18 +136,22 @@ fun MapScreen(
 
     fun getCurrentLocation() {
         scope.launch {
-            hLog("1 >>> ${permissionsController.isPermissionGranted(Permission.LOCATION)}")
-            hLog("2 >>> ${permissionsController.isPermissionGranted(Permission.COARSE_LOCATION)}")
-            hLog("3 >>> ${permissionsController.isPermissionGranted(Permission.BACKGROUND_LOCATION)}")
             when (permissionsController.getPermissionState(Permission.LOCATION)) {
                 PermissionState.Granted -> {
-                    hLog("allRequiredPermission >>> ${position}")
+                    hLog("현위치 >>> ${position}")
+                    if (isFocusLocation) {
+                        hLog("내위치 포커싱 끄기")
+                    } else {
+                        hLog("내위치 포커싱 켜기")
+                    }
                     onUpdateFocusLocation(isFocusLocation.not())
                 }
                 PermissionState.Denied -> {
+                    hLog("위치 권한 거부 상태로 재요청")
                     requestPermission()
                 }
                 else -> {
+                    hLog("위치 권한 거부 상태로 직접 설정 필요")
                     isShowPermissionDialog.value = true
                 }
             }
@@ -175,111 +187,128 @@ fun MapScreen(
         onPauseOrDispose { }
     }
 
-    Box(
-        modifier = Modifier
-            .onSizeChanged {
-                parentHeightPx = it.height
-            }
+    ModalBottomSheetLayout(
+        sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        sheetContent = {
+            SortBottomSheet(
+                selectedSortType = searchUiState.sortType,
+                allPermissionsGranted = isPermissionGranted.value,
+                onSortTypeSelect = {
+                    scope.launch {
+                        sheetState.hide()
+                        onUpdateSortType(it)
+                    }
+                }
+            )
+        },
+        sheetBackgroundColor = Colors.White,
+        sheetState = sheetState,
     ) {
-        PlatformNaverMap(
-            modifier = Modifier,
-            viewModel = viewModel,
-            position = position,
-            searchUiState = searchUiState,
-            placeDetailUiState = placeDetailUiState,
-            isShowBookmarks = isShowBookmarks,
-            cameraPosition = cameraPosition,
-            onPlaceClick = onPlaceClick,
-            onCameraStateChange = onCameraStateChange
-        )
-
-        ConstraintLayout(
+        Box(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
+                .onSizeChanged {
+                    parentHeightPx = it.height
+                }
         ) {
-            val (button, sheet) = createRefs()
-            Column(
+            PlatformNaverMap(
+                modifier = Modifier,
+                viewModel = viewModel,
+                position = position,
+                searchUiState = searchUiState,
+                placeDetailUiState = placeDetailUiState,
+                isShowBookmarks = isShowBookmarks,
+                cameraPosition = cameraPosition,
+                onPlaceClick = onPlaceClick,
+                onCameraStateChange = onCameraStateChange
+            )
+
+            ConstraintLayout(
                 modifier = Modifier
-                    .alpha(alpha)
-                    .padding(bottom = 16.dp, end = 16.dp)
-                    .constrainAs(button) {
-                        bottom.linkTo(sheet.top)
-                        end.linkTo(parent.end)
-                    },
+                    .align(Alignment.BottomCenter)
             ) {
-                Card(
+                val (button, sheet) = createRefs()
+                Column(
                     modifier = Modifier
-                        .clickableWithNoRipple {
-                            onUpdateShowBookmarks()
+                        .alpha(alpha)
+                        .padding(bottom = 16.dp, end = 16.dp)
+                        .constrainAs(button) {
+                            bottom.linkTo(sheet.top)
+                            end.linkTo(parent.end)
                         },
-                    shape = RoundedCornerShape(8.dp),
-                    backgroundColor = Colors.White,
-                    elevation = 1.dp
                 ) {
-                    Image(
+                    Card(
                         modifier = Modifier
-                            .padding(10.dp)
-                            .size(20.dp),
-                        painter = if (isShowBookmarks) {
-                            painterResource(Res.drawable.ic_bookmark_on)
-                        } else {
-                            painterResource(Res.drawable.ic_bookmark_off)
-                        },
-                        contentDescription = "bookmark filter"
-                    )
+                            .clickableWithNoRipple {
+                                onUpdateShowBookmarks()
+                            },
+                        shape = RoundedCornerShape(8.dp),
+                        backgroundColor = Colors.White,
+                        elevation = 1.dp
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .size(20.dp),
+                            painter = if (isShowBookmarks) {
+                                painterResource(Res.drawable.ic_bookmark_on)
+                            } else {
+                                painterResource(Res.drawable.ic_bookmark_off)
+                            },
+                            contentDescription = "bookmark filter"
+                        )
+                    }
+
+                    Card(
+                        modifier = Modifier
+                            .padding(top = 12.dp)
+                            .clickableSingleWithNoRipple {
+                                getCurrentLocation()
+                            },
+                        shape = RoundedCornerShape(8.dp),
+                        backgroundColor = Colors.White,
+                        elevation = 1.dp
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .padding(10.dp),
+                            painter = painterResource(Res.drawable.ic_focus),
+                            contentDescription = "focusing",
+                            colorFilter = if (isFocusLocation) {
+                                ColorFilter.tint(Colors.Error)
+                            } else {
+                                null
+                            }
+                        )
+                    }
                 }
 
-                Card(
+                PBottomSheet(
                     modifier = Modifier
-                        .padding(top = 12.dp)
-                        .clickableWithNoRipple {
-                            getCurrentLocation()
+                        .fillMaxWidth()
+                        .constrainAs(sheet) {
+                            bottom.linkTo(parent.bottom)
                         },
-                    shape = RoundedCornerShape(8.dp),
-                    backgroundColor = Colors.White,
-                    elevation = 1.dp
+                    expandedHeight = expandedHeight,
+                    halfHeight = halfHeight,
+                    hiddenHeight = hiddenHeight,
+                    onSheetHeightChanged = {
+                        bottomSheetHeight = it
+                    },
                 ) {
-                    Image(
-                        modifier = Modifier
-                            .padding(10.dp),
-                        painter = painterResource(Res.drawable.ic_focus),
-                        contentDescription = "focusing",
-                        colorFilter = if (isFocusLocation) {
-                            ColorFilter.tint(Colors.Error)
-                        } else {
-                            null
-                        }
+                    MapBottomSheetNavHost(
+                        searchUiState = searchUiState,
+                        placeDetailUiState = placeDetailUiState,
+                        isScrollable = alpha == 0f,
+                        onValueChange = onValueChange,
+                        onChipClick = onChipClick,
+                        onPlaceClick = {
+                            onPlaceClick(it.kakaoPlaceId)
+                        },
+                        onClearDetailPlace = onClearDetailPlace,
+                        onUpdateBookmark = onUpdateBookmark,
+                        onSelectSortTypeClick = { scope.launch { sheetState.show() } }
                     )
                 }
-            }
-
-            PBottomSheet(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .constrainAs(sheet) {
-                        bottom.linkTo(parent.bottom)
-                    },
-                expandedHeight = expandedHeight,
-                halfHeight = halfHeight,
-                hiddenHeight = hiddenHeight,
-                onSheetHeightChanged = {
-                    bottomSheetHeight = it
-                },
-            ) {
-                MapBottomSheetNavHost(
-                    searchUiState = searchUiState,
-                    placeDetailUiState = placeDetailUiState,
-                    allPermissionsGranted = isPermissionGranted.value,
-                    isScrollable = alpha == 0f,
-                    onValueChange = onValueChange,
-                    onChipClick = onChipClick,
-                    onPlaceClick = {
-                        onPlaceClick(it.kakaoPlaceId)
-                    },
-                    onClearDetailPlace = onClearDetailPlace,
-                    onUpdateBookmark = onUpdateBookmark,
-                    onUpdateSortType = onUpdateSortType
-                )
             }
         }
     }

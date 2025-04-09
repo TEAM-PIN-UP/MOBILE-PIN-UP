@@ -31,6 +31,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -55,7 +57,9 @@ class MapViewModel (
     }
 
     private fun initCollectLocation() = viewModelScope.launch {
+        hLog("위치 수집 시작")
         locationTracker.getLocationsFlow()
+            .distinctUntilChanged()
             .collectLatest {
                 val myLocation = Position(it.latitude, it.longitude)
                 hLog("myLocation >>> ${myLocation}")
@@ -258,6 +262,7 @@ class MapViewModel (
 
     fun collectPosition() = viewModelScope.launch {
         if (_mapUiState.value.currentPosition == null) {
+            hLog("위치 트랙킹 시작")
             locationTracker.startTracking()
         }
     }

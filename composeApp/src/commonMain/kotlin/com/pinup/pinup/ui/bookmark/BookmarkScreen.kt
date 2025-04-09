@@ -20,7 +20,11 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,92 +63,103 @@ fun BookmarkScreen(
     onUpdateSortType: (SortType) -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
-    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(
+        ModalBottomSheetValue.Hidden
+    )
     val pages = remember { listOf("전체","지역별") }
     val pagerState = rememberPagerState{ pages.size }
-    Column(
-        modifier = modifier
-            .background(
-                color = Colors.White
+    ModalBottomSheetLayout(
+        sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        sheetContent = {
+            SortBottomSheet(
+                selectedSortType = sortType,
+                allPermissionsGranted = permissionState,
+                onSortTypeSelect = {
+                    scope.launch {
+                        sheetState.hide()
+                        onUpdateSortType(it)
+                    }
+                }
             )
+        },
+        sheetBackgroundColor = Colors.White,
+        sheetState = sheetState,
     ) {
-        Text(
-            modifier = Modifier
-                .padding(vertical = 13.dp)
-                .padding(start = 20.dp),
-            text = "마이 플레이스",
-            style = Typography.H2,
-            color = Colors.Neutral800
-        )
-
-        PHorizontalDivider()
-
-        LazyRow(
-            modifier = Modifier
-                .padding(top = 4.dp, start = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        Column(
+            modifier = modifier
+                .background(
+                    color = Colors.White
+                )
         ) {
-            itemsIndexed(pages) { index, item ->
-                Column(
-                    modifier = Modifier
-                        .width(IntrinsicSize.Min)
-                        .clickableWithNoRipple {
+            Text(
+                modifier = Modifier
+                    .padding(vertical = 13.dp)
+                    .padding(start = 20.dp),
+                text = "마이 플레이스",
+                style = Typography.H2,
+                color = Colors.Neutral800
+            )
+
+            PHorizontalDivider()
+
+            LazyRow(
+                modifier = Modifier
+                    .padding(top = 4.dp, start = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                itemsIndexed(pages) { index, item ->
+                    Column(
+                        modifier = Modifier
+                            .width(IntrinsicSize.Min)
+                            .clickableWithNoRipple {
+                                scope.launch {
+                                    pagerState.scrollToPage(index)
+                                }
+                            }
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .width(IntrinsicSize.Max)
+                                .padding(top = 12.dp, bottom = 8.dp),
+                            text = item,
+                            style = Typography.H3,
+                            color = if (pagerState.currentPage == index) Colors.Neutral800 else Colors.Neutral300,
+                            textAlign = TextAlign.Center
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .height(3.dp)
+                                .fillMaxWidth()
+                                .background(
+                                    color = if (pagerState.currentPage == index) Colors.Neutral800 else Colors.Transparency
+                                )
+                        )
+                    }
+                }
+            }
+
+            HorizontalPager(
+                state = pagerState,
+                userScrollEnabled = false,
+            ) {
+                if (it == 0) {
+                    BookmarkedPlaceAll(
+                        bookmarkedPlaces = bookmarkedPlaces,
+                        chipStates = chipStates,
+                        sortType = sortType,
+                        onChipClick = onChipClick,
+                        onSortTypeClick = {
                             scope.launch {
-                                pagerState.scrollToPage(index)
+                                sheetState.show()
                             }
                         }
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .width(IntrinsicSize.Max)
-                            .padding(top = 12.dp, bottom = 8.dp),
-                        text = item,
-                        style = Typography.H3,
-                        color = if (pagerState.currentPage == index) Colors.Neutral800 else Colors.Neutral300,
-                        textAlign = TextAlign.Center
                     )
+                } else {
 
-                    Box(
-                        modifier = Modifier
-                            .height(3.dp)
-                            .fillMaxWidth()
-                            .background(
-                                color = if (pagerState.currentPage == index) Colors.Neutral800 else Colors.Transparency
-                            )
-                    )
                 }
             }
         }
-
-        HorizontalPager(
-            state = pagerState,
-            userScrollEnabled = false,
-        ) {
-            if (it == 0) {
-                BookmarkedPlaceAll(
-                    bookmarkedPlaces = bookmarkedPlaces,
-                    chipStates = chipStates,
-                    sortType = sortType,
-                    onChipClick = onChipClick,
-                    onSortTypeClick = {
-                        showBottomSheet = true
-                    }
-                )
-            } else {
-
-            }
-        }
-    }
-
-    if (showBottomSheet) {
-        SortBottomSheet(
-            selectedSortType = sortType,
-            allPermissionsGranted = permissionState,
-            onDismissRequest = { showBottomSheet = false },
-            onSortTypeSelect = {
-                onUpdateSortType(it)
-            }
-        )
     }
 }
 
