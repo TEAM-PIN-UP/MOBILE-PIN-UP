@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,9 +36,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.BookmarkedPlaceCard
 import com.pinup.pinup.ui.component.Chips
 import com.pinup.pinup.ui.component.PHorizontalDivider
@@ -45,6 +48,8 @@ import com.pinup.pinup.ui.component.SortBottomSheet
 import com.pinup.pinup.ui.model.ChipState
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.location.LOCATION
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -59,8 +64,10 @@ fun BookmarkScreen(
     sortType: SortType,
     permissionState: Boolean,
     modifier: Modifier = Modifier,
+    initBookmarkedPlaces: () -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
     onUpdateSortType: (SortType) -> Unit = {},
+    onUpdateBookmark: (String) -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     val sheetState = rememberModalBottomSheetState(
@@ -68,6 +75,13 @@ fun BookmarkScreen(
     )
     val pages = remember { listOf("전체","지역별") }
     val pagerState = rememberPagerState{ pages.size }
+
+    LifecycleResumeEffect(Unit) {
+        hLog("북마크 업데이트")
+        initBookmarkedPlaces()
+        onPauseOrDispose { }
+    }
+
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         sheetContent = {
@@ -87,6 +101,7 @@ fun BookmarkScreen(
     ) {
         Column(
             modifier = modifier
+                .fillMaxSize()
                 .background(
                     color = Colors.White
                 )
@@ -153,7 +168,8 @@ fun BookmarkScreen(
                             scope.launch {
                                 sheetState.show()
                             }
-                        }
+                        },
+                        onUpdateBookmark = onUpdateBookmark
                     )
                 } else {
 
@@ -170,6 +186,7 @@ fun BookmarkedPlaceAll(
     sortType: SortType,
     onChipClick: (ChipState) -> Unit = {},
     onSortTypeClick: () -> Unit = {},
+    onUpdateBookmark: (String) -> Unit = {},
 ) {
     val lazyGridState = rememberLazyGridState()
     Column {
@@ -219,7 +236,8 @@ fun BookmarkedPlaceAll(
             ) {
                 items(bookmarkedPlaces) {
                     BookmarkedPlaceCard(
-                        bookmarkedPlace = it
+                        bookmarkedPlace = it,
+                        onUpdateBookmark = onUpdateBookmark
                     )
                 }
             }

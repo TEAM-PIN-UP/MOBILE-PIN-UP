@@ -5,13 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SortType
+import com.pinup.pinup.domain.usecase.DeleteBookmarkUseCase
 import com.pinup.pinup.domain.usecase.GetBookmarksUseCase
 import com.pinup.pinup.ui.model.ChipState
 import dev.icerock.moko.geo.LocationTracker
 import dev.icerock.moko.permissions.Permission
 import dev.icerock.moko.permissions.location.LOCATION
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,8 +20,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
-class BookmarkViewModel (
+class BookmarkViewModel(
     private val getBookmarksUseCase: GetBookmarksUseCase,
+    private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
     val locationTracker: LocationTracker
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(BookmarkUiState())
@@ -30,7 +30,6 @@ class BookmarkViewModel (
         get() = _uiState.asStateFlow()
 
     init {
-        initBookmarkedPlaces()
         initLocation()
     }
 
@@ -48,10 +47,10 @@ class BookmarkViewModel (
         }
     }
 
-    private fun initBookmarkedPlaces() = viewModelScope.launch {
+    fun initBookmarkedPlaces() = viewModelScope.launch {
         when (val result = getBookmarksUseCase(
             sort = _uiState.value.sortType,
-            category = _uiState.value.chipStates.first{ it.isSelected }.type,
+            category = _uiState.value.chipStates.first { it.isSelected }.type,
             currentLatitude = if (_uiState.value.isNear) _uiState.value.currentLatitude.toString() else "",
             currentLongitude = if (_uiState.value.isNear) _uiState.value.currentLongitude.toString() else "",
         )
@@ -61,14 +60,16 @@ class BookmarkViewModel (
                 _uiState.update {
                     it.copy(
                         bookmarkedPlace = result.data,
-                        permissionState = locationTracker.permissionsController.isPermissionGranted(Permission.LOCATION)
+                        permissionState = locationTracker.permissionsController.isPermissionGranted(
+                            Permission.LOCATION
+                        )
                     )
                 }
             }
         }
     }
 
-    fun updateFilterCategory(chipState: ChipState) = viewModelScope.launch(Dispatchers.IO) {
+    fun updateFilterCategory(chipState: ChipState) = viewModelScope.launch {
         when (val result = getBookmarksUseCase(
             sort = _uiState.value.sortType,
             category = chipState.type,
@@ -92,12 +93,14 @@ class BookmarkViewModel (
         }
     }
 
-    fun updateSortType(sortType: SortType) = viewModelScope.launch(Dispatchers.IO) {
+    fun updateSortType(sortType: SortType) = viewModelScope.launch {
         when (val result = getBookmarksUseCase(
             sort = sortType,
-            category = _uiState.value.chipStates.first{ it.isSelected }.type,
-            currentLatitude = if (_uiState.value.isNear) _uiState.value.currentLatitude.toString() else "",
-            currentLongitude = if (_uiState.value.isNear) _uiState.value.currentLongitude.toString() else "",
+            category = _uiState.value.chipStates.first { it.isSelected }.type,
+            currentLatitude = if (_uiState.value.isNear) _uiState.value.currentLatitude
+                ?: "" else "",
+            currentLongitude = if (_uiState.value.isNear) _uiState.value.currentLongitude
+                ?: "" else "",
         )
         ) {
             is PResult.Fail -> {}
@@ -106,6 +109,24 @@ class BookmarkViewModel (
                     uiState.copy(
                         bookmarkedPlace = result.data,
                         sortType = sortType,
+                    )
+                }
+            }
+        }
+    }
+
+    fun updateBookmark(kakaoPlaceId: String) = viewModelScope.launch {
+        when (deleteBookmarkUseCase(kakaoPlaceId)) {
+            is PResult.Fail -> {}
+            is PResult.Success -> {
+                val removeItem =
+                    _uiState.value.bookmarkedPlace.find { it.kakaoPlaceId == kakaoPlaceId }
+                val updatedBookmarkedPlaces = _uiState.value.bookmarkedPlace
+                    .toMutableList()
+                updatedBookmarkedPlaces.remove(removeItem)
+                _uiState.update { uiState ->
+                    uiState.copy(
+                        bookmarkedPlace = updatedBookmarkedPlaces,
                     )
                 }
             }

@@ -222,7 +222,6 @@ class MapViewModel (
                 hLog("fail >> ${result.failState}")
             }
             is PResult.Success -> {
-                hLog("success >")
                 _mapUiState.update {
                     it.copy(
                         placeDetailUiState = it.placeDetailUiState.copy(
@@ -231,6 +230,15 @@ class MapViewModel (
                                    bookmark = it.placeDetailUiState.detailPlace.mapPlace.bookmark.not()
                                 )
                             )
+                        ),
+                        searchUiState = it.searchUiState.copy(
+                            reviewedPlaces = it.searchUiState.reviewedPlaces.map { reviewedPlace ->
+                                if (reviewedPlace.kakaoPlaceId == kakaoPlaceId) {
+                                    reviewedPlace.copy(bookmark = reviewedPlace.bookmark.not())
+                                } else {
+                                    reviewedPlace
+                                }
+                            }
                         )
                     )
                 }
