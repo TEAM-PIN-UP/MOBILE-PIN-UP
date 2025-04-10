@@ -31,11 +31,7 @@ class MyViewModel (
     private val photoReviewPagination = Pagination()
     private val textReviewPagination = Pagination()
 
-    init {
-        initMyInfo()
-    }
-
-    private fun initMyInfo() = viewModelScope.launch {
+    fun initMyInfo() = viewModelScope.launch {
         val memberInfo = getMemberInfoUseCase().getSuccessOrNull() ?: return@launch
         val photoReviews = getPhotoReviewsUseCase(
             page = photoReviewPagination.pageNum,

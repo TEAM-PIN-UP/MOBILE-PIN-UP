@@ -162,14 +162,25 @@ class PResultConverterFactory(
                                 val deserializer = json.serializersModule.serializer(typeData.typeArgs.first().typeInfo.kotlinType!!)
                                 PResult.Success(json.decodeFromString(deserializer, bodyText))
                             } else {
-                                val response = json.decodeFromString<PResponse<Nothing>>(result.response.bodyAsText())
-                                PResult.Fail(
-                                    FailState(
-                                        status = response.status,
-                                        code = response.code,
-                                        message = response.message
+                                if (result.response.status.value == 403) {
+                                    PResult.Fail(
+                                        FailState(
+                                            status = 403,
+                                            code = "",
+                                            message = "엑세스 토큰 필요"
+                                        )
                                     )
-                                )
+                                } else {
+                                    val response =
+                                        json.decodeFromString<PResponse<Nothing>>(result.response.bodyAsText())
+                                    PResult.Fail(
+                                        FailState(
+                                            status = response.status,
+                                            code = response.code,
+                                            message = response.message
+                                        )
+                                    )
+                                }
                             }
                         }
                     }

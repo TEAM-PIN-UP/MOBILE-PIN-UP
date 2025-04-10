@@ -37,7 +37,7 @@ class SignUpViewModel (
     private val snsUserInfo = Json.decodeFromString<SNSUserInfo>(savedStateHandle.get<String>(SNS_USER_INFO) ?: "")
     private val _uiState = MutableStateFlow(SignUpUiState(
         nicknameState = NickNameState(
-            nickname = snsUserInfo.nickname ?: ""
+            nickname = ""
         ),
         snsType = snsUserInfo.snsType,
         socialId = snsUserInfo.socialId,
