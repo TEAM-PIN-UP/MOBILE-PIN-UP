@@ -37,7 +37,8 @@ fun SettingScreen(
     snsType: SNSType?,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
-    onLogoutClick: () -> Unit = {}
+    onLogoutClick: () -> Unit = {},
+    onProfileModifyClick: () -> Unit = {},
 ) {
     val context = LocalPlatformContext.current
 //    val packageInfo = remember {
@@ -71,7 +72,9 @@ fun SettingScreen(
 
             MenuBar(
                 text = "프로필 편집",
-                onClick = {}
+                onClick = {
+                    onProfileModifyClick()
+                }
             )
             PHorizontalDivider()
             MenuBar(

@@ -11,6 +11,7 @@ fun SettingRoute(
     viewModel: SettingViewModel = koinViewModel(),
     onBackPressed: () -> Unit,
     onMoveLoginScreen: () -> Unit,
+    onMoveProfileModify: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
@@ -25,6 +26,7 @@ fun SettingRoute(
         email = uiState.value.email,
         snsType = uiState.value.snsType,
         onBackPressed = onBackPressed,
-        onLogoutClick = viewModel::logout
+        onLogoutClick = viewModel::logout,
+        onProfileModifyClick = onMoveProfileModify
     )
 }
