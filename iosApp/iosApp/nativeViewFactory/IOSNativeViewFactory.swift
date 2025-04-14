@@ -64,6 +64,8 @@ struct NaverMap: UIViewRepresentable {
         view.showCompass = false
         view.showZoomControls = false
         view.showScaleBar = false
+        view.mapView.locationOverlay.hidden = false
+        view.mapView.locationOverlay.icon = NMFOverlayImage(name: "ic_my_location")
         view.mapView.addCameraDelegate(delegate: context.coordinator)
         view.mapView.touchDelegate = context.coordinator
         view.mapView.moveCamera(NMFCameraUpdate(position: cameraPosition))
@@ -73,6 +75,8 @@ struct NaverMap: UIViewRepresentable {
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
         print("updateUIView")
         clearMarker()
+        uiView.mapView.locationOverlay.location = NMGLatLng(lat: position?.latitude ?? 0, lng: position?.longitude ?? 0)
+        print("trest : \(uiView.mapView.locationOverlay.location)")
         searchUiState.reviewedPlaces.filter { reviewedPlace in
             if (isShowBookmarks) {
                 reviewedPlace.bookmark
