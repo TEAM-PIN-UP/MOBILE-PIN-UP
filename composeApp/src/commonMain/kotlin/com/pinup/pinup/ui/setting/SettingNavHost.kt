@@ -41,7 +41,11 @@ fun SettingNavHost(
         }
 
         composable<SettingDestination.ProfileSetting> {
-            ProfileSettingRoute()
+            ProfileSettingRoute(
+                onBackPressed = {
+                    navHostController.popBackStack()
+                },
+            )
         }
     }
 }

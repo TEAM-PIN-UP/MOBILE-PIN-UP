@@ -5,7 +5,10 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ProfileSettingRoute(
+    onBackPressed: () -> Unit,
     viewModel: ProfileSettingViewModel = koinViewModel()
 ) {
-    ProfileSettingScreen()
+    ProfileSettingScreen(
+        onBackPressed = onBackPressed
+    )
 }
