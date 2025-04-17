@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -9,6 +10,8 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinCocoapods)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.ktorfit)
 }
 
 kotlin {
@@ -26,7 +29,7 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
-            isStatic = false
+            isStatic = true
         }
     }
 
@@ -35,13 +38,10 @@ kotlin {
         homepage = "Link to the Shared Module homepage"
         version = "1.0"
         ios.deploymentTarget = "16.0"
-
-        framework {
-            baseName = "NMapsMap"
-            isStatic = true
-        }
+        podfile = project.file("../iosApp/Podfile")
 
         pod("NMapsMap")
+        pod("GoogleSignIn")
     }
     
     sourceSets {
@@ -56,6 +56,14 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             // naver map
             implementation(libs.naver.map.compose)
+            // google login
+            implementation(libs.androidx.credentials)
+            implementation(libs.google.api)
+            implementation(libs.googleid)
+            // kakao login
+            implementation(libs.kakao.user)
+            // naver login
+            implementation(libs.naver.oauth)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -79,18 +87,20 @@ kotlin {
             implementation(libs.ktor.negotiation)
             implementation(libs.ktor.serialization)
             implementation(libs.ktor.logging)
+            implementation(libs.ktorfit)
             //kotlinx
             implementation(libs.kotlinx.immutable)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             // coil
             implementation(libs.coil)
+            implementation(libs.coil.network)
             // koin
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.composeVM)
             // backHandler
-            implementation(libs.ui.backhandler)
+//            implementation(libs.ui.backhandler)
             // datastore
             implementation(libs.androidx.data.store.core)
             // moko library(geo, permission, media)
@@ -115,12 +125,42 @@ android {
         applicationId = "com.pinup.pinup"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.0.2"
+
+        buildConfigField(
+            "String",
+            "NAVER_CLIENT_ID",
+            getApiKey("naver.client.id")
+        )
+
+        buildConfigField(
+            "String",
+            "NAVER_CLIENT_SECRET",
+            getApiKey("naver.client.secret")
+        )
+
+        buildConfigField(
+            "String",
+            "GOOGLE_CLIENT_ID",
+            getApiKey("google.client.id")
+        )
+
+        buildConfigField(
+            "String",
+            "KAKAO_APP_KEY",
+            getApiKey("kakao.app.key")
+        )
+        manifestPlaceholders["NATIVE_APP_KEY"] = getApiKey("kakao.app.key")
+        manifestPlaceholders["NAVER_MAP_CLIENT_ID"] = getApiKey("naver.map.client.id")
+    }
+    buildFeatures {
+        buildConfig = true
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/DEPENDENCIES"
         }
     }
     buildTypes {
@@ -132,6 +172,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+}
+
+fun getApiKey(propertyKey: String): String {
+    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }
 
 dependencies {

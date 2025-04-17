@@ -11,7 +11,12 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.semantics.Role
+import com.pinup.pinup.platform.hLog
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 
 fun Modifier.clickableWithNoRipple(
@@ -113,13 +118,14 @@ internal fun MultipleEventsCutter.Companion.get(): MultipleEventsCutter =
     MultipleEventsCutterImpl()
 
 private class MultipleEventsCutterImpl : MultipleEventsCutter {
-    private val now: Long
-        get() = Clock.System.now().epochSeconds
+    private val now: Instant
+        get() = Clock.System.now()
 
-    private var lastEventTimeMs: Long = 0
+    private var lastEventTimeMs: Instant = Clock.System.now()
 
     override fun processEvent(event: () -> Unit) {
-        if (now - lastEventTimeMs >= 500L) {
+        val minus = (now - lastEventTimeMs).inWholeMilliseconds
+        if (minus >= 400) {
             event.invoke()
         }
         lastEventTimeMs = now

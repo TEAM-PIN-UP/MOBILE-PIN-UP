@@ -10,7 +10,6 @@ data class PResponse<T>(
     val code: String,
     val message: String,
     val data: T? = null,
-    val errors: List<String> = emptyList()
 ) {
     companion object {
         inline fun <reified T> PResponse<T>.toResult(): PResult<T> {

@@ -12,7 +12,7 @@ import com.pinup.pinup.domain.model.getSuccessOrNull
 import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPhotoReviewsUseCase
 import com.pinup.pinup.domain.usecase.GetTextReviewsUseCase
-import com.pinup.pinup.hLog
+import com.pinup.pinup.platform.hLog
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,11 +31,7 @@ class MyViewModel (
     private val photoReviewPagination = Pagination()
     private val textReviewPagination = Pagination()
 
-    init {
-        initMyInfo()
-    }
-
-    private fun initMyInfo() = viewModelScope.launch {
+    fun initMyInfo() = viewModelScope.launch {
         val memberInfo = getMemberInfoUseCase().getSuccessOrNull() ?: return@launch
         val photoReviews = getPhotoReviewsUseCase(
             page = photoReviewPagination.pageNum,

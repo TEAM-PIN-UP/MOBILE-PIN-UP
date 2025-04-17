@@ -25,7 +25,7 @@ import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.LocalPlatformContext
-import com.pinup.pinup.pxToDp
+import com.pinup.pinup.platform.pxToDp
 import com.pinup.pinup.ui.theme.Colors
 import kotlinx.datetime.Clock
 import kotlin.math.abs
@@ -40,7 +40,6 @@ fun PBottomSheet(
     onSheetHeightChanged: (Dp) -> Unit = {},
     content: @Composable () -> Unit,
 ) {
-    val context = LocalPlatformContext.current
     var currentTargetValue by remember { mutableStateOf(pBottomSheetTargetValue) }
     var realHeight by remember(expandedHeight, halfHeight, hiddenHeight) {
         mutableStateOf(

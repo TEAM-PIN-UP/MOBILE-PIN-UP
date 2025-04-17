@@ -1,14 +1,26 @@
 package com.pinup.pinup.di
 
-import org.koin.core.module.dsl.singleOf
+import com.pinup.pinup.remote.api.AuthApi
+import com.pinup.pinup.remote.api.BookmarksApi
+import com.pinup.pinup.remote.api.MembersApi
+import com.pinup.pinup.remote.api.PinBuddyApi
+import com.pinup.pinup.remote.api.PlacesApi
+import com.pinup.pinup.remote.api.ReviewsApi
+import com.pinup.pinup.remote.api.createAuthApi
+import com.pinup.pinup.remote.api.createBookmarksApi
+import com.pinup.pinup.remote.api.createMembersApi
+import com.pinup.pinup.remote.api.createPinBuddyApi
+import com.pinup.pinup.remote.api.createPlacesApi
+import com.pinup.pinup.remote.api.createReviewsApi
+import de.jensklingenberg.ktorfit.Ktorfit
 import org.koin.dsl.module
-import com.pinup.pinup.remote.api.*
 
 val apiModule = module {
-    singleOf(::AuthApi)
-    singleOf(::BookmarksApi)
-    singleOf(::MembersApi)
-    singleOf(::PinBuddyApi)
-    singleOf(::PlacesApi)
-    singleOf(::ReviewsApi)
+    single<AuthApi> { get<Ktorfit>().createAuthApi() }
+    single<BookmarksApi> { get<Ktorfit>().createBookmarksApi() }
+    single<MembersApi> { get<Ktorfit>().createMembersApi() }
+    single<PinBuddyApi> { get<Ktorfit>().createPinBuddyApi() }
+    single<PlacesApi> { get<Ktorfit>().createPlacesApi() }
+    single<ReviewsApi> { get<Ktorfit>().createReviewsApi() }
+
 }

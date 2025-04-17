@@ -9,7 +9,7 @@ import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
 import com.pinup.pinup.domain.usecase.LoginUseCase
 import com.pinup.pinup.domain.usecase.SignUpUseCase
 import com.pinup.pinup.domain.validator.NickNameValidator
-import com.pinup.pinup.hLog
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.login.model.SNSUserInfo
 import kotlinx.coroutines.FlowPreview
@@ -37,7 +37,7 @@ class SignUpViewModel (
     private val snsUserInfo = Json.decodeFromString<SNSUserInfo>(savedStateHandle.get<String>(SNS_USER_INFO) ?: "")
     private val _uiState = MutableStateFlow(SignUpUiState(
         nicknameState = NickNameState(
-            nickname = snsUserInfo.nickname ?: ""
+            nickname = ""
         ),
         snsType = snsUserInfo.snsType,
         socialId = snsUserInfo.socialId,

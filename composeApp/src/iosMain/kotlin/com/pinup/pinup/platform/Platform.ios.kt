@@ -1,11 +1,9 @@
-package com.pinup.pinup
+package com.pinup.pinup.platform
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import coil3.PlatformContext
-import coil3.toUri
 import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.io.bytestring.toByteString
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSLibraryDirectory
 import platform.Foundation.NSLog
@@ -32,7 +30,7 @@ actual fun getRealPathFromUri(contentUri: String): String? {
 }
 
 actual fun hLog(message: String) {
-    return NSLog(message)
+    return println(message)
 }
 actual fun dataStorePreferences(): DataStore<Preferences> {
     return createDataStore(

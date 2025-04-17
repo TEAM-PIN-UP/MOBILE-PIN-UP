@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.usecase.SearchPlacesUseCase
-import com.pinup.pinup.hLog
+import com.pinup.pinup.platform.hLog
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

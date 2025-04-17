@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,7 +21,11 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,9 +36,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.BookmarkedPlaceCard
 import com.pinup.pinup.ui.component.Chips
 import com.pinup.pinup.ui.component.PHorizontalDivider
@@ -41,6 +48,8 @@ import com.pinup.pinup.ui.component.SortBottomSheet
 import com.pinup.pinup.ui.model.ChipState
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.location.LOCATION
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -55,96 +64,118 @@ fun BookmarkScreen(
     sortType: SortType,
     permissionState: Boolean,
     modifier: Modifier = Modifier,
+    initBookmarkedPlaces: () -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
     onUpdateSortType: (SortType) -> Unit = {},
+    onUpdateBookmark: (String) -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
-    var showBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(
+        ModalBottomSheetValue.Hidden
+    )
     val pages = remember { listOf("전체","지역별") }
     val pagerState = rememberPagerState{ pages.size }
-    Column(
-        modifier = modifier
-            .background(
-                color = Colors.White
+
+    LifecycleResumeEffect(Unit) {
+        hLog("북마크 업데이트")
+        initBookmarkedPlaces()
+        onPauseOrDispose { }
+    }
+
+    ModalBottomSheetLayout(
+        sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        sheetContent = {
+            SortBottomSheet(
+                selectedSortType = sortType,
+                allPermissionsGranted = permissionState,
+                onSortTypeSelect = {
+                    scope.launch {
+                        sheetState.hide()
+                        onUpdateSortType(it)
+                    }
+                }
             )
+        },
+        sheetBackgroundColor = Colors.White,
+        sheetState = sheetState,
     ) {
-        Text(
-            modifier = Modifier
-                .padding(vertical = 13.dp)
-                .padding(start = 20.dp),
-            text = "마이 플레이스",
-            style = Typography.H2,
-            color = Colors.Neutral800
-        )
-
-        PHorizontalDivider()
-
-        LazyRow(
-            modifier = Modifier
-                .padding(top = 4.dp, start = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(
+                    color = Colors.White
+                )
         ) {
-            itemsIndexed(pages) { index, item ->
-                Column(
-                    modifier = Modifier
-                        .width(IntrinsicSize.Min)
-                        .clickableWithNoRipple {
-                            scope.launch {
-                                pagerState.scrollToPage(index)
-                            }
-                        }
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .width(IntrinsicSize.Max)
-                            .padding(top = 12.dp, bottom = 8.dp),
-                        text = item,
-                        style = Typography.H3,
-                        color = if (pagerState.currentPage == index) Colors.Neutral800 else Colors.Neutral300,
-                        textAlign = TextAlign.Center
-                    )
+            Text(
+                modifier = Modifier
+                    .padding(vertical = 13.dp)
+                    .padding(start = 20.dp),
+                text = "마이 플레이스",
+                style = Typography.H2,
+                color = Colors.Neutral800
+            )
 
-                    Box(
+            PHorizontalDivider()
+
+            LazyRow(
+                modifier = Modifier
+                    .padding(top = 4.dp, start = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                itemsIndexed(pages) { index, item ->
+                    Column(
                         modifier = Modifier
-                            .height(3.dp)
-                            .fillMaxWidth()
-                            .background(
-                                color = if (pagerState.currentPage == index) Colors.Neutral800 else Colors.Transparency
-                            )
+                            .width(IntrinsicSize.Min)
+                            .clickableWithNoRipple {
+                                scope.launch {
+                                    pagerState.scrollToPage(index)
+                                }
+                            }
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .width(IntrinsicSize.Max)
+                                .padding(top = 12.dp, bottom = 8.dp),
+                            text = item,
+                            style = Typography.H3,
+                            color = if (pagerState.currentPage == index) Colors.Neutral800 else Colors.Neutral300,
+                            textAlign = TextAlign.Center
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .height(3.dp)
+                                .fillMaxWidth()
+                                .background(
+                                    color = if (pagerState.currentPage == index) Colors.Neutral800 else Colors.Transparency
+                                )
+                        )
+                    }
+                }
+            }
+
+            HorizontalPager(
+                state = pagerState,
+                userScrollEnabled = false,
+            ) {
+                if (it == 0) {
+                    BookmarkedPlaceAll(
+                        bookmarkedPlaces = bookmarkedPlaces,
+                        chipStates = chipStates,
+                        sortType = sortType,
+                        onChipClick = onChipClick,
+                        onSortTypeClick = {
+                            scope.launch {
+                                sheetState.show()
+                            }
+                        },
+                        onUpdateBookmark = onUpdateBookmark
                     )
+                } else {
+
                 }
             }
         }
-
-        HorizontalPager(
-            state = pagerState,
-            userScrollEnabled = false,
-        ) {
-            if (it == 0) {
-                BookmarkedPlaceAll(
-                    bookmarkedPlaces = bookmarkedPlaces,
-                    chipStates = chipStates,
-                    sortType = sortType,
-                    onChipClick = onChipClick,
-                    onSortTypeClick = {
-                        showBottomSheet = true
-                    }
-                )
-            } else {
-
-            }
-        }
-    }
-
-    if (showBottomSheet) {
-        SortBottomSheet(
-            selectedSortType = sortType,
-            allPermissionsGranted = permissionState,
-            onDismissRequest = { showBottomSheet = false },
-            onSortTypeSelect = {
-                onUpdateSortType(it)
-            }
-        )
     }
 }
 
@@ -155,6 +186,7 @@ fun BookmarkedPlaceAll(
     sortType: SortType,
     onChipClick: (ChipState) -> Unit = {},
     onSortTypeClick: () -> Unit = {},
+    onUpdateBookmark: (String) -> Unit = {},
 ) {
     val lazyGridState = rememberLazyGridState()
     Column {
@@ -204,7 +236,8 @@ fun BookmarkedPlaceAll(
             ) {
                 items(bookmarkedPlaces) {
                     BookmarkedPlaceCard(
-                        bookmarkedPlace = it
+                        bookmarkedPlace = it,
+                        onUpdateBookmark = onUpdateBookmark
                     )
                 }
             }

@@ -16,14 +16,13 @@ import kotlinx.serialization.Serializable
 fun MapBottomSheetNavHost(
     searchUiState: SearchUiState,
     placeDetailUiState: PlaceDetailUiState,
-    allPermissionsGranted: Boolean,
     isScrollable: Boolean,
     onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
     onPlaceClick: (ReviewedPlace) -> Unit = {},
     onClearDetailPlace: () -> Unit = {},
     onUpdateBookmark: (String, Boolean) -> Unit = { _, _ -> },
-    onUpdateSortType: (SortType) -> Unit,
+    onSelectSortTypeClick: () -> Unit = {},
     navHostController: NavHostController = rememberNavController()
 ) {
     LaunchedEffect(placeDetailUiState.detailPlace) {
@@ -48,14 +47,13 @@ fun MapBottomSheetNavHost(
                 query = searchUiState.query,
                 chipStates = searchUiState.chipStates.toPersistentList(),
                 sortType = searchUiState.sortType,
-                allPermissionsGranted = allPermissionsGranted,
                 isExpanded = isScrollable,
                 onValueChange = onValueChange,
                 onChipClick = onChipClick,
                 onPlaceClick = {
                     onPlaceClick(it)
                 },
-                onUpdateSortType = onUpdateSortType
+                onSelectSortTypeClick = onSelectSortTypeClick
             )
         }
 

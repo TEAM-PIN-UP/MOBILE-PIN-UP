@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.usecase.IsLoginUseCase
 import com.pinup.pinup.domain.usecase.LogoutUseCase
 import com.pinup.pinup.event.LogoutEventBus
+import com.pinup.pinup.platform.hLog
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +31,7 @@ class StartAppViewModel(
     private fun getIsLogin() = viewModelScope.launch {
         _uiState.update {
             it.copy(
-                isLogin = false
+                isLogin = isLoginUseCase()
             )
         }
     }
@@ -40,11 +41,12 @@ class StartAppViewModel(
         LogoutEventBus.logoutEvent
             .debounce(300)
             .collectLatest { message ->
+                hLog("logout")
                 logoutUseCase()
                 _uiState.update {
                     it.copy(
                         alertState = it.alertState.copy(
-                            title = message ?: "",
+                            title = message ?: "세션이 만료되어 로그아웃 되었습니다.\n다시 로그인 해주세요.",
                             isShow = true
                         )
                     )

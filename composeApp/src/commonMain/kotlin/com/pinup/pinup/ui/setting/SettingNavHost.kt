@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pinup.pinup.ui.profilesetting.ProfileSettingRoute
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -32,7 +33,18 @@ fun SettingNavHost(
         composable<SettingDestination.Setting> {
             SettingRoute(
                 onBackPressed = onBackPressed,
-                onMoveLoginScreen = onMoveLoginScreen
+                onMoveLoginScreen = onMoveLoginScreen,
+                onMoveProfileModify = {
+                    navHostController.navigate(SettingDestination.ProfileSetting)
+                }
+            )
+        }
+
+        composable<SettingDestination.ProfileSetting> {
+            ProfileSettingRoute(
+                onBackPressed = {
+                    navHostController.popBackStack()
+                },
             )
         }
     }
@@ -41,4 +53,6 @@ fun SettingNavHost(
 sealed interface SettingDestination {
     @Serializable
     data object Setting : SettingDestination
+    @Serializable
+    data object ProfileSetting : SettingDestination
 }

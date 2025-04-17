@@ -1,5 +1,5 @@
 [versions]
-agp = "8.6.1"
+agp = "8.5.2"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -8,30 +8,37 @@ androidx-appcompat = "1.7.0"
 androidx-constraintlayout = "2.2.0"
 androidx-core-ktx = "1.15.0"
 androidx-espresso-core = "3.6.1"
-androidx-lifecycle = "2.9.0-alpha14"
+androidx-lifecycle = "2.8.4"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
-compose-multiplatform = "1.8.0-beta01"
+compose-multiplatform = "1.7.0"
 junit = "4.13.2"
 kotlin = "2.1.0"
-navigation = "2.9.0-alpha15"
+ksp = "2.1.0-1.0.29"
+navigation = "2.8.0-alpha12"
 backHandler = "1.8.0-rc01"
 kotlin-serialization = "1.7.3"
 koin = "4.1.0-Beta5"
 kotlin-datetime = "0.6.2"
 coil = "3.0.4"
 ktor = "3.0.3"
+ktorfit = "2.5.0"
 androidx-data-store = "1.1.1"
 kotlinxImmutable = "0.3.8"
 peekaboo = "0.5.2"
 constraintlayout = "0.5.1"
 # FragmentActivity 참조 이슈로 인한 다운그레이드 1.19.1 -> 0.17.0
-mokoPermission = "0.17.0"
+mokoPermission = "0.19.1"
 mokoMedia = "0.11.0"
 mokoGeo = "0.8.0"
 filePicker = "3.1.0"
 naverMapCompose = "1.7.3"
 naverMapIos = "3.19.1"
+credentials = "1.5.0-beta01"
+google-api = "1.33.0"
+googleid = "1.1.1"
+naverOauth = "5.10.0"
+kakao = "2.6.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -62,6 +69,7 @@ geo-compose = { module = "dev.icerock.moko:geo-compose", version.ref = "mokoGeo"
 file-picker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "filePicker" }
 
 coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil"}
+coil-network = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil"}
 
 # Ktor
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -71,6 +79,7 @@ ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "kto
 ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktorfit = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
 
 #image, camera
 peekaboo-image-picker = { module = "io.github.onseok:peekaboo-ui", version.ref = "peekaboo"}
@@ -86,6 +95,17 @@ koin-composeVM = { module = "io.insert-koin:koin-compose-viewmodel", version.ref
 # naver map
 naver-map-compose = { group = "io.github.fornewid",name = "naver-map-compose", version.ref = "naverMapCompose" }
 
+# google login
+androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentials" }
+google-api = { module = "com.google.api-client:google-api-client", version.ref = "google-api" }
+googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleid" }
+
+# naver login
+naver-oauth = { group = "com.navercorp.nid", name = "oauth", version.ref = "naverOauth" }
+
+# kakao login
+kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
@@ -94,3 +114,5 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinCocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
+ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit"}

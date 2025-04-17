@@ -5,6 +5,7 @@ import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.domain.repository.BookmarksRepository
+import com.pinup.pinup.platform.hLog
 
 
 class GetBookmarksUseCase (
@@ -16,6 +17,8 @@ class GetBookmarksUseCase (
         currentLatitude: String,
         currentLongitude: String
     ): PResult<List<BookmarkedPlace>> {
+        hLog("여기 ?")
+
        return bookmarksRepository.getBookmarks(
            category = category,
            sort = sort,

@@ -26,7 +26,9 @@ fun BookmarkRoute(
         chipStates = uiState.chipStates.toPersistentList(),
         sortType = uiState.sortType,
         permissionState = uiState.permissionState,
+        initBookmarkedPlaces = bookmarkViewModel::initBookmarkedPlaces,
         onChipClick = bookmarkViewModel::updateFilterCategory,
         onUpdateSortType = bookmarkViewModel::updateSortType,
+        onUpdateBookmark = bookmarkViewModel::updateBookmark
     )
 }

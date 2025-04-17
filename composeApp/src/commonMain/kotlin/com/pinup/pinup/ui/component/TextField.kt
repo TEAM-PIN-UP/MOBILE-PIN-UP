@@ -111,7 +111,8 @@ fun RoundedTextField(
     ) {
         BasicTextField(
             modifier = Modifier
-                .align(Alignment.Center),
+                .align(Alignment.Center)
+                .height(textFieldHeight.dp),
             value = textFieldValue,
             onValueChange = {
                 if (it.text.length <= textLimit) {

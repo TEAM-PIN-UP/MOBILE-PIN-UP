@@ -1,5 +1,6 @@
-package com.pinup.pinup
+package com.pinup.pinup.platform
 
+import android.graphics.BitmapFactory
 import android.view.Gravity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -9,11 +10,13 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.naver.maps.geometry.LatLng
@@ -36,6 +39,7 @@ import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.PositionBounds
 import com.pinup.pinup.extentions.toLatLng
 import com.pinup.pinup.ui.component.RoundedBox
+import com.pinup.pinup.ui.map.MapViewModel
 import com.pinup.pinup.ui.map.PlaceDetailUiState
 import com.pinup.pinup.ui.map.SearchUiState
 import com.pinup.pinup.ui.theme.Colors
@@ -52,6 +56,7 @@ import pinup.composeapp.generated.resources.ic_my_position
 @Composable
 actual fun PlatformNaverMap(
     modifier: Modifier,
+    viewModel: MapViewModel,
     position: Position,
     searchUiState: SearchUiState,
     placeDetailUiState: PlaceDetailUiState,
@@ -63,8 +68,15 @@ actual fun PlatformNaverMap(
     val scope = rememberCoroutineScope()
     val cameraPositionState = rememberCameraPositionState()
     LaunchedEffect(cameraPosition) {
-        hLog("cameraPosition >>> $cameraPosition")
         cameraPosition?.let {
+            val nowCameraPosition = Position(
+                latitude = cameraPositionState.position.target.latitude,
+                longitude = cameraPositionState.position.target.longitude
+            )
+            hLog("카메라 이동됨 >>> 현재 카메라: $nowCameraPosition")
+            hLog("카메라 이동됨 >>> 바뀐 카메라: $cameraPosition")
+            hLog("카메라 이동됨 >>> 결과: ${if(it == nowCameraPosition) "같음, 취소 됨" else "다름, 이동 됨"}")
+            if (it == nowCameraPosition) return@let
             scope.launch {
                 cameraPositionState.animate(
                     CameraUpdate.scrollTo(it.toLatLng())
@@ -73,7 +85,7 @@ actual fun PlatformNaverMap(
         }
     }
 
-    LaunchedEffect(cameraPositionState.isMoving) {
+    LaunchedEffect(cameraPositionState.isMoving, cameraPositionState.contentBounds) {
         hLog("MapScreen: ${cameraPositionState.cameraUpdateReason}")
         cameraPositionState.contentBounds?.let {
             onCameraStateChange(
@@ -127,58 +139,74 @@ actual fun PlatformNaverMap(
         if (position.isValid) {
             LocationOverlay(
                 position = position.toLatLng(),
-                icon = OverlayImage.fromBitmap(imageResource(Res.drawable.ic_my_position).asAndroidBitmap())
             )
         }
 
         searchUiState.reviewedPlaces.filter { if (isShowBookmarks) it.bookmark else true }.forEach {
-            MarkerComposable(
-                keys = arrayOf(it.kakaoPlaceId),
-                state = MarkerState(
-                    position = LatLng(it.latitude, it.longitude),
-                ),
-                anchor = Offset(0.5f, 0.25f),
-                onClick = { _ ->
-                    onPlaceClick(it.kakaoPlaceId)
-                    true
-                }
-            ) {
-                Column(
-                    modifier = Modifier,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if (it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
-
-                    } else {
-                        Image(
-                            painter = when (it.placeCategory) {
-                                Category.RESTAURANT -> {
-                                    painterResource(Res.drawable.ic_food_marker)
-                                }
-
-                                else -> {
-                                    painterResource(Res.drawable.ic_cafe_marker)
-                                }
-                            },
-                            contentDescription = "marker"
-                        )
+            key(it.kakaoPlaceId, it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
+                MarkerComposable(
+                    keys = arrayOf(it.kakaoPlaceId),
+                    state = MarkerState(
+                        position = LatLng(it.latitude, it.longitude),
+                    ),
+                    anchor = Offset(0.5f, 0.25f),
+                    onClick = { _ ->
+                        onPlaceClick(it.kakaoPlaceId)
+                        true
                     }
-
-                    RoundedBox(
+                ) {
+                    Column(
                         modifier = Modifier,
-                        backgroundColor = Colors.Black_25,
-                        cornerRounded = 100
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(vertical = 2.dp, horizontal = 7.dp)
-                                .widthIn(max = 44.dp),
-                            text = it.name,
-                            style = Typography.B6,
-                            color = Colors.White,
-                            overflow = TextOverflow.Ellipsis,
-                            maxLines = 1
-                        )
+                        if (it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
+                            RoundedBox(
+                                modifier = Modifier,
+                                backgroundColor = Colors.Neutral800,
+                                cornerRounded = 100
+                            ) {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(vertical = 2.dp, horizontal = 7.dp)
+                                        .widthIn(max = 44.dp),
+                                    text = it.name,
+                                    style = Typography.B5,
+                                    color = Colors.White,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1
+                                )
+                            }
+                        } else {
+                            Image(
+                                painter = when (it.placeCategory) {
+                                    Category.RESTAURANT -> {
+                                        painterResource(Res.drawable.ic_food_marker)
+                                    }
+
+                                    else -> {
+                                        painterResource(Res.drawable.ic_cafe_marker)
+                                    }
+                                },
+                                contentDescription = "marker"
+                            )
+
+                            RoundedBox(
+                                modifier = Modifier,
+                                backgroundColor = Colors.Black_25,
+                                cornerRounded = 100
+                            ) {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(vertical = 2.dp, horizontal = 7.dp)
+                                        .widthIn(max = 44.dp),
+                                    text = it.name,
+                                    style = Typography.B6,
+                                    color = Colors.White,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1
+                                )
+                            }
+                        }
                     }
                 }
             }

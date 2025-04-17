@@ -1,6 +1,6 @@
 package com.pinup.pinup.di
 
-import com.pinup.pinup.dataStorePreferences
+import com.pinup.pinup.platform.dataStorePreferences
 import org.koin.dsl.module
 
 val dataStoreModule = module {

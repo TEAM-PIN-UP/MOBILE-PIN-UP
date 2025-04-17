@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 import androidx.compose.ui.unit.dp
+import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Colors
@@ -30,6 +31,9 @@ fun BottomBar(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .clickableSingleWithNoRipple {
+                // 바텀시트 터치 이벤트 막기 위해 넣어 놓음
+            }
             .background(Colors.White)
             .height(56.dp)
     ) {
