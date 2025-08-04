@@ -1,0 +1,25 @@
+source 'https://cdn.cocoapods.org'
+
+platform :ios, '16.4'
+
+use_frameworks! :linkage => :static
+
+target 'iosApp' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  # Pods for iosApp
+  pod 'NMapsMap'
+  pod 'FirebaseAnalytics'
+  pod 'GoogleSignIn'
+  pod 'KakaoSDKCommon' # 카카오 공통 SDK
+  pod 'KakaoSDKAuth'  # 사용자 인증
+  pod 'KakaoSDKUser'  # 카카오 로그인, 사용자 관리
+  pod 'NidThirdPartyLogin' # 네이버 로그인
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |t|
+    t.build_configurations.each do |c|
+      c.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.4'   # 상단과 동일
+    end
+  end
+end

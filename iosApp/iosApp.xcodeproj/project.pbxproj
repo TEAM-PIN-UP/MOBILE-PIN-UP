@@ -34,11 +34,15 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		AE0824E22D9ECA6B00E53D9A /* loginController */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = loginController;
 			sourceTree = "<group>";
 		};
 		AE08252B2DA38F2F00E53D9A /* nativeViewFactory */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = nativeViewFactory;
 			sourceTree = "<group>";
 		};
@@ -139,6 +143,7 @@
 				7555FF79242A565900829871 /* Resources */,
 				AE0824DF2D9E537800E53D9A /* ShellScript */,
 				58478487FA05DBC6092B2C7E /* [CP] Embed Pods Frameworks */,
+				A3C85DBB18BDC5ECBF83169F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -216,6 +221,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A3C85DBB18BDC5ECBF83169F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		AE0824DF2D9E537800E53D9A /* ShellScript */ = {
