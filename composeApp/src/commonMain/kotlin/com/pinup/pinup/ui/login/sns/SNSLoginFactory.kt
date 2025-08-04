@@ -14,6 +14,7 @@ class SNSLoginFactory(
             SNSType.KAKAO -> kaKaoLoginController.doLogin(resultListener, contextFactory.getActivity())
             SNSType.NAVER -> naverLoginController.doLogin(resultListener, contextFactory.getActivity())
             SNSType.GOOGLE -> googleLoginController.doLogin(resultListener)
+            SNSType.EMAIL -> {}
         }
     }
 }

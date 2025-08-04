@@ -15,5 +15,15 @@ object Texts {
         }
     }
 
-    val WORD_START = "시작하기"
+    val ONBOARDING_LOGIN_TITLE = buildAnnotatedString {
+        withStyle(style = SpanStyle(color = Colors.Neutral800)) {
+            append("우리의 로컬 아카이브, ")
+        }
+        withStyle(style = SpanStyle(color = Colors.Main)) {
+            append("핀업")
+        }
+    }
+    const val ONBOARDING_LOGIN_TEXT = "로그인하고 나만의 공간을 공유해보세요!"
+
+    const val WORD_START = "시작하기"
 }
