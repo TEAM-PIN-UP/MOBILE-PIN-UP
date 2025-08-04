@@ -16,27 +16,22 @@ import de.jensklingenberg.ktorfit.converter.Converter
 import de.jensklingenberg.ktorfit.converter.KtorfitResult
 import de.jensklingenberg.ktorfit.converter.TypeData
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.headers
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
-import io.ktor.http.append
 import io.ktor.http.contentType
-import io.ktor.http.headersOf
 import io.ktor.http.withCharset
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.charsets.Charsets
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.serializer
 import org.koin.dsl.module
 
@@ -54,14 +49,7 @@ val httpClientModule = module {
                     }
                 )
             }
-            install(Logging) {
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        hLog(message)
-                    }
-                }
-                level = LogLevel.ALL
-            }
+
             install(Auth) {
                 bearer {
                     refreshTokens {
@@ -115,14 +103,14 @@ fun getKtorfit(): Ktorfit {
                 }
             )
         }
-        install(Logging) {
-            logger = object : Logger {
-                override fun log(message: String) {
-                    hLog(message)
-                }
-            }
-            level = LogLevel.ALL
-        }
+//        install(Logging) {
+//            logger = object : Logger {
+//                override fun log(message: String) {
+//                    hLog(message)
+//                }
+//            }
+//            level = LogLevel.ALL
+//        }
         defaultRequest {
             contentType(ContentType.Application.Json.withCharset(Charsets.UTF_8))
         }
@@ -157,8 +145,9 @@ class PResultConverterFactory(
                         }
 
                         is KtorfitResult.Success -> {
+                            val bodyText = result.response.bodyAsText()
+                            kLog(bodyText)
                             if (result.response.status.value == 200) {
-                                val bodyText = result.response.bodyAsText()
                                 val deserializer = json.serializersModule.serializer(typeData.typeArgs.first().typeInfo.kotlinType!!)
                                 PResult.Success(json.decodeFromString(deserializer, bodyText))
                             } else {
@@ -172,7 +161,7 @@ class PResultConverterFactory(
                                     )
                                 } else {
                                     val response =
-                                        json.decodeFromString<PResponse<Nothing>>(result.response.bodyAsText())
+                                        json.decodeFromString<PResponse<Nothing>>(bodyText)
                                     PResult.Fail(
                                         FailState(
                                             status = response.status,
@@ -189,4 +178,20 @@ class PResultConverterFactory(
         }
         return null
     }
+}
+
+fun kLog(log : String){
+    val prettyPrinter = Json {
+        prettyPrint = true
+        prettyPrintIndent = "  "
+        isLenient = true
+        ignoreUnknownKeys = true
+    }
+
+    val prettyText = runCatching {
+        val element = prettyPrinter.parseToJsonElement(log)
+        prettyPrinter.encodeToString(JsonElement.serializer(), element)
+    }.getOrDefault(log)
+
+    hLog(prettyText)
 }
