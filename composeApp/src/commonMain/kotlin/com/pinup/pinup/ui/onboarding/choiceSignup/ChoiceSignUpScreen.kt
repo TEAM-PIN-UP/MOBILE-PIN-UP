@@ -24,6 +24,7 @@ import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_email_login
 import pinup.composeapp.generated.resources.ic_google_login
 import pinup.composeapp.generated.resources.ic_kakao_login
+import pinup.composeapp.generated.resources.ic_naver_login
 
 @Composable
 fun ChoiceSignUpScreen(
