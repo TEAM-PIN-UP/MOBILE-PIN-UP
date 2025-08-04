@@ -24,15 +24,16 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 interface AuthApi {
-    @POST("api/auth/refresh")
+    @POST(AuthPath.REFRESH)
     suspend fun refreshToken(@Header("Refresh") token: String): PResult<PResponse<LoginResponse>>
 
-    @POST("api/auth/login")
+    @POST(AuthPath.SOCIAL_LOGIN)
     suspend fun login(@Body request: LoginRequest): PResult<PResponse<LoginResponse>>
 
-    @POST("api/auth/logout")
+    @POST(AuthPath.LOGOUT)
     suspend fun logout(@Header("Access") token: String): PResult<PResponse<Unit>>
 
+    //TODO memeber API로 이전
     @Multipart
     @POST("api/auth/sign-up")
     suspend fun signUp(
