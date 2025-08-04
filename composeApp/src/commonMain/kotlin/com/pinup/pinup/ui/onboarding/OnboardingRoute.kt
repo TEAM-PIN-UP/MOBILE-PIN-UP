@@ -19,7 +19,6 @@ fun OnboardingRoute(
         }
     }
     OnboardingScreen(
-        //TODO 임시, 추후 회원가입 여부 로직 추가
         onClickStart = viewModel::onClickStart
     )
 }

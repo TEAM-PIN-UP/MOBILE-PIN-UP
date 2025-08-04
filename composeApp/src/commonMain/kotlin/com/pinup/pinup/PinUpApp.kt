@@ -81,10 +81,9 @@ fun PinUpApp(
                     }
                 ){
                     OnboardingRoute(
-                        contextFactory = contextFactory,
                         onMoveSignUpOnboarding = {
                             //TODO 페이지 추가 예정
-                            navHostController.navigate(PinUpAppDestination.SignUp("snsUserInfoString"))
+                            navHostController.navigate(PinUpAppDestination.SignUp(""))
                         },
                         onMoveLogin = {
                             navHostController.navigate(PinUpAppDestination.Login)
