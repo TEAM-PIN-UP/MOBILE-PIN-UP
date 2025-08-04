@@ -21,6 +21,7 @@ import com.pinup.pinup.ui.component.LogoutDialog
 import com.pinup.pinup.ui.login.compose.LoginRoute
 import com.pinup.pinup.ui.main.compose.MainNavHost
 import com.pinup.pinup.ui.onboarding.OnboardingRoute
+import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpRoute
 import com.pinup.pinup.ui.pinbuddy.PinBuddyRoute
 import com.pinup.pinup.ui.reviewwrite.compose.WriteReviewNavHost
 import com.pinup.pinup.ui.setting.SettingNavHost
@@ -82,11 +83,33 @@ fun PinUpApp(
                 ){
                     OnboardingRoute(
                         onMoveSignUpOnboarding = {
-                            //TODO 페이지 추가 예정
-                            navHostController.navigate(PinUpAppDestination.SignUp(""))
+                            navHostController.navigate(PinUpAppDestination.ChoiceSignUp)
                         },
                         onMoveLogin = {
                             navHostController.navigate(PinUpAppDestination.Login)
+                        }
+                    )
+                }
+
+                composable<PinUpAppDestination.ChoiceSignUp>(
+                    enterTransition = {
+                        slideInHorizontally(initialOffsetX = { it })
+                    },
+                    popEnterTransition = {
+                        fadeIn(animationSpec = tween(200))
+                    },
+                    popExitTransition = {
+                        slideOutHorizontally(targetOffsetX = { it })
+                    }
+                ){
+                    ChoiceSignUpRoute(
+                        contextFactory = contextFactory,
+                        onMoveLogin = {
+                            navHostController.navigate(PinUpAppDestination.Login)
+                        },
+                        onMoveSignUp = { snsUserInfo ->
+                            val snsUserInfoString = Json.encodeToString(snsUserInfo)
+                            navHostController.navigate(PinUpAppDestination.SignUp(snsUserInfoString))
                         }
                     )
                 }
@@ -231,6 +254,8 @@ fun PinUpApp(
 sealed interface PinUpAppDestination {
     @Serializable
     data object Onboarding : PinUpAppDestination
+    @Serializable
+    data object ChoiceSignUp : PinUpAppDestination
     @Serializable
     data object Main : PinUpAppDestination {
         @Serializable
