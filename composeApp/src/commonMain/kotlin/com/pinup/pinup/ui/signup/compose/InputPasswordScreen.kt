@@ -23,6 +23,7 @@ import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.component.ErrorText
 import com.pinup.pinup.ui.component.PButton
 import com.pinup.pinup.ui.component.RoundedTextField
+import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.signup.PasswordState
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
@@ -38,6 +39,7 @@ fun InputPasswordScreen(
     onPasswordAgainChanged: (String) -> Unit,
     onClickShowPassword : () -> Unit,
     onClickConfirm: () -> Unit,
+    onBackPressed : () -> Unit ={},
 ) {
     Column(
         modifier = Modifier
@@ -45,8 +47,14 @@ fun InputPasswordScreen(
             .background(Colors.White)
             .padding(horizontal = 20.dp)
     ) {
+        TitleBar(
+            onLeftButtonClick = {
+                onBackPressed()
+            }
+        )
+
+        Spacer(modifier = Modifier.height(49.dp))
         Text(
-            modifier = Modifier.padding(top = 40.dp),
             text = Texts.SignupPassword.TITLE,
             style = Typography.H0,
             color = Colors.Black

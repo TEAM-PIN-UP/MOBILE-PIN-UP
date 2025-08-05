@@ -19,6 +19,7 @@ import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.PButton
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.RoundedBox
+import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.signup.TermsOfService
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
@@ -40,7 +41,8 @@ fun TermsOfServiceScreen(
     isCollectDataAgree: Boolean,
     isCollectLocationAgree: Boolean,
     isMarketingAgreeClick: Boolean,
-    isPassValidation: Boolean
+    isPassValidation: Boolean,
+    onBackPressed: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -48,6 +50,12 @@ fun TermsOfServiceScreen(
             .background(Colors.White)
             .padding(horizontal = 20.dp)
     ) {
+        TitleBar(
+            onLeftButtonClick = {
+                onBackPressed()
+            }
+        )
+
         Spacer(modifier = Modifier.height(44.dp))
 
         Text(

@@ -21,6 +21,7 @@ import com.pinup.pinup.ui.component.ErrorText
 import com.pinup.pinup.ui.component.PButton
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.RoundedTextField
+import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.signup.EmailState
 import com.pinup.pinup.ui.signup.EmailVerifyType
 import com.pinup.pinup.ui.theme.Colors
@@ -33,7 +34,8 @@ fun InputEmailScreen(
     emailState: EmailState = EmailState(),
     onEmailChanged : (String) -> Unit = {},
     onCodeChanged : (String) -> Unit = {},
-    onClickVerify : () -> Unit = {}
+    onClickVerify : () -> Unit = {},
+    onBackPressed : () -> Unit ={},
 ) {
     Column(
         modifier = Modifier
@@ -41,6 +43,12 @@ fun InputEmailScreen(
             .background(Colors.White)
             .padding(horizontal = 20.dp),
     ) {
+        TitleBar(
+            onLeftButtonClick = {
+                onBackPressed()
+            }
+        )
+
         Spacer(modifier = Modifier.height(49.dp))
 
         Text(

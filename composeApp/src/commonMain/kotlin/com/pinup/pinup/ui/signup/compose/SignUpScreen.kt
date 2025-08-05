@@ -52,12 +52,6 @@ fun SignUpScreen(
         modifier = Modifier
             .background(Colors.White)
     ) {
-        TitleBar(
-            onLeftButtonClick = {
-                onBackPressed()
-            }
-        )
-
         NavHost(
             navController = navHostController,
             startDestination = if(snsType == SNSType.EMAIL) SignUpDestination.InputEmail else SignUpDestination.Terms,
@@ -78,7 +72,8 @@ fun SignUpScreen(
                     onEmailChanged = onEmailChanged,
                     onCodeChanged = onCodeChanged,
                     onClickVerify = onClickVerify,
-                    onMovePassword = { navHostController.navigate(SignUpDestination.InputPassword) }
+                    onMovePassword = { navHostController.navigate(SignUpDestination.InputPassword) },
+                    onBackPressed = onBackPressed
                 )
             }
 
@@ -99,6 +94,7 @@ fun SignUpScreen(
                     onPasswordAgainChanged = onPasswordAgainChanged,
                     onClickShowPassword = onClickShowPassword,
                     onClickConfirm = { navHostController.navigate(SignUpDestination.Terms) },
+                    onBackPressed = onBackPressed
                 )
             }
 
@@ -169,7 +165,8 @@ fun SignUpScreen(
                     isCollectDataAgree = termsOfServiceState.isCollectDataAgree,
                     isCollectLocationAgree = termsOfServiceState.isCollectLocationAgree,
                     isMarketingAgreeClick = termsOfServiceState.isMarketingAgreeAgree,
-                    isPassValidation = termsOfServiceState.isPassValidation
+                    isPassValidation = termsOfServiceState.isPassValidation,
+                    onBackPressed = onBackPressed
                 )
             }
         }
