@@ -16,6 +16,7 @@ import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.signup.EmailState
 import com.pinup.pinup.ui.signup.NickNameState
+import com.pinup.pinup.ui.signup.PasswordState
 import com.pinup.pinup.ui.signup.TermsOfService
 import com.pinup.pinup.ui.signup.TermsOfServiceState
 import com.pinup.pinup.ui.theme.Colors
@@ -26,12 +27,16 @@ fun SignUpScreen(
     navHostController: NavHostController,
     snsType: SNSType,
     emailState: EmailState,
+    passwordState : PasswordState,
     nicknameState: NickNameState,
     profileUrl: ByteArray,
     termsOfServiceState: TermsOfServiceState,
     onEmailChanged : (String) -> Unit,
     onCodeChanged : (String) -> Unit,
     onClickVerify : () -> Unit,
+    onPasswordChanged : (String) -> Unit,
+    onPasswordAgainChanged : (String) -> Unit,
+    onClickShowPassword : () -> Unit,
     onValueChange: (String) -> Unit,
     onProfileImageChange: (ByteArray) -> Unit,
     onAllAgreeClick: (TermsOfService) -> Unit,
@@ -72,7 +77,27 @@ fun SignUpScreen(
                     onEmailChanged = onEmailChanged,
                     onCodeChanged = onCodeChanged,
                     onClickVerify = onClickVerify,
-                    onMovePassword = { navHostController.navigate(SignUpDestination.Name) }
+                    onMovePassword = { navHostController.navigate(SignUpDestination.InputPassword) }
+                )
+            }
+
+            composable<SignUpDestination.InputPassword>(
+                enterTransition = {
+                    slideInHorizontally(initialOffsetX = { it })
+                },
+                popEnterTransition = {
+                    fadeIn(animationSpec = tween(200))
+                },
+                popExitTransition = {
+                    slideOutHorizontally(targetOffsetX = { it })
+                }
+            ) {
+                InputPasswordScreen(
+                    passwordState = passwordState,
+                    onPasswordChanged = onPasswordChanged,
+                    onPasswordAgainChanged = onPasswordAgainChanged,
+                    onClickShowPassword = onClickShowPassword,
+                    onClickConfirm = { navHostController.navigate(SignUpDestination.Terms) },
                 )
             }
 
@@ -148,6 +173,8 @@ fun SignUpScreen(
 sealed interface SignUpDestination {
     @Serializable
     data object InputEmail : SignUpDestination
+    @Serializable
+    data object InputPassword : SignUpDestination
     @Serializable
     data object Name : SignUpDestination
     @Serializable
