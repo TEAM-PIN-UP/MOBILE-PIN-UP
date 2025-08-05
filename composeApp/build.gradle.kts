@@ -109,6 +109,8 @@ kotlin {
             implementation(libs.media.compose)
             implementation(libs.geo.compose)
             implementation(libs.file.picker)
+
+            implementation(libs.web.view)
         }
         iosMain.dependencies {
             // ktor

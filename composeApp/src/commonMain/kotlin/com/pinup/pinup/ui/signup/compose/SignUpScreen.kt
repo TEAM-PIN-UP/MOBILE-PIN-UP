@@ -161,8 +161,8 @@ fun SignUpScreen(
                     onCollectDataAgreeClick = onCollectDataAgreeClick,
                     onCollectLocationAgreeClick = onCollectLocationAgreeClick,
                     onMarketingAgreeClick = onMarketingAgreeClick,
-                    onMoveComplete = {
-                        navHostController.navigate(PinUpAppDestination.Main)
+                    onMoveInputName = {
+                        navHostController.navigate(SignUpDestination.Name)
                     },
                     isAllAgree = termsOfServiceState.isAllAgree,
                     isUsingServiceAgree = termsOfServiceState.isUsingServiceAgree,

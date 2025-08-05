@@ -34,7 +34,7 @@ fun TermsOfServiceScreen(
     onCollectDataAgreeClick: (TermsOfService) -> Unit,
     onCollectLocationAgreeClick: (TermsOfService) -> Unit,
     onMarketingAgreeClick: (TermsOfService) -> Unit,
-    onMoveComplete: () -> Unit,
+    onMoveInputName: () -> Unit,
     isAllAgree: Boolean,
     isUsingServiceAgree: Boolean,
     isCollectDataAgree: Boolean,
@@ -48,7 +48,6 @@ fun TermsOfServiceScreen(
             .background(Colors.White)
             .padding(horizontal = 20.dp)
     ) {
-
         Spacer(modifier = Modifier.height(44.dp))
 
         Text(
@@ -233,7 +232,7 @@ fun TermsOfServiceScreen(
             text = Texts.Word.CONFIRM,
             isEnable = isPassValidation,
             onClick = {
-                onMoveComplete()
+                onMoveInputName()
             }
         )
 

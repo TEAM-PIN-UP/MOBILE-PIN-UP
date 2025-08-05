@@ -39,6 +39,7 @@ google-api = "1.33.0"
 googleid = "1.1.1"
 naverOauth = "5.10.0"
 kakao = "2.6.0"
+webview = "1.8.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -105,6 +106,9 @@ naver-oauth = { group = "com.navercorp.nid", name = "oauth", version.ref = "nave
 
 # kakao login
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
+
+# WebView
+web-view = { module = "io.github.kevinnzou:compose-webview-multiplatform", version.ref = "webview" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
