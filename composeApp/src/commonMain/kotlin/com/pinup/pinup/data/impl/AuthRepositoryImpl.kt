@@ -2,6 +2,7 @@ package com.pinup.pinup.data.impl
 
 import com.pinup.pinup.data.local.MembersLocalDataSource
 import com.pinup.pinup.data.remote.AuthRemoteDataSource
+import com.pinup.pinup.data.request.EmailLoginRequest
 import com.pinup.pinup.data.request.LoginRequest
 import com.pinup.pinup.data.request.SignUpRequest
 import com.pinup.pinup.data.response.LoginResponse
@@ -14,8 +15,12 @@ class AuthRepositoryImpl (
     private val authRemoteDataSource: AuthRemoteDataSource,
     private val membersLocalDataSource: MembersLocalDataSource,
 ): AuthRepository {
+    override suspend fun emailLogin(request: EmailLoginRequest): PResult<LoginResponse> {
+        return authRemoteDataSource.emailLogin(request)
+    }
+
     override suspend fun socialLogin(provider : String, socialId: String): PResult<LoginResponse> {
-        return authRemoteDataSource.login(
+        return authRemoteDataSource.socialLogin(
             request = LoginRequest(
                 provider = provider,
                 socialId = socialId
