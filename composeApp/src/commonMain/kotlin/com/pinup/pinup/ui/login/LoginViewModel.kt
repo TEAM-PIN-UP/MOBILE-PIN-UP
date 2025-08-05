@@ -46,7 +46,7 @@ class LoginViewModel (
 
     private fun login(snsLoginInfo: SNSUserInfo) {
         viewModelScope.launch {
-            resultResponse(socialLoginUseCase(snsLoginInfo), { emitEvent( LoginUiEvent.MoveMain ) }, ::handleFailLogin )
+            resultResponse(socialLoginUseCase(snsLoginInfo), { emitEvent( LoginUiEvent.MoveMain ) }, { handleFailSocialLogin(it, snsLoginInfo)} )
         }
     }
 
@@ -56,11 +56,17 @@ class LoginViewModel (
             password = _uiState.value.password
         )
         viewModelScope.launch {
-            resultResponse(emailLoginUseCase(request), { emitEvent( LoginUiEvent.MoveMain ) }, ::handleFailLogin )
+            resultResponse(emailLoginUseCase(request), { emitEvent( LoginUiEvent.MoveMain ) }, ::handleFailEmailLogin )
         }
     }
 
-    private fun handleFailLogin(code : String) {
+    private fun handleFailSocialLogin(code : String, snsLoginInfo : SNSUserInfo) {
+        if (code == StatusCode.Login.NOT_EXIST_MEMBER) {
+            emitEvent(LoginUiEvent.MoveSignUp(snsLoginInfo))
+        }
+    }
+
+    private fun handleFailEmailLogin(code : String){
         if (code == StatusCode.Login.NOT_EXIST_MEMBER) {
             updateState {
                 copy(
