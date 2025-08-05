@@ -14,11 +14,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.event.DetailPlaceEventBus
+import com.pinup.pinup.extentions.jsonToArg
 import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
 import com.pinup.pinup.ui.component.LogoutDialog
 import com.pinup.pinup.ui.login.compose.LoginRoute
+import com.pinup.pinup.ui.login.model.SNSType
+import com.pinup.pinup.ui.login.model.SNSUserInfo
 import com.pinup.pinup.ui.main.compose.MainNavHost
 import com.pinup.pinup.ui.onboarding.OnboardingRoute
 import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpRoute
@@ -148,6 +151,7 @@ fun PinUpApp(
                         slideOutHorizontally(targetOffsetX = { it })
                     }
                 ) {
+                    val snsType = it.jsonToArg<SNSUserInfo>("snsUserInfo")?.snsType ?: SNSType.KAKAO
                     SignUpRoute(
                         onBackPressed = {
                             navHostController.popBackStack()
