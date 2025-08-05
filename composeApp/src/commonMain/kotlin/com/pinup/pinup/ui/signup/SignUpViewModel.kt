@@ -11,6 +11,7 @@ import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.login.model.SNSUserInfo
+import com.pinup.pinup.util.Const
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -92,7 +93,7 @@ class SignUpViewModel (
 
     fun isValidEmail(): Boolean {
         val regex = Regex(
-            pattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            pattern = Const.PRegex.EMAIL_REGEX,
             option = RegexOption.IGNORE_CASE
         )
         val isValid = _uiState.value.emailState.email.isNotBlank() && _uiState.value.emailState.email.matches(regex)
@@ -106,6 +107,40 @@ class SignUpViewModel (
         }
         return isValid
     }
+
+    fun updatePassword(password: String) = viewModelScope.launch {
+        val regex = Regex(Const.PRegex.PASSWORD_REGEX)
+        updateState {
+            copy(
+                passwordState = passwordState.copy(
+                    password = password,
+                    isPasswordValid = password.isNotBlank() && password.matches(regex)
+                )
+            )
+        }
+    }
+
+    fun updatePasswordAgain(password: String) = viewModelScope.launch {
+        updateState {
+            copy(
+                passwordState = passwordState.copy(
+                    passwordAgain = password,
+                    isPasswordMatched = password == passwordState.password
+                )
+            )
+        }
+    }
+
+    fun onClickShowPassword() = viewModelScope.launch {
+        updateState {
+            copy(
+                passwordState = uiState.value.passwordState.copy(
+                    isShowPassword = !uiState.value.passwordState.isShowPassword,
+                )
+            )
+        }
+    }
+
 
     private fun checkNickName(nickname: String) = viewModelScope.launch {
         resultResponse(checkNickNameUseCase(nickname), ::handleSuccessCheckNickName)
@@ -179,6 +214,7 @@ sealed interface SignUpUiEvent : UiEvent{
 data class SignUpUiState(
     val snsType: SNSType = SNSType.KAKAO,
     val emailState: EmailState = EmailState(),
+    val passwordState: PasswordState = PasswordState(),
     val nicknameState: NickNameState = NickNameState(),
     val socialId: String = "",
     val profileUrl: ByteArray = ByteArray(0),
@@ -207,6 +243,16 @@ data class EmailState(
     val isClickedVerify : Boolean = false,
 ) {
     val isPassValidation = isEmailValid && !isEmailUsed && email.isNotEmpty() && emailVerifyType == EmailVerifyType.VERIFIED
+}
+
+data class PasswordState(
+    val password: String = "",
+    val passwordAgain : String = "",
+    val isPasswordValid: Boolean = true,
+    val isPasswordMatched: Boolean = true,
+    val isShowPassword: Boolean = false,
+) {
+    val isPassValidation = isPasswordValid && isPasswordMatched && password.isNotEmpty() && passwordAgain.isNotEmpty()
 }
 
 data class TermsOfServiceState(
