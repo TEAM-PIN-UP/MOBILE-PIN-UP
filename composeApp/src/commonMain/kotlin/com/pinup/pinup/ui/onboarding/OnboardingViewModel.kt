@@ -13,8 +13,11 @@ class OnboardingViewModel (
 
     fun onClickStart() = viewModelScope.launch {
         val isLogin = isLoginUseCase()
-        if(isLogin) emitEvent(OnboardingUiEvent.MoveLogin)
-        else emitEvent(OnboardingUiEvent.MoveSignUpOnboarding)
+        if (isLogin) {
+            emitEvent(OnboardingUiEvent.MoveLogin)
+        } else {
+            emitEvent(OnboardingUiEvent.MoveSignUpOnboarding)
+        }
     }
 }
 
