@@ -18,7 +18,7 @@ object Texts {
         const val VERIFY = "인증하기"
     }
 
-    object Onboarding{
+    object Onboarding {
         val ONBOARDING_TEXT = buildAnnotatedString {
             withStyle(style = SpanStyle(color = Colors.White)) {
                 append("우리의 로컬 아카이브, ")
@@ -38,19 +38,27 @@ object Texts {
         const val ONBOARDING_LOGIN_TEXT = "로그인하고 나만의 공간을 공유해보세요!"
     }
 
-    object Login{
+    object Login {
         const val LOGIN_ID_FIND = "아이디 찾기"
         const val LOGIN_PASSWORD_FIND = "비밀번호 찾기"
         const val LOGIN_SNS = "SNS 로그인"
         const val INCORRECT_ID = "아이디 혹은 비밀번호가 일치하지 않습니다."
     }
 
-    object SignupEmail{
+    object SignupEmail {
         const val TITLE = "로그인에 사용할\n이메일을 입력해주세요."
         const val HINT = "이메일 주소를 입력해주세요."
         const val INVALID = "유효한 이메일 주소가 아닙니다."
         const val DUPLICATE = "동일한 이메일 주소로 가입된 계정이 있습니다.\n기존 계정을 확인해주세요."
         const val CODE_HINT = "인증번호를 입력해주세요."
         const val CODE_INVALID = "인증번호가 일치하지 않습니다."
+    }
+
+    object SignupPassword {
+        const val TITLE = "사용하실 비밀번호를\n입력해주세요."
+        const val HINT = "비밀번호 입력 (8자이상 + 특수문자 포함)"
+        const val INVALID = "비밀번호는 8~20자, 특수문자 포함 필수입니다."
+        const val CONFIRM = "비밀번호 확인"
+        const val NOT_MATCH = "입력된 비밀번호가 일치하지 않습니다."
     }
 }
