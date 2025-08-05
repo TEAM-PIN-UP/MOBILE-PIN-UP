@@ -2,6 +2,7 @@
 package com.pinup.pinup.ui.onboarding.choiceSignup
 
 import androidx.lifecycle.viewModelScope
+import com.pinup.pinup.domain.model.StatusCode
 import com.pinup.pinup.domain.usecase.SocialLoginUseCase
 import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.platform.hLog
@@ -43,7 +44,14 @@ class ChoiceSignUpViewModel (
 
     private fun login(snsLoginInfo: SNSUserInfo) {
         viewModelScope.launch {
-            resultResponse(socialLoginUseCase(snsLoginInfo), { emitEvent( ChoiceSignUpUiEvent.MoveMain ) }, { emitEvent(ChoiceSignUpUiEvent.MoveSignUp(snsLoginInfo))} )
+            resultResponse(socialLoginUseCase(snsLoginInfo), { emitEvent( ChoiceSignUpUiEvent.MoveMain ) }, { handleLoginError(it, snsLoginInfo) } )
+        }
+    }
+
+    private fun handleLoginError(code : String, snsLoginInfo : SNSUserInfo){
+        when(code) {
+            StatusCode.Login.NOT_EXIST_MEMBER -> emitEvent(ChoiceSignUpUiEvent.MoveSignUp(snsLoginInfo))
+            else -> hLog(code) //TODO 나중에 TOAST같은 오류처리
         }
     }
 

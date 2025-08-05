@@ -18,7 +18,7 @@ fun ChoiceSignUpRoute(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
             when(it) {
-                ChoiceSignUpUiEvent.MoveMain -> onMoveLogin()
+                ChoiceSignUpUiEvent.MoveMain -> onMoveLogin() // TODO Main 구현되면 수정할 예정
                 is ChoiceSignUpUiEvent.MoveSignUp -> onMoveSignUp(it.snsLoginInfo)
                 ChoiceSignUpUiEvent.MoveEmailLogin -> onMoveLogin()
             }
