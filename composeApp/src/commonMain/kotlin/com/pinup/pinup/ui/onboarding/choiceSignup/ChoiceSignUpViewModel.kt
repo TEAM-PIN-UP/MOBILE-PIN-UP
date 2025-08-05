@@ -54,7 +54,15 @@ class ChoiceSignUpViewModel (
 
     private fun login(snsLoginInfo: SNSUserInfo) {
         viewModelScope.launch {
-            resultResponse(socialLoginUseCase(snsLoginInfo), { emitEvent( ChoiceSignUpUiEvent.MoveMain ) }, { handleLoginError(it, snsLoginInfo) } )
+            resultResponse(
+                response = socialLoginUseCase(snsLoginInfo),
+                successCallback = {
+                    emitEvent( ChoiceSignUpUiEvent.MoveMain )
+                },
+                errorCallback = {
+                    handleLoginError(it, snsLoginInfo)
+                }
+            )
         }
     }
 
