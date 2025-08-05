@@ -13,6 +13,12 @@ private val PretendardStyle = TextStyle(
 )
 
 val Typography = PinUpTypography(
+    H0 = PretendardStyle.copy(
+        fontWeight = FontWeight.W600,
+        fontSize = 24.sp,
+        lineHeight = 24.sp,
+        letterSpacing = (-0.4).sp
+    ),
     H1 = PretendardStyle.copy(
         fontWeight = FontWeight.W600,
         fontSize = 20.sp,
@@ -119,6 +125,7 @@ val Typography = PinUpTypography(
 
 @Immutable
 data class PinUpTypography(
+    val H0: TextStyle,
     val H1: TextStyle,
     val H2: TextStyle,
     val H3: TextStyle,

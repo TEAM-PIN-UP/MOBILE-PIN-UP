@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SignUpInfo
 import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
-import com.pinup.pinup.domain.usecase.LoginUseCase
+import com.pinup.pinup.domain.usecase.SocialLoginUseCase
 import com.pinup.pinup.domain.usecase.SignUpUseCase
 import com.pinup.pinup.domain.validator.NickNameValidator
 import com.pinup.pinup.platform.hLog
@@ -32,7 +32,7 @@ class SignUpViewModel (
     savedStateHandle: SavedStateHandle,
     private val checkNickNameUseCase: CheckNickNameUseCase,
     private val signUpUseCase: SignUpUseCase,
-    private val loginUseCase: LoginUseCase,
+    private val socialLoginUseCase: SocialLoginUseCase,
 ) : ViewModel() {
     private val snsUserInfo = Json.decodeFromString<SNSUserInfo>(savedStateHandle.get<String>(SNS_USER_INFO) ?: "")
     private val _uiState = MutableStateFlow(SignUpUiState(
@@ -164,7 +164,7 @@ class SignUpViewModel (
     }
 
     private fun login() = viewModelScope.launch {
-        when (val result = loginUseCase(snsUserInfo)) {
+        when (val result = socialLoginUseCase(snsUserInfo)) {
             is PResult.Fail -> {
                 hLog("result >> ${result.failState}")
             }

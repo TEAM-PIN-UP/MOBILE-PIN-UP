@@ -47,7 +47,7 @@ fun OnboardingScreen(
 
         Text(
             modifier = Modifier,
-            text = Texts.ONBOARDING_TEXT,
+            text = Texts.Onboarding.ONBOARDING_TEXT,
             style = Typography.H1
         )
 
@@ -67,7 +67,7 @@ fun OnboardingScreen(
                 modifier = Modifier
                     .padding(vertical = 15.dp)
                     .align(Alignment.Center),
-                text = Texts.WORD_START,
+                text = Texts.Word.WORD_START,
                 style = Typography.H4,
                 color = Colors.Neutral800
             )

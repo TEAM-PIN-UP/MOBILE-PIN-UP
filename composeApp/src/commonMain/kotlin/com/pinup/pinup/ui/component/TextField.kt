@@ -41,13 +41,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
+import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RoundedTextField(
     modifier: Modifier = Modifier,
-    textFieldHeight: Int = 52,
+    textFieldHeight: Int = 47,
     text: String = "",
     placeholder: String = "",
     onValueChange: (String) -> Unit,
@@ -63,13 +64,14 @@ fun RoundedTextField(
     onLeadingIconClick: () -> Unit = {},
     onTailIconClick: () -> Unit = {},
     focusedBorderColor: Color = Color.Blue,
-    unfocusedBorderColor: Color = Color.Gray,
+    unfocusedBorderColor: Color = Colors.Neutral300,
+    isError: Boolean = false,
     backgroundColor: Color = Color.White,
     errorBorderColor: Color = Color.Black,
     cornerRounded: Int = 8,
     textStyle: TextStyle = TextStyle(),
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    placeholderTextColor: Color = Color.Gray,
+    placeholderTextColor: Color = Colors.Neutral300,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         imeAction = ImeAction.Done,
         keyboardType = KeyboardType.Text,
@@ -91,16 +93,20 @@ fun RoundedTextField(
         textFieldValue = TextFieldValue(text)
     }
 
+    val textFieldColor = if (isError) {
+        Colors.Error
+    } else if(text.isNotEmpty()){
+        Colors.Neutral800
+    } else{
+        Colors.Neutral300
+    }
+
     Box(
         modifier = modifier
             .height(textFieldHeight.dp)
             .border(
                 width = 1.dp,
-                color = if (isFocused) {
-                    focusedBorderColor
-                } else {
-                    unfocusedBorderColor
-                },
+                color = textFieldColor,
                 shape = RoundedCornerShape(cornerRounded.dp)
             )
             .focusRequester(focusRequester)
@@ -124,7 +130,7 @@ fun RoundedTextField(
             enabled = enabled,
             readOnly = readOnly,
             textStyle = textStyle.copy(
-                color = textColor
+                color = textFieldColor
             ),
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,

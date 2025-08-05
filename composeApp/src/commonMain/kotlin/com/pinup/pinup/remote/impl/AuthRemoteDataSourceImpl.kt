@@ -1,6 +1,7 @@
 package com.pinup.pinup.remote.impl
 
 import com.pinup.pinup.data.remote.AuthRemoteDataSource
+import com.pinup.pinup.data.request.EmailLoginRequest
 import com.pinup.pinup.data.request.LoginRequest
 import com.pinup.pinup.data.request.SignUpRequest
 import com.pinup.pinup.data.response.LoginResponse
@@ -11,7 +12,6 @@ import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
-import io.ktor.utils.io.InternalAPI
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -22,8 +22,12 @@ import kotlinx.serialization.json.Json
 class AuthRemoteDataSourceImpl (
     private val authApi: AuthApi
 ): AuthRemoteDataSource {
-    override suspend fun login(request: LoginRequest): PResult<LoginResponse> {
-        return authApi.login(request).mapSuccessData()
+    override suspend fun emailLogin(request: EmailLoginRequest): PResult<LoginResponse> {
+        return authApi.emailLogin(request).mapSuccessData()
+    }
+
+    override suspend fun socialLogin(request: LoginRequest): PResult<LoginResponse> {
+        return authApi.socialLogin(request).mapSuccessData()
     }
 
     override suspend fun logout(access: String): PResult<Unit> {
