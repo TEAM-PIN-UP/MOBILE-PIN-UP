@@ -2,6 +2,7 @@ package com.pinup.pinup.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,18 +20,18 @@ import pinup.composeapp.generated.resources.ic_back
 
 @Composable
 fun TitleBar(
-    title: String,
+    title : String = "",
     modifier: Modifier = Modifier,
     onLeftButtonClick: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(48.dp),
+            .height(56.dp),
     ) {
         Image(
             modifier = Modifier
-                .padding(start = 12.dp)
+                .padding(start = 20.dp)
                 .clickableWithNoRipple { onLeftButtonClick() }
                 .align(Alignment.CenterStart),
             painter = painterResource(Res.drawable.ic_back),

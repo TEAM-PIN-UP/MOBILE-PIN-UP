@@ -47,13 +47,10 @@ fun SignUpScreen(
             .background(Colors.White)
     ) {
         TitleBar(
-            title = "회원가입",
             onLeftButtonClick = {
                 onBackPressed()
             }
         )
-
-        PHorizontalDivider()
 
         NavHost(
             navController = navHostController,
@@ -70,13 +67,12 @@ fun SignUpScreen(
                     slideOutHorizontally(targetOffsetX = { it })
                 }
             ) {
-                InputNameScreen(
-                    nickname = nicknameState.nickname,
-                    isNicknameUsed = nicknameState.isNicknameUsed,
-                    onValueChange = onValueChange,
-                    onMoveSelectProfileImage = {
-                        navHostController.navigate(SignUpDestination.Image)
-                    }
+                InputEmailScreen(
+                    emailState = emailState,
+                    onEmailChanged = onEmailChanged,
+                    onCodeChanged = onCodeChanged,
+                    onClickVerify = onClickVerify,
+                    onMovePassword = { navHostController.navigate(SignUpDestination.Name) }
                 )
             }
 
