@@ -91,6 +91,12 @@ val Typography = PinUpTypography(
         lineHeight = 24.sp,
         letterSpacing = (-0.22).sp
     ),
+    B7 = PretendardStyle.copy(
+        fontWeight = FontWeight.W500,
+        fontSize = 10.sp,
+        lineHeight = 12.sp,
+        letterSpacing = (-0.20).sp
+    ),
     C1 = PretendardStyle.copy(
         fontWeight = FontWeight.W400,
         fontSize = 14.sp,
@@ -139,6 +145,7 @@ data class PinUpTypography(
     val B4: TextStyle,
     val B5: TextStyle,
     val B6: TextStyle,
+    val B7: TextStyle,
 
     val C1: TextStyle,
     val C2: TextStyle,

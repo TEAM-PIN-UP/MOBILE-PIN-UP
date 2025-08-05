@@ -1,28 +1,21 @@
 package com.pinup.pinup.ui.signup
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SignUpInfo
 import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
-import com.pinup.pinup.domain.usecase.SocialLoginUseCase
 import com.pinup.pinup.domain.usecase.SignUpUseCase
 import com.pinup.pinup.domain.validator.NickNameValidator
-import com.pinup.pinup.platform.hLog
+import com.pinup.pinup.ui.base.BaseViewModel
+import com.pinup.pinup.ui.base.UiEvent
+import com.pinup.pinup.ui.base.UiState
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.login.model.SNSUserInfo
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
@@ -32,28 +25,20 @@ class SignUpViewModel (
     savedStateHandle: SavedStateHandle,
     private val checkNickNameUseCase: CheckNickNameUseCase,
     private val signUpUseCase: SignUpUseCase,
-    private val socialLoginUseCase: SocialLoginUseCase,
-) : ViewModel() {
+) : BaseViewModel<SignUpUiState, SignUpUiEvent>(SignUpUiState()) {
     private val snsUserInfo = Json.decodeFromString<SNSUserInfo>(savedStateHandle.get<String>(SNS_USER_INFO) ?: "")
-    private val _uiState = MutableStateFlow(SignUpUiState(
-        nicknameState = NickNameState(
-            nickname = ""
-        ),
-        snsType = snsUserInfo.snsType,
-        socialId = snsUserInfo.socialId,
-        email = snsUserInfo.email ?: "",
-        name = snsUserInfo.name ?: snsUserInfo.nickname ?: ""
-    ))
-    val uiState: StateFlow<SignUpUiState>
-        get() = _uiState.asStateFlow()
-
-    private val _uiEvent = MutableSharedFlow<SignUpUiEvent>()
-    val uiEvent: SharedFlow<SignUpUiEvent>
-        get() = _uiEvent.asSharedFlow()
-
     private val query = MutableStateFlow("")
 
     init {
+        updateState { copy(
+            nicknameState = NickNameState(
+                nickname = ""
+            ),
+            snsType = snsUserInfo.snsType,
+            socialId = snsUserInfo.socialId,
+            name = snsUserInfo.name ?: snsUserInfo.nickname ?: ""
+        ) }
+
         viewModelScope.launch {
             query
                 .filter {
@@ -64,48 +49,62 @@ class SignUpViewModel (
                     checkNickName(it)
                 }
         }
-        updateNickName(_uiState.value.nicknameState.nickname)
+        updateNickName(uiState.value.nicknameState.nickname)
     }
 
     fun updateProfile(profileUrl: ByteArray) {
-        _uiState.update {
-            it.copy(
-                profileUrl = profileUrl
-            )
-        }
+        updateState { copy( profileUrl = profileUrl ) }
     }
 
     fun updateNickName(nickname: String) = viewModelScope.launch {
         if (NickNameValidator.checkNameValidation(nickname).not()) return@launch
         query.emit(nickname)
-        _uiState.update {
-            it.copy(
-                nicknameState = it.nicknameState.copy(
-                    nickname = nickname
-                )
+        updateState { copy(
+            nicknameState = uiState.value.nicknameState.copy(
+                nickname = nickname
             )
-        }
+        ) }
+    }
+
+    fun updateEmail(email: String) = viewModelScope.launch {
+        updateState { copy(
+            emailState = uiState.value.emailState.copy(
+                email = email
+            )
+        ) }
+    }
+
+    fun updateVerificationCode(code: String) = viewModelScope.launch {
+        updateState { copy(
+            emailState = uiState.value.emailState.copy(
+                verificationCode = code
+            )
+        ) }
+    }
+
+    fun onClickVerify() = viewModelScope.launch {
+        //TODO: 이메일 인증 로직 구현
+        updateState { copy(
+            emailState = emailState.copy(
+                isClickedVerify = true,
+            )
+        ) }
     }
 
     private fun checkNickName(nickname: String) = viewModelScope.launch {
-        when (val result = checkNickNameUseCase.invoke(nickname)) {
-            is PResult.Fail -> {
+        resultResponse(checkNickNameUseCase(nickname), ::handleSuccessCheckNickName)
+    }
 
-            }
-            is PResult.Success -> {
-                _uiState.update {
-                    it.copy(
-                        nicknameState = it.nicknameState.copy(
-                            isNicknameUsed = result.data
-                        )
-                    )
-                }
-            }
-        }
+    private fun handleSuccessCheckNickName(isNicknameUsed: Boolean) {
+        updateState { copy(
+            nicknameState = uiState.value.nicknameState.copy(
+                isNicknameUsed = isNicknameUsed
+            )
+        ) }
     }
 
     fun updateTermsOfServiceState(termsOfService: TermsOfService) = viewModelScope.launch {
-        var termsOfServiceState = _uiState.value.termsOfServiceState
+        var termsOfServiceState = uiState.value.termsOfServiceState
         when(termsOfService) {
             TermsOfService.ALL -> {
                 termsOfServiceState = termsOfServiceState.copy(
@@ -136,42 +135,20 @@ class SignUpViewModel (
                 )
             }
         }
-        _uiState.update {
-            it.copy(
-                termsOfServiceState = termsOfServiceState
-            )
-        }
+        updateState { copy( termsOfServiceState = termsOfServiceState) }
     }
 
     fun signUp() = viewModelScope.launch {
         val request = SignUpInfo(
-            email = _uiState.value.email,
-            socialId = _uiState.value.socialId,
-            nickname = _uiState.value.nicknameState.nickname,
-            name = _uiState.value.name,
-            loginType = _uiState.value.snsType,
-            termsOfMarketing = _uiState.value.termsOfServiceState.isMarketingAgreeAgree,
-            profileImage = _uiState.value.profileUrl
+            email = uiState.value.emailState.email,
+            socialId = uiState.value.socialId,
+            nickname = uiState.value.nicknameState.nickname,
+            name = uiState.value.name,
+            loginType = uiState.value.snsType,
+            termsOfMarketing = uiState.value.termsOfServiceState.isMarketingAgreeAgree,
+            profileImage = uiState.value.profileUrl
         )
-        when (val result = signUpUseCase(request)) {
-            is PResult.Fail -> {
-                hLog("result >> ${result.failState}")
-            }
-            is PResult.Success -> {
-                login()
-            }
-        }
-    }
-
-    private fun login() = viewModelScope.launch {
-        when (val result = socialLoginUseCase(snsUserInfo)) {
-            is PResult.Fail -> {
-                hLog("result >> ${result.failState}")
-            }
-            is PResult.Success -> {
-                _uiEvent.emit(SignUpUiEvent.MoveMain)
-            }
-        }
+        resultResponse(signUpUseCase(request), { emitEvent(SignUpUiEvent.MoveMain) })
     }
 
     companion object {
@@ -179,19 +156,19 @@ class SignUpViewModel (
     }
 }
 
-sealed interface SignUpUiEvent {
+sealed interface SignUpUiEvent : UiEvent{
     data object MoveMain : SignUpUiEvent
 }
 
 data class SignUpUiState(
     val snsType: SNSType = SNSType.KAKAO,
+    val emailState: EmailState = EmailState(),
     val nicknameState: NickNameState = NickNameState(),
     val socialId: String = "",
     val profileUrl: ByteArray = ByteArray(0),
-    val email: String = "",
     val name: String = "",
     val termsOfServiceState: TermsOfServiceState = TermsOfServiceState(),
-)
+) : UiState
 
 enum class TermsOfService {
     ALL,
@@ -199,6 +176,21 @@ enum class TermsOfService {
     COLLECT_DATA,
     COLLECT_LOCATION,
     MARKETING
+}
+
+enum class EmailVerifyType {
+    NONE, VERIFIED, NOT_VERIFIED
+}
+
+data class EmailState(
+    val email: String = "",
+    val verificationCode: String = "",
+    val isEmailValid: Boolean = false,
+    val isEmailUsed: Boolean = false,
+    val emailVerifyType: EmailVerifyType = EmailVerifyType.NONE,
+    val isClickedVerify : Boolean = false,
+) {
+    val isPassValidation = !isEmailValid && !isEmailUsed && email.isNotEmpty() && emailVerifyType == EmailVerifyType.VERIFIED
 }
 
 data class TermsOfServiceState(
