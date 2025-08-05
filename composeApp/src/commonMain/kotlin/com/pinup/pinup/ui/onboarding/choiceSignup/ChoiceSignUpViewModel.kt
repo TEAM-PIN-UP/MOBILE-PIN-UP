@@ -2,7 +2,7 @@
 package com.pinup.pinup.ui.onboarding.choiceSignup
 
 import androidx.lifecycle.viewModelScope
-import com.pinup.pinup.domain.usecase.LoginUseCase
+import com.pinup.pinup.domain.usecase.SocialLoginUseCase
 import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.base.BaseViewModel
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class ChoiceSignUpViewModel (
     private val contextFactory: ContextFactory,
-    private val loginUseCase: LoginUseCase,
+    private val socialLoginUseCase: SocialLoginUseCase,
     private val snsLoginFactory: SNSLoginFactory
 ) : BaseViewModel<UiState, ChoiceSignUpUiEvent>(UiState.Default) {
     private val loginResultListener = object : SNSLoginResultListener {
@@ -43,7 +43,7 @@ class ChoiceSignUpViewModel (
 
     private fun login(snsLoginInfo: SNSUserInfo) {
         viewModelScope.launch {
-            resultResponse(loginUseCase(snsLoginInfo), { emitEvent( ChoiceSignUpUiEvent.MoveMain ) }, { emitEvent(ChoiceSignUpUiEvent.MoveSignUp(snsLoginInfo))} )
+            resultResponse(socialLoginUseCase(snsLoginInfo), { emitEvent( ChoiceSignUpUiEvent.MoveMain ) }, { emitEvent(ChoiceSignUpUiEvent.MoveSignUp(snsLoginInfo))} )
         }
     }
 

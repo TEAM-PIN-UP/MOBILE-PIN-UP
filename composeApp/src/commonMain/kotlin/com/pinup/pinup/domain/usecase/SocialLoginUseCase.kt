@@ -7,13 +7,13 @@ import com.pinup.pinup.domain.repository.AuthRepository
 import com.pinup.pinup.ui.login.model.SNSUserInfo
 
 
-class LoginUseCase (
+class SocialLoginUseCase (
     private val authRepository: AuthRepository,
     private val saveTokenUseCase: SaveTokenUseCase,
     private val saveUserInfoUseCase: SaveUserInfoUseCase,
 ) {
     suspend operator fun invoke(snsUserInfo: SNSUserInfo) : PResult<Unit> {
-        return when (val result = authRepository.login(snsUserInfo.socialId)) {
+        return when (val result = authRepository.socialLogin(snsUserInfo.snsType.name, snsUserInfo.socialId)) {
             is PResult.Fail -> result
             is PResult.Success -> {
                 saveUserInfoUseCase(

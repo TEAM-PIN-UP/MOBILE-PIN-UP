@@ -14,9 +14,10 @@ class AuthRepositoryImpl (
     private val authRemoteDataSource: AuthRemoteDataSource,
     private val membersLocalDataSource: MembersLocalDataSource,
 ): AuthRepository {
-    override suspend fun login(socialId: String): PResult<LoginResponse> {
+    override suspend fun socialLogin(provider : String, socialId: String): PResult<LoginResponse> {
         return authRemoteDataSource.login(
             request = LoginRequest(
+                provider = provider,
                 socialId = socialId
             )
         )

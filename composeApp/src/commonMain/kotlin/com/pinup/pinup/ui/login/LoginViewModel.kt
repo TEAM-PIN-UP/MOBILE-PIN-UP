@@ -3,7 +3,7 @@ package com.pinup.pinup.ui.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.model.PResult
-import com.pinup.pinup.domain.usecase.LoginUseCase
+import com.pinup.pinup.domain.usecase.SocialLoginUseCase
 import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.login.model.SNSType
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel (
     private val contextFactory: ContextFactory,
-    private val loginUseCase: LoginUseCase,
+    private val socialLoginUseCase: SocialLoginUseCase,
     private val snsLoginFactory: SNSLoginFactory
 ) : ViewModel() {
     private val _uiEvent = MutableSharedFlow<LoginUiEvent>()
@@ -42,7 +42,7 @@ class LoginViewModel (
     }
 
     private fun login(snsLoginInfo: SNSUserInfo) = viewModelScope.launch {
-        when (val result = loginUseCase.invoke(snsLoginInfo)) {
+        when (val result = socialLoginUseCase.invoke(snsLoginInfo)) {
             is PResult.Fail -> {
                 hLog("fail >> ${result.failState}")
                 if (result.failState.code == "E_MEMBER001") {
