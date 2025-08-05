@@ -67,15 +67,31 @@ class LoginViewModel (
     }
 
     private fun handleFailEmailLogin(code : String){
-
+        if (code == StatusCode.Login.NOT_EXIST_MEMBER) {
+            updateState {
+                copy(
+                    isError = true
+                )
+            }
+        }
     }
 
     fun onIdChange(id: String) {
-        updateState { copy(id = id) }
+        updateState {
+            copy(
+                id = id,
+                isError = false
+            )
+        }
     }
 
     fun onPasswordChange(password: String) {
-        updateState { copy(password = password) }
+        updateState {
+            copy(
+                password = password,
+                isError = false
+            )
+        }
     }
 }
 

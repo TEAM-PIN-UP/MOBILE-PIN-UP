@@ -37,5 +37,6 @@ object Texts {
         const val LOGIN_ID_FIND = "아이디 찾기"
         const val LOGIN_PASSWORD_FIND = "비밀번호 찾기"
         const val LOGIN_SNS = "SNS 로그인"
+        const val INCORRECT_ID = "아이디 혹은 비밀번호가 일치하지 않습니다."
     }
 }

@@ -65,6 +65,7 @@ fun RoundedTextField(
     onTailIconClick: () -> Unit = {},
     focusedBorderColor: Color = Color.Blue,
     unfocusedBorderColor: Color = Colors.Neutral300,
+    isError: Boolean = false,
     backgroundColor: Color = Color.White,
     errorBorderColor: Color = Color.Black,
     cornerRounded: Int = 8,
@@ -92,16 +93,20 @@ fun RoundedTextField(
         textFieldValue = TextFieldValue(text)
     }
 
+    val textFieldColor = if (isError) {
+        Colors.Error
+    } else if(text.isNotEmpty()){
+        Colors.Neutral800
+    } else{
+        Colors.Neutral300
+    }
+
     Box(
         modifier = modifier
             .height(textFieldHeight.dp)
             .border(
                 width = 1.dp,
-                color = if (isFocused) {
-                    focusedBorderColor
-                } else {
-                    unfocusedBorderColor
-                },
+                color = textFieldColor,
                 shape = RoundedCornerShape(cornerRounded.dp)
             )
             .focusRequester(focusRequester)
@@ -125,7 +130,7 @@ fun RoundedTextField(
             enabled = enabled,
             readOnly = readOnly,
             textStyle = textStyle.copy(
-                color = textColor
+                color = textFieldColor
             ),
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,

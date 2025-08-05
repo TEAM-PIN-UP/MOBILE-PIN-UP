@@ -35,7 +35,8 @@ fun LoginRoute(
         onIdChanged = viewModel::onIdChange,
         onPasswordChanged = viewModel::onPasswordChange,
         id = uiState.id,
-        password = uiState.password
+        password = uiState.password,
+        isError = uiState.isError
 
     )
 }

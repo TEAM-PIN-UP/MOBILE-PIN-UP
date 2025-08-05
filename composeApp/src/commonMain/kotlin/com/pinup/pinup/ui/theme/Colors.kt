@@ -23,7 +23,7 @@ object Colors {
     val Black_40 = Color(0x66000000)
     val Black_50 = Color(0x80000000)
     val Black_70 = Color(0xB3000000)
-    val Error = Color(0xFFF36C62)
+    val Error = Color(0xFFFF0004)
     val Transparency = Color(0x00000000)
 
     val GrayLine = Color(0xFFE7E7E7)

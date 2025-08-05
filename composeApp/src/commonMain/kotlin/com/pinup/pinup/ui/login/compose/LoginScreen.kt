@@ -44,6 +44,7 @@ fun LoginScreen(
     onSnsLoginClick: (SNSType) -> Unit = {},
     id : String = "",
     password : String = "",
+    isError: Boolean = false,
     onIdChanged : (String) -> Unit = {},
     onPasswordChanged : (String) -> Unit = {},
 ) {
@@ -80,8 +81,7 @@ fun LoginScreen(
             onValueChange = onIdChanged,
             placeholder = Texts.Word.WORD_ID,
             cornerRounded = 100,
-            backgroundColor = Colors.White,
-            focusedBorderColor = Colors.Neutral700,
+            isError = isError
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -94,9 +94,8 @@ fun LoginScreen(
             onValueChange = onPasswordChanged,
             placeholder = Texts.Word.WORD_PASSWORD,
             cornerRounded = 100,
-            backgroundColor = Colors.White,
-            focusedBorderColor = Colors.Neutral700,
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            isError = isError
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -110,7 +109,20 @@ fun LoginScreen(
             }
         )
 
-        Spacer(modifier = Modifier.height(15.dp))
+        if (isError) {
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                modifier = Modifier,
+                text = Texts.Login.INCORRECT_ID,
+                style = Typography.B3,
+                color = Colors.Error
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+        } else {
+            Spacer(modifier = Modifier.height(15.dp))
+        }
 
         Row(
             modifier = Modifier
