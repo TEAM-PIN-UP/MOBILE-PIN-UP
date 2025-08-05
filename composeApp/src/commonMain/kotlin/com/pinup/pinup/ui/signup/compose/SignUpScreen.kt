@@ -3,7 +3,9 @@ package com.pinup.pinup.ui.signup.compose
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
@@ -155,7 +157,30 @@ fun SignUpScreen(
                     isCollectLocationAgree = termsOfServiceState.isCollectLocationAgree,
                     isMarketingAgreeClick = termsOfServiceState.isMarketingAgreeAgree,
                     isPassValidation = termsOfServiceState.isPassValidation,
-                    onBackPressed = onBackPressed
+                    onBackPressed = onBackPressed,
+                    onClickDetailTerm = { url ->
+                        navHostController.navigate(SignUpDestination.TermDetail(url))
+                    }
+                )
+            }
+
+            composable<SignUpDestination.TermDetail>(
+                enterTransition = {
+                    slideInVertically(initialOffsetY = { it })
+                },
+                popEnterTransition = {
+                    fadeIn(animationSpec = tween(200))
+                },
+                popExitTransition = {
+                    slideOutVertically(targetOffsetY = { it })
+                }
+            ) {
+                val url = it.arguments?.get("url").toString()
+                DetailTermScreen(
+                    onBackPressed = {
+                        navHostController.popBackStack()
+                    },
+                    url = url,
                 )
             }
         }
@@ -168,11 +193,15 @@ sealed interface SignUpDestination {
     @Serializable
     data object InputPassword : SignUpDestination
     @Serializable
+    data object Terms : SignUpDestination
+    @Serializable
+    data class TermDetail(
+        val url : String
+    ) : SignUpDestination
+    @Serializable
     data object Name : SignUpDestination
     @Serializable
     data object Image : SignUpDestination
-    @Serializable
-    data object Terms : SignUpDestination
     @Serializable
     data object Complete : SignUpDestination
 }

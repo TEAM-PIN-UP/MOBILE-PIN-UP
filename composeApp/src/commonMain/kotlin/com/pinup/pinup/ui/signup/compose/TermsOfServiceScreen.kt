@@ -37,7 +37,8 @@ fun TermsOfServiceScreen(
     isCollectLocationAgree: Boolean,
     isMarketingAgreeClick: Boolean,
     isPassValidation: Boolean,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    onClickDetailTerm: (String) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -82,6 +83,7 @@ fun TermsOfServiceScreen(
                 onTermAgreeClick(TermsOfService.USING_SERVICE)
             },
             isClick = isUsingServiceAgree,
+            onClickDetail = onClickDetailTerm
         )
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -92,6 +94,7 @@ fun TermsOfServiceScreen(
                 onTermAgreeClick(TermsOfService.COLLECT_DATA)
             },
             isClick = isCollectDataAgree,
+            onClickDetail = onClickDetailTerm
         )
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -102,6 +105,7 @@ fun TermsOfServiceScreen(
                 onTermAgreeClick(TermsOfService.COLLECT_LOCATION)
             },
             isClick = isCollectLocationAgree,
+            onClickDetail = onClickDetailTerm
         )
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -112,6 +116,7 @@ fun TermsOfServiceScreen(
                 onTermAgreeClick(TermsOfService.MARKETING)
             },
             isClick = isMarketingAgreeClick,
+            onClickDetail = onClickDetailTerm
         )
 
         Spacer(Modifier.weight(1f))

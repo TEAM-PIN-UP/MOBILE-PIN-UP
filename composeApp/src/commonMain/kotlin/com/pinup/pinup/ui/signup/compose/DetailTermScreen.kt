@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.multiplatform.webview.web.WebView
 import com.multiplatform.webview.web.rememberWebViewState
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
 
