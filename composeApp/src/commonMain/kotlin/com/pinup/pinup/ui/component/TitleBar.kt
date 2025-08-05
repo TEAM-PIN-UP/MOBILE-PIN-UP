@@ -32,7 +32,6 @@ fun TitleBar(
     ) {
         Image(
             modifier = Modifier
-                .padding(start = 20.dp)
                 .clickableWithNoRipple { onLeftButtonClick() }
                 .align(Alignment.CenterStart)
                 .statusBarsPadding(),

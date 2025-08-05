@@ -11,9 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.pinup.pinup.PinUpAppDestination
-import com.pinup.pinup.ui.component.PHorizontalDivider
-import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.signup.EmailState
 import com.pinup.pinup.ui.signup.NickNameState
@@ -40,11 +37,7 @@ fun SignUpScreen(
     onClickShowPassword : () -> Unit,
     onValueChange: (String) -> Unit,
     onProfileImageChange: (ByteArray) -> Unit,
-    onAllAgreeClick: (TermsOfService) -> Unit,
-    onUsingServiceAgreeClick: (TermsOfService) -> Unit,
-    onCollectDataAgreeClick: (TermsOfService) -> Unit,
-    onCollectLocationAgreeClick: (TermsOfService) -> Unit,
-    onMarketingAgreeClick: (TermsOfService) -> Unit,
+    onTermAgreeClick: (TermsOfService) -> Unit,
     onSignUpClick: () -> Unit,
     onBackPressed: () -> Unit,
 ) {
@@ -54,7 +47,7 @@ fun SignUpScreen(
     ) {
         NavHost(
             navController = navHostController,
-            startDestination = if(snsType == SNSType.EMAIL) SignUpDestination.InputEmail else SignUpDestination.Terms,
+            startDestination = if(snsType == SNSType.EMAIL) SignUpDestination.Terms else SignUpDestination.Terms,
         ) {
             composable<SignUpDestination.InputEmail>(
                 enterTransition = {
@@ -152,11 +145,7 @@ fun SignUpScreen(
                 }
             ) {
                 TermsOfServiceScreen(
-                    onAllAgreeClick = onAllAgreeClick,
-                    onUsingServiceAgreeClick = onUsingServiceAgreeClick,
-                    onCollectDataAgreeClick = onCollectDataAgreeClick,
-                    onCollectLocationAgreeClick = onCollectLocationAgreeClick,
-                    onMarketingAgreeClick = onMarketingAgreeClick,
+                    onTermAgreeClick = onTermAgreeClick,
                     onMoveInputName = {
                         navHostController.navigate(SignUpDestination.Name)
                     },

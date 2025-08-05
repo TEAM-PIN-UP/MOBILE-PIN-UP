@@ -45,11 +45,7 @@ fun SignUpRoute(
         onClickVerify = signUpViewModel::onClickVerify,
         onValueChange = signUpViewModel::updateNickName,
         onProfileImageChange = signUpViewModel::updateProfile,
-        onAllAgreeClick = signUpViewModel::updateTermsOfServiceState,
-        onUsingServiceAgreeClick = signUpViewModel::updateTermsOfServiceState,
-        onCollectDataAgreeClick = signUpViewModel::updateTermsOfServiceState,
-        onCollectLocationAgreeClick = signUpViewModel::updateTermsOfServiceState,
-        onMarketingAgreeClick = signUpViewModel::updateTermsOfServiceState,
+        onTermAgreeClick = signUpViewModel::updateTermsOfServiceState,
         onSignUpClick = signUpViewModel::signUp,
         onBackPressed = onBackPressed
     )
