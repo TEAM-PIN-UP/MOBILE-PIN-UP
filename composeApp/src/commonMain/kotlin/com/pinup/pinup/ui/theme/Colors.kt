@@ -12,7 +12,9 @@ object Colors {
     val Neutral500 = Color(0xFF7C7D7E)
     val Neutral600 = Color(0xFF5F5F60)
     val Neutral700 = Color(0xFF424242)
-    val Neutral800 = Color(0xFF1F1F1F)
+    val Neutral800 = Color(0xFF191919)
+
+    val Main = Color(0xFFFF5414)
 
     val White = Color(0xFFFFFFFF)
     val Black = Color(0xFF000000)

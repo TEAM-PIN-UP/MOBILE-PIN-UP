@@ -20,6 +20,7 @@ import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
 import com.pinup.pinup.ui.component.LogoutDialog
 import com.pinup.pinup.ui.login.compose.LoginRoute
 import com.pinup.pinup.ui.main.compose.MainNavHost
+import com.pinup.pinup.ui.onboarding.OnboardingRoute
 import com.pinup.pinup.ui.pinbuddy.PinBuddyRoute
 import com.pinup.pinup.ui.reviewwrite.compose.WriteReviewNavHost
 import com.pinup.pinup.ui.setting.SettingNavHost
@@ -47,7 +48,7 @@ fun PinUpApp(
             PinUpAppDestination.Main
         }
         false -> {
-            PinUpAppDestination.Login
+            PinUpAppDestination.Onboarding
         }
         else -> {
             return
@@ -68,6 +69,28 @@ fun PinUpApp(
                 startDestination = startDestination,
                 navController = navHostController
             ) {
+                composable<PinUpAppDestination.Onboarding>(
+                    enterTransition = {
+                        slideInHorizontally(initialOffsetX = { it })
+                    },
+                    popEnterTransition = {
+                        fadeIn(animationSpec = tween(200))
+                    },
+                    popExitTransition = {
+                        slideOutHorizontally(targetOffsetX = { it })
+                    }
+                ){
+                    OnboardingRoute(
+                        onMoveSignUpOnboarding = {
+                            //TODO 페이지 추가 예정
+                            navHostController.navigate(PinUpAppDestination.SignUp(""))
+                        },
+                        onMoveLogin = {
+                            navHostController.navigate(PinUpAppDestination.Login)
+                        }
+                    )
+                }
+
                 composable<PinUpAppDestination.Login>(
                     enterTransition = {
                         slideInHorizontally(initialOffsetX = { it })
@@ -206,6 +229,8 @@ fun PinUpApp(
 
 
 sealed interface PinUpAppDestination {
+    @Serializable
+    data object Onboarding : PinUpAppDestination
     @Serializable
     data object Main : PinUpAppDestination {
         @Serializable

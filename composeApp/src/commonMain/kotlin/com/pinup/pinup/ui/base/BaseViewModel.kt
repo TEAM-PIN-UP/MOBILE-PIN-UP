@@ -31,6 +31,12 @@ abstract class BaseViewModel<STATE: UiState, EVENT : UiEvent>(
         }
     }
 
+    protected fun emitEvent(event: EVENT) {
+        viewModelScope.launch {
+            _uiEvent.emit(event)
+        }
+    }
+
     protected fun<D> resultResponse(response: PResult<D>, successCallback : (D) -> Unit, errorCallback : ((String) -> Unit)? = null){
         when(response){
             is PResult.Fail -> {

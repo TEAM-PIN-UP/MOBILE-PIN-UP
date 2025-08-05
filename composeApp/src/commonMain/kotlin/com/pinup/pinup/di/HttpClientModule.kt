@@ -96,7 +96,7 @@ val httpClientModule = module {
             ignoreUnknownKeys = true
         }
         Ktorfit.Builder()
-            .baseUrl("https://api.kwonyonghyun.p-e.kr/")
+            .baseUrl("http://43.200.161.96:8080/")
             .httpClient(client)
             .converterFactories(PResultConverterFactory(json))
             .build()
