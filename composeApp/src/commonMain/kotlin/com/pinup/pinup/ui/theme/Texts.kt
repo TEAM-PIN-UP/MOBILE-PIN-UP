@@ -6,6 +6,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 
 object Texts {
+    object Word {
+        const val WORD_START = "시작하기"
+        const val WORD_ID = "아이디"
+        const val WORD_PASSWORD = "비밀번호"
+        const val WORD_LOGIN = "로그인"
+    }
 
     object Onboarding{
         val ONBOARDING_TEXT = buildAnnotatedString {
@@ -27,7 +33,10 @@ object Texts {
         const val ONBOARDING_LOGIN_TEXT = "로그인하고 나만의 공간을 공유해보세요!"
     }
 
-    object Word {
-        const val WORD_START = "시작하기"
+    object Login{
+        const val LOGIN_ID_FIND = "아이디 찾기"
+        const val LOGIN_PASSWORD_FIND = "비밀번호 찾기"
+        const val LOGIN_SNS = "SNS 로그인"
+        const val INCORRECT_ID = "아이디 혹은 비밀번호가 일치하지 않습니다."
     }
 }
