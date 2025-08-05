@@ -46,7 +46,7 @@ fun InputEmailScreen(
         Text(
             text = Texts.SignupEmail.TITLE,
             style = Typography.H0,
-            color = Colors.Neutral800
+            color = Colors.Black
         )
 
         Spacer(modifier = Modifier.height(31.dp))

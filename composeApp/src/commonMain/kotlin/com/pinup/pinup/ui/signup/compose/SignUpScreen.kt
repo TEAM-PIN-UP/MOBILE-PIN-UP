@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.pinup.pinup.PinUpAppDestination
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.login.model.SNSType
@@ -154,16 +155,21 @@ fun SignUpScreen(
                     slideOutHorizontally(targetOffsetX = { it })
                 }
             ) {
-                TermsOfServiceRoute(
+                TermsOfServiceScreen(
                     onAllAgreeClick = onAllAgreeClick,
                     onUsingServiceAgreeClick = onUsingServiceAgreeClick,
                     onCollectDataAgreeClick = onCollectDataAgreeClick,
                     onCollectLocationAgreeClick = onCollectLocationAgreeClick,
-                    onMoveComplete = {
-                        navHostController.navigate(SignUpDestination.Complete)
-                    },
                     onMarketingAgreeClick = onMarketingAgreeClick,
-                    termsOfServiceState = termsOfServiceState
+                    onMoveComplete = {
+                        navHostController.navigate(PinUpAppDestination.Main)
+                    },
+                    isAllAgree = termsOfServiceState.isAllAgree,
+                    isUsingServiceAgree = termsOfServiceState.isUsingServiceAgree,
+                    isCollectDataAgree = termsOfServiceState.isCollectDataAgree,
+                    isCollectLocationAgree = termsOfServiceState.isCollectLocationAgree,
+                    isMarketingAgreeClick = termsOfServiceState.isMarketingAgreeAgree,
+                    isPassValidation = termsOfServiceState.isPassValidation
                 )
             }
         }

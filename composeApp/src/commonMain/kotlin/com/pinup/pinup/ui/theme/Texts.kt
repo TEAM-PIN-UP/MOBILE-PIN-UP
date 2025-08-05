@@ -61,4 +61,13 @@ object Texts {
         const val CONFIRM = "비밀번호 확인"
         const val NOT_MATCH = "입력된 비밀번호가 일치하지 않습니다."
     }
+
+    object SignupTerms {
+        const val TITLE = "서비스 이용약관에\n동의해주세요."
+        const val ALL_AGREE = "약관 전체 동의"
+        const val SERVICE_AGREE = "이용약관 동의 (필수)"
+        const val PRIVATE_INFO_AGREE = "개인정보 수집 및 이용 동의 (필수)"
+        const val LOCATION_INFO_AGREE = "위치정보 이용 동의 (필수)"
+        const val MARKETING_AGREE = "홍보 및 마케팅 이용 동의 (선택)"
+    }
 }

@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,9 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.PButton
+import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.signup.TermsOfService
 import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
@@ -44,25 +48,21 @@ fun TermsOfServiceScreen(
             .background(Colors.White)
             .padding(horizontal = 20.dp)
     ) {
-        Text(
-            modifier = Modifier.padding(top = 40.dp),
-            text = "약관동의",
-            style = Typography.H1,
-            color = Colors.Neutral800
-        )
+
+        Spacer(modifier = Modifier.height(44.dp))
 
         Text(
-            modifier = Modifier
-                .padding(top = 12.dp),
-            text = "핀업 서비스 이용을 위해서는 약관동의가 필요해요.",
-            style = Typography.B3,
-            color = Colors.Neutral500
+            modifier = Modifier.padding(top = 40.dp),
+            text = Texts.SignupTerms.TITLE,
+            style = Typography.H0,
+            color = Colors.Black
         )
+
+        Spacer(modifier = Modifier.height(40.dp))
 
         RoundedBox(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 28.dp)
                 .clickableWithNoRipple {
                     onAllAgreeClick(TermsOfService.ALL)
                 },
@@ -70,27 +70,32 @@ fun TermsOfServiceScreen(
         ) {
             Row(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(vertical = 15.dp)
             ) {
                 Image(
                     painter = if (isAllAgree) painterResource(Res.drawable.ic_check) else painterResource(Res.drawable.ic_uncheck),
                     contentDescription = null
                 )
 
+                Spacer(modifier = Modifier.width(19.dp))
+
                 Text(
-                    modifier = Modifier
-                        .padding(start = 12.dp),
-                    text = "전체 동의",
-                    style = Typography.B3,
-                    color = Colors.Neutral800
+                    text = Texts.SignupTerms.ALL_AGREE,
+                    style = Typography.B2,
+                    color = Colors.Neutral500
                 )
             }
         }
 
+        Spacer(modifier = Modifier.height(20.dp))
+
+        PHorizontalDivider()
+
+        Spacer(modifier = Modifier.height(20.dp))
+
         Row(
             modifier = Modifier
-                .padding(top = 24.dp)
-                .padding(horizontal = 12.dp)
+                .padding(vertical = 15.dp)
                 .clickableWithNoRipple {
                     onUsingServiceAgreeClick(TermsOfService.USING_SERVICE)
                 },
@@ -102,12 +107,12 @@ fun TermsOfServiceScreen(
                 contentDescription = null
             )
 
+            Spacer(modifier = Modifier.width(19.dp))
+
             Text(
-                modifier = Modifier
-                    .padding(start = 12.dp),
-                text = "핀업 이용약관 동의(필수)",
-                style = Typography.B3,
-                color = Colors.Neutral800
+                text = Texts.SignupTerms.SERVICE_AGREE,
+                style = Typography.B2,
+                color = Colors.Neutral500
             )
 
             Spacer(Modifier.weight(1f))
@@ -116,12 +121,15 @@ fun TermsOfServiceScreen(
                 painter = painterResource(Res.drawable.ic_chevron_right),
                 contentDescription = null
             )
+
+            Spacer(modifier = Modifier.width(9.dp))
         }
+
+        Spacer(modifier = Modifier.height(5.dp))
 
         Row(
             modifier = Modifier
-                .padding(top = 24.dp)
-                .padding(horizontal = 12.dp)
+                .padding(vertical = 15.dp)
                 .clickableWithNoRipple {
                     onCollectDataAgreeClick(TermsOfService.COLLECT_DATA)
                 },
@@ -133,12 +141,12 @@ fun TermsOfServiceScreen(
                 contentDescription = null
             )
 
+            Spacer(modifier = Modifier.width(19.dp))
+
             Text(
-                modifier = Modifier
-                    .padding(start = 12.dp),
-                text = "개인정보 수집 및 이용 동의 (필수)",
-                style = Typography.B3,
-                color = Colors.Neutral800
+                text = Texts.SignupTerms.PRIVATE_INFO_AGREE,
+                style = Typography.B2,
+                color = Colors.Neutral500
             )
 
             Spacer(Modifier.weight(1f))
@@ -147,12 +155,15 @@ fun TermsOfServiceScreen(
                 painter = painterResource(Res.drawable.ic_chevron_right),
                 contentDescription = null
             )
+
+            Spacer(modifier = Modifier.width(9.dp))
         }
+
+        Spacer(modifier = Modifier.height(5.dp))
 
         Row(
             modifier = Modifier
-                .padding(top = 24.dp)
-                .padding(horizontal = 12.dp)
+                .padding(vertical = 15.dp)
                 .clickableWithNoRipple {
                     onCollectLocationAgreeClick(TermsOfService.COLLECT_LOCATION)
                 },
@@ -164,12 +175,12 @@ fun TermsOfServiceScreen(
                 contentDescription = null
             )
 
+            Spacer(modifier = Modifier.width(19.dp))
+
             Text(
-                modifier = Modifier
-                    .padding(start = 12.dp),
-                text = "위치정보 수집 및 이용 동의 (필수)",
-                style = Typography.B3,
-                color = Colors.Neutral800
+                text = Texts.SignupTerms.LOCATION_INFO_AGREE,
+                style = Typography.B2,
+                color = Colors.Neutral500
             )
 
             Spacer(Modifier.weight(1f))
@@ -178,12 +189,15 @@ fun TermsOfServiceScreen(
                 painter = painterResource(Res.drawable.ic_chevron_right),
                 contentDescription = null
             )
+
+            Spacer(modifier = Modifier.width(9.dp))
         }
+
+        Spacer(modifier = Modifier.height(5.dp))
 
         Row(
             modifier = Modifier
-                .padding(top = 24.dp)
-                .padding(horizontal = 12.dp)
+                .padding(vertical = 15.dp)
                 .clickableWithNoRipple {
                     onMarketingAgreeClick(TermsOfService.MARKETING)
                 },
@@ -195,12 +209,12 @@ fun TermsOfServiceScreen(
                 contentDescription = null
             )
 
+            Spacer(modifier = Modifier.width(19.dp))
+
             Text(
-                modifier = Modifier
-                    .padding(start = 12.dp),
-                text = "마케팅 정보 수신 동의 (선택)",
-                style = Typography.B3,
-                color = Colors.Neutral800
+                text = Texts.SignupTerms.MARKETING_AGREE,
+                style = Typography.B2,
+                color = Colors.Neutral500
             )
 
             Spacer(Modifier.weight(1f))
@@ -209,18 +223,20 @@ fun TermsOfServiceScreen(
                 painter = painterResource(Res.drawable.ic_chevron_right),
                 contentDescription = null
             )
+
+            Spacer(modifier = Modifier.width(9.dp))
         }
 
         Spacer(Modifier.weight(1f))
 
         PButton(
-            modifier = Modifier
-                .padding(bottom = 28.dp),
-            text = "다음",
+            text = Texts.Word.CONFIRM,
             isEnable = isPassValidation,
             onClick = {
                 onMoveComplete()
             }
         )
+
+        Spacer(modifier = Modifier.height(53.dp))
     }
 }
