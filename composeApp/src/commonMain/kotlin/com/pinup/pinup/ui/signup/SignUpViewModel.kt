@@ -77,10 +77,11 @@ class SignUpViewModel (
     }
 
     fun updateVerificationCode(code: String) = viewModelScope.launch {
-        //TODO 최대 글자 도달시 확인 api 로직 구현
+        //TODO 최대 글자 도달시 확인 api 로직 구현 현재는 6자리 시 통과 가능
         updateState { copy(
             emailState = uiState.value.emailState.copy(
-                verificationCode = code
+                verificationCode = code,
+                emailVerifyType = if(code.length == 6) EmailVerifyType.VERIFIED else EmailVerifyType.NOT_VERIFIED
             )
         ) }
     }
