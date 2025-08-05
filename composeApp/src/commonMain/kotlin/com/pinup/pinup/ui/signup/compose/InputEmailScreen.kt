@@ -68,10 +68,10 @@ fun InputEmailScreen(
                 placeholder = Texts.SignupEmail.HINT,
                 cornerRounded = 100,
                 backgroundColor = Colors.White,
-                isError = emailState.isEmailValid || emailState.isEmailUsed,
+                isError = !emailState.isEmailValid || emailState.isEmailUsed,
             )
 
-            if (!emailState.isEmailValid && !emailState.isEmailUsed && emailState.email.isNotEmpty()) {
+            if (emailState.isEmailValid && !emailState.isEmailUsed && emailState.email.isNotEmpty()) {
                 Row(
                     modifier = Modifier
                         .padding(top = 11.dp)
@@ -104,7 +104,7 @@ fun InputEmailScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        if (emailState.isEmailValid) {
+        if (!emailState.isEmailValid) {
             ErrorText(Texts.SignupEmail.INVALID)
         } else if (emailState.isEmailUsed) {
             ErrorText(Texts.SignupEmail.DUPLICATE)

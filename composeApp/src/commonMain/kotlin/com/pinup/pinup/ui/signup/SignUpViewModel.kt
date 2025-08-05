@@ -69,12 +69,14 @@ class SignUpViewModel (
     fun updateEmail(email: String) = viewModelScope.launch {
         updateState { copy(
             emailState = uiState.value.emailState.copy(
-                email = email
+                email = email,
+                isEmailValid = true
             )
         ) }
     }
 
     fun updateVerificationCode(code: String) = viewModelScope.launch {
+        //TODO 최대 글자 도달시 확인 api 로직 구현
         updateState { copy(
             emailState = uiState.value.emailState.copy(
                 verificationCode = code
@@ -83,12 +85,26 @@ class SignUpViewModel (
     }
 
     fun onClickVerify() = viewModelScope.launch {
-        //TODO: 이메일 인증 로직 구현
-        updateState { copy(
-            emailState = emailState.copy(
-                isClickedVerify = true,
+        if (isValidEmail()) {
+            //TODO: 이메일 인증 로직 구현
+        }
+    }
+
+    fun isValidEmail(): Boolean {
+        val regex = Regex(
+            pattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            option = RegexOption.IGNORE_CASE
+        )
+        val isValid = _uiState.value.emailState.email.isNotBlank() && _uiState.value.emailState.email.matches(regex)
+        updateState {
+            copy(
+                emailState = emailState.copy(
+                    isEmailValid = isValid,
+                    isClickedVerify = isValid,
+                )
             )
-        ) }
+        }
+        return isValid
     }
 
     private fun checkNickName(nickname: String) = viewModelScope.launch {
@@ -185,12 +201,12 @@ enum class EmailVerifyType {
 data class EmailState(
     val email: String = "",
     val verificationCode: String = "",
-    val isEmailValid: Boolean = false,
+    val isEmailValid: Boolean = true,
     val isEmailUsed: Boolean = false,
     val emailVerifyType: EmailVerifyType = EmailVerifyType.NONE,
     val isClickedVerify : Boolean = false,
 ) {
-    val isPassValidation = !isEmailValid && !isEmailUsed && email.isNotEmpty() && emailVerifyType == EmailVerifyType.VERIFIED
+    val isPassValidation = isEmailValid && !isEmailUsed && email.isNotEmpty() && emailVerifyType == EmailVerifyType.VERIFIED
 }
 
 data class TermsOfServiceState(
