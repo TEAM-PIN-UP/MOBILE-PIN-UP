@@ -13,6 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.TitleBar
+import com.pinup.pinup.ui.login.model.SNSType
+import com.pinup.pinup.ui.signup.EmailState
 import com.pinup.pinup.ui.signup.NickNameState
 import com.pinup.pinup.ui.signup.TermsOfService
 import com.pinup.pinup.ui.signup.TermsOfServiceState
@@ -22,9 +24,14 @@ import kotlinx.serialization.Serializable
 @Composable
 fun SignUpScreen(
     navHostController: NavHostController,
+    snsType: SNSType,
+    emailState: EmailState,
     nicknameState: NickNameState,
     profileUrl: ByteArray,
     termsOfServiceState: TermsOfServiceState,
+    onEmailChanged : (String) -> Unit,
+    onCodeChanged : (String) -> Unit,
+    onClickVerify : () -> Unit,
     onValueChange: (String) -> Unit,
     onProfileImageChange: (ByteArray) -> Unit,
     onAllAgreeClick: (TermsOfService) -> Unit,
@@ -50,8 +57,29 @@ fun SignUpScreen(
 
         NavHost(
             navController = navHostController,
-            startDestination = SignUpDestination.Name,
+            startDestination = if(snsType == SNSType.EMAIL) SignUpDestination.InputEmail else SignUpDestination.Terms,
         ) {
+            composable<SignUpDestination.InputEmail>(
+                enterTransition = {
+                    slideInHorizontally(initialOffsetX = { it })
+                },
+                popEnterTransition = {
+                    fadeIn(animationSpec = tween(200))
+                },
+                popExitTransition = {
+                    slideOutHorizontally(targetOffsetX = { it })
+                }
+            ) {
+                InputNameScreen(
+                    nickname = nicknameState.nickname,
+                    isNicknameUsed = nicknameState.isNicknameUsed,
+                    onValueChange = onValueChange,
+                    onMoveSelectProfileImage = {
+                        navHostController.navigate(SignUpDestination.Image)
+                    }
+                )
+            }
+
             composable<SignUpDestination.Name>(
                 enterTransition = {
                     slideInHorizontally(initialOffsetX = { it })
@@ -117,27 +145,13 @@ fun SignUpScreen(
                     termsOfServiceState = termsOfServiceState
                 )
             }
-
-            composable<SignUpDestination.Complete>(
-                enterTransition = {
-                    slideInHorizontally(initialOffsetX = { it })
-                },
-                popEnterTransition = {
-                    fadeIn(animationSpec = tween(200))
-                },
-                popExitTransition = {
-                    slideOutHorizontally(targetOffsetX = { it })
-                }
-            ) {
-                CompleteScreen(
-                    onSignUpClick = onSignUpClick
-                )
-            }
         }
     }
 }
 
 sealed interface SignUpDestination {
+    @Serializable
+    data object InputEmail : SignUpDestination
     @Serializable
     data object Name : SignUpDestination
     @Serializable

@@ -153,6 +153,7 @@ fun PinUpApp(
                 ) {
                     val snsType = it.jsonToArg<SNSUserInfo>("snsUserInfo")?.snsType ?: SNSType.KAKAO
                     SignUpRoute(
+                        snsType = snsType,
                         onBackPressed = {
                             navHostController.popBackStack()
                         },
