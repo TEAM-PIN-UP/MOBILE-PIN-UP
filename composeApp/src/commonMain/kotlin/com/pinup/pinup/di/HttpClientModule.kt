@@ -21,6 +21,9 @@ import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.headers
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
@@ -48,6 +51,14 @@ val httpClientModule = module {
                         ignoreUnknownKeys = true
                     }
                 )
+            }
+            install(Logging) {
+                 logger = object : Logger {
+                    override fun log(message: String) {
+                        hLog(message)
+                    }
+                 }
+                level = LogLevel.HEADERS
             }
 
             install(Auth) {
@@ -180,7 +191,7 @@ class PResultConverterFactory(
     }
 }
 
-fun kLog(log : String){
+private fun kLog(log : String){
     val prettyPrinter = Json {
         prettyPrint = true
         prettyPrintIndent = "  "

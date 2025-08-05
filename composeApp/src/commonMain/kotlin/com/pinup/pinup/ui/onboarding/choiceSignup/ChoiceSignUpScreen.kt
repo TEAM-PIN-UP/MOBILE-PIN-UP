@@ -41,7 +41,7 @@ fun ChoiceSignUpScreen(
 
         Text(
             modifier = Modifier,
-            text = Texts.ONBOARDING_LOGIN_TITLE,
+            text = Texts.Onboarding.ONBOARDING_LOGIN_TITLE,
             style = Typography.H0
         )
 
@@ -49,7 +49,7 @@ fun ChoiceSignUpScreen(
 
         Text(
             modifier = Modifier,
-            text = Texts.ONBOARDING_LOGIN_TEXT,
+            text = Texts.Onboarding.ONBOARDING_LOGIN_TEXT,
             style = Typography.B2,
             color = Colors.Neutral400
         )
