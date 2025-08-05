@@ -18,7 +18,7 @@ interface AuthApi {
     @POST(AuthPath.SOCIAL_LOGIN)
     suspend fun socialLogin(@Body request: LoginRequest): PResult<PResponse<LoginResponse>>
 
-    @POST(AuthPath.SOCIAL_LOGIN)
+    @POST(AuthPath.EMAIL_LOGIN)
     suspend fun emailLogin(@Body request: EmailLoginRequest): PResult<PResponse<LoginResponse>>
 
     @POST(AuthPath.LOGOUT)

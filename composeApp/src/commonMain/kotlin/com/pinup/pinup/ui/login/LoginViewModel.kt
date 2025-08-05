@@ -1,6 +1,8 @@
 package com.pinup.pinup.ui.login
 
 import androidx.lifecycle.viewModelScope
+import com.pinup.pinup.data.request.EmailLoginRequest
+import com.pinup.pinup.domain.model.StatusCode
 import com.pinup.pinup.domain.usecase.EmailLoginUseCase
 import com.pinup.pinup.domain.usecase.SocialLoginUseCase
 import com.pinup.pinup.platform.ContextFactory
@@ -16,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel (
     private val contextFactory: ContextFactory,
-    private val loginUseCase: EmailLoginUseCase,
+    private val emailLoginUseCase: EmailLoginUseCase,
     private val socialLoginUseCase: SocialLoginUseCase,
     private val snsLoginFactory: SNSLoginFactory
 ) : BaseViewModel<LoginUiState, LoginUiEvent>(LoginUiState()) {
@@ -35,19 +37,37 @@ class LoginViewModel (
 
     }
     fun doSNSLogin(snsType: SNSType) {
+        if (snsType == SNSType.EMAIL) {
+            emailLogin()
+            return
+        }
         snsLoginFactory.doLogin(snsType, contextFactory, loginResultListener)
     }
 
     private fun login(snsLoginInfo: SNSUserInfo) {
         viewModelScope.launch {
-            resultResponse(loginUseCase(snsLoginInfo), { emitEvent( LoginUiEvent.MoveMain ) }, { handleFailLogin(it, snsLoginInfo)} )
+            resultResponse(socialLoginUseCase(snsLoginInfo), { emitEvent( LoginUiEvent.MoveMain ) }, { handleFailSocialLogin(it, snsLoginInfo)} )
         }
     }
 
-    private fun handleFailLogin(code : String, snsLoginInfo : SNSUserInfo) {
-//        if (code == StatusCode.Login.NOT_EXIST_MEMBER) {
-//            emitEvent(LoginUiEvent.MoveSignUp(snsLoginInfo))
-//        }
+    private fun emailLogin() {
+        val request = EmailLoginRequest(
+            email = _uiState.value.id,
+            password = _uiState.value.password
+        )
+        viewModelScope.launch {
+            resultResponse(emailLoginUseCase(request), { emitEvent( LoginUiEvent.MoveMain ) }, ::handleFailEmailLogin )
+        }
+    }
+
+    private fun handleFailSocialLogin(code : String, snsLoginInfo : SNSUserInfo) {
+        if (code == StatusCode.Login.NOT_EXIST_MEMBER) {
+            emitEvent(LoginUiEvent.MoveSignUp(snsLoginInfo))
+        }
+    }
+
+    private fun handleFailEmailLogin(code : String){
+
     }
 
     fun onIdChange(id: String) {
@@ -56,10 +76,6 @@ class LoginViewModel (
 
     fun onPasswordChange(password: String) {
         updateState { copy(password = password) }
-    }
-
-    fun onClickLogin(){
-        //TODO: 로그인 로직 구현
     }
 }
 

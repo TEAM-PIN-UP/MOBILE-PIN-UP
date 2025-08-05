@@ -23,7 +23,7 @@ class AuthRemoteDataSourceImpl (
     private val authApi: AuthApi
 ): AuthRemoteDataSource {
     override suspend fun emailLogin(request: EmailLoginRequest): PResult<LoginResponse> {
-        return authApi.socialLogin(request).mapSuccessData()
+        return authApi.emailLogin(request).mapSuccessData()
     }
 
     override suspend fun socialLogin(request: LoginRequest): PResult<LoginResponse> {

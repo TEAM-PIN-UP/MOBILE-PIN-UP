@@ -41,13 +41,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
+import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RoundedTextField(
     modifier: Modifier = Modifier,
-    textFieldHeight: Int = 52,
+    textFieldHeight: Int = 47,
     text: String = "",
     placeholder: String = "",
     onValueChange: (String) -> Unit,
@@ -63,13 +64,13 @@ fun RoundedTextField(
     onLeadingIconClick: () -> Unit = {},
     onTailIconClick: () -> Unit = {},
     focusedBorderColor: Color = Color.Blue,
-    unfocusedBorderColor: Color = Color.Gray,
+    unfocusedBorderColor: Color = Colors.Neutral300,
     backgroundColor: Color = Color.White,
     errorBorderColor: Color = Color.Black,
     cornerRounded: Int = 8,
     textStyle: TextStyle = TextStyle(),
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    placeholderTextColor: Color = Color.Gray,
+    placeholderTextColor: Color = Colors.Neutral300,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         imeAction = ImeAction.Done,
         keyboardType = KeyboardType.Text,

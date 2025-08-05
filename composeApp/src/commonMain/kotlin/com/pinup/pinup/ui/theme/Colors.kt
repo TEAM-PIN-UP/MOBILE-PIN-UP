@@ -25,4 +25,6 @@ object Colors {
     val Black_70 = Color(0xB3000000)
     val Error = Color(0xFFF36C62)
     val Transparency = Color(0x00000000)
+
+    val GrayLine = Color(0xFFE7E7E7)
 }
