@@ -60,8 +60,8 @@ class LoginViewModel (
 
     private fun emailLogin() {
         val request = EmailLoginRequest(
-            email = _uiState.value.id,
-            password = _uiState.value.password
+            email = uiState.value.id,
+            password = uiState.value.password
         )
         viewModelScope.launch {
             resultResponse(

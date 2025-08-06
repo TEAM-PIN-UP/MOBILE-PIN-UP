@@ -7,7 +7,7 @@ data class SignUpInfo(
     val password: String = "",
     val name: String,
     val nickname: String,
-    val socialId: String,
+    val socialId: String ="",
     val loginType: SNSType,
     val profileImage: ByteArray,
     val termsOfMarketing: Boolean,
