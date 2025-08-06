@@ -19,6 +19,7 @@ import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
 import com.pinup.pinup.ui.component.LogoutDialog
+import com.pinup.pinup.ui.findAccount.findPassword.ChangePasswordRoute
 import com.pinup.pinup.ui.findAccount.findPassword.FindPasswordEmailRoute
 import com.pinup.pinup.ui.login.compose.LoginRoute
 import com.pinup.pinup.ui.login.model.SNSType
@@ -157,7 +158,28 @@ fun PinUpApp(
                 ){
                     FindPasswordEmailRoute(
                         onMoveChangePassword = {
-                            //navHostController.navigate(PinUpAppDestination.ChangePassword)
+                            navHostController.navigate(PinUpAppDestination.ChangePassword)
+                        },
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        }
+                    )
+                }
+
+                composable<PinUpAppDestination.ChangePassword>(
+                    enterTransition = {
+                        slideInHorizontally(initialOffsetX = { it })
+                    },
+                    popEnterTransition = {
+                        fadeIn(animationSpec = tween(200))
+                    },
+                    popExitTransition = {
+                        slideOutHorizontally(targetOffsetX = { it })
+                    }
+                ){
+                    ChangePasswordRoute(
+                        onMoveLogin = {
+                            navHostController.navigate(PinUpAppDestination.Login)
                         },
                         onBackPressed = {
                             navHostController.popBackStack()
@@ -307,6 +329,8 @@ sealed interface PinUpAppDestination {
     data object Login : PinUpAppDestination
     @Serializable
     data object FindPasswordEmail : PinUpAppDestination
+    @Serializable
+    data object ChangePassword : PinUpAppDestination
     @Serializable
     data class SignUp(
         val snsUserInfo: String

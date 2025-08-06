@@ -49,6 +49,7 @@ object Texts {
         const val TITLE = "비밀번호 변경하기"
         const val PASSWORD_HINT = "비밀번호는 8~20자, 특수문자 포함 필수입니다."
         const val CHANGE_PASSWORD = "비밀번호 변경하기"
+        const val PASSWORD_AGAIN_HINT = "비밀번호 확인"
     }
 
     object SignupEmail {

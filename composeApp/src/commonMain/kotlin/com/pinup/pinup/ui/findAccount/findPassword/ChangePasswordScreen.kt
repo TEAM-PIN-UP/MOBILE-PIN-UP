@@ -95,6 +95,7 @@ fun ChangePasswordScreen(
                 onValueChange = {
                     onPasswordAgainChanged(it)
                 },
+                placeholder = Texts.FindPassword.PASSWORD_AGAIN_HINT,
                 visualTransformation = if(passwordState.isShowPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 cornerRounded = 100,
                 textStyle = Typography.B3,

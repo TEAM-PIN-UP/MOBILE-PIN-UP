@@ -86,31 +86,40 @@ class FindPasswordViewModel: BaseViewModel<ChangePasswordUiState, UiEvent>(
     }
 
     fun updatePassword(password: String) = viewModelScope.launch {
-        updateState { copy(
-            passwordState = uiState.value.passwordState.copy(
-                password = password
+        val regex = Regex(Const.PRegex.PASSWORD_REGEX)
+        updateState {
+            copy(
+                passwordState = passwordState.copy(
+                    password = password,
+                    isPasswordValid = password.isNotBlank() && password.matches(regex)
+                )
             )
-        ) }
+        }
     }
 
     fun updatePasswordAgain(password: String) = viewModelScope.launch {
-        updateState { copy(
-            passwordState = uiState.value.passwordState.copy(
-                passwordAgain = password
+        updateState {
+            copy(
+                passwordState = uiState.value.passwordState.copy(
+                    passwordAgain = password,
+                    isPasswordMatched = password == passwordState.password
+                )
             )
-        ) }
+        }
     }
 
     fun onClickShowPassword() = viewModelScope.launch {
-        updateState { copy(
-            passwordState = uiState.value.passwordState.copy(
-                isShowPassword = !uiState.value.passwordState.isShowPassword,
+        updateState {
+            copy(
+                passwordState = uiState.value.passwordState.copy(
+                    isShowPassword = !uiState.value.passwordState.isShowPassword,
+                )
             )
-        ) }
+        }
     }
 
     fun changePassword() {
-
+        //TODO 서버 비밀번호 변경 로직
     }
 }
 
