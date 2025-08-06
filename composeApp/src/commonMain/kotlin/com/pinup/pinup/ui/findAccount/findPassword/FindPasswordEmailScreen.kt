@@ -33,6 +33,7 @@ fun FindPasswordEmailScreen(
     emailState: ChangePasswordEmailState = ChangePasswordEmailState(),
     onEmailChanged: (String) -> Unit = {},
     onCodeChanged: (String) -> Unit = {},
+    onClickSendCode: () -> Unit = {},
     onClickVerify: () -> Unit = {},
     onBackPressed: () -> Unit,
 ) {
@@ -86,7 +87,7 @@ fun FindPasswordEmailScreen(
                 RoundedBox(
                     modifier = Modifier
                         .clickableSingleWithNoRipple {
-                            if(emailState.isEmailValid && emailState.email.isNotEmpty()) onClickVerify()
+                            if(emailState.isEmailValid && emailState.email.isNotEmpty()) onClickSendCode()
                         },
                     cornerRounded = 100,
                     backgroundColor = if(emailState.isEmailValid && emailState.email.isNotEmpty() && !emailState.isClicked) Colors.Neutral800 else Colors.Neutral300,

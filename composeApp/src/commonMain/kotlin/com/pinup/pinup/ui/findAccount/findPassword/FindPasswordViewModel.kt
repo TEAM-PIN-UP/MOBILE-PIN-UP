@@ -38,11 +38,15 @@ class FindPasswordViewModel: BaseViewModel<ChangePasswordUiState, UiEvent>(
         }
     }
 
-    fun onClickVerify() = viewModelScope.launch {
+    fun onClickSendCode() = viewModelScope.launch {
         if (isValidEmail()) {
             retryVerifyCount()
             //TODO: 이메일 인증 로직 구현
         }
+    }
+
+    fun onClickVerify() {
+        //TODO: 이메일 인증 로직 구현
     }
 
     fun retryVerifyCount() {
@@ -122,8 +126,7 @@ data class ChangePasswordEmailState(
     val emailVerifyType: EmailVerifyType = EmailVerifyType.NONE,
     val isClicked: Boolean = false,
 ) {
-    val isPassValidation = true
-    //isEmailValid && emailVerifyType == EmailVerifyType.VERIFIED
+    val isPassValidation = isEmailValid && emailVerifyType == EmailVerifyType.VERIFIED
 }
 
 data class ChangePasswordState(

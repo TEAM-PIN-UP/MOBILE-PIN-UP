@@ -27,6 +27,7 @@ fun FindPasswordEmailRoute(
         emailState = uiState.emailState,
         onEmailChanged = viewModel::updateEmail,
         onCodeChanged = viewModel::updateVerificationCode,
+        onClickSendCode = viewModel::onClickSendCode,
         onClickVerify = viewModel::onClickVerify,
         onBackPressed = onBackPressed
     )
