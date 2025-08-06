@@ -19,6 +19,7 @@ import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
 import com.pinup.pinup.ui.component.LogoutDialog
+import com.pinup.pinup.ui.findAccount.findPassword.FindPasswordEmailRoute
 import com.pinup.pinup.ui.login.compose.LoginRoute
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.login.model.SNSUserInfo
@@ -137,6 +138,24 @@ fun PinUpApp(
                         onMoveMain = {
                             moveMain()
                         }
+                    )
+                }
+
+                composable<PinUpAppDestination.FindPasswordEmail>(
+                    enterTransition = {
+                        slideInHorizontally(initialOffsetX = { it })
+                    },
+                    popEnterTransition = {
+                        fadeIn(animationSpec = tween(200))
+                    },
+                    popExitTransition = {
+                        slideOutHorizontally(targetOffsetX = { it })
+                    }
+                ){
+                    FindPasswordEmailRoute(
+                        onMoveChangePassword = {
+                            //navHostController.navigate(PinUpAppDestination.ChangePassword)
+                        },
                     )
                 }
 
@@ -280,6 +299,8 @@ sealed interface PinUpAppDestination {
     data object Setting : PinUpAppDestination
     @Serializable
     data object Login : PinUpAppDestination
+    @Serializable
+    data object FindPasswordEmail : PinUpAppDestination
     @Serializable
     data class SignUp(
         val snsUserInfo: String
