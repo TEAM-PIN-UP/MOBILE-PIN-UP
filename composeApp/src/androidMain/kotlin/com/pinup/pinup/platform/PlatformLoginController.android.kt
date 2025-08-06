@@ -3,6 +3,7 @@ package com.pinup.pinup.platform
 import android.content.Context
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
@@ -33,36 +34,40 @@ actual class GoogleLoginController : SNSLoginController {
             val request: GetCredentialRequest = GetCredentialRequest.Builder()
                 .addCredentialOption(googleIdOption)
                 .build()
-            val result = CredentialManager.create(context)
-                .getCredential(
-                    context = context,
-                    request = request
+            try {
+                val result = CredentialManager.create(context)
+                    .getCredential(
+                        context = context,
+                        request = request
+                    )
+
+                // start credential
+                val credentials = result.credential
+                val googleIdTokenCredential = GoogleIdTokenCredential
+                    .createFrom(credentials.data)
+
+                val googleIdToken = googleIdTokenCredential.idToken
+                val verifier = GoogleIdTokenVerifier.Builder(
+                    NetHttpTransport(),
+                    GsonFactory.getDefaultInstance()
                 )
-
-            // start credential
-            val credentials = result.credential
-            val googleIdTokenCredential = GoogleIdTokenCredential
-                .createFrom(credentials.data)
-
-            val googleIdToken = googleIdTokenCredential.idToken
-            val verifier = GoogleIdTokenVerifier.Builder(
-                NetHttpTransport(),
-                GsonFactory.getDefaultInstance()
-            )
-                .setAudience(Collections.singletonList(BuildConfig.GOOGLE_CLIENT_ID))
-                .build()
-            val idToken = withContext(Dispatchers.IO) {
-                verifier.verify(googleIdToken)
+                    .setAudience(Collections.singletonList(BuildConfig.GOOGLE_CLIENT_ID))
+                    .build()
+                val idToken = withContext(Dispatchers.IO) {
+                    verifier.verify(googleIdToken)
+                }
+                val payload = idToken.payload
+                val snsLoginInfo = SNSUserInfo(
+                    socialId = payload.subject,
+                    snsType = SNSType.GOOGLE,
+                    email = payload.email,
+                    name = googleIdTokenCredential.givenName,
+                    nickname = googleIdTokenCredential.displayName
+                )
+                resultListener.onSuccess(snsLoginInfo)
+            } catch (e: Exception) {
+                resultListener.onCancel()
             }
-            val payload = idToken.payload
-            val snsLoginInfo = SNSUserInfo(
-                socialId = payload.subject,
-                snsType = SNSType.GOOGLE,
-                email = payload.email,
-                name = googleIdTokenCredential.givenName,
-                nickname = googleIdTokenCredential.displayName
-            )
-            resultListener.onSuccess(snsLoginInfo)
         }
     }
 }
