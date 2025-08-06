@@ -164,7 +164,7 @@ fun FindPasswordEmailScreen(
         PButton(
             modifier = Modifier
                 .padding(bottom = 28.dp),
-            text = Texts.Word.CONFIRM,
+            text = Texts.FindPassword.CHANGE_PASSWORD,
             onClick = {
                 onMovePassword()
             },
