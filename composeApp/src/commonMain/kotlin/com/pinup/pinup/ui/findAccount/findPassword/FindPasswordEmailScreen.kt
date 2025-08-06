@@ -21,6 +21,7 @@ import com.pinup.pinup.ui.component.ErrorText
 import com.pinup.pinup.ui.component.PButton
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.RoundedTextField
+import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.signup.EmailVerifyType
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
@@ -30,9 +31,10 @@ import com.pinup.pinup.ui.theme.Typography
 fun FindPasswordEmailScreen(
     onMovePassword: () -> Unit,
     emailState: ChangePasswordEmailState = ChangePasswordEmailState(),
-    onEmailChanged : (String) -> Unit = {},
-    onCodeChanged : (String) -> Unit = {},
-    onClickVerify : () -> Unit = {}
+    onEmailChanged: (String) -> Unit = {},
+    onCodeChanged: (String) -> Unit = {},
+    onClickVerify: () -> Unit = {},
+    onBackPressed: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -40,6 +42,10 @@ fun FindPasswordEmailScreen(
             .background(Colors.White)
             .padding(horizontal = 20.dp),
     ) {
+        TitleBar(
+            onLeftButtonClick = onBackPressed
+        )
+
         Spacer(modifier = Modifier.height(44.dp))
 
         Text(

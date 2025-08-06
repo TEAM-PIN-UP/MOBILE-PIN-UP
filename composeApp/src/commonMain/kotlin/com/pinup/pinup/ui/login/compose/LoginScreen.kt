@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.PButton
 import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.login.model.SNSType
@@ -42,6 +43,8 @@ import pinup.composeapp.generated.resources.ic_sns_login
 @Composable
 fun LoginScreen(
     onSnsLoginClick: (SNSType) -> Unit = {},
+    onClickFindPassword: () -> Unit = {},
+    onCLickFindEmail: () -> Unit = {},
     id : String = "",
     password : String = "",
     isError: Boolean = false,
@@ -139,7 +142,10 @@ fun LoginScreen(
             Spacer(modifier = Modifier.width(27.dp))
 
             Text(
-                modifier = Modifier,
+                modifier = Modifier
+                    .clickableSingleWithNoRipple {
+                        onClickFindPassword()
+                    },
                 text = Texts.Login.LOGIN_PASSWORD_FIND,
                 style = Typography.B4,
                 color = Colors.Neutral700

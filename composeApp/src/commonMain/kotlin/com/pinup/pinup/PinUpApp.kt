@@ -87,7 +87,7 @@ fun PinUpApp(
                 ){
                     OnboardingRoute(
                         onMoveSignUpOnboarding = {
-                            navHostController.navigate(PinUpAppDestination.ChoiceSignUp)
+                            navHostController.navigate(PinUpAppDestination.Login)
                         },
                         onMoveLogin = {
                             navHostController.navigate(PinUpAppDestination.Login)
@@ -137,6 +137,9 @@ fun PinUpApp(
                         },
                         onMoveMain = {
                             moveMain()
+                        },
+                        onMoveFindPassword = {
+                            navHostController.navigate(PinUpAppDestination.FindPasswordEmail)
                         }
                     )
                 }
@@ -156,6 +159,9 @@ fun PinUpApp(
                         onMoveChangePassword = {
                             //navHostController.navigate(PinUpAppDestination.ChangePassword)
                         },
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        }
                     )
                 }
 

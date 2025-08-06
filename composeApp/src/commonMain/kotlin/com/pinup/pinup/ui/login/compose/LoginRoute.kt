@@ -19,6 +19,7 @@ fun LoginRoute(
     contextFactory: ContextFactory,
     onMoveSignUp: (SNSUserInfo) -> Unit,
     onMoveMain: () -> Unit,
+    onMoveFindPassword: () -> Unit,
     viewModel: LoginViewModel = koinViewModel(parameters = { parametersOf(contextFactory) })
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -34,6 +35,7 @@ fun LoginRoute(
         onSnsLoginClick = viewModel::doSNSLogin,
         onIdChanged = viewModel::onIdChange,
         onPasswordChanged = viewModel::onPasswordChange,
+        onClickFindPassword = onMoveFindPassword,
         id = uiState.id,
         password = uiState.password,
         isError = uiState.isError

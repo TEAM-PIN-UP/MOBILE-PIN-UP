@@ -9,7 +9,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun FindPasswordEmailRoute(
-    onMoveChangePassword : () -> Unit,
+    onMoveChangePassword: () -> Unit,
+    onBackPressed: () -> Unit,
     viewModel: FindPasswordViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -26,6 +27,7 @@ fun FindPasswordEmailRoute(
         emailState = uiState.emailState,
         onEmailChanged = viewModel::updateEmail,
         onCodeChanged = viewModel::updateVerificationCode,
-        onClickVerify = viewModel::onClickVerify
+        onClickVerify = viewModel::onClickVerify,
+        onBackPressed = onBackPressed
     )
 }
