@@ -5,11 +5,15 @@ import com.pinup.pinup.data.response.GetReviewsResponse
 import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.data.response.SearchUserResponse
 import com.pinup.pinup.domain.model.PResult
+import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Multipart
+import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.get
 import io.ktor.http.parameters
 
@@ -51,4 +55,16 @@ interface MembersApi {
         @Query("page") page: Int,
         @Query("size") size: Int,
     ): PResult<PResponse<GetReviewsResponse>>
+
+    @Multipart
+    @POST(ApiPath.Members.SOCIAL_SIGN_UP)
+    suspend fun socialSignUp(
+        @Body multipart: MultiPartFormDataContent
+    ): PResult<PResponse<Unit>>
+
+    @Multipart
+    @POST(ApiPath.Members.EMAIL_SIGN_UP)
+    suspend fun emailSignUp(
+        @Body multipart: MultiPartFormDataContent
+    ): PResult<PResponse<Unit>>
 }

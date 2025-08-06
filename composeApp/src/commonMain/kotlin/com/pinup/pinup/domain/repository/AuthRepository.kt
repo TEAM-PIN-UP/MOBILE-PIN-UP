@@ -10,4 +10,5 @@ interface AuthRepository {
     suspend fun socialLogin(provider : String, socialId: String): PResult<LoginResponse>
     suspend fun logout(): PResult<Unit>
     suspend fun socialSignUp(signUpInfo: SignUpInfo): PResult<Unit>
+    suspend fun emailSignUp(signUpInfo: SignUpInfo): PResult<Unit>
 }

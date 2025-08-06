@@ -12,22 +12,15 @@ import de.jensklingenberg.ktorfit.http.POST
 import io.ktor.client.request.forms.MultiPartFormDataContent
 
 interface AuthApi {
-    @POST(AuthPath.REFRESH)
+    @POST(ApiPath.Auth.REFRESH)
     suspend fun refreshToken(@Header("Refresh") token: String): PResult<PResponse<LoginResponse>>
 
-    @POST(AuthPath.SOCIAL_LOGIN)
+    @POST(ApiPath.Auth.SOCIAL_LOGIN)
     suspend fun socialLogin(@Body request: LoginRequest): PResult<PResponse<LoginResponse>>
 
-    @POST(AuthPath.EMAIL_LOGIN)
+    @POST(ApiPath.Auth.EMAIL_LOGIN)
     suspend fun emailLogin(@Body request: EmailLoginRequest): PResult<PResponse<LoginResponse>>
 
-    @POST(AuthPath.LOGOUT)
+    @POST(ApiPath.Auth.LOGOUT)
     suspend fun logout(@Header("Access") token: String): PResult<PResponse<Unit>>
-
-    //TODO memeber API로 이전
-    @Multipart
-    @POST("api/auth/sign-up")
-    suspend fun signUp(
-        @Body multipart: MultiPartFormDataContent
-    ): PResult<PResponse<Unit>>
 }

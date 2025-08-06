@@ -4,6 +4,7 @@ import com.pinup.pinup.data.local.MembersLocalDataSource
 import com.pinup.pinup.data.remote.AuthRemoteDataSource
 import com.pinup.pinup.data.request.EmailLoginRequest
 import com.pinup.pinup.data.request.LoginRequest
+import com.pinup.pinup.data.request.signUp.EmailSignUpRequest
 import com.pinup.pinup.data.request.signUp.SocialSignUpRequest
 import com.pinup.pinup.data.response.LoginResponse
 import com.pinup.pinup.domain.model.PResult
@@ -41,6 +42,20 @@ class AuthRepositoryImpl (
                 nickname = signUpInfo.nickname,
                 email = signUpInfo.email,
                 socialId = signUpInfo.socialId,
+                loginType = signUpInfo.loginType,
+                termsOfMarketing = signUpInfo.termsOfMarketing.toYnString()
+            )
+        )
+    }
+
+    override suspend fun emailSignUp(signUpInfo: SignUpInfo): PResult<Unit> {
+        return authRemoteDataSource.emailSignUp(
+            profileImage = signUpInfo.profileImage,
+            request = EmailSignUpRequest(
+                email = signUpInfo.email,
+                name = signUpInfo.name,
+                password = signUpInfo.password,
+                nickname = signUpInfo.nickname,
                 loginType = signUpInfo.loginType,
                 termsOfMarketing = signUpInfo.termsOfMarketing.toYnString()
             )

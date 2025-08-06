@@ -1,10 +1,19 @@
 package com.pinup.pinup.remote.api
 
-object AuthPath{
-    private const val AUTH = "api/auth"
-    const val REFRESH = "$AUTH/refresh"
-    const val SOCIAL_LOGIN = "$AUTH/social-login"
-    const val EMAIL_LOGIN = "$AUTH/login"
-    const val LOGOUT = "$AUTH/logout"
+import com.pinup.pinup.remote.api.ApiPath.Auth.AUTH
 
+object ApiPath {
+    object Auth{
+        private const val AUTH = "api/auth"
+        const val REFRESH = "$AUTH/refresh"
+        const val SOCIAL_LOGIN = "$AUTH/social-login"
+        const val EMAIL_LOGIN = "$AUTH/login"
+        const val LOGOUT = "$AUTH/logout"
+    }
+
+    object Members {
+        const val MEMBERS = "api/members"
+        const val SOCIAL_SIGN_UP = "$MEMBERS/social-sign-up"
+        const val EMAIL_SIGN_UP = "$MEMBERS/sign-up"
+    }
 }
