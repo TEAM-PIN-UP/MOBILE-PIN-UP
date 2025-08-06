@@ -49,7 +49,7 @@ fun SignUpScreen(
     ) {
         NavHost(
             navController = navHostController,
-            startDestination = if(snsType == SNSType.EMAIL) SignUpDestination.Terms else SignUpDestination.Terms,
+            startDestination = if(snsType == SNSType.EMAIL) SignUpDestination.Name else SignUpDestination.Name,
         ) {
             composable<SignUpDestination.InputEmail>(
                 enterTransition = {
@@ -110,7 +110,9 @@ fun SignUpScreen(
                     onValueChange = onValueChange,
                     onMoveSelectProfileImage = {
                         navHostController.navigate(SignUpDestination.Image)
-                    }
+                    },
+                    onBackPressed = onBackPressed,
+                    isPassNickname = nicknameState.isPassNickname
                 )
             }
 

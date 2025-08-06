@@ -70,4 +70,12 @@ object Texts {
         const val LOCATION_INFO_AGREE = "위치정보 이용 동의 (필수)"
         const val MARKETING_AGREE = "홍보 및 마케팅 이용 동의 (선택)"
     }
+
+    object SignupNickname {
+        const val NICKNAME_TITLE = "반가워요!\n닉네임을 만들어볼까요?"
+        const val INPUT_NICKNAME = "닉네임 입력"
+        const val NICKNAME_HINT = "닉네임은 나중에 언제든지 변경가능해요."
+        const val CONDITION_NICKNAME = "한글, 영문만 입력 가능"
+        const val DUPLICATE_NICKNAME = "중복되는 닉네임이에요."
+    }
 }

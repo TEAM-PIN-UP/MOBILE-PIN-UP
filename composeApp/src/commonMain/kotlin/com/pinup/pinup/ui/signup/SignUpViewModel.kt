@@ -269,5 +269,7 @@ data class TermsOfServiceState(
 
 data class NickNameState(
     val nickname: String = "",
-    val isNicknameUsed: Boolean? = null,
-)
+    val isNicknameUsed: Boolean = false,
+) {
+    val isPassNickname: Boolean = nickname.isNotEmpty() && !isNicknameUsed
+}

@@ -78,7 +78,7 @@ fun RoundedTextField(
     ),
     keyboardActions: KeyboardActions = KeyboardActions(),
     focusRequester: FocusRequester = FocusRequester(),
-    contentPadding: PaddingValues = PaddingValues(14.dp),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 14.dp),
     cursorColor: Color = Color.Black,
     textColor: Color = Color.Black,
 ) {
