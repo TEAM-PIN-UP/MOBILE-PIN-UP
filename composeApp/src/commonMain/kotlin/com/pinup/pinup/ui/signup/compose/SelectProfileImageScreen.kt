@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -27,13 +28,14 @@ import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 import androidx.compose.runtime.rememberCoroutineScope
+import com.pinup.pinup.ui.theme.Texts
 
 @Composable
 fun SelectProfileImageScreen(
     profileImage: ByteArray,
     nickname: String,
     onUpdateProfileImage: (ByteArray) -> Unit,
-    onMoveTermsOfService: () -> Unit,
+    onClickSignup: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val singleImagePicker = rememberImagePickerLauncher(
@@ -52,23 +54,19 @@ fun SelectProfileImageScreen(
             .background(Colors.White)
             .padding(horizontal = 20.dp)
     ) {
-        Text(
-            modifier = Modifier.padding(top = 40.dp),
-            text = if (profileImage.isEmpty()) "프로필에 사용 될" else "멋진 프로필",
-            style = Typography.H1,
-            color = Colors.Neutral800
-        )
+
+        Spacer(modifier = Modifier.height(44.dp))
 
         Text(
-            modifier = Modifier.padding(top = 8.dp),
-            text = if (profileImage.isEmpty()) "이미지를 골라주세요." else "사진이 등록되었어요!",
-            style = Typography.H1,
-            color = Colors.Neutral800
+            text = if (profileImage.isEmpty()) Texts.SignupProfile.PROFILE_TITLE else Texts.SignupProfile.PROFILE_REGISTER,
+            style = Typography.H0,
+            color = Colors.Black
         )
+
+        Spacer(modifier = Modifier.height(107.dp))
 
         Column(
             modifier = Modifier
-                .padding(top = 64.dp)
                 .align(Alignment.CenterHorizontally),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -82,31 +80,17 @@ fun SelectProfileImageScreen(
                     contentDescription = null,
                 )
             } else {
-                Box {
-                    AsyncImage(
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .size(100.dp)
-                            .clickableSingleWithNoRipple {
-                                singleImagePicker.launch()
-                            },
-                        model = profileImage,
-                        contentScale = ContentScale.Crop,
-                        contentDescription = null,
-                    )
-                    Box(
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .size(100.dp)
-                            .background(Colors.Black_40),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(Res.drawable.ic_camera),
-                            contentDescription = null
-                        )
-                    }
-                }
+                AsyncImage(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(100.dp)
+                        .clickableSingleWithNoRipple {
+                            singleImagePicker.launch()
+                        },
+                    model = profileImage,
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                )
             }
 
             Text(
@@ -121,38 +105,40 @@ fun SelectProfileImageScreen(
 
         if (profileImage.isEmpty()) {
             PButton(
-                text = "사진 선택하기",
+                text = Texts.SignupProfile.PROFILE_SELECT,
                 onClick = {
                     singleImagePicker.launch()
                 }
             )
 
+            Spacer(modifier = Modifier.height(8.dp))
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp, bottom = 13.dp)
                     .clickableSingleWithNoRipple {
-                        onMoveTermsOfService()
+                        onClickSignup()
                     },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     modifier = Modifier
                         .padding(vertical = 15.dp),
-                    text = "건너뛰기",
-                    style = Typography.H4,
-                    color = Colors.Neutral400
+                    text = Texts.Word.SKIP,
+                    style = Typography.H3,
+                    color = Colors.Neutral800
                 )
             }
         } else {
             PButton(
-                modifier = Modifier
-                    .padding(bottom = 28.dp),
-                text = "다음",
+                modifier = Modifier,
+                text = Texts.Word.NEXT,
                 onClick = {
-                    onMoveTermsOfService()
+                    onClickSignup()
                 }
             )
         }
+
+        Spacer(modifier = Modifier.height(53.dp))
     }
 }

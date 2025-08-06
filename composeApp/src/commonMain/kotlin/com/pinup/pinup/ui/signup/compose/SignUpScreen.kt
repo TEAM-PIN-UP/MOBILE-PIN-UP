@@ -131,9 +131,7 @@ fun SignUpScreen(
                     profileImage = profileUrl,
                     nickname = nicknameState.nickname,
                     onUpdateProfileImage = onProfileImageChange,
-                    onMoveTermsOfService = {
-                        navHostController.navigate(SignUpDestination.Terms)
-                    },
+                    onClickSignup = onSignUpClick,
                 )
             }
 

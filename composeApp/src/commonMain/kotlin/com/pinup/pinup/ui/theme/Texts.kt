@@ -78,4 +78,10 @@ object Texts {
         const val CONDITION_NICKNAME = "한글, 영문만 입력 가능"
         const val DUPLICATE_NICKNAME = "중복되는 닉네임이에요."
     }
+
+    object SignupProfile {
+        const val PROFILE_TITLE = "프로필에 사용 될\n이미지를 골라주세요."
+        const val PROFILE_REGISTER = "멋진 프로필\n사진이 등록되었어요!"
+        const val PROFILE_SELECT = "사진 선택하기"
+    }
 }
