@@ -28,6 +28,7 @@ import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 import androidx.compose.runtime.rememberCoroutineScope
+import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Texts
 
 @Composable
@@ -36,6 +37,7 @@ fun SelectProfileImageScreen(
     nickname: String,
     onUpdateProfileImage: (ByteArray) -> Unit,
     onClickSignup: () -> Unit,
+    onBackPressed: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val singleImagePicker = rememberImagePickerLauncher(
@@ -54,8 +56,13 @@ fun SelectProfileImageScreen(
             .background(Colors.White)
             .padding(horizontal = 20.dp)
     ) {
+        TitleBar(
+            onLeftButtonClick = {
+                onBackPressed()
+            }
+        )
 
-        Spacer(modifier = Modifier.height(44.dp))
+        Spacer(modifier = Modifier.height(49.dp))
 
         Text(
             text = if (profileImage.isEmpty()) Texts.SignupProfile.PROFILE_TITLE else Texts.SignupProfile.PROFILE_REGISTER,

@@ -132,6 +132,7 @@ fun SignUpScreen(
                     nickname = nicknameState.nickname,
                     onUpdateProfileImage = onProfileImageChange,
                     onClickSignup = onSignUpClick,
+                    onBackPressed = onBackPressed
                 )
             }
 
