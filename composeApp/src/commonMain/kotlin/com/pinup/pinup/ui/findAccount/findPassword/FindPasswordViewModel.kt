@@ -6,34 +6,62 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.signup.EmailVerifyType
 import com.pinup.pinup.util.Const
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class FindPasswordViewModel: BaseViewModel<ChangePasswordUiState, UiEvent>(
     ChangePasswordUiState()
 ) {
-
+    companion object {
+        const val RETRY_VERIFICATION_TIME = 7000
+    }
     fun updateEmail(email: String) = viewModelScope.launch {
-        updateState { copy(
-            emailState = uiState.value.emailState.copy(
-                email = email,
-                isEmailValid = true
+        updateState {
+            copy(
+                emailState = uiState.value.emailState.copy(
+                    email = email,
+                    isEmailValid = true
+                )
             )
-        ) }
+        }
     }
 
     fun updateVerificationCode(code: String) = viewModelScope.launch {
         //TODO 최대 글자 도달시 확인 api 로직 구현 현재는 6자리 시 통과 가능
-        updateState { copy(
-            emailState = uiState.value.emailState.copy(
-                verificationCode = code,
-                emailVerifyType = if(code.length == 6) EmailVerifyType.VERIFIED else EmailVerifyType.NOT_VERIFIED
+        updateState {
+            copy(
+                emailState = uiState.value.emailState.copy(
+                    verificationCode = code,
+                    emailVerifyType = if(code.length == 6) EmailVerifyType.VERIFIED else EmailVerifyType.NOT_VERIFIED
+                )
             )
-        ) }
+        }
     }
 
     fun onClickVerify() = viewModelScope.launch {
         if (isValidEmail()) {
+            retryVerifyCount()
             //TODO: 이메일 인증 로직 구현
+        }
+    }
+
+    fun retryVerifyCount() {
+        viewModelScope.launch {
+            updateState {
+                copy(
+                    emailState = uiState.value.emailState.copy(
+                        isClicked = true
+                    )
+                )
+            }
+            delay(RETRY_VERIFICATION_TIME.toLong())
+            updateState {
+                copy(
+                    emailState = uiState.value.emailState.copy(
+                        isClicked = false
+                    )
+                )
+            }
         }
     }
 
