@@ -3,7 +3,7 @@ package com.pinup.pinup.remote.impl
 import com.pinup.pinup.data.remote.AuthRemoteDataSource
 import com.pinup.pinup.data.request.EmailLoginRequest
 import com.pinup.pinup.data.request.LoginRequest
-import com.pinup.pinup.data.request.SignUpRequest
+import com.pinup.pinup.data.request.signUp.SocialSignUpRequest
 import com.pinup.pinup.data.response.LoginResponse
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.mapSuccessData
@@ -34,7 +34,7 @@ class AuthRemoteDataSourceImpl (
         return authApi.logout(access).mapSuccessData()
     }
 
-    override suspend fun signUp(profileImage: ByteArray, request: SignUpRequest): PResult<Unit> {
+    override suspend fun socialSignUp(profileImage: ByteArray, request: SocialSignUpRequest): PResult<Unit> {
         val timeStamp = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).nanosecond
         val signUpRequestString = Json.encodeToString(request)
         val multipart = MultiPartFormDataContent(formData {

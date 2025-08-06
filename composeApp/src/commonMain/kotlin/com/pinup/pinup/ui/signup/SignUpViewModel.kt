@@ -2,10 +2,12 @@ package com.pinup.pinup.ui.signup
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.pinup.pinup.data.request.signUp.SocialSignUpRequest
 import com.pinup.pinup.domain.model.SignUpInfo
 import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
-import com.pinup.pinup.domain.usecase.SignUpUseCase
+import com.pinup.pinup.domain.usecase.SocialSignUpUseCase
 import com.pinup.pinup.domain.validator.NickNameValidator
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
@@ -25,20 +27,22 @@ import kotlinx.serialization.json.Json
 class SignUpViewModel (
     savedStateHandle: SavedStateHandle,
     private val checkNickNameUseCase: CheckNickNameUseCase,
-    private val signUpUseCase: SignUpUseCase,
+    private val socialSignUpUseCase: SocialSignUpUseCase,
 ) : BaseViewModel<SignUpUiState, SignUpUiEvent>(SignUpUiState()) {
     private val snsUserInfo = Json.decodeFromString<SNSUserInfo>(savedStateHandle.get<String>(SNS_USER_INFO) ?: "")
     private val query = MutableStateFlow("")
 
     init {
-        updateState { copy(
-            nicknameState = NickNameState(
-                nickname = ""
-            ),
-            snsType = snsUserInfo.snsType,
-            socialId = snsUserInfo.socialId,
-            name = snsUserInfo.name ?: snsUserInfo.nickname ?: ""
-        ) }
+        updateState {
+            copy(
+                nicknameState = NickNameState(
+                    nickname = ""
+                ),
+                snsType = snsUserInfo.snsType,
+                socialId = snsUserInfo.socialId,
+                name = snsUserInfo.name ?: snsUserInfo.nickname ?: ""
+            )
+        }
 
         viewModelScope.launch {
             query
@@ -190,7 +194,28 @@ class SignUpViewModel (
         updateState { copy( termsOfServiceState = termsOfServiceState) }
     }
 
-    fun signUp() = viewModelScope.launch {
+    fun signUp() {
+        hLog(uiState.value.profileUrl.toString())
+//        if (_uiState.value.snsType == SNSType.EMAIL) {
+//            emailSignUp()
+//        } else {
+//            socialSignUp()
+//        }
+    }
+
+    private fun socialSignUp() = viewModelScope.launch {
+        val request = SocialSignUpRequest(
+            email = uiState.value.emailState.email,
+            socialId = uiState.value.socialId,
+            nickname = uiState.value.nicknameState.nickname,
+            name = uiState.value.name,
+            loginType = uiState.value.snsType,
+            termsOfMarketing = uiState.value.termsOfServiceState.isMarketingAgreeAgree.toString(),
+        )
+        //resultResponse(signUpUseCase(request), { emitEvent(SignUpUiEvent.MoveMain) })
+    }
+
+    private fun emailSignUp() = viewModelScope.launch {
         val request = SignUpInfo(
             email = uiState.value.emailState.email,
             socialId = uiState.value.socialId,
@@ -200,7 +225,7 @@ class SignUpViewModel (
             termsOfMarketing = uiState.value.termsOfServiceState.isMarketingAgreeAgree,
             profileImage = uiState.value.profileUrl
         )
-        resultResponse(signUpUseCase(request), { emitEvent(SignUpUiEvent.MoveMain) })
+        //resultResponse(signUpUseCase(request), { emitEvent(SignUpUiEvent.MoveMain) })
     }
 
     companion object {

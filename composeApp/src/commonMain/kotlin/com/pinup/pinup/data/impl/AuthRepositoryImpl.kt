@@ -4,7 +4,7 @@ import com.pinup.pinup.data.local.MembersLocalDataSource
 import com.pinup.pinup.data.remote.AuthRemoteDataSource
 import com.pinup.pinup.data.request.EmailLoginRequest
 import com.pinup.pinup.data.request.LoginRequest
-import com.pinup.pinup.data.request.SignUpRequest
+import com.pinup.pinup.data.request.signUp.SocialSignUpRequest
 import com.pinup.pinup.data.response.LoginResponse
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.SignUpInfo
@@ -33,10 +33,10 @@ class AuthRepositoryImpl (
         return authRemoteDataSource.logout(accessToken)
     }
 
-    override suspend fun signUp(signUpInfo: SignUpInfo): PResult<Unit> {
-        return authRemoteDataSource.signUp(
+    override suspend fun socialSignUp(signUpInfo: SignUpInfo): PResult<Unit> {
+        return authRemoteDataSource.socialSignUp(
             profileImage = signUpInfo.profileImage,
-            request = SignUpRequest(
+            request = SocialSignUpRequest(
                 name = signUpInfo.name,
                 nickname = signUpInfo.nickname,
                 email = signUpInfo.email,
