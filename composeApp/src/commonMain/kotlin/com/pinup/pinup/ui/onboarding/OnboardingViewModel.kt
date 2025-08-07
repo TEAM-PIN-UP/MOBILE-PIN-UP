@@ -16,7 +16,8 @@ class OnboardingViewModel (
         if (isLogin) {
             emitEvent(OnboardingUiEvent.MoveLogin)
         } else {
-            emitEvent(OnboardingUiEvent.MoveSignUpOnboarding)
+            emitEvent(OnboardingUiEvent.MoveLogin)
+            //emitEvent(OnboardingUiEvent.MoveSignUpOnboarding)
         }
     }
 }

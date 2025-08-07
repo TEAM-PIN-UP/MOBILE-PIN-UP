@@ -14,7 +14,7 @@ fun OnboardingRoute(
         viewModel.uiEvent.collectLatest {
             when(it) {
                 OnboardingUiEvent.MoveSignUpOnboarding -> onMoveSignUpOnboarding()
-                OnboardingUiEvent.MoveLogin -> onMoveLogin
+                OnboardingUiEvent.MoveLogin -> onMoveLogin()
             }
         }
     }

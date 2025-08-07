@@ -52,7 +52,8 @@ class LoginViewModel (
                     emitEvent( LoginUiEvent.MoveMain )
                 },
                 errorCallback = {
-                    handleFailSocialLogin(it, snsLoginInfo)
+                    emitEvent( LoginUiEvent.MoveMain )
+                    //handleFailSocialLogin(it, snsLoginInfo)
                 }
             )
         }
