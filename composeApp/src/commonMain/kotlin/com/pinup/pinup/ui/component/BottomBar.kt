@@ -5,10 +5,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
@@ -17,6 +21,8 @@ import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
+import com.pinup.pinup.ui.theme.Typography
 
 @Composable
 fun BottomBar(
@@ -24,10 +30,6 @@ fun BottomBar(
     profileImage: String,
     onBottomMenuClick: (MainDestination) -> Unit
 ) {
-    val iconModifier = Modifier
-        .padding(vertical = 9.dp, horizontal = 13.dp)
-        .background(Colors.White)
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,86 +37,123 @@ fun BottomBar(
                 // 바텀시트 터치 이벤트 막기 위해 넣어 놓음
             }
             .background(Colors.White)
-            .height(56.dp)
     ) {
         PHorizontalDivider()
 
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Image(
-                modifier = iconModifier
-                    .clickableWithNoRipple {
-                        onBottomMenuClick(MainDestination.Map)
-                    },
-                painter = if (selectedMenu == MainDestination.Map) {
-                    painterResource(Res.drawable.ic_map_on)
-                } else {
-                    painterResource(Res.drawable.ic_map_off)
-                },
-                contentDescription = "map"
+
+            BottomBarMenuItem(
+                selectedMenu = selectedMenu,
+                myMenu = MainDestination.Map,
+                onBottomMenuClick = onBottomMenuClick
             )
 
-            Image(
-                modifier = iconModifier
-                    .clickableWithNoRipple {
-                        onBottomMenuClick(MainDestination.Bookmark)
-                    },
-                painter = if (selectedMenu == MainDestination.Bookmark) {
-                    painterResource(Res.drawable.ic_bookmark_on)
-                } else {
-                    painterResource(Res.drawable.ic_bookmark_off)
-                },
-                contentDescription = "bookmark"
+            BottomBarMenuItem(
+                selectedMenu = selectedMenu,
+                myMenu = MainDestination.Feed,
+                onBottomMenuClick = onBottomMenuClick
             )
 
-            Image(
-                modifier = iconModifier
-                    .clickableWithNoRipple {
-                        onBottomMenuClick(MainDestination.Upload)
-                    },
-                painter = if (selectedMenu == MainDestination.Upload) {
-                    painterResource(Res.drawable.ic_upload_on)
-                } else {
-                    painterResource(Res.drawable.ic_upload_off)
-                },
-                contentDescription = "upload"
+
+            BottomBarMenuItem(
+                selectedMenu = selectedMenu,
+                myMenu = MainDestination.Upload,
+                onBottomMenuClick = onBottomMenuClick
             )
 
+
+            BottomBarMenuItem(
+                selectedMenu = selectedMenu,
+                myMenu = MainDestination.Article,
+                onBottomMenuClick = onBottomMenuClick
+            )
+
+            BottomBarMenuItem(
+                selectedMenu = selectedMenu,
+                myMenu = MainDestination.My,
+                imageUrl = profileImage,
+                onBottomMenuClick = onBottomMenuClick
+            )
+        }
+    }
+}
+
+@Composable
+fun BottomBarMenuItem(
+    selectedMenu: MainDestination,
+    myMenu: MainDestination,
+    imageUrl: String = "",
+    onBottomMenuClick: (MainDestination) -> Unit
+){
+    val offRes = when(myMenu){
+        MainDestination.Article -> Res.drawable.ic_article_off
+        MainDestination.Feed -> Res.drawable.ic_feed_off
+        MainDestination.Map -> Res.drawable.ic_map_off
+        MainDestination.My -> Res.drawable.ic_map_off
+        MainDestination.Upload -> Res.drawable.ic_upload
+    }
+
+    val onRes = when(myMenu){
+        MainDestination.Article -> Res.drawable.ic_article_on
+        MainDestination.Feed -> Res.drawable.ic_feed_on
+        MainDestination.Map -> Res.drawable.ic_map_on
+        MainDestination.My -> Res.drawable.ic_map_on
+        MainDestination.Upload -> Res.drawable.ic_upload
+    }
+
+    val text = when(myMenu){
+        MainDestination.Article -> Texts.Word.ARTICLE
+        MainDestination.Feed -> Texts.Word.FEED
+        MainDestination.Map -> Texts.Word.PIN_MAP
+        MainDestination.My -> Texts.Word.MY
+        MainDestination.Upload -> ""
+    }
+
+    Column(
+        modifier = Modifier
+            .padding(vertical = 12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ){
+        if (myMenu != MainDestination.My) {
             Image(
-                modifier = iconModifier
+                modifier = Modifier
+                    .padding(horizontal = 25.dp)
+                    .background(Colors.White)
                     .clickableWithNoRipple {
-                        onBottomMenuClick(MainDestination.Contents)
+                        onBottomMenuClick(myMenu)
                     },
-                painter = if (selectedMenu == MainDestination.Contents) {
-                    painterResource(Res.drawable.ic_contents_on)
+                painter = if (selectedMenu == myMenu) {
+                    painterResource(onRes)
                 } else {
-                    painterResource(Res.drawable.ic_contents_off)
+                    painterResource(offRes)
                 },
                 contentDescription = "contents"
             )
+        } else {
+            ProfileImageView(
+                modifier = Modifier
+                    .padding(horizontal = 25.dp)
+                    .background(Colors.White)
+                    .clickableWithNoRipple {
+                        onBottomMenuClick(myMenu)
+                    },
+                imgUrl = imageUrl,
+                cornerColor = if(selectedMenu == myMenu) Colors.Main else Colors.Transparency
+            )
+        }
 
-            if (selectedMenu == MainDestination.My) {
-                ProfileImageView(
-                    modifier = iconModifier
-                        .clickableWithNoRipple {
-                            onBottomMenuClick(MainDestination.My)
-                        },
-                    imgUrl = profileImage,
-                    cornerColor = Colors.Neutral800
-                )
-            } else {
-                ProfileImageView(
-                    modifier = iconModifier
-                        .clickableWithNoRipple {
-                            onBottomMenuClick(MainDestination.My)
-                        },
-                    imgUrl = profileImage,
-                )
-            }
+        if (myMenu != MainDestination.Upload) {
+            Spacer(modifier = Modifier.height(2.dp))
+
+            Text(
+                text = text,
+                style = Typography.L1,
+                color = if(selectedMenu == myMenu) Colors.Main else Colors.Gray800
+            )
         }
     }
 }

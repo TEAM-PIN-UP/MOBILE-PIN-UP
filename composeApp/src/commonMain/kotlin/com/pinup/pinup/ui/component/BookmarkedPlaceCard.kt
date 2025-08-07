@@ -59,7 +59,7 @@ fun BookmarkedPlaceCard(
                         .align(Alignment.Center)
                         .padding(5.dp)
                         .size(16.dp),
-                    painter = painterResource(Res.drawable.ic_bookmark_on),
+                    painter = painterResource(Res.drawable.ic_feed_on),
                     contentDescription = "boomark"
                 )
             }

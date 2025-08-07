@@ -50,15 +50,13 @@ import dev.icerock.moko.permissions.RequestCanceledException
 import dev.icerock.moko.permissions.compose.BindEffect
 import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
 import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
-import dev.icerock.moko.permissions.location.BACKGROUND_LOCATION
-import dev.icerock.moko.permissions.location.COARSE_LOCATION
 import dev.icerock.moko.permissions.location.LOCATION
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_bookmark_off
-import pinup.composeapp.generated.resources.ic_bookmark_on
+import pinup.composeapp.generated.resources.ic_feed_off
+import pinup.composeapp.generated.resources.ic_feed_on
 import pinup.composeapp.generated.resources.ic_focus
 
 @Composable
@@ -99,7 +97,7 @@ fun MapScreen(
     }
     val hiddenHeight by remember(parentHeightDp) {
         derivedStateOf {
-            parentHeightDp / 4
+            35.dp
         }
     }
     var bottomSheetHeight by remember { mutableStateOf(hiddenHeight) }
@@ -250,9 +248,9 @@ fun MapScreen(
                                 .padding(10.dp)
                                 .size(20.dp),
                             painter = if (isShowBookmarks) {
-                                painterResource(Res.drawable.ic_bookmark_on)
+                                painterResource(Res.drawable.ic_feed_on)
                             } else {
-                                painterResource(Res.drawable.ic_bookmark_off)
+                                painterResource(Res.drawable.ic_feed_off)
                             },
                             contentDescription = "bookmark filter"
                         )

@@ -122,9 +122,9 @@ fun MapBottomSheetDetailScreen(
                             .align(Alignment.Center)
                             .padding(10.dp),
                         painter = if (detailPlace.mapPlace.bookmark) {
-                            painterResource(Res.drawable.ic_bookmark_on)
+                            painterResource(Res.drawable.ic_feed_on)
                         } else {
-                            painterResource(Res.drawable.ic_bookmark_off)
+                            painterResource(Res.drawable.ic_feed_off)
                         },
                         contentDescription = "boomark"
                     )

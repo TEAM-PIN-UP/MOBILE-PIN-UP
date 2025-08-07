@@ -37,10 +37,10 @@ fun MainNavHost(
     LaunchedEffect(currentDestination) {
         if (MainDestination.Map::class.qualifiedName == currentDestination?.route) {
             selectedMenuBar.value = MainDestination.Map
-        } else if (MainDestination.Bookmark::class.qualifiedName == currentDestination?.route) {
-            selectedMenuBar.value = MainDestination.Bookmark
-        } else if (MainDestination.Contents::class.qualifiedName == currentDestination?.route) {
-            selectedMenuBar.value = MainDestination.Contents
+        } else if (MainDestination.Feed::class.qualifiedName == currentDestination?.route) {
+            selectedMenuBar.value = MainDestination.Feed
+        } else if (MainDestination.Article::class.qualifiedName == currentDestination?.route) {
+            selectedMenuBar.value = MainDestination.Article
         } else if (MainDestination.My::class.qualifiedName == currentDestination?.route) {
             selectedMenuBar.value = MainDestination.My
         }
@@ -58,11 +58,11 @@ fun MainNavHost(
                 MapRoute()
             }
 
-            composable<MainDestination.Bookmark> {
+            composable<MainDestination.Feed> {
                 BookmarkRoute()
             }
 
-            composable<MainDestination.Contents> {
+            composable<MainDestination.Article> {
 
             }
 
@@ -99,11 +99,11 @@ sealed interface MainDestination {
     @Serializable
     data object Map : MainDestination
     @Serializable
-    data object Bookmark : MainDestination
+    data object Feed : MainDestination
     @Serializable
     data object Upload : MainDestination
     @Serializable
-    data object Contents : MainDestination
+    data object Article : MainDestination
     @Serializable
     data object My : MainDestination
 }
