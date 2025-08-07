@@ -37,6 +37,7 @@ fun BottomBar(
                 // 바텀시트 터치 이벤트 막기 위해 넣어 놓음
             }
             .background(Colors.White)
+            .padding(bottom = 34.dp)
     ) {
         PHorizontalDivider()
 
