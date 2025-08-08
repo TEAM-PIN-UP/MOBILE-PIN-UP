@@ -71,6 +71,7 @@ fun RoundedTextField(
     errorBorderColor: Color = Color.Black,
     cornerRounded: Int = 8,
     textStyle: TextStyle = TextStyle(),
+    placeholderStyle: TextStyle = TextStyle(),
     visualTransformation: VisualTransformation = VisualTransformation.None,
     placeholderTextColor: Color = Colors.Gray400,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
@@ -188,7 +189,7 @@ fun RoundedTextField(
 
                             Text(
                                 text = placeholder,
-                                style = Typography.B3,
+                                style = placeholderStyle,
                                 color = placeholderTextColor,
                                 overflow = TextOverflow.Ellipsis
                             )

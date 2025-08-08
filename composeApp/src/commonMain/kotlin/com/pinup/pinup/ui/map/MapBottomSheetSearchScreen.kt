@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.ReviewedPlace
@@ -97,8 +98,14 @@ fun MapBottomSheetSearchScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
             text = query,
+            textStyle = Typography.B1.copy(
+                fontWeight = FontWeight.Medium
+            ),
             onValueChange = onValueChange,
             placeholder = Texts.PinMap.SEARCH_HINT,
+            placeholderStyle = Typography.T2.copy(
+                fontWeight = FontWeight.Medium
+            ),
             cornerRounded = 100,
             leadingIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_search_back) else painterResource(
                 Res.drawable.ic_search
