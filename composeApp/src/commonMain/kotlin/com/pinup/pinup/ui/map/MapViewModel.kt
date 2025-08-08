@@ -138,7 +138,7 @@ class MapViewModel (
                 successCallback = {
                     updateState {
                         copy(
-                            searchUiState = uiState.value.searchUiState.copy(
+                            searchUiState = searchUiState.copy(
                                 reviewedPlaces = it
                             )
                         )
@@ -152,6 +152,16 @@ class MapViewModel (
         }
     }
 
+    fun updateSearchText(search: String){
+        updateState {
+            copy(
+                searchUiState = searchUiState.copy(
+                    query = search
+                )
+            )
+        }
+    }
+
     fun updateChipState(chipState: ChipState) = viewModelScope.launch(Dispatchers.IO) {
         val request = uiState.value.locationBound
         val sortType = uiState.value.searchUiState.sortType
@@ -161,9 +171,9 @@ class MapViewModel (
             successCallback = {
                 updateState {
                     copy(
-                        searchUiState = uiState.value.searchUiState.copy(
+                        searchUiState = searchUiState.copy(
                             reviewedPlaces = it,
-                            chipStates = uiState.value.searchUiState.chipStates.map { chip ->
+                            chipStates = searchUiState.chipStates.map { chip ->
                                 chip.copy(
                                     isSelected = chip == chipState
                                 )
@@ -215,15 +225,15 @@ class MapViewModel (
             successCallback = {
                 updateState {
                     copy(
-                        placeDetailUiState = uiState.value.placeDetailUiState.copy(
-                            detailPlace = uiState.value.placeDetailUiState.detailPlace?.copy(
-                                mapPlace = uiState.value.placeDetailUiState.detailPlace!!.mapPlace.copy(
-                                    bookmark = uiState.value.placeDetailUiState.detailPlace!!.mapPlace.bookmark.not()
+                        placeDetailUiState = placeDetailUiState.copy(
+                            detailPlace = placeDetailUiState.detailPlace?.copy(
+                                mapPlace = placeDetailUiState.detailPlace.mapPlace.copy(
+                                    bookmark = placeDetailUiState.detailPlace.mapPlace.bookmark.not()
                                 )
                             )
                         ),
-                        searchUiState = uiState.value.searchUiState.copy(
-                            reviewedPlaces = uiState.value.searchUiState.reviewedPlaces.map { reviewedPlace ->
+                        searchUiState = searchUiState.copy(
+                            reviewedPlaces = searchUiState.reviewedPlaces.map { reviewedPlace ->
                                 if (reviewedPlace.kakaoPlaceId == kakaoPlaceId) {
                                     reviewedPlace.copy(bookmark = reviewedPlace.bookmark.not())
                                 } else {
@@ -246,7 +256,7 @@ class MapViewModel (
             successCallback = {
                 updateState {
                     copy(
-                        searchUiState = uiState.value.searchUiState.copy(
+                        searchUiState = searchUiState.copy(
                             reviewedPlaces = it,
                             sortType = sortType
                         ),

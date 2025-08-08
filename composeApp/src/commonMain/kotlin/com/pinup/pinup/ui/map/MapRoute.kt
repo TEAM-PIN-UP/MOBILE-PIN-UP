@@ -16,7 +16,7 @@ fun MapRoute() {
         accuracy = LocationTrackerAccuracy.Best
     )
     val mapViewModel: MapViewModel = koinViewModel(parameters = { parametersOf(locationTrackerFactory.createLocationTracker()) })
-    val mapUiState = mapViewModel.mapUiState.collectAsStateWithLifecycle()
+    val mapUiState = mapViewModel.uiState.collectAsStateWithLifecycle()
 
     BindLocationTrackerEffect(mapViewModel.locationTracker)
     MapScreen(
@@ -30,6 +30,7 @@ fun MapRoute() {
         isCameraMoving = mapUiState.value.isCameraMoving,
         onCameraStateChange = mapViewModel::getPlaces,
         onChipClick = mapViewModel::updateChipState,
+        onValueChange = mapViewModel::updateSearchText,
         onPlaceClick = mapViewModel::getDetailPlace,
         onClearDetailPlace = mapViewModel::clearDetailPlace,
         onUpdateBookmark = mapViewModel::updateBookmark,
