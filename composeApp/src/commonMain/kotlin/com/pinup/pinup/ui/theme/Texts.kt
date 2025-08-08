@@ -95,4 +95,8 @@ object Texts {
         const val PROFILE_REGISTER = "멋진 프로필\n사진이 등록되었어요!"
         const val PROFILE_SELECT = "사진 선택하기"
     }
+
+    object PinMap {
+        const val SEARCH_HINT = "장소/위치 검색하기"
+    }
 }

@@ -40,6 +40,7 @@ import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.SortBottomSheet
 import com.pinup.pinup.ui.model.ChipState
 import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.CoroutineScope
@@ -97,14 +98,13 @@ fun MapBottomSheetSearchScreen(
                 .padding(horizontal = 20.dp),
             text = query,
             onValueChange = onValueChange,
-            placeholder = "장소/가게 검색하기",
+            placeholder = Texts.PinMap.SEARCH_HINT,
             cornerRounded = 100,
             leadingIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_search_back) else painterResource(
                 Res.drawable.ic_search
             ),
-            backgroundColor = Colors.Neutral50,
-            unfocusedBorderColor = Colors.Neutral50,
-            focusedBorderColor = Colors.Neutral50,
+            fixedBorderColor = Colors.Transparency,
+            backgroundColor = Colors.Gray50,
         )
 
         Row(

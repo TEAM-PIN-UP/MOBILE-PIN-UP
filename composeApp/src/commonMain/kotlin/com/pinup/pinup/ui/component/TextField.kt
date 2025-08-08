@@ -66,12 +66,13 @@ fun RoundedTextField(
     focusedBorderColor: Color = Color.Blue,
     unfocusedBorderColor: Color = Colors.Neutral300,
     isError: Boolean = false,
+    fixedBorderColor: Color? = null,
     backgroundColor: Color = Color.White,
     errorBorderColor: Color = Color.Black,
     cornerRounded: Int = 8,
     textStyle: TextStyle = TextStyle(),
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    placeholderTextColor: Color = Colors.Neutral300,
+    placeholderTextColor: Color = Colors.Gray400,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         imeAction = ImeAction.Done,
         keyboardType = KeyboardType.Text,
@@ -106,7 +107,7 @@ fun RoundedTextField(
             .height(textFieldHeight.dp)
             .border(
                 width = 1.dp,
-                color = textFieldColor,
+                color = fixedBorderColor ?: textFieldColor,
                 shape = RoundedCornerShape(cornerRounded.dp)
             )
             .focusRequester(focusRequester)
