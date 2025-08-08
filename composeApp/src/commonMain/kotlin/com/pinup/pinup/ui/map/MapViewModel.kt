@@ -16,6 +16,9 @@ import com.pinup.pinup.domain.usecase.GetDetailPlaceUseCase
 import com.pinup.pinup.domain.usecase.GetReviewedPlacesUseCase
 import com.pinup.pinup.event.DetailPlaceEventBus
 import com.pinup.pinup.platform.hLog
+import com.pinup.pinup.ui.base.BaseViewModel
+import com.pinup.pinup.ui.base.UiEvent
+import com.pinup.pinup.ui.base.UiState
 import com.pinup.pinup.ui.model.ChipState
 import dev.icerock.moko.geo.LocationTracker
 import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
@@ -43,14 +46,7 @@ class MapViewModel (
     private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
     val locationTracker: LocationTracker
-) : ViewModel() {
-    private val _mapUiState = MutableStateFlow(MapUiState())
-    val mapUiState: StateFlow<MapUiState>
-        get() = _mapUiState.asStateFlow()
-    private val _uiEvent = MutableSharedFlow<MapUiEvent>()
-    val uiEvent: SharedFlow<MapUiEvent>
-        get() = _uiEvent.asSharedFlow()
-
+) : BaseViewModel<MapUiState, MapUiEvent>(MapUiState()) {
     init {
         initDetailPlaceEventBus()
         initCollectLocation()
@@ -63,7 +59,7 @@ class MapViewModel (
             .collectLatest {
                 val myLocation = Position(it.latitude, it.longitude)
                 hLog("myLocation >>> ${myLocation}")
-                if (_mapUiState.value.currentPosition == null || _mapUiState.value.isFocusLocation) {
+                if (uiState.value.currentPosition == null || uiState.value.isFocusLocation) {
                     updateCameraPosition(myLocation)
                 }
                 updatePosition(myLocation)
@@ -80,8 +76,8 @@ class MapViewModel (
     }
 
     private fun updatePosition(position: Position) = viewModelScope.launch {
-        _mapUiState.update {
-            it.copy(
+        updateState {
+            copy(
                 currentPosition = position
             )
         }
@@ -89,28 +85,28 @@ class MapViewModel (
 
     fun updateShowBookmarks() = viewModelScope.launch {
         hLog("updateShowBookmarks")
-        _mapUiState.update {
-            it.copy(
-                isShowBookmarks = !it.isShowBookmarks
+        updateState {
+            copy(
+                isShowBookmarks = !isShowBookmarks
             )
         }
     }
 
     fun updateFocusLocation(value: Boolean) = viewModelScope.launch {
-        _mapUiState.update {
-            it.copy(
+        updateState {
+            copy(
                 isFocusLocation = value
             )
         }
 
         if (value) {
-            updateCameraPosition(_mapUiState.value.currentPosition)
+            updateCameraPosition(uiState.value.currentPosition)
         }
     }
 
     private fun updateCameraPosition(position: Position?) = viewModelScope.launch {
-        _mapUiState.update {
-            it.copy(
+        updateState {
+            copy(
                 cameraPosition = position
             )
         }
@@ -118,8 +114,8 @@ class MapViewModel (
 
 
     fun getPlaces(cameraState: CameraState) = viewModelScope.launch {
-        _mapUiState.update {
-            it.copy(
+        updateState {
+            copy(
                 isCameraMoving = cameraState.isMoving
             )
         }
@@ -127,90 +123,81 @@ class MapViewModel (
         if (cameraState.isMoving.not()) {
             updateCameraPosition(cameraState.position)
             val latLngBounds = cameraState.contentBounds
-            val request = _mapUiState.value.locationBound.copy(
+            val request = uiState.value.locationBound.copy(
                 neLatitude = latLngBounds.northEast.latitude.toString(),
                 neLongitude = latLngBounds.northEast.longitude.toString(),
                 swLatitude = latLngBounds.southWest.latitude.toString(),
                 swLongitude = latLngBounds.southWest.longitude.toString(),
             )
-            _mapUiState.value.locationBound = request
-            val filter = _mapUiState.value.searchUiState.chipStates.find { it.isSelected }?.type ?: Category.ALL
-            val sortType = _mapUiState.value.searchUiState.sortType
-            val currentLatLng = if (sortType == SortType.NEAR) _mapUiState.value.currentPosition else null
-            when (val result = getReviewedPlacesUseCase(request, currentLatLng, sortType, filter)) {
-                is PResult.Fail -> {
-                    hLog("fail >> ${result.failState}")
-                }
-
-                is PResult.Success -> {
-                    _mapUiState.update {
-                        it.copy(
-                            searchUiState = it.searchUiState.copy(
-                                reviewedPlaces = result.data
-                            ),
+            uiState.value.locationBound = request
+            val filter = uiState.value.searchUiState.chipStates.find { it.isSelected }?.type ?: Category.ALL
+            val sortType = uiState.value.searchUiState.sortType
+            val currentLatLng = if (sortType == SortType.NEAR) uiState.value.currentPosition else null
+            resultResponse(
+                response = getReviewedPlacesUseCase(request, currentLatLng, sortType, filter),
+                successCallback = {
+                    updateState {
+                        copy(
+                            searchUiState = uiState.value.searchUiState.copy(
+                                reviewedPlaces = it
+                            )
                         )
                     }
                 }
-            }
+            )
         } else {
-            if (cameraState.reason == CameraState.Reason.GESTURE && _mapUiState.value.isFocusLocation) {
+            if (cameraState.reason == CameraState.Reason.GESTURE && uiState.value.isFocusLocation) {
                 updateFocusLocation(false)
             }
         }
     }
 
     fun updateChipState(chipState: ChipState) = viewModelScope.launch(Dispatchers.IO) {
-        val request = _mapUiState.value.locationBound
-        val sortType = _mapUiState.value.searchUiState.sortType
-        val currentLatLng = if (sortType == SortType.NEAR) _mapUiState.value.currentPosition else null
-        when (val result = getReviewedPlacesUseCase(request, currentLatLng, sortType, chipState.type)) {
-            is PResult.Fail -> {
-                hLog("fail >> ${result.failState}")
-            }
-
-            is PResult.Success -> {
-                _mapUiState.update {
-                    it.copy(
-                        searchUiState = it.searchUiState.copy(
-                            reviewedPlaces = result.data,
-                            chipStates = _mapUiState.value.searchUiState.chipStates.map { chip ->
+        val request = uiState.value.locationBound
+        val sortType = uiState.value.searchUiState.sortType
+        val currentLatLng = if (sortType == SortType.NEAR) uiState.value.currentPosition else null
+        resultResponse(
+            response = getReviewedPlacesUseCase(request, currentLatLng, sortType, chipState.type),
+            successCallback = {
+                updateState {
+                    copy(
+                        searchUiState = uiState.value.searchUiState.copy(
+                            reviewedPlaces = it,
+                            chipStates = uiState.value.searchUiState.chipStates.map { chip ->
                                 chip.copy(
                                     isSelected = chip == chipState
                                 )
                             }
-                        ),
+                        )
                     )
                 }
             }
-        }
+        )
     }
 
     fun getDetailPlace(kakaoPlaceId: String) = viewModelScope.launch {
-        if (_mapUiState.value.placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId == kakaoPlaceId) return@launch
-        when (val result = getDetailPlaceUseCase(
-            kakaoPlaceId = kakaoPlaceId,
-            currentLatitude = _mapUiState.value.currentPosition?.latitude?.toString(),
-            currentLongitude = _mapUiState.value.currentPosition?.longitude?.toString()
-        )) {
-            is PResult.Fail -> {
-                hLog("fail >> ${result.failState}")
-            }
-
-            is PResult.Success -> {
-                _mapUiState.update {
-                    it.copy(
-                        placeDetailUiState = PlaceDetailUiState(result.data),
-                        cameraPosition = Position(result.data.mapPlace.latitude, result.data.mapPlace.longitude),
+        if (uiState.value.placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId == kakaoPlaceId) return@launch
+        resultResponse(
+            response = getDetailPlaceUseCase(
+                kakaoPlaceId = kakaoPlaceId,
+                currentLatitude = uiState.value.currentPosition?.latitude?.toString(),
+                currentLongitude = uiState.value.currentPosition?.longitude?.toString()
+            ),
+            successCallback = {
+                updateState {
+                    copy(
+                        placeDetailUiState = PlaceDetailUiState(it),
+                        cameraPosition = Position(it.mapPlace.latitude, it.mapPlace.longitude),
                         isFocusLocation = false
                     )
                 }
             }
-        }
+        )
     }
 
     fun clearDetailPlace() = viewModelScope.launch {
-        _mapUiState.update {
-            it.copy(
+        updateState {
+            copy(
                 placeDetailUiState = PlaceDetailUiState()
             )
         }
@@ -223,22 +210,20 @@ class MapViewModel (
             addBookmarkUseCase(kakaoPlaceId)
         }
 
-        when (result) {
-            is PResult.Fail -> {
-                hLog("fail >> ${result.failState}")
-            }
-            is PResult.Success -> {
-                _mapUiState.update {
-                    it.copy(
-                        placeDetailUiState = it.placeDetailUiState.copy(
-                            detailPlace = it.placeDetailUiState.detailPlace?.copy(
-                                mapPlace = it.placeDetailUiState.detailPlace.mapPlace.copy(
-                                   bookmark = it.placeDetailUiState.detailPlace.mapPlace.bookmark.not()
+        resultResponse(
+            response = result,
+            successCallback = {
+                updateState {
+                    copy(
+                        placeDetailUiState = uiState.value.placeDetailUiState.copy(
+                            detailPlace = uiState.value.placeDetailUiState.detailPlace?.copy(
+                                mapPlace = uiState.value.placeDetailUiState.detailPlace!!.mapPlace.copy(
+                                    bookmark = uiState.value.placeDetailUiState.detailPlace!!.mapPlace.bookmark.not()
                                 )
                             )
                         ),
-                        searchUiState = it.searchUiState.copy(
-                            reviewedPlaces = it.searchUiState.reviewedPlaces.map { reviewedPlace ->
+                        searchUiState = uiState.value.searchUiState.copy(
+                            reviewedPlaces = uiState.value.searchUiState.reviewedPlaces.map { reviewedPlace ->
                                 if (reviewedPlace.kakaoPlaceId == kakaoPlaceId) {
                                     reviewedPlace.copy(bookmark = reviewedPlace.bookmark.not())
                                 } else {
@@ -249,33 +234,30 @@ class MapViewModel (
                     )
                 }
             }
-        }
+        )
     }
 
     fun updateSortType(sortType: SortType) = viewModelScope.launch {
-        val request = _mapUiState.value.locationBound
-        val chipState = _mapUiState.value.searchUiState.chipStates.first { it.isSelected }
-        val currentLatLng = if (sortType == SortType.NEAR) _mapUiState.value.currentPosition else null
-        when (val result = getReviewedPlacesUseCase(request, currentLatLng, sortType, chipState.type)) {
-            is PResult.Fail -> {
-                hLog("fail >> ${result.failState}")
-            }
-
-            is PResult.Success -> {
-                _mapUiState.update {
-                    it.copy(
-                        searchUiState = it.searchUiState.copy(
-                            reviewedPlaces = result.data,
+        val request = uiState.value.locationBound
+        val chipState = uiState.value.searchUiState.chipStates.first { it.isSelected }
+        val currentLatLng = if (sortType == SortType.NEAR) uiState.value.currentPosition else null
+        resultResponse(
+            response = getReviewedPlacesUseCase(request, currentLatLng, sortType, chipState.type),
+            successCallback = {
+                updateState {
+                    copy(
+                        searchUiState = uiState.value.searchUiState.copy(
+                            reviewedPlaces = it,
                             sortType = sortType
                         ),
                     )
                 }
             }
-        }
+        )
     }
 
     fun collectPosition() = viewModelScope.launch {
-        if (_mapUiState.value.currentPosition == null) {
+        if (uiState.value.currentPosition == null) {
             hLog("위치 트랙킹 시작")
             locationTracker.startTracking()
         }
@@ -302,7 +284,7 @@ data class MapUiState(
     val currentPosition: Position? = null,
     val cameraPosition: Position? = null,
     val isCameraMoving: Boolean = false,
-)
+) : UiState
 
-sealed interface MapUiEvent {
+sealed interface MapUiEvent : UiEvent {
 }
