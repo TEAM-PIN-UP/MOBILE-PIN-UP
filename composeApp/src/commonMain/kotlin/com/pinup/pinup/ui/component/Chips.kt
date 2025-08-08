@@ -63,14 +63,14 @@ fun Chip(
     ) {
         Row(
             modifier = Modifier
-                .padding(vertical = 11.dp)
-                .padding(horizontal = 12.dp),
+                .padding(vertical = 12.dp)
+                .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             icon?.let {
                 Image(
                     modifier = Modifier
-                        .padding(end = 4.dp),
+                        .padding(end = 6.dp),
                     painter = icon,
                     contentDescription = "chip icon",
                     colorFilter = if (isSelected) ColorFilter.tint(selectedTextColor) else null
