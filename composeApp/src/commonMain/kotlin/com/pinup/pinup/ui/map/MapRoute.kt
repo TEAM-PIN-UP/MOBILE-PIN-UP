@@ -27,6 +27,7 @@ fun MapRoute() {
         cameraPosition = mapUiState.value.cameraPosition,
         isFocusLocation = mapUiState.value.isFocusLocation,
         isShowBookmarks = mapUiState.value.isShowBookmarks,
+        isCameraMoving = mapUiState.value.isCameraMoving,
         onCameraStateChange = mapViewModel::getPlaces,
         onChipClick = mapViewModel::updateChipState,
         onPlaceClick = mapViewModel::getDetailPlace,

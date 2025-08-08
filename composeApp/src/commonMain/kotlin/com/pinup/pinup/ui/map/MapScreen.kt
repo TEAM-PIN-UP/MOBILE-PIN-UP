@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ModalBottomSheetLayout
@@ -66,6 +67,7 @@ fun MapScreen(
     placeDetailUiState: PlaceDetailUiState,
     isFocusLocation: Boolean,
     isShowBookmarks: Boolean,
+    isCameraMoving: Boolean,
     position: Position = Position.INVALID,
     cameraPosition: Position? = null,
     onCameraStateChange: (CameraState) -> Unit = { },
@@ -234,12 +236,13 @@ fun MapScreen(
                             end.linkTo(parent.end)
                         },
                 ) {
+                    // TODO 만약 핀츠가 없다면 해당 컬럼 안보이게
                     Card(
                         modifier = Modifier
                             .clickableWithNoRipple {
                                 onUpdateShowBookmarks()
                             },
-                        shape = RoundedCornerShape(8.dp),
+                        shape = CircleShape,
                         backgroundColor = Colors.White,
                         elevation = 1.dp
                     ) {
@@ -262,7 +265,7 @@ fun MapScreen(
                             .clickableSingleWithNoRipple {
                                 getCurrentLocation()
                             },
-                        shape = RoundedCornerShape(8.dp),
+                        shape = CircleShape,
                         backgroundColor = Colors.White,
                         elevation = 1.dp
                     ) {
@@ -292,6 +295,7 @@ fun MapScreen(
                     onSheetHeightChanged = {
                         bottomSheetHeight = it
                     },
+                    isMoving = isCameraMoving
                 ) {
                     MapBottomSheetNavHost(
                         searchUiState = searchUiState,

@@ -118,6 +118,12 @@ class MapViewModel (
 
 
     fun getPlaces(cameraState: CameraState) = viewModelScope.launch {
+        _mapUiState.update {
+            it.copy(
+                isCameraMoving = cameraState.isMoving
+            )
+        }
+
         if (cameraState.isMoving.not()) {
             updateCameraPosition(cameraState.position)
             val latLngBounds = cameraState.contentBounds
@@ -295,6 +301,7 @@ data class MapUiState(
     val isShowBookmarks: Boolean = false,
     val currentPosition: Position? = null,
     val cameraPosition: Position? = null,
+    val isCameraMoving: Boolean = false,
 )
 
 sealed interface MapUiEvent {

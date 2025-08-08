@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,6 +26,7 @@ import androidx.compose.ui.input.pointer.util.VelocityTracker
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.LocalPlatformContext
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.platform.pxToDp
 import com.pinup.pinup.ui.theme.Colors
 import kotlinx.datetime.Clock
@@ -38,6 +40,7 @@ fun PBottomSheet(
     modifier: Modifier = Modifier,
     pBottomSheetTargetValue: PBottomSheetTargetValue = PBottomSheetTargetValue.HIDDEN,
     onSheetHeightChanged: (Dp) -> Unit = {},
+    isMoving: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     var currentTargetValue by remember { mutableStateOf(pBottomSheetTargetValue) }
@@ -63,6 +66,10 @@ fun PBottomSheet(
         derivedStateOf {
             dragOffset.y < 0
         }
+    }
+
+    LaunchedEffect(isMoving){
+        realHeight = hiddenHeight
     }
 
     Column(
