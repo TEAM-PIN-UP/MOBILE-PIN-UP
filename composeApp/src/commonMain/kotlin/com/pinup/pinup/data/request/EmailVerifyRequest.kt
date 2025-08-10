@@ -10,5 +10,5 @@ data class EmailVerifyRequest(
 
 @Serializable
 data class SendVerifyCodeRequest(
-    val code: String
+    val email: String
 )
