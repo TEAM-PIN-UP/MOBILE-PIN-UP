@@ -10,6 +10,7 @@ import org.koin.dsl.module
 val dataSourceModule = module {
     single<EmailVerifyDataSource> { EmailVerifyDataSourceImpl(get()) }
     single<AuthRemoteDataSource> { AuthRemoteDataSourceImpl(get(), get()) }
+    single<ImageRemoteDataSource> { ImageRemoteDataSourceImpl(get()) }
     single<BookmarksRemoteDataSource> { BookmarksRemoteDataSourceImpl(get()) }
     single<MembersRemoteDataSource> { MembersRemoteDataSourceImpl(get()) }
     single<MembersLocalDataSource> { MembersLocalDataSourceImpl(get()) }
