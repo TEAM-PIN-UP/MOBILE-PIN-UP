@@ -21,6 +21,8 @@ val useCaseModule = module {
     single<GetSentPinBuddyRequestsUseCase> { GetSentPinBuddyRequestsUseCase(get()) }
     single<GetTextReviewsUseCase> { GetTextReviewsUseCase(get()) }
     single<IsLoginUseCase> { IsLoginUseCase(get(), get(), get()) }
+    single<PostEmailVerifyUseCase> { PostEmailVerifyUseCase(get()) }
+    single<PostSendVerifyCodeUseCase> { PostSendVerifyCodeUseCase(get()) }
     single<SocialLoginUseCase> { SocialLoginUseCase(get(), get(), get()) }
     single<EmailLoginUseCase> { EmailLoginUseCase(get(), get(), get()) }
     single<LogoutUseCase> { LogoutUseCase(get(), get()) }
