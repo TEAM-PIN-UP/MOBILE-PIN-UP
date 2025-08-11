@@ -2,8 +2,12 @@ package com.pinup.pinup.ui.signup
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.pinup.pinup.data.request.EmailVerifyRequest
+import com.pinup.pinup.data.request.SendVerifyCodeRequest
 import com.pinup.pinup.domain.model.SignUpInfo
 import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
+import com.pinup.pinup.domain.usecase.PostEmailVerifyUseCase
+import com.pinup.pinup.domain.usecase.PostSendVerifyCodeUseCase
 import com.pinup.pinup.domain.usecase.SignUpUseCase
 import com.pinup.pinup.domain.validator.NickNameValidator
 import com.pinup.pinup.ui.base.BaseViewModel
@@ -25,6 +29,8 @@ import kotlinx.serialization.json.Json
 class SignUpViewModel (
     savedStateHandle: SavedStateHandle,
     private val checkNickNameUseCase: CheckNickNameUseCase,
+    private val sendVerifyCodeUseCase: PostSendVerifyCodeUseCase,
+    private val emailVerifyUseCase: PostEmailVerifyUseCase,
     private val signUpUseCase: SignUpUseCase,
 ) : BaseViewModel<SignUpUiState, SignUpUiEvent>(SignUpUiState()) {
     private val snsUserInfo = Json.decodeFromString<SNSUserInfo>(savedStateHandle.get<String>(SNS_USER_INFO) ?: "")
@@ -68,27 +74,64 @@ class SignUpViewModel (
     }
 
     fun updateEmail(email: String) = viewModelScope.launch {
-        updateState { copy(
-            emailState = uiState.value.emailState.copy(
-                email = email,
-                isEmailValid = true
+        updateState {
+            copy(
+                emailState = uiState.value.emailState.copy(
+                    email = email,
+                    isEmailValid = true
+                )
             )
-        ) }
+        }
     }
 
     fun updateVerificationCode(code: String) = viewModelScope.launch {
-        //TODO 최대 글자 도달시 확인 api 로직 구현 현재는 6자리 시 통과 가능
-        updateState { copy(
-            emailState = uiState.value.emailState.copy(
-                verificationCode = code,
-                emailVerifyType = if(code.length == 6) EmailVerifyType.VERIFIED else EmailVerifyType.NOT_VERIFIED
+        updateState {
+            copy(
+                emailState = uiState.value.emailState.copy(
+                    verificationCode = code
+                )
             )
-        ) }
+        }
+        if (code.length == 6) {
+           verifyEmail()
+        }
+    }
+
+    private fun verifyEmail() = viewModelScope.launch {
+        val request = EmailVerifyRequest(
+            email = uiState.value.emailState.email,
+            code = uiState.value.emailState.verificationCode
+        )
+        resultResponse(
+            response = emailVerifyUseCase(request),
+            successCallback = {
+                handleEmailVerify(EmailVerifyType.VERIFIED)
+            },
+            errorCallback = {
+                handleEmailVerify(EmailVerifyType.NOT_VERIFIED)
+            }
+        )
+    }
+
+    private fun handleEmailVerify(type: EmailVerifyType) {
+        updateState {
+            copy(
+                emailState = emailState.copy(
+                    emailVerifyType = type
+                )
+            )
+        }
     }
 
     fun onClickVerify() = viewModelScope.launch {
         if (isValidEmail()) {
-            //TODO: 이메일 인증 로직 구현
+            val request = SendVerifyCodeRequest(
+                email = uiState.value.emailState.email
+            )
+            resultResponse(
+                response = sendVerifyCodeUseCase(request),
+                successCallback = {}
+            )
         }
     }
 
