@@ -3,9 +3,12 @@ package com.pinup.pinup.ui.map
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -92,14 +95,19 @@ fun MapScreen(
     )
     var parentHeightPx by remember { mutableIntStateOf(0) }
     val parentHeightDp = with(LocalDensity.current) { parentHeightPx.toDp() }
+    var bottomBarHeightPx by remember { mutableIntStateOf(0) }
+    val bottomBarHeightDp = with(LocalDensity.current) { bottomBarHeightPx.toDp() }
+    val statusBarHeightDp = WindowInsets.statusBars
+        .asPaddingValues()
+        .calculateTopPadding()
     val expandedHeight by remember(parentHeightDp) {
         derivedStateOf {
-            parentHeightDp - 62.dp
+            parentHeightDp - 24.dp - bottomBarHeightDp - statusBarHeightDp
         }
     }
     val halfHeight by remember(parentHeightDp) {
         derivedStateOf {
-            parentHeightDp / 2
+            (parentHeightDp - bottomBarHeightDp) / 2
         }
     }
     val hiddenHeight by remember(parentHeightDp) {
@@ -321,11 +329,16 @@ fun MapScreen(
                         )
                     }
 
-                    BottomBar(
-                        selectedMenu = MainDestination.Map,
-                        profileImage = "",
-                        onBottomMenuClick = onClickBottomNav
-                    )
+                    Box(
+                        modifier = Modifier
+                            .onSizeChanged { bottomBarHeightPx = it.height }
+                    ){
+                        BottomBar(
+                            selectedMenu = MainDestination.Map,
+                            profileImage = "",
+                            onBottomMenuClick = onClickBottomNav
+                        )
+                    }
                 }
             }
         }

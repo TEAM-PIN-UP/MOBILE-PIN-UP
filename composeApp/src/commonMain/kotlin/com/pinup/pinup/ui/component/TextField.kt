@@ -105,7 +105,6 @@ fun RoundedTextField(
 
     Box(
         modifier = modifier
-            .height(textFieldHeight.dp)
             .border(
                 width = 1.dp,
                 color = fixedBorderColor ?: textFieldColor,
@@ -119,8 +118,7 @@ fun RoundedTextField(
     ) {
         BasicTextField(
             modifier = Modifier
-                .align(Alignment.Center)
-                .height(textFieldHeight.dp),
+                .align(Alignment.Center),
             value = textFieldValue,
             onValueChange = {
                 if (it.text.length <= textLimit) {
