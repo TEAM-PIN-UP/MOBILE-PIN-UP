@@ -9,6 +9,5 @@ data class SignUpInfo(
     val nickname: String,
     val socialId: String ="",
     val loginType: SNSType,
-    val profileImage: ByteArray,
     val termsOfMarketing: Boolean,
 )

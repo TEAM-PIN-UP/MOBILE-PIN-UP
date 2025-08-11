@@ -37,33 +37,11 @@ class AuthRemoteDataSourceImpl (
         return authApi.logout(access).mapSuccessData()
     }
 
-    override suspend fun socialSignUp(profileImage: ByteArray, request: SocialSignUpRequest): PResult<Unit> {
-        val timeStamp = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).nanosecond
-        val signUpRequestString = Json.encodeToString(request)
-        val multipart = MultiPartFormDataContent(formData {
-            append("signUpRequest", signUpRequestString)
-            append("multipartFile", profileImage, Headers.build {
-                append(HttpHeaders.ContentType, "image/png")
-                append(HttpHeaders.ContentDisposition, "filename=$timeStamp.png")
-            })
-        })
-        return membersApi.socialSignUp(
-            multipart = multipart
-        ).mapSuccessData()
+    override suspend fun socialSignUp(request: SocialSignUpRequest): PResult<Unit> {
+        return membersApi.socialSignUp(request).mapSuccessData()
     }
 
-    override suspend fun emailSignUp(profileImage: ByteArray, request: EmailSignUpRequest): PResult<Unit> {
-        val timeStamp = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).nanosecond
-        val signUpRequestString = Json.encodeToString(request)
-        val multipart = MultiPartFormDataContent(formData {
-            append("signUpRequest", signUpRequestString)
-            append("multipartFile", profileImage, Headers.build {
-                append(HttpHeaders.ContentType, "image/png")
-                append(HttpHeaders.ContentDisposition, "filename=$timeStamp.png")
-            })
-        })
-        return membersApi.emailSignUp(
-            multipart = multipart
-        ).mapSuccessData()
+    override suspend fun emailSignUp(request: EmailSignUpRequest): PResult<Unit> {
+        return membersApi.emailSignUp(request).mapSuccessData()
     }
 }

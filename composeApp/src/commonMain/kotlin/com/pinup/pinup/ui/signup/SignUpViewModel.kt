@@ -253,7 +253,6 @@ class SignUpViewModel (
             name = uiState.value.name,
             loginType = uiState.value.snsType,
             termsOfMarketing = uiState.value.termsOfServiceState.isMarketingAgreeAgree,
-            profileImage = uiState.value.profileUrl
         )
         resultResponse(
             response = socialSignUpUseCase(request),
@@ -269,7 +268,6 @@ class SignUpViewModel (
             name = uiState.value.name,
             loginType = uiState.value.snsType,
             termsOfMarketing = uiState.value.termsOfServiceState.isMarketingAgreeAgree,
-            profileImage = uiState.value.profileUrl
         )
         resultResponse(
             response = emailSignUpUseCase(request),

@@ -36,7 +36,6 @@ class AuthRepositoryImpl (
 
     override suspend fun socialSignUp(signUpInfo: SignUpInfo): PResult<Unit> {
         return authRemoteDataSource.socialSignUp(
-            profileImage = signUpInfo.profileImage,
             request = SocialSignUpRequest(
                 name = signUpInfo.name,
                 nickname = signUpInfo.nickname,
@@ -50,7 +49,6 @@ class AuthRepositoryImpl (
 
     override suspend fun emailSignUp(signUpInfo: SignUpInfo): PResult<Unit> {
         return authRemoteDataSource.emailSignUp(
-            profileImage = signUpInfo.profileImage,
             request = EmailSignUpRequest(
                 email = signUpInfo.email,
                 name = signUpInfo.name,
