@@ -22,4 +22,10 @@ object ApiPath {
         const val VERIFY_CODE = "$EMAIL/verify-code"
         const val SEND_CODE = "$EMAIL/send-code"
     }
+
+    object ImagePath {
+        private const val IMAGE = "api/{type}"
+        const val SEVERAL_IMAGE = "$IMAGE/IMAGES"
+        const val ONE_IMAGE = "$IMAGE/IMAGE"
+    }
 }

@@ -8,7 +8,6 @@ import com.pinup.pinup.domain.model.SignUpInfo
 import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
 import com.pinup.pinup.domain.usecase.PostEmailVerifyUseCase
 import com.pinup.pinup.domain.usecase.PostSendVerifyCodeUseCase
-import com.pinup.pinup.domain.usecase.SignUpUseCase
 import com.pinup.pinup.domain.usecase.EmailSignUpUseCase
 import com.pinup.pinup.domain.usecase.SocialSignUpUseCase
 import com.pinup.pinup.domain.validator.NickNameValidator
