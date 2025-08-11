@@ -154,7 +154,7 @@ fun MapBottomSheetSearchScreen(
                     .padding(top = 80.dp)
                     .fillMaxWidth()
                     .background(color = Colors.White),
-                text = "근처에 리뷰 있는\n가게가 없어요!",
+                text = Texts.PinMap.EMPTY_PINLOG,
                 color = Colors.Neutral500,
                 style = Typography.C2,
                 textAlign = TextAlign.Center
