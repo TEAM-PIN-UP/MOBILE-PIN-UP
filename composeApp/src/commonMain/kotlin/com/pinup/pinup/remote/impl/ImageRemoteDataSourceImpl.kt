@@ -34,7 +34,7 @@ class ImageRemoteDataSourceImpl (
         ).mapSuccessData()
     }
 
-    override suspend fun sendVerifyCode(
+    override suspend fun uploadImage(
         type: String,
         image: ByteArray
     ): PResult<Unit> {
