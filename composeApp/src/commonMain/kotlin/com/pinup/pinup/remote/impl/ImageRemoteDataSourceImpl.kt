@@ -1,6 +1,7 @@
 package com.pinup.pinup.remote.impl
 
 import com.pinup.pinup.data.remote.ImageRemoteDataSource
+import com.pinup.pinup.domain.model.ImageUploadType
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.remote.api.ImageApi
@@ -16,7 +17,7 @@ class ImageRemoteDataSourceImpl (
     private val imageApi: ImageApi
 ): ImageRemoteDataSource {
     override suspend fun uploadSeveralImages(
-        type: String,
+        type: ImageUploadType,
         files: List<ByteArray>
     ): PResult<Unit> {
         val timeStamp = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).nanosecond
@@ -29,13 +30,13 @@ class ImageRemoteDataSourceImpl (
             }
         })
         return imageApi.uploadSeveralImages(
-            type = type,
+            type = type.request,
             multipart = multipart
         ).mapSuccessData()
     }
 
     override suspend fun uploadImage(
-        type: String,
+        type: ImageUploadType,
         image: ByteArray
     ): PResult<Unit> {
         val timeStamp = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).nanosecond
@@ -46,7 +47,7 @@ class ImageRemoteDataSourceImpl (
             })
         })
         return imageApi.uploadSeveralImages(
-            type = type,
+            type = type.request,
             multipart = multipart
         ).mapSuccessData()
     }
