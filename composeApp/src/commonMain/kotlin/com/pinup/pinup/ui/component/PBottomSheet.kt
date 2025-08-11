@@ -41,6 +41,7 @@ fun PBottomSheet(
     pBottomSheetTargetValue: PBottomSheetTargetValue = PBottomSheetTargetValue.HIDDEN,
     onSheetHeightChanged: (Dp) -> Unit = {},
     isMoving: Boolean = false,
+    isFocusSearch: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     var currentTargetValue by remember { mutableStateOf(pBottomSheetTargetValue) }
@@ -70,6 +71,10 @@ fun PBottomSheet(
 
     LaunchedEffect(isMoving){
         realHeight = hiddenHeight
+    }
+
+    LaunchedEffect(isFocusSearch){
+        realHeight = expandedHeight
     }
 
     Column(

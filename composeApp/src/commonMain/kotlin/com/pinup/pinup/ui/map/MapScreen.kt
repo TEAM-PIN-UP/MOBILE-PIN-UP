@@ -83,6 +83,7 @@ fun MapScreen(
     onUpdatePosition: () -> Unit = {},
     onUpdateShowBookmarks: () -> Unit = {},
     onUpdateFocusLocation: (Boolean) -> Unit = {},
+    onFocusChange: (Boolean) -> Unit = {},
     onClickBottomNav: (MainDestination) -> Unit
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
@@ -93,7 +94,7 @@ fun MapScreen(
     val parentHeightDp = with(LocalDensity.current) { parentHeightPx.toDp() }
     val expandedHeight by remember(parentHeightDp) {
         derivedStateOf {
-            parentHeightDp - 28.dp
+            parentHeightDp - 62.dp
         }
     }
     val halfHeight by remember(parentHeightDp) {
@@ -301,7 +302,8 @@ fun MapScreen(
                         onSheetHeightChanged = {
                             bottomSheetHeight = it
                         },
-                        isMoving = isCameraMoving
+                        isMoving = isCameraMoving,
+                        isFocusSearch = searchUiState.isFocus
                     ) {
                         MapBottomSheetNavHost(
                             searchUiState = searchUiState,
@@ -314,7 +316,8 @@ fun MapScreen(
                             },
                             onClearDetailPlace = onClearDetailPlace,
                             onUpdateBookmark = onUpdateBookmark,
-                            onSelectSortTypeClick = { scope.launch { sheetState.show() } }
+                            onSelectSortTypeClick = { scope.launch { sheetState.show() } },
+                            onFocusChange = onFocusChange
                         )
                     }
 

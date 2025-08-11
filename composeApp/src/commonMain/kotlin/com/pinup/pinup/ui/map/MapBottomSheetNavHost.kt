@@ -23,6 +23,7 @@ fun MapBottomSheetNavHost(
     onClearDetailPlace: () -> Unit = {},
     onUpdateBookmark: (String, Boolean) -> Unit = { _, _ -> },
     onSelectSortTypeClick: () -> Unit = {},
+    onFocusChange: (Boolean) -> Unit,
     navHostController: NavHostController = rememberNavController()
 ) {
     LaunchedEffect(placeDetailUiState.detailPlace) {
@@ -53,7 +54,8 @@ fun MapBottomSheetNavHost(
                 onPlaceClick = {
                     onPlaceClick(it)
                 },
-                onSelectSortTypeClick = onSelectSortTypeClick
+                onSelectSortTypeClick = onSelectSortTypeClick,
+                onFocusChange = onFocusChange
             )
         }
 

@@ -273,13 +273,24 @@ class MapViewModel (
             }
         }
     }
+
+    fun updateFocusSearch(focus: Boolean) {
+        updateState {
+            copy(
+                searchUiState = searchUiState.copy(
+                    isFocus = focus
+                )
+            )
+        }
+    }
 }
 
 data class SearchUiState(
     val query: String = "",
     val chipStates: List<ChipState> = ChipState.default,
     val sortType: SortType = SortType.LATEST,
-    val reviewedPlaces: List<ReviewedPlace> = emptyList()
+    val reviewedPlaces: List<ReviewedPlace> = emptyList(),
+    val isFocus: Boolean = false
 )
 
 data class PlaceDetailUiState(

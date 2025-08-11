@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.Chips
 import com.pinup.pinup.ui.component.ReviewedPlaceCard
 import com.pinup.pinup.ui.component.RoundedTextField
@@ -62,7 +63,8 @@ fun MapBottomSheetSearchScreen(
     onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
     onPlaceClick: (ReviewedPlace) -> Unit = {},
-    onSelectSortTypeClick: () -> Unit = {}
+    onSelectSortTypeClick: () -> Unit = {},
+    onFocusChange: (Boolean) -> Unit ={},
 ) {
     val scrollState = rememberLazyListState()
     var dragOffset by remember {
@@ -113,6 +115,7 @@ fun MapBottomSheetSearchScreen(
             ),
             fixedBorderColor = Colors.Transparency,
             backgroundColor = Colors.Gray50,
+            onFocusChange = onFocusChange
         )
 
         Row(
