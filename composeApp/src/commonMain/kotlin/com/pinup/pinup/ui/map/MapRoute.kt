@@ -3,6 +3,7 @@ package com.pinup.pinup.ui.map
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.pinup.domain.model.Position
+import com.pinup.pinup.ui.main.compose.MainDestination
 import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
 import dev.icerock.moko.geo.compose.LocationTrackerAccuracy
 import dev.icerock.moko.geo.compose.LocationTrackerFactory
@@ -11,7 +12,9 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun MapRoute() {
+fun MapRoute(
+    onBottomMenuClick: (MainDestination) -> Unit
+) {
     val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
         accuracy = LocationTrackerAccuracy.Best
     )
@@ -28,6 +31,8 @@ fun MapRoute() {
         isFocusLocation = mapUiState.value.isFocusLocation,
         isShowBookmarks = mapUiState.value.isShowBookmarks,
         isCameraMoving = mapUiState.value.isCameraMoving,
+        profileImage = mapUiState.value.profileImage,
+        onClickBottomNav = onBottomMenuClick,
         onCameraStateChange = mapViewModel::getPlaces,
         onChipClick = mapViewModel::updateChipState,
         onValueChange = mapViewModel::updateSearchText,

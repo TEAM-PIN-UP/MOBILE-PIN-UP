@@ -37,9 +37,11 @@ import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.platform.PlatformNaverMap
 import com.pinup.pinup.platform.hLog
+import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.PBottomSheet
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.component.SortBottomSheet
+import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.model.ChipState
 import com.pinup.pinup.ui.theme.Colors
 import dev.icerock.moko.permissions.DeniedAlwaysException
@@ -68,6 +70,7 @@ fun MapScreen(
     isFocusLocation: Boolean,
     isShowBookmarks: Boolean,
     isCameraMoving: Boolean,
+    profileImage: String,
     position: Position = Position.INVALID,
     cameraPosition: Position? = null,
     onCameraStateChange: (CameraState) -> Unit = { },
@@ -80,6 +83,7 @@ fun MapScreen(
     onUpdatePosition: () -> Unit = {},
     onUpdateShowBookmarks: () -> Unit = {},
     onUpdateFocusLocation: (Boolean) -> Unit = {},
+    onClickBottomNav: (MainDestination) -> Unit
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -283,32 +287,41 @@ fun MapScreen(
                     }
                 }
 
-                PBottomSheet(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .constrainAs(sheet) {
                             bottom.linkTo(parent.bottom)
-                        },
-                    expandedHeight = expandedHeight,
-                    halfHeight = halfHeight,
-                    hiddenHeight = hiddenHeight,
-                    onSheetHeightChanged = {
-                        bottomSheetHeight = it
-                    },
-                    isMoving = isCameraMoving
+                        }
                 ) {
-                    MapBottomSheetNavHost(
-                        searchUiState = searchUiState,
-                        placeDetailUiState = placeDetailUiState,
-                        isScrollable = alpha == 0f,
-                        onValueChange = onValueChange,
-                        onChipClick = onChipClick,
-                        onPlaceClick = {
-                            onPlaceClick(it.kakaoPlaceId)
+                    PBottomSheet(
+                        expandedHeight = expandedHeight,
+                        halfHeight = halfHeight,
+                        hiddenHeight = hiddenHeight,
+                        onSheetHeightChanged = {
+                            bottomSheetHeight = it
                         },
-                        onClearDetailPlace = onClearDetailPlace,
-                        onUpdateBookmark = onUpdateBookmark,
-                        onSelectSortTypeClick = { scope.launch { sheetState.show() } }
+                        isMoving = isCameraMoving
+                    ) {
+                        MapBottomSheetNavHost(
+                            searchUiState = searchUiState,
+                            placeDetailUiState = placeDetailUiState,
+                            isScrollable = alpha == 0f,
+                            onValueChange = onValueChange,
+                            onChipClick = onChipClick,
+                            onPlaceClick = {
+                                onPlaceClick(it.kakaoPlaceId)
+                            },
+                            onClearDetailPlace = onClearDetailPlace,
+                            onUpdateBookmark = onUpdateBookmark,
+                            onSelectSortTypeClick = { scope.launch { sheetState.show() } }
+                        )
+                    }
+
+                    BottomBar(
+                        selectedMenu = MainDestination.Map,
+                        profileImage = "",
+                        onBottomMenuClick = onClickBottomNav
                     )
                 }
             }

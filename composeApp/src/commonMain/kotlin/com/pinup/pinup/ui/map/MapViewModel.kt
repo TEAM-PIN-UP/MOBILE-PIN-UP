@@ -1,18 +1,17 @@
 package com.pinup.pinup.ui.map
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.LocationBound
-import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.domain.usecase.AddBookmarkUseCase
 import com.pinup.pinup.domain.usecase.DeleteBookmarkUseCase
 import com.pinup.pinup.domain.usecase.GetDetailPlaceUseCase
+import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.pinup.domain.usecase.GetReviewedPlacesUseCase
 import com.pinup.pinup.event.DetailPlaceEventBus
 import com.pinup.pinup.platform.hLog
@@ -21,22 +20,12 @@ import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
 import com.pinup.pinup.ui.model.ChipState
 import dev.icerock.moko.geo.LocationTracker
-import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
@@ -45,11 +34,13 @@ class MapViewModel (
     private val getDetailPlaceUseCase: GetDetailPlaceUseCase,
     private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
+    private val getMyProfileUseCase: GetMyProfileUseCase,
     val locationTracker: LocationTracker
 ) : BaseViewModel<MapUiState, MapUiEvent>(MapUiState()) {
     init {
         initDetailPlaceEventBus()
         initCollectLocation()
+        getMyProfileImage()
     }
 
     private fun initCollectLocation() = viewModelScope.launch {
@@ -272,6 +263,16 @@ class MapViewModel (
             locationTracker.startTracking()
         }
     }
+
+    private fun getMyProfileImage() = viewModelScope.launch {
+        getMyProfileUseCase().collectLatest {
+            updateState {
+                copy(
+                    profileImage = it.profileUrl
+                )
+            }
+        }
+    }
 }
 
 data class SearchUiState(
@@ -294,6 +295,7 @@ data class MapUiState(
     val currentPosition: Position? = null,
     val cameraPosition: Position? = null,
     val isCameraMoving: Boolean = false,
+    val profileImage: String = "",
 ) : UiState
 
 sealed interface MapUiEvent : UiEvent {

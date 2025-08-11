@@ -55,7 +55,21 @@ fun MainNavHost(
             exitTransition = { ExitTransition.None }
         ) {
             composable<MainDestination.Map> {
-                MapRoute()
+                MapRoute(
+                    onBottomMenuClick = {
+                        if (MainDestination.Upload == it) {
+                            onMoveWriteReview()
+                        } else {
+                            navHostController.navigate(it) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
+                        }
+                    }
+                )
             }
 
             composable<MainDestination.Feed> {
@@ -74,24 +88,6 @@ fun MainNavHost(
                 )
             }
         }
-
-        BottomBar(
-            selectedMenu = selectedMenuBar.value,
-            profileImage = uiState.value.profileImage,
-            onBottomMenuClick = {
-                if (MainDestination.Upload == it) {
-                    onMoveWriteReview()
-                } else {
-                    navHostController.navigate(it) {
-                        launchSingleTop = true
-                        restoreState = true
-                        popUpTo(navHostController.graph.startDestinationId) {
-                            saveState = true
-                        }
-                    }
-                }
-            }
-        )
     }
 }
 
