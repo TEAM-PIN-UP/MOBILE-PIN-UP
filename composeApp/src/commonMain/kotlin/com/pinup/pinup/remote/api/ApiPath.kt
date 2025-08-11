@@ -8,3 +8,9 @@ object AuthPath{
     const val LOGOUT = "$AUTH/logout"
 
 }
+
+object MailPath {
+    private const val EMAIL = "api/mail"
+    const val VERIFY_CODE = "$EMAIL/verify-code"
+    const val SEND_CODE = "$EMAIL/send-code"
+}
