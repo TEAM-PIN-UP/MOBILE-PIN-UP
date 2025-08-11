@@ -106,6 +106,7 @@ fun MapBottomSheetSearchScreen(
             placeholderStyle = Typography.T2.copy(
                 fontWeight = FontWeight.Medium
             ),
+            placeholderTextColor = Colors.Gray400,
             cornerRounded = 100,
             leadingIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_search_back) else painterResource(
                 Res.drawable.ic_search
@@ -163,7 +164,7 @@ fun MapBottomSheetSearchScreen(
             LazyColumn(
                 modifier = Modifier
                     .background(
-                        color = Colors.Neutral50
+                        color = Colors.Gray50
                     )
                     .pointerInput(Unit) {
                         awaitPointerEventScope {

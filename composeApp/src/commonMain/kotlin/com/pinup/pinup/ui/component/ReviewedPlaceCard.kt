@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -44,109 +46,114 @@ fun ReviewedPlaceCard(
                 onItemClick()
             }
     ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 20.dp)
-        ) {
-            Column {
-                Text(
-                    text = name,
-                    style = Typography.H3,
-                    color = Colors.Neutral800
-                )
-
-                Row(
-                    modifier = Modifier
-                        .padding(top = 6.5.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(Res.drawable.ic_star),
-                        contentDescription = "rating"
-                    )
-
-                    Text(
-                        modifier = Modifier
-                            .padding(start = 2.dp),
-                        text = rating.toString(),
-                        style = Typography.H4,
-                        color = Colors.Neutral800
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .padding(top = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    distance?.let {
-                        Text(
-                            modifier = Modifier
-                                .padding(end = 6.dp),
-                            text = it,
-                            style = Typography.B4,
-                            color = Colors.Neutral500
-                        )
-                    }
-                    Text(
-                        text = "리뷰 $reviewCount",
-                        style = Typography.B4,
-                        color = Colors.Neutral700
-                    )
-                }
-            }
-
-            Spacer(Modifier.weight(1f))
-
-            Row {
-                LazyRow {
-                    itemsIndexed(reviewerProfileImageUrls) { index, item ->
-                        if (index == 3) {
-                            ReviewedProfileImageView(
-                                modifier = Modifier
-                                    .offset(x = (((reviewerProfileImageUrls.size - 1) - index) * 5).dp),
-                            ) {
-                                Row(
-                                    modifier = Modifier
-                                        .align(Alignment.Center),
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Image(
-                                        painter = painterResource(Res.drawable.ic_plus),
-                                        contentDescription = null
-                                    )
-
-                                    Text(
-                                        modifier = Modifier
-                                            .padding(start = 1.dp),
-                                        text = (reviewerProfileImageUrls.size - 3).toString(),
-                                        color = Colors.White,
-                                        fontWeight = FontWeight.W500
-                                    )
-                                }
-                            }
-                            return@itemsIndexed
-                        } else {
-                            ReviewedProfileImageView(
-                                modifier = Modifier
-                                    .offset(x = (((reviewerProfileImageUrls.size - 1) - index) * 5).dp),
-                                imgUrl = item
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
         LazyRow(
             modifier = Modifier
-                .padding(top = 16.dp)
+                .padding(top = 20.dp)
                 .padding(start = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(reviewImageUrls) {
                 ReviewImage(
                     imgUrl = it
                 )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = name,
+                style = Typography.B1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray800
+            )
+
+            Spacer(modifier = Modifier.width(6.dp))
+
+            distance?.let {
+                Text(
+                    modifier = Modifier
+                        .padding(end = 6.dp),
+                    text = it,
+                    style = Typography.B4,
+                    color = Colors.Gray400
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(5.dp))
+
+        Row(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.ic_star),
+                contentDescription = "rating"
+            )
+
+            Spacer(modifier = Modifier.width(2.dp))
+
+            Text(
+                text = rating.toString(),
+                style = Typography.B2.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Colors.Gray800
+            )
+
+            Spacer(modifier = Modifier.width(2.dp))
+
+            Text(
+                text = "($reviewCount)",
+                style = Typography.L1.copy(
+                    fontWeight = FontWeight.Normal
+                ),
+                color = Colors.Gray500
+            )
+
+            Spacer(Modifier.weight(1f))
+
+            LazyRow {
+                itemsIndexed(reviewerProfileImageUrls) { index, item ->
+                    if (index == 3) {
+                        ReviewedProfileImageView(
+                            modifier = Modifier
+                                .offset(x = (((reviewerProfileImageUrls.size - 1) - index) * 5).dp),
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .align(Alignment.Center),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Image(
+                                    painter = painterResource(Res.drawable.ic_plus),
+                                    contentDescription = null
+                                )
+
+                                Text(
+                                    modifier = Modifier
+                                        .padding(start = 1.dp),
+                                    text = (reviewerProfileImageUrls.size - 3).toString(),
+                                    color = Colors.White,
+                                    fontWeight = FontWeight.W500
+                                )
+                            }
+                        }
+                        return@itemsIndexed
+                    } else {
+                        ReviewedProfileImageView(
+                            modifier = Modifier
+                                .offset(x = (((reviewerProfileImageUrls.size - 1) - index) * 5).dp),
+                            imgUrl = item
+                        )
+                    }
+                }
             }
         }
     }
