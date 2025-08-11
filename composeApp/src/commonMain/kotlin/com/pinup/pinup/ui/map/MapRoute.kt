@@ -29,7 +29,7 @@ fun MapRoute(
         position = mapUiState.value.currentPosition ?: Position.INVALID,
         cameraPosition = mapUiState.value.cameraPosition,
         isFocusLocation = mapUiState.value.isFocusLocation,
-        isShowBookmarks = mapUiState.value.isShowBookmarks,
+        isShowPinch = mapUiState.value.isShowBookmarks,
         isCameraMoving = mapUiState.value.isCameraMoving,
         profileImage = mapUiState.value.profileImage,
         onClickBottomNav = onBottomMenuClick,

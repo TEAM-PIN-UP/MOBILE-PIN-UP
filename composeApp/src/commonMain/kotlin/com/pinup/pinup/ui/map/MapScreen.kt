@@ -58,9 +58,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_feed_off
-import pinup.composeapp.generated.resources.ic_feed_on
 import pinup.composeapp.generated.resources.ic_focus
+import pinup.composeapp.generated.resources.ic_pinch_off
+import pinup.composeapp.generated.resources.ic_pinch_on
 
 @Composable
 fun MapScreen(
@@ -68,7 +68,7 @@ fun MapScreen(
     searchUiState: SearchUiState,
     placeDetailUiState: PlaceDetailUiState,
     isFocusLocation: Boolean,
-    isShowBookmarks: Boolean,
+    isShowPinch: Boolean,
     isCameraMoving: Boolean,
     profileImage: String,
     position: Position = Position.INVALID,
@@ -220,7 +220,7 @@ fun MapScreen(
                 position = position,
                 searchUiState = searchUiState,
                 placeDetailUiState = placeDetailUiState,
-                isShowBookmarks = isShowBookmarks,
+                isShowBookmarks = isShowPinch,
                 cameraPosition = cameraPosition,
                 onPlaceClick = onPlaceClick,
                 onCameraStateChange = onCameraStateChange
@@ -254,10 +254,10 @@ fun MapScreen(
                             modifier = Modifier
                                 .padding(10.dp)
                                 .size(20.dp),
-                            painter = if (isShowBookmarks) {
-                                painterResource(Res.drawable.ic_feed_on)
+                            painter = if (isShowPinch) {
+                                painterResource(Res.drawable.ic_pinch_on)
                             } else {
-                                painterResource(Res.drawable.ic_feed_off)
+                                painterResource(Res.drawable.ic_pinch_off)
                             },
                             contentDescription = "bookmark filter"
                         )
