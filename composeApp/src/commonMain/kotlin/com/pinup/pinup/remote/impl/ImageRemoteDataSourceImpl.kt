@@ -46,7 +46,7 @@ class ImageRemoteDataSourceImpl (
                 append(HttpHeaders.ContentDisposition, "filename=$timeStamp.png")
             })
         })
-        return imageApi.uploadSeveralImages(
+        return imageApi.uploadImage(
             type = type.request,
             multipart = multipart
         ).mapSuccessData()

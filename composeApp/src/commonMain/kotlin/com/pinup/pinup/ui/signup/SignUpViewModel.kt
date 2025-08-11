@@ -4,11 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.data.request.EmailVerifyRequest
 import com.pinup.pinup.data.request.SendVerifyCodeRequest
+import com.pinup.pinup.domain.model.ImageUploadType
 import com.pinup.pinup.domain.model.SignUpInfo
 import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
 import com.pinup.pinup.domain.usecase.PostEmailVerifyUseCase
 import com.pinup.pinup.domain.usecase.PostSendVerifyCodeUseCase
 import com.pinup.pinup.domain.usecase.EmailSignUpUseCase
+import com.pinup.pinup.domain.usecase.PostImageUploadUseCase
 import com.pinup.pinup.domain.usecase.SocialSignUpUseCase
 import com.pinup.pinup.domain.validator.NickNameValidator
 import com.pinup.pinup.ui.base.BaseViewModel
@@ -33,7 +35,8 @@ class SignUpViewModel (
     private val sendVerifyCodeUseCase: PostSendVerifyCodeUseCase,
     private val emailVerifyUseCase: PostEmailVerifyUseCase,
     private val socialSignUpUseCase: SocialSignUpUseCase,
-    private val emailSignUpUseCase: EmailSignUpUseCase
+    private val emailSignUpUseCase: EmailSignUpUseCase,
+    private val uploadImageUploadUseCase: PostImageUploadUseCase
 ) : BaseViewModel<SignUpUiState, SignUpUiEvent>(SignUpUiState()) {
     private val snsUserInfo = Json.decodeFromString<SNSUserInfo>(savedStateHandle.get<String>(SNS_USER_INFO) ?: "")
     private val query = MutableStateFlow("")
@@ -191,7 +194,8 @@ class SignUpViewModel (
 
 
     private fun checkNickName(nickname: String) = viewModelScope.launch {
-        resultResponse(checkNickNameUseCase(nickname), ::handleSuccessCheckNickName)
+        handleSuccessCheckNickName(false)
+        //resultResponse(checkNickNameUseCase(nickname), ::handleSuccessCheckNickName)
     }
 
     private fun handleSuccessCheckNickName(isNicknameUsed: Boolean) {
@@ -238,7 +242,7 @@ class SignUpViewModel (
     }
 
     fun signUp() {
-        if (uiState.value.snsType == SNSType.EMAIL) {
+        if (uiState.value.snsType == SNSType.PINUP) {
             emailSignUp()
         } else {
             socialSignUp()
@@ -256,7 +260,7 @@ class SignUpViewModel (
         )
         resultResponse(
             response = socialSignUpUseCase(request),
-            successCallback = { emitEvent(SignUpUiEvent.MoveMain) }
+            successCallback = { uploadProfileImage() }
         )
     }
 
@@ -265,12 +269,23 @@ class SignUpViewModel (
             email = uiState.value.emailState.email,
             nickname = uiState.value.nicknameState.nickname,
             password = uiState.value.passwordState.password,
-            name = uiState.value.name,
+            name = uiState.value.nicknameState.nickname,
             loginType = uiState.value.snsType,
             termsOfMarketing = uiState.value.termsOfServiceState.isMarketingAgreeAgree,
         )
         resultResponse(
             response = emailSignUpUseCase(request),
+            successCallback = { uploadProfileImage() }
+        )
+    }
+
+    private fun uploadProfileImage() = viewModelScope.launch {
+        if(uiState.value.profileUrl.isEmpty()) {
+            emitEvent(SignUpUiEvent.MoveMain)
+            return@launch
+        }
+        resultResponse(
+            response = uploadImageUploadUseCase(ImageUploadType.PROFILES, uiState.value.profileUrl),
             successCallback = { emitEvent(SignUpUiEvent.MoveMain) }
         )
     }

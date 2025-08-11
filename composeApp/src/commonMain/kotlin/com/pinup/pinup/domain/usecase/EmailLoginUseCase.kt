@@ -6,7 +6,6 @@ import com.pinup.pinup.domain.model.TokenInfo
 import com.pinup.pinup.domain.model.UserInfo
 import com.pinup.pinup.domain.repository.AuthRepository
 import com.pinup.pinup.ui.login.model.SNSType
-import com.pinup.pinup.ui.login.model.SNSUserInfo
 
 class EmailLoginUseCase (
     private val authRepository: AuthRepository,
@@ -24,7 +23,7 @@ class EmailLoginUseCase (
                         name = result.data.memberResponse.name,
                         nickname = result.data.memberResponse.nickname,
                         profileUrl = result.data.memberResponse.profilePictureUrl ?: "",
-                        snsType = SNSType.EMAIL
+                        snsType = SNSType.PINUP
                     )
                 )
                 saveTokenUseCase(

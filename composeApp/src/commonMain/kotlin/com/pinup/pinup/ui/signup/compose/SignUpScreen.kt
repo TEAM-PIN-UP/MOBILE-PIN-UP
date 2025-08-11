@@ -49,7 +49,7 @@ fun SignUpScreen(
     ) {
         NavHost(
             navController = navHostController,
-            startDestination = if(snsType == SNSType.EMAIL) SignUpDestination.InputEmail else SignUpDestination.Terms,
+            startDestination = if(snsType == SNSType.PINUP) SignUpDestination.InputEmail else SignUpDestination.Terms,
         ) {
             composable<SignUpDestination.InputEmail>(
                 enterTransition = {

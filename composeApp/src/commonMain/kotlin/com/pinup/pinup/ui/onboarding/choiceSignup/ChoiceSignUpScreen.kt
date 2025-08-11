@@ -100,7 +100,7 @@ fun ChoiceSignUpScreen(
                 .padding(horizontal = 20.dp)
                 .fillMaxWidth()
                 .clickableSingleWithNoRipple {
-                    onClickSnsLogin(SNSType.EMAIL)
+                    onClickSnsLogin(SNSType.PINUP)
                 },
             painter = painterResource(Res.drawable.ic_email_login),
             contentDescription = null
