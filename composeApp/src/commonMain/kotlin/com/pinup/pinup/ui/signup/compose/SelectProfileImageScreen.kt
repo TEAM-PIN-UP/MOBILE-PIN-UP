@@ -28,6 +28,7 @@ import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.text.font.FontWeight
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Texts
 
@@ -66,8 +67,10 @@ fun SelectProfileImageScreen(
 
         Text(
             text = if (profileImage.isEmpty()) Texts.SignupProfile.PROFILE_TITLE else Texts.SignupProfile.PROFILE_REGISTER,
-            style = Typography.H0,
-            color = Colors.Black
+            style = Typography.D2.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = Colors.Gray800
         )
 
         Spacer(modifier = Modifier.height(107.dp))
@@ -103,8 +106,10 @@ fun SelectProfileImageScreen(
             Text(
                 modifier = Modifier.padding(top = 16.dp),
                 text = nickname,
-                style = Typography.B3,
-                color = Colors.Neutral800
+                style = Typography.B1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Black
             )
         }
 
@@ -132,8 +137,10 @@ fun SelectProfileImageScreen(
                     modifier = Modifier
                         .padding(vertical = 15.dp),
                     text = Texts.Word.SKIP,
-                    style = Typography.H3,
-                    color = Colors.Neutral800
+                    style = Typography.B2.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = Colors.Gray600
                 )
             }
         } else {
