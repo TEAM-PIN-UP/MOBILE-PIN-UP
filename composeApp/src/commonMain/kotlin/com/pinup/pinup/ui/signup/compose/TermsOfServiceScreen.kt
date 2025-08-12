@@ -13,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.PButton
@@ -57,8 +58,10 @@ fun TermsOfServiceScreen(
         Text(
             modifier = Modifier.padding(top = 40.dp),
             text = Texts.SignupTerms.TITLE,
-            style = Typography.H0,
-            color = Colors.Black
+            style = Typography.D2.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = Colors.Gray800
         )
 
         Spacer(modifier = Modifier.height(40.dp))
@@ -173,8 +176,10 @@ fun TermRow(
 
         Text(
             text = text,
-            style = Typography.B2,
-            color = Colors.Neutral500
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.Medium
+            ),
+            color = Colors.Gray500
         )
 
         Spacer(Modifier.weight(1f))
