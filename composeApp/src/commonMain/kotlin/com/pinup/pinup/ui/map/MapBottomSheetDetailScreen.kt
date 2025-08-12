@@ -6,10 +6,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -89,25 +91,27 @@ fun MapBottomSheetDetailScreen(
                     color = Colors.White
                 )
         ) {
-            Box(
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     modifier = Modifier
-                        .align(Alignment.TopStart)
+                        .padding(8.dp)
                         .clickableWithNoRipple {
                             onClearDetailPlace()
                             onBackPressed()
                         },
-                    painter = painterResource(Res.drawable.ic_bottomsheet_back),
+                    painter = painterResource(Res.drawable.ic_back),
                     contentDescription = "bottomsheet back"
                 )
 
+                Spacer(modifier = Modifier.weight(1f))
+
                 RoundedBox(
                     modifier = Modifier
-                        .align(Alignment.TopEnd)
                         .clickableSingleWithNoRipple {
                             onUpdateBookmark(
                                 detailPlace.mapPlace.kakaoPlaceId,
@@ -122,14 +126,34 @@ fun MapBottomSheetDetailScreen(
                             .align(Alignment.Center)
                             .padding(10.dp),
                         painter = if (detailPlace.mapPlace.bookmark) {
-                            painterResource(Res.drawable.ic_feed_on)
+                            painterResource(Res.drawable.ic_bookmark_on)
                         } else {
-                            painterResource(Res.drawable.ic_feed_off)
+                            painterResource(Res.drawable.ic_bookmark_off)
                         },
                         contentDescription = "boomark"
                     )
                 }
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                RoundedBox(
+                    modifier = Modifier
+                        .clickableSingleWithNoRipple {
+                            //onClickPinlog()
+                        },
+                    backgroundColor = Colors.Neutral50,
+                    cornerRounded = 100
+                ) {
+                    Image(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(10.dp),
+                        painter = painterResource(Res.drawable.ic_write_pinlog),
+                        contentDescription = "pinlog"
+                    )
+                }
             }
+
             LazyColumn(
                 modifier = Modifier
                     .pointerInput(Unit) {
