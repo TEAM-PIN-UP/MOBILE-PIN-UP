@@ -61,7 +61,7 @@ fun OnboardingScreen(
                     onClickStart()
                 },
             cornerRounded = 999,
-            backgroundColor = Colors.White,
+            backgroundColor = Colors.Gray50,
         ) {
             Text(
                 modifier = Modifier
@@ -69,7 +69,7 @@ fun OnboardingScreen(
                     .align(Alignment.Center),
                 text = Texts.Word.WORD_START,
                 style = Typography.H4,
-                color = Colors.Neutral800
+                color = Colors.Gray800
             )
         }
 

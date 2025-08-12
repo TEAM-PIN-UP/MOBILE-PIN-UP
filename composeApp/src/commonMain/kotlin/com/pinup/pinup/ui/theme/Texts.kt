@@ -20,7 +20,7 @@ object Texts {
 
     object Onboarding {
         val ONBOARDING_TEXT = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Colors.White)) {
+            withStyle(style = SpanStyle(color = Colors.Gray50)) {
                 append("우리의 로컬 아카이브, ")
             }
             withStyle(style = SpanStyle(color = Colors.Main)) {
