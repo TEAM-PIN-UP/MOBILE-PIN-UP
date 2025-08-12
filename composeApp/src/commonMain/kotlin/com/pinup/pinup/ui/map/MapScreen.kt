@@ -73,6 +73,7 @@ fun MapScreen(
     isFocusLocation: Boolean,
     isShowPinch: Boolean,
     isCameraMoving: Boolean,
+    isDetailClicked: Boolean,
     profileImage: String,
     position: Position = Position.INVALID,
     cameraPosition: Position? = null,
@@ -311,6 +312,7 @@ fun MapScreen(
                             bottomSheetHeight = it
                         },
                         isMoving = isCameraMoving,
+                        isDetailClicked = isDetailClicked,
                         isFocusSearch = searchUiState.isFocus
                     ) {
                         MapBottomSheetNavHost(

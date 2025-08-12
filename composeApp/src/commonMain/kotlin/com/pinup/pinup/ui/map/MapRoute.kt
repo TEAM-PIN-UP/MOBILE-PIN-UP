@@ -31,6 +31,7 @@ fun MapRoute(
         isFocusLocation = mapUiState.value.isFocusLocation,
         isShowPinch = mapUiState.value.isShowBookmarks,
         isCameraMoving = mapUiState.value.isCameraMoving,
+        isDetailClicked = mapUiState.value.isDetailClicked,
         profileImage = mapUiState.value.profileImage,
         onClickBottomNav = onBottomMenuClick,
         onCameraStateChange = mapViewModel::getPlaces,

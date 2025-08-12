@@ -189,7 +189,8 @@ class MapViewModel (
                     copy(
                         placeDetailUiState = PlaceDetailUiState(it),
                         cameraPosition = Position(it.mapPlace.latitude, it.mapPlace.longitude),
-                        isFocusLocation = false
+                        isFocusLocation = false,
+                        isDetailClicked = true
                     )
                 }
             }
@@ -199,7 +200,8 @@ class MapViewModel (
     fun clearDetailPlace() = viewModelScope.launch {
         updateState {
             copy(
-                placeDetailUiState = PlaceDetailUiState()
+                placeDetailUiState = PlaceDetailUiState(),
+                isDetailClicked = false
             )
         }
     }
@@ -306,6 +308,7 @@ data class MapUiState(
     val currentPosition: Position? = null,
     val cameraPosition: Position? = null,
     val isCameraMoving: Boolean = false,
+    val isDetailClicked: Boolean = false,
     val profileImage: String = "",
 ) : UiState
 
