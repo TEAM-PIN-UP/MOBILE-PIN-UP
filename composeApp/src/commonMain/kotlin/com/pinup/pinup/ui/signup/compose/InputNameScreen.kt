@@ -13,7 +13,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.pinup.pinup.ui.component.ErrorText
 import com.pinup.pinup.ui.component.PButton
 import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.TitleBar
@@ -22,6 +24,7 @@ import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.ic_check_circle_black
 import pinup.composeapp.generated.resources.ic_error_circle
 import pinup.composeapp.generated.resources.ic_error_circle_red
 
@@ -52,8 +55,10 @@ fun InputNameScreen(
         Text(
             modifier = Modifier.padding(top = 40.dp),
             text = Texts.SignupNickname.NICKNAME_TITLE,
-            style = Typography.H0,
-            color = Colors.Black
+            style = Typography.D2.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = Colors.Gray800
         )
 
         Spacer(modifier = Modifier.height(36.dp))
@@ -61,11 +66,13 @@ fun InputNameScreen(
         Text(
             modifier = Modifier.padding(top = 40.dp),
             text = Texts.SignupNickname.INPUT_NICKNAME,
-            style = Typography.H3,
-            color = Colors.Neutral700
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            color = Colors.Gray700
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(3.dp))
 
         RoundedTextField(
             modifier = Modifier,
@@ -76,28 +83,18 @@ fun InputNameScreen(
             },
             cornerRounded = 100,
             placeholder = Texts.SignupNickname.NICKNAME_HINT,
-            textStyle = Typography.B3,
             isError = isNicknameUsed,
-            unfocusedBorderColor = Colors.Neutral200,
+            tailIcon = if(isNicknameUsed) null else painterResource(Res.drawable.ic_check_circle_black)
         )
+
+        Spacer(modifier = Modifier.height(4.dp))
 
         Row(
             verticalAlignment = Alignment.CenterVertically
         ){
-            Image(
-                modifier = Modifier.padding(top = 4.dp),
-                painter = painterResource(if(isNicknameUsed) Res.drawable.ic_error_circle_red else Res.drawable.ic_error_circle),
-                contentDescription = null
-            )
-
-            Spacer(modifier = Modifier.width(4.dp))
-
-            Text(
-                modifier = Modifier
-                    .padding(top = 4.dp),
+            ErrorText(
                 text = if (isNicknameUsed) Texts.SignupNickname.DUPLICATE_NICKNAME else Texts.SignupNickname.CONDITION_NICKNAME,
-                style = Typography.B5,
-                color = if (isNicknameUsed) Colors.Error else Colors.Neutral500
+                isNotError = !isNicknameUsed
             )
 
             Spacer(
@@ -107,8 +104,10 @@ fun InputNameScreen(
 
             Text(
                 text = "${nickname.length}/$maxLength",
-                style = Typography.B5,
-                color = if (isNicknameUsed == true) Colors.Error else Colors.Neutral500
+                style = Typography.L1.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = if (isNicknameUsed) Colors.Negative else Colors.Gray500
             )
         }
 

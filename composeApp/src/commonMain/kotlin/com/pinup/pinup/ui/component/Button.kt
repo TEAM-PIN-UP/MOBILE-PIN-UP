@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
@@ -18,7 +19,7 @@ fun PButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val backgroundColor = if (isEnable) Colors.Neutral800 else Colors.Neutral300
+    val backgroundColor = if (isEnable) Colors.Gray800 else Colors.Gray300
     RoundedBox(
         modifier = modifier
             .fillMaxWidth()
@@ -35,7 +36,9 @@ fun PButton(
                 .padding(vertical = 15.dp)
                 .align(Alignment.Center),
             text = text,
-            style = Typography.H4,
+            style = Typography.T2.copy(
+                fontWeight = FontWeight.Bold
+            ),
             color = Colors.White
         )
     }

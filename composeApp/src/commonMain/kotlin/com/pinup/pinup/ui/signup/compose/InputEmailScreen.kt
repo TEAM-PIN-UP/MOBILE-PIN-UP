@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.component.ErrorText
@@ -53,16 +54,20 @@ fun InputEmailScreen(
 
         Text(
             text = Texts.SignupEmail.TITLE,
-            style = Typography.H0,
-            color = Colors.Black
+            style = Typography.D2.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = Colors.Gray800
         )
 
         Spacer(modifier = Modifier.height(31.dp))
 
         Text(
             text = Texts.Word.EMAIL,
-            style = Typography.B2,
-            color = Colors.Neutral700
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            color = Colors.Gray700
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -93,14 +98,16 @@ fun InputEmailScreen(
                                 onClickVerify()
                             },
                         cornerRounded = 100,
-                        backgroundColor = Colors.Neutral800,
+                        backgroundColor = Colors.Gray800,
                     ) {
                         Text(
                             modifier = Modifier
                                 .padding(horizontal = 12.dp, vertical = 6.dp)
                                 .align(Alignment.Center),
                             text = Texts.Word.VERIFY,
-                            style = Typography.B7,
+                            style = Typography.L3.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
                             color = Colors.White
                         )
                     }

@@ -14,18 +14,20 @@ import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.ic_error_circle
 import pinup.composeapp.generated.resources.ic_error_circle_red
 
 @Composable
 fun ErrorText(
-    text : String
+    text : String,
+    isNotError: Boolean = false
 ){
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             modifier = Modifier.padding(top = 4.dp),
-            painter = painterResource(Res.drawable.ic_error_circle_red),
+            painter = painterResource(if(isNotError) Res.drawable.ic_error_circle else Res.drawable.ic_error_circle_red),
             contentDescription = null
         )
 
@@ -36,7 +38,7 @@ fun ErrorText(
                 .padding(top = 4.dp),
             text = text,
             style = Typography.B5,
-            color = Colors.Error
+            color = if(isNotError) Colors.Gray500 else Colors.Negative
         )
     }
 }

@@ -13,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.login.model.SNSType
@@ -42,7 +43,7 @@ fun ChoiceSignUpScreen(
         Text(
             modifier = Modifier,
             text = Texts.Onboarding.ONBOARDING_LOGIN_TITLE,
-            style = Typography.H0
+            style = Typography.D2
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -50,8 +51,10 @@ fun ChoiceSignUpScreen(
         Text(
             modifier = Modifier,
             text = Texts.Onboarding.ONBOARDING_LOGIN_TEXT,
-            style = Typography.B2,
-            color = Colors.Neutral400
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.Medium
+            ),
+            color = Colors.Gray400
         )
 
         Spacer(modifier = Modifier.height(49.dp))
@@ -100,7 +103,7 @@ fun ChoiceSignUpScreen(
                 .padding(horizontal = 20.dp)
                 .fillMaxWidth()
                 .clickableSingleWithNoRipple {
-                    onClickSnsLogin(SNSType.EMAIL)
+                    onClickSnsLogin(SNSType.PINUP)
                 },
             painter = painterResource(Res.drawable.ic_email_login),
             contentDescription = null

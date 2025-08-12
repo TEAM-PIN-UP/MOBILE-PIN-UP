@@ -13,7 +13,7 @@ class FindPasswordViewModel: BaseViewModel<ChangePasswordUiState, UiEvent>(
     ChangePasswordUiState()
 ) {
     companion object {
-        const val RETRY_VERIFICATION_TIME = 7000
+        const val RETRY_VERIFICATION_TIME = 5000
     }
     fun updateEmail(email: String) = viewModelScope.launch {
         updateState {

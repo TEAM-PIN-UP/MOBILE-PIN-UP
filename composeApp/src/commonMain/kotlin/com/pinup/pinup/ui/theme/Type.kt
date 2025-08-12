@@ -14,25 +14,21 @@ private val PretendardStyle = TextStyle(
 
 val Typography = PinUpTypography(
     D1 = PretendardStyle.copy(
-        fontWeight = FontWeight.W700,
         fontSize = 30.sp,
         lineHeight = 40.sp,
         letterSpacing = (-0.02).sp
     ),
     D2 = PretendardStyle.copy(
-        fontWeight = FontWeight.W600,
         fontSize = 24.sp,
         lineHeight = 32.sp,
         letterSpacing = (-0.02).sp
     ),
     T1 = PretendardStyle.copy(
-        fontWeight = FontWeight.W600,
         fontSize = 18.sp,
         lineHeight = 26.sp,
         letterSpacing = (-0.02).sp
     ),
     T2 = PretendardStyle.copy(
-        fontWeight = FontWeight.W700,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = (-0.02).sp
@@ -80,19 +76,16 @@ val Typography = PinUpTypography(
         letterSpacing = (-0.24).sp
     ),
     B1 = PretendardStyle.copy(
-        fontWeight = FontWeight.W600,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = (-0.02).sp
     ),
     B2 = PretendardStyle.copy(
-        fontWeight = FontWeight.W600,
         fontSize = 14.sp,
         lineHeight = 22.sp,
         letterSpacing = (-0.02).sp
     ),
     B3 = PretendardStyle.copy(
-        fontWeight = FontWeight.W600,
         fontSize = 13.sp,
         lineHeight = 18.sp,
         letterSpacing = (-0.02).sp
@@ -141,19 +134,16 @@ val Typography = PinUpTypography(
     ),
 
     L1 = PretendardStyle.copy(
-        fontWeight = FontWeight.W600,
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = (-0.02).sp
     ),
     L2 = PretendardStyle.copy(
-        fontWeight = FontWeight.W600,
         fontSize = 11.sp,
         lineHeight = 14.sp,
         letterSpacing = (-0.02).sp
     ),
     L3 = PretendardStyle.copy(
-        fontWeight = FontWeight.W600,
         fontSize = 10.sp,
         lineHeight = 13.sp,
         letterSpacing = (-0.02).sp

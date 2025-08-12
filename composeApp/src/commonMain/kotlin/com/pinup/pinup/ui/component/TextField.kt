@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -70,10 +71,10 @@ fun RoundedTextField(
     backgroundColor: Color = Color.White,
     errorBorderColor: Color = Color.Black,
     cornerRounded: Int = 8,
-    textStyle: TextStyle = TextStyle(),
-    placeholderStyle: TextStyle = TextStyle(),
+    textStyle: TextStyle = Typography.B2.copy( fontWeight = FontWeight.Medium ),
+    placeholderStyle: TextStyle = Typography.B2.copy(fontWeight = FontWeight.Medium),
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    placeholderTextColor: Color = Colors.Gray400,
+    placeholderTextColor: Color = Colors.Gray300,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         imeAction = ImeAction.Done,
         keyboardType = KeyboardType.Text,
@@ -96,11 +97,11 @@ fun RoundedTextField(
     }
 
     val textFieldColor = if (isError) {
-        Colors.Error
+        Colors.Negative
     } else if(text.isNotEmpty()){
-        Colors.Neutral800
+        Colors.Gray800
     } else{
-        Colors.Neutral300
+        Colors.Gray300
     }
 
     Box(
