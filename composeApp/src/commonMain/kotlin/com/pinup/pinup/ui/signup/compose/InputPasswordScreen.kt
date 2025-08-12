@@ -16,6 +16,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -56,7 +57,9 @@ fun InputPasswordScreen(
         Spacer(modifier = Modifier.height(49.dp))
         Text(
             text = Texts.SignupPassword.TITLE,
-            style = Typography.H0,
+            style = Typography.D2.copy(
+                fontWeight = FontWeight.Bold
+            ),
             color = Colors.Black
         )
 
@@ -64,8 +67,10 @@ fun InputPasswordScreen(
 
         Text(
             text = Texts.Word.WORD_PASSWORD,
-            style = Typography.H3,
-            color = Colors.Neutral700
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            color = Colors.Gray700
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -78,7 +83,6 @@ fun InputPasswordScreen(
             },
             cornerRounded = 100,
             placeholder = Texts.SignupPassword.HINT,
-            textStyle = Typography.B3,
             isError = !passwordState.isPasswordValid,
         )
 
@@ -95,8 +99,10 @@ fun InputPasswordScreen(
 
         Text(
             text = Texts.SignupPassword.CONFIRM,
-            style = Typography.H3,
-            color = Colors.Neutral700
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            color = Colors.Gray700
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -110,9 +116,7 @@ fun InputPasswordScreen(
                 },
                 visualTransformation = if(passwordState.isShowPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 cornerRounded = 100,
-                textStyle = Typography.B3,
-                unfocusedBorderColor = if (!passwordState.isPasswordValid) Colors.Error else Colors.Neutral200,
-                focusedBorderColor = if (!passwordState.isPasswordMatched) Colors.Error else Colors.Neutral800
+                isError = !passwordState.isPasswordMatched,
             )
 
             Row(
