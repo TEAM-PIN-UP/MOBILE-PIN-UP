@@ -10,15 +10,6 @@ import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.remote.api.AuthApi
 import com.pinup.pinup.remote.api.MembersApi
-import io.ktor.client.request.forms.MultiPartFormDataContent
-import io.ktor.client.request.forms.formData
-import io.ktor.http.Headers
-import io.ktor.http.HttpHeaders
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 
 class AuthRemoteDataSourceImpl (
@@ -37,11 +28,11 @@ class AuthRemoteDataSourceImpl (
         return authApi.logout(access).mapSuccessData()
     }
 
-    override suspend fun socialSignUp(request: SocialSignUpRequest): PResult<Unit> {
+    override suspend fun socialSignUp(request: SocialSignUpRequest): PResult<LoginResponse> {
         return membersApi.socialSignUp(request).mapSuccessData()
     }
 
-    override suspend fun emailSignUp(request: EmailSignUpRequest): PResult<Unit> {
+    override suspend fun emailSignUp(request: EmailSignUpRequest): PResult<LoginResponse> {
         return membersApi.emailSignUp(request).mapSuccessData()
     }
 }

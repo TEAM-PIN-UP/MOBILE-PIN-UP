@@ -34,7 +34,7 @@ class AuthRepositoryImpl (
         return authRemoteDataSource.logout(accessToken)
     }
 
-    override suspend fun socialSignUp(signUpInfo: SignUpInfo): PResult<Unit> {
+    override suspend fun socialSignUp(signUpInfo: SignUpInfo): PResult<LoginResponse> {
         return authRemoteDataSource.socialSignUp(
             request = SocialSignUpRequest(
                 name = signUpInfo.name,
@@ -47,7 +47,7 @@ class AuthRepositoryImpl (
         )
     }
 
-    override suspend fun emailSignUp(signUpInfo: SignUpInfo): PResult<Unit> {
+    override suspend fun emailSignUp(signUpInfo: SignUpInfo): PResult<LoginResponse> {
         return authRemoteDataSource.emailSignUp(
             request = EmailSignUpRequest(
                 email = signUpInfo.email,

@@ -11,6 +11,6 @@ interface AuthRemoteDataSource {
     suspend fun emailLogin(request: EmailLoginRequest): PResult<LoginResponse>
     suspend fun socialLogin(request: LoginRequest): PResult<LoginResponse>
     suspend fun logout(access: String): PResult<Unit>
-    suspend fun socialSignUp(request: SocialSignUpRequest): PResult<Unit>
-    suspend fun emailSignUp(request: EmailSignUpRequest): PResult<Unit>
+    suspend fun socialSignUp(request: SocialSignUpRequest): PResult<LoginResponse>
+    suspend fun emailSignUp(request: EmailSignUpRequest): PResult<LoginResponse>
 }
