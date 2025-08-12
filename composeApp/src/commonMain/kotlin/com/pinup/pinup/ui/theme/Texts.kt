@@ -28,7 +28,7 @@ object Texts {
             }
         }
         val ONBOARDING_LOGIN_TITLE = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Colors.Neutral800)) {
+            withStyle(style = SpanStyle(color = Colors.Gray800)) {
                 append("우리의 로컬 아카이브, ")
             }
             withStyle(style = SpanStyle(color = Colors.Main)) {
