@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.component.ErrorText
@@ -51,16 +52,20 @@ fun FindPasswordEmailScreen(
 
         Text(
             text = Texts.FindPassword.TITLE,
-            style = Typography.H0,
-            color = Colors.Neutral800
+            style = Typography.D2.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = Colors.Gray800
         )
 
         Spacer(modifier = Modifier.height(69.dp))
 
         Text(
             text = Texts.Word.EMAIL,
-            style = Typography.B2,
-            color = Colors.Neutral700
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            color = Colors.Gray700
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -90,14 +95,16 @@ fun FindPasswordEmailScreen(
                             if(emailState.isEmailValid && emailState.email.isNotEmpty()) onClickSendCode()
                         },
                     cornerRounded = 100,
-                    backgroundColor = if(emailState.isEmailValid && emailState.email.isNotEmpty() && !emailState.isClicked) Colors.Neutral800 else Colors.Neutral300,
+                    backgroundColor = if(emailState.isEmailValid && emailState.email.isNotEmpty() && !emailState.isClicked) Colors.Gray800 else Colors.Gray300,
                 ) {
                     Text(
                         modifier = Modifier
                             .padding(horizontal = 12.dp, vertical = 6.dp)
                             .align(Alignment.Center),
                         text = Texts.Word.VERIFY,
-                        style = Typography.B7,
+                        style = Typography.L3.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
                         color = Colors.White
                     )
                 }
@@ -144,14 +151,16 @@ fun FindPasswordEmailScreen(
                             if(emailState.verificationCode.isNotEmpty()) onClickVerify()
                         },
                     cornerRounded = 100,
-                    backgroundColor = if(emailState.verificationCode.isNotEmpty()) Colors.Neutral800 else Colors.Neutral300,
+                    backgroundColor = if(emailState.verificationCode.isNotEmpty()) Colors.Gray800 else Colors.Gray300,
                 ) {
                     Text(
                         modifier = Modifier
                             .padding(horizontal = 20.dp, vertical = 6.dp)
                             .align(Alignment.Center),
                         text = Texts.Word.CONFIRM,
-                        style = Typography.B7,
+                        style = Typography.L3.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
                         color = Colors.White
                     )
                 }
