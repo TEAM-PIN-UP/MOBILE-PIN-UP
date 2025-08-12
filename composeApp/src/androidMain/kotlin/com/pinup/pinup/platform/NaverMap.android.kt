@@ -49,7 +49,9 @@ import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_cafe_marker
+import pinup.composeapp.generated.resources.ic_cafe_marker_on
 import pinup.composeapp.generated.resources.ic_food_marker
+import pinup.composeapp.generated.resources.ic_food_marker_on
 import pinup.composeapp.generated.resources.ic_my_position
 
 @OptIn(ExperimentalNaverMapApi::class)
@@ -160,52 +162,46 @@ actual fun PlatformNaverMap(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         if (it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
-                            RoundedBox(
-                                modifier = Modifier,
-                                backgroundColor = Colors.Neutral800,
-                                cornerRounded = 100
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .padding(vertical = 2.dp, horizontal = 7.dp)
-                                        .widthIn(max = 44.dp),
-                                    text = it.name,
-                                    style = Typography.B5,
-                                    color = Colors.White,
-                                    overflow = TextOverflow.Ellipsis,
-                                    maxLines = 1
-                                )
-                            }
+                            Image(
+                                painter = when (it.placeCategory) {
+                                    Category.RESTAURANT -> {
+                                        painterResource(Res.drawable.ic_cafe_marker_on)
+                                    }
+                                    else -> {
+                                        painterResource(Res.drawable.ic_food_marker_on)
+                                    }
+                                },
+                                contentDescription = "marker"
+                            )
                         } else {
                             Image(
                                 painter = when (it.placeCategory) {
                                     Category.RESTAURANT -> {
                                         painterResource(Res.drawable.ic_food_marker)
                                     }
-
                                     else -> {
                                         painterResource(Res.drawable.ic_cafe_marker)
                                     }
                                 },
                                 contentDescription = "marker"
                             )
+                        }
 
-                            RoundedBox(
-                                modifier = Modifier,
-                                backgroundColor = Colors.Black_25,
-                                cornerRounded = 100
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .padding(vertical = 2.dp, horizontal = 7.dp)
-                                        .widthIn(max = 44.dp),
-                                    text = it.name,
-                                    style = Typography.B6,
-                                    color = Colors.White,
-                                    overflow = TextOverflow.Ellipsis,
-                                    maxLines = 1
-                                )
-                            }
+                        RoundedBox(
+                            modifier = Modifier,
+                            backgroundColor = Colors.Black_25,
+                            cornerRounded = 100
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(vertical = 2.dp, horizontal = 6.dp)
+                                    .widthIn(max = 72.dp),
+                                text = it.name,
+                                style = Typography.B6,
+                                color = Colors.White,
+                                overflow = TextOverflow.Ellipsis,
+                                maxLines = 1
+                            )
                         }
                     }
                 }
