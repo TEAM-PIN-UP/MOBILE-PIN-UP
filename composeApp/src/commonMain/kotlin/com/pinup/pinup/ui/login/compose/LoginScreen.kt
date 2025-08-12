@@ -17,6 +17,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
@@ -27,6 +28,7 @@ import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
+import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_google
@@ -56,7 +58,7 @@ fun LoginScreen(
         Text(
             modifier = Modifier,
             text = Texts.Onboarding.ONBOARDING_LOGIN_TITLE,
-            style = Typography.H0
+            style = Typography.D2
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -64,8 +66,10 @@ fun LoginScreen(
         Text(
             modifier = Modifier,
             text = Texts.Onboarding.ONBOARDING_LOGIN_TEXT,
-            style = Typography.B2,
-            color = Colors.Neutral400
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.Medium
+            ),
+            color = Colors.Gray400
         )
 
         Spacer(modifier = Modifier.height(49.dp))
@@ -77,6 +81,9 @@ fun LoginScreen(
             text = id,
             onValueChange = onIdChanged,
             placeholder = Texts.Word.WORD_ID,
+            textStyle = Typography.B2.copy(
+                fontWeight = FontWeight.Medium
+            ),
             cornerRounded = 100,
             isError = isError
         )
@@ -90,6 +97,9 @@ fun LoginScreen(
             text = password,
             onValueChange = onPasswordChanged,
             placeholder = Texts.Word.WORD_PASSWORD,
+            textStyle = Typography.B2.copy(
+                fontWeight = FontWeight.Medium
+            ),
             cornerRounded = 100,
             visualTransformation = PasswordVisualTransformation(),
             isError = isError
@@ -112,7 +122,9 @@ fun LoginScreen(
             Text(
                 modifier = Modifier,
                 text = Texts.Login.INCORRECT_ID,
-                style = Typography.B3,
+                style = Typography.B2.copy(
+                    fontWeight = FontWeight.Medium
+                ),
                 color = Colors.Error
             )
 
@@ -129,8 +141,10 @@ fun LoginScreen(
             Text(
                 modifier = Modifier,
                 text = Texts.Login.LOGIN_ID_FIND,
-                style = Typography.B4,
-                color = Colors.Neutral700
+                style = Typography.B3.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Colors.Gray700
             )
 
             Spacer(modifier = Modifier.width(27.dp))
@@ -141,8 +155,10 @@ fun LoginScreen(
                         onClickFindPassword()
                     },
                 text = Texts.Login.LOGIN_PASSWORD_FIND,
-                style = Typography.B4,
-                color = Colors.Neutral700
+                style = Typography.B3.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Colors.Gray700
             )
         }
 
@@ -164,8 +180,10 @@ fun LoginScreen(
             Text(
                 modifier = Modifier.padding(horizontal = 14.dp),
                 text = Texts.Login.LOGIN_SNS,
-                style = Typography.B4,
-                color = Colors.Neutral400
+                style = Typography.B3.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Colors.Gray400
             )
 
             Box(

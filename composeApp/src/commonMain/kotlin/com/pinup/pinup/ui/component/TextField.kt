@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -71,7 +72,7 @@ fun RoundedTextField(
     cornerRounded: Int = 8,
     textStyle: TextStyle = TextStyle(),
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    placeholderTextColor: Color = Colors.Neutral300,
+    placeholderTextColor: Color = Colors.Gray300,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         imeAction = ImeAction.Done,
         keyboardType = KeyboardType.Text,
@@ -187,7 +188,9 @@ fun RoundedTextField(
 
                             Text(
                                 text = placeholder,
-                                style = Typography.B3,
+                                style = Typography.B2.copy(
+                                    fontWeight = FontWeight.Medium
+                                ),
                                 color = placeholderTextColor,
                                 overflow = TextOverflow.Ellipsis
                             )

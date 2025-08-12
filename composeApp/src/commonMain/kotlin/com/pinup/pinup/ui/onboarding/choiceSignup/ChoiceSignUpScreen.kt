@@ -13,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.login.model.SNSType
@@ -50,7 +51,9 @@ fun ChoiceSignUpScreen(
         Text(
             modifier = Modifier,
             text = Texts.Onboarding.ONBOARDING_LOGIN_TEXT,
-            style = Typography.B2,
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.Medium
+            ),
             color = Colors.Gray400
         )
 
