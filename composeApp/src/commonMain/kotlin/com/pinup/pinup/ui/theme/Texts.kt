@@ -40,13 +40,11 @@ object Texts {
 
     object Login {
         const val LOGIN_ID_FIND = "아이디 찾기"
-        const val LOGIN_PASSWORD_FIND = "비밀번호 찾기"
         const val LOGIN_SNS = "SNS 로그인"
         const val INCORRECT_ID = "아이디 혹은 비밀번호가 일치하지 않습니다."
     }
 
     object FindPassword {
-        const val TITLE = "비밀번호 변경하기"
         const val PASSWORD_HINT = "비밀번호는 8~20자, 특수문자 포함 필수입니다."
         const val CHANGE_PASSWORD = "비밀번호 변경하기"
         const val PASSWORD_AGAIN_HINT = "비밀번호 확인"

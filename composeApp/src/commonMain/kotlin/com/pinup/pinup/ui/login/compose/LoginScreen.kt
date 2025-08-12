@@ -154,7 +154,7 @@ fun LoginScreen(
                     .clickableSingleWithNoRipple {
                         onClickFindPassword()
                     },
-                text = Texts.Login.LOGIN_PASSWORD_FIND,
+                text = Texts.FindPassword.CHANGE_PASSWORD,
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),

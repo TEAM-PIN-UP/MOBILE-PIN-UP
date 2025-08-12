@@ -51,7 +51,7 @@ fun FindPasswordEmailScreen(
         Spacer(modifier = Modifier.height(44.dp))
 
         Text(
-            text = Texts.FindPassword.TITLE,
+            text = Texts.FindPassword.CHANGE_PASSWORD,
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),

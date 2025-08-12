@@ -16,6 +16,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -53,8 +54,10 @@ fun ChangePasswordScreen(
         Spacer(modifier = Modifier.height(44.dp))
 
         Text(
-            text = Texts.FindPassword.TITLE,
-            style = Typography.H0,
+            text = Texts.FindPassword.CHANGE_PASSWORD,
+            style = Typography.D2.copy(
+                fontWeight = FontWeight.Bold
+            ),
             color = Colors.Black
         )
 
@@ -62,7 +65,9 @@ fun ChangePasswordScreen(
 
         Text(
             text = Texts.Word.WORD_PASSWORD,
-            style = Typography.H3,
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
             color = Colors.Neutral700
         )
 
@@ -98,7 +103,6 @@ fun ChangePasswordScreen(
                 placeholder = Texts.FindPassword.PASSWORD_AGAIN_HINT,
                 visualTransformation = if(passwordState.isShowPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 cornerRounded = 100,
-                textStyle = Typography.B3,
                 isError = !passwordState.isPasswordMatched
             )
 
