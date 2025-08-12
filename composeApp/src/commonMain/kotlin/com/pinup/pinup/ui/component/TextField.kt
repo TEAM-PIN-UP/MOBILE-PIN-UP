@@ -70,7 +70,7 @@ fun RoundedTextField(
     backgroundColor: Color = Color.White,
     errorBorderColor: Color = Color.Black,
     cornerRounded: Int = 8,
-    textStyle: TextStyle = TextStyle(),
+    textStyle: TextStyle = Typography.B2.copy( fontWeight = FontWeight.Medium ),
     visualTransformation: VisualTransformation = VisualTransformation.None,
     placeholderTextColor: Color = Colors.Gray300,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
@@ -95,11 +95,11 @@ fun RoundedTextField(
     }
 
     val textFieldColor = if (isError) {
-        Colors.Error
+        Colors.Negative
     } else if(text.isNotEmpty()){
-        Colors.Neutral800
+        Colors.Gray800
     } else{
-        Colors.Neutral300
+        Colors.Gray300
     }
 
     Box(

@@ -38,7 +38,7 @@ fun ErrorText(
                 .padding(top = 4.dp),
             text = text,
             style = Typography.B5,
-            color = if(isNotError) Colors.Gray500 else Colors.Error
+            color = if(isNotError) Colors.Gray500 else Colors.Negative
         )
     }
 }
