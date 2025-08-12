@@ -106,9 +106,15 @@ fun FindPasswordEmailScreen(
             }
         }
 
-        if(!emailState.isEmailValid){
+        if (!emailState.isEmailValid) {
             Spacer(modifier = Modifier.height(8.dp))
             ErrorText(Texts.SignupEmail.INVALID)
+        } else if (emailState.isClicked) {
+            Spacer(modifier = Modifier.height(8.dp))
+            ErrorText(
+                text = Texts.SignupEmail.SEND_CODE,
+                isNotError = true
+            )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
