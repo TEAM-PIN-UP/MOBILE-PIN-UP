@@ -1,7 +1,10 @@
 package com.pinup.pinup.remote.api
 
+import com.pinup.pinup.data.request.signUp.EmailSignUpRequest
+import com.pinup.pinup.data.request.signUp.SocialSignUpRequest
 import com.pinup.pinup.data.response.GetMemberInfoResponse
 import com.pinup.pinup.data.response.GetReviewsResponse
+import com.pinup.pinup.data.response.LoginResponse
 import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.data.response.SearchUserResponse
 import com.pinup.pinup.domain.model.PResult
@@ -56,15 +59,13 @@ interface MembersApi {
         @Query("size") size: Int,
     ): PResult<PResponse<GetReviewsResponse>>
 
-    @Multipart
     @POST(ApiPath.Members.SOCIAL_SIGN_UP)
     suspend fun socialSignUp(
-        @Body multipart: MultiPartFormDataContent
-    ): PResult<PResponse<Unit>>
+        @Body request: SocialSignUpRequest
+    ): PResult<PResponse<LoginResponse>>
 
-    @Multipart
     @POST(ApiPath.Members.EMAIL_SIGN_UP)
     suspend fun emailSignUp(
-        @Body multipart: MultiPartFormDataContent
-    ): PResult<PResponse<Unit>>
+        @Body request: EmailSignUpRequest
+    ): PResult<PResponse<LoginResponse>>
 }

@@ -10,15 +10,6 @@ import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.remote.api.AuthApi
 import com.pinup.pinup.remote.api.MembersApi
-import io.ktor.client.request.forms.MultiPartFormDataContent
-import io.ktor.client.request.forms.formData
-import io.ktor.http.Headers
-import io.ktor.http.HttpHeaders
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 
 class AuthRemoteDataSourceImpl (
@@ -37,33 +28,11 @@ class AuthRemoteDataSourceImpl (
         return authApi.logout(access).mapSuccessData()
     }
 
-    override suspend fun socialSignUp(profileImage: ByteArray, request: SocialSignUpRequest): PResult<Unit> {
-        val timeStamp = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).nanosecond
-        val signUpRequestString = Json.encodeToString(request)
-        val multipart = MultiPartFormDataContent(formData {
-            append("signUpRequest", signUpRequestString)
-            append("multipartFile", profileImage, Headers.build {
-                append(HttpHeaders.ContentType, "image/png")
-                append(HttpHeaders.ContentDisposition, "filename=$timeStamp.png")
-            })
-        })
-        return membersApi.socialSignUp(
-            multipart = multipart
-        ).mapSuccessData()
+    override suspend fun socialSignUp(request: SocialSignUpRequest): PResult<LoginResponse> {
+        return membersApi.socialSignUp(request).mapSuccessData()
     }
 
-    override suspend fun emailSignUp(profileImage: ByteArray, request: EmailSignUpRequest): PResult<Unit> {
-        val timeStamp = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).nanosecond
-        val signUpRequestString = Json.encodeToString(request)
-        val multipart = MultiPartFormDataContent(formData {
-            append("signUpRequest", signUpRequestString)
-            append("multipartFile", profileImage, Headers.build {
-                append(HttpHeaders.ContentType, "image/png")
-                append(HttpHeaders.ContentDisposition, "filename=$timeStamp.png")
-            })
-        })
-        return membersApi.emailSignUp(
-            multipart = multipart
-        ).mapSuccessData()
+    override suspend fun emailSignUp(request: EmailSignUpRequest): PResult<LoginResponse> {
+        return membersApi.emailSignUp(request).mapSuccessData()
     }
 }

@@ -35,7 +35,7 @@ class ChoiceSignUpViewModel (
 
     }
     fun doSNSLogin(snsType: SNSType) {
-        if(snsType == SNSType.EMAIL) {
+        if(snsType == SNSType.PINUP) {
 //            emitEvent(ChoiceSignUpUiEvent.MoveEmailLogin)
 //            return
             //TODO 임시용, 제거 예정

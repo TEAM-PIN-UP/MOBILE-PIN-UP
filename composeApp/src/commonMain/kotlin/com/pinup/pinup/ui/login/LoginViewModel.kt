@@ -37,7 +37,7 @@ class LoginViewModel (
 
     }
     fun doSNSLogin(snsType: SNSType) {
-        if (snsType == SNSType.EMAIL) {
+        if (snsType == SNSType.PINUP) {
             emailLogin()
             return
         }

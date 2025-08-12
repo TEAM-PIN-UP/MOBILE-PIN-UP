@@ -13,16 +13,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.PButton
@@ -36,8 +32,6 @@ import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_google
 import pinup.composeapp.generated.resources.ic_kakao
 import pinup.composeapp.generated.resources.ic_naver
-import pinup.composeapp.generated.resources.ic_search
-import pinup.composeapp.generated.resources.ic_sns_login
 
 
 @Composable
@@ -108,7 +102,7 @@ fun LoginScreen(
                 .padding(horizontal = 20.dp),
             text = Texts.Word.WORD_LOGIN,
             onClick = {
-                onSnsLoginClick(SNSType.EMAIL)
+                onSnsLoginClick(SNSType.PINUP)
             }
         )
 

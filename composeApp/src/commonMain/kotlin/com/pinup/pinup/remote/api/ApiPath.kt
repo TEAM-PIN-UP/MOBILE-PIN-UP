@@ -16,4 +16,16 @@ object ApiPath {
         const val SOCIAL_SIGN_UP = "$MEMBERS/social-sign-up"
         const val EMAIL_SIGN_UP = "$MEMBERS/sign-up"
     }
+
+    object MailPath {
+        private const val EMAIL = "api/mail"
+        const val VERIFY_CODE = "$EMAIL/verify-code"
+        const val SEND_CODE = "$EMAIL/send-code"
+    }
+
+    object ImagePath {
+        private const val IMAGE = "api/{type}"
+        const val SEVERAL_IMAGE = "$IMAGE/IMAGES"
+        const val ONE_IMAGE = "$IMAGE/IMAGE"
+    }
 }
