@@ -48,6 +48,7 @@ fun MapBottomSheetNavHost(
                 query = searchUiState.query,
                 chipStates = searchUiState.chipStates.toPersistentList(),
                 sortType = searchUiState.sortType,
+                places = searchUiState.places,
                 isExpanded = isScrollable,
                 onValueChange = onValueChange,
                 onChipClick = onChipClick,

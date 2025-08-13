@@ -5,6 +5,7 @@ import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.LocationBound
+import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.domain.model.SortType
@@ -13,6 +14,7 @@ import com.pinup.pinup.domain.usecase.DeleteBookmarkUseCase
 import com.pinup.pinup.domain.usecase.GetDetailPlaceUseCase
 import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.pinup.domain.usecase.GetReviewedPlacesUseCase
+import com.pinup.pinup.domain.usecase.SearchPlacesUseCase
 import com.pinup.pinup.event.DetailPlaceEventBus
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.base.BaseViewModel
@@ -35,6 +37,7 @@ class MapViewModel (
     private val deleteBookmarkUseCase: DeleteBookmarkUseCase,
     private val addBookmarkUseCase: AddBookmarkUseCase,
     private val getMyProfileUseCase: GetMyProfileUseCase,
+    private val searchPlacesUseCase: SearchPlacesUseCase,
     val locationTracker: LocationTracker
 ) : BaseViewModel<MapUiState, MapUiEvent>(MapUiState()) {
     init {
@@ -143,7 +146,8 @@ class MapViewModel (
         }
     }
 
-    fun updateSearchText(search: String){
+    fun updateSearchText(search: String) {
+        getSearchedPlaceList(search)
         updateState {
             copy(
                 searchUiState = searchUiState.copy(
@@ -151,6 +155,21 @@ class MapViewModel (
                 )
             )
         }
+    }
+
+    private fun getSearchedPlaceList(search: String) = viewModelScope.launch {
+        resultResponse(
+            response = searchPlacesUseCase(search),
+            successCallback = { result ->
+                updateState {
+                    copy(
+                        searchUiState = searchUiState.copy(
+                            places = result
+                        )
+                    )
+                }
+            }
+        )
     }
 
     fun updateChipState(chipState: ChipState) = viewModelScope.launch(Dispatchers.IO) {
@@ -292,7 +311,8 @@ data class SearchUiState(
     val chipStates: List<ChipState> = ChipState.default,
     val sortType: SortType = SortType.LATEST,
     val reviewedPlaces: List<ReviewedPlace> = emptyList(),
-    val isFocus: Boolean = false
+    val isFocus: Boolean = false,
+    val places: List<Place> = emptyList()
 )
 
 data class PlaceDetailUiState(

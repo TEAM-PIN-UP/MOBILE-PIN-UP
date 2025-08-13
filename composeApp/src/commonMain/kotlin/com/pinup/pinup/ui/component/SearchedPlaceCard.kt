@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
@@ -32,34 +34,42 @@ fun SearchedPlaceCard(
                 onClick()
             }
     ) {
+        //TODO 카테고리 판별해서 알맞은 아이콘 보여주기
         Image(
             painter = painterResource(Res.drawable.ic_category_food),
             contentDescription = "category icon",
         )
 
+        Spacer(modifier = Modifier.width(7.dp))
+
         Column(
             modifier = Modifier
-                .padding(start = 12.dp)
         ) {
             Text(
                 text = name,
-                style = Typography.B3,
-                color = Colors.Neutral800,
+                style = Typography.B2.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray800,
             )
 
             Text(
                 text = address,
-                style = Typography.C3,
-                color = Colors.Neutral500,
+                style = Typography.L1.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Colors.Gray500,
             )
         }
 
         Spacer(Modifier.weight(1f))
 
         Text(
-            text = "리뷰 $reviewCount",
-            style = Typography.B5,
-            color = Colors.Neutral600,
+            text = "핀로그 $reviewCount",
+            style = Typography.B2.copy(
+                fontWeight = FontWeight.Medium
+            ),
+            color = Colors.Gray600,
         )
     }
 }
