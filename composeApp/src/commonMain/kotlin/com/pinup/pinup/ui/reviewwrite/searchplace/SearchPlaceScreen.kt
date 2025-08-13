@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.SearchedPlaceCard
@@ -117,6 +118,7 @@ fun SearchPlaceScreen(
                     items(places) {
                         SearchedPlaceCard(
                             name = it.name,
+                            category = Category.CAFE,
                             address = it.address,
                             reviewCount = it.reviewCount,
                             onClick = {

@@ -28,11 +28,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.domain.model.SortType
@@ -72,6 +75,8 @@ fun MapBottomSheetSearchScreen(
     onSelectSortTypeClick: () -> Unit = {},
     onFocusChange: (Boolean) -> Unit ={},
 ) {
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
     var isFocusSearch by remember {
         mutableStateOf(false)
     }
@@ -101,7 +106,7 @@ fun MapBottomSheetSearchScreen(
                 Res.drawable.ic_search
             ),
             onLeadingIconClick = {
-                //TODO 포커스 모드 해제
+                focusManager.clearFocus(force = true)
             },
             tailIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_close) else null,
             tailIconSize = 20,
@@ -113,7 +118,8 @@ fun MapBottomSheetSearchScreen(
             onFocusChange = {
                 isFocusSearch = it
                 onFocusChange(it)
-            }
+            },
+            focusRequester = focusRequester
         )
 
         if (isFocusSearch) {
@@ -272,6 +278,8 @@ fun FocusScreen(
             ),
         )
 
+        Spacer(modifier = Modifier.height(28.dp))
+
         LazyColumn(
             state = scrollState,
             verticalArrangement = Arrangement.spacedBy(28.dp),
@@ -280,6 +288,7 @@ fun FocusScreen(
                 SearchedPlaceCard(
                     name = it.name,
                     address = it.address,
+                    category = Category.of(it.categoryCode),
                     reviewCount = it.reviewCount,
                     onClick = {
                         onPlaceClick(it)

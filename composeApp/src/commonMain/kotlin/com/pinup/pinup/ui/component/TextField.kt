@@ -119,7 +119,8 @@ fun RoundedTextField(
     ) {
         BasicTextField(
             modifier = Modifier
-                .align(Alignment.Center),
+                .align(Alignment.Center)
+                .focusRequester(focusRequester),
             value = textFieldValue,
             onValueChange = {
                 if (it.text.length <= textLimit) {
@@ -145,7 +146,8 @@ fun RoundedTextField(
                     innerTextField = @Composable {
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             if (leadingIcon != null) {
                                 Image(
@@ -211,5 +213,4 @@ fun RoundedTextField(
             }
         )
     }
-
 }

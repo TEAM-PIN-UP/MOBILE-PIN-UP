@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
@@ -22,10 +23,16 @@ import pinup.composeapp.generated.resources.*
 @Composable
 fun SearchedPlaceCard(
     name: String,
+    category: Category,
     address: String,
     reviewCount: Int,
     onClick: () -> Unit = {},
 ) {
+    val image = when (category) {
+        Category.RESTAURANT -> Res.drawable.ic_category_food
+        Category.CAFE -> Res.drawable.ic_category_cafe
+        else -> Res.drawable.ic_category_place
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -36,7 +43,7 @@ fun SearchedPlaceCard(
     ) {
         //TODO 카테고리 판별해서 알맞은 아이콘 보여주기
         Image(
-            painter = painterResource(Res.drawable.ic_category_food),
+            painter = painterResource(image),
             contentDescription = "category icon",
         )
 
