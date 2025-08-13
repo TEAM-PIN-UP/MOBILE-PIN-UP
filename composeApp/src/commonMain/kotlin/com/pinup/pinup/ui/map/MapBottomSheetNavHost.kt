@@ -7,7 +7,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.domain.model.ReviewedPlace
-import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.ui.model.ChipState
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
@@ -16,6 +15,7 @@ import kotlinx.serialization.Serializable
 fun MapBottomSheetNavHost(
     searchUiState: SearchUiState,
     placeDetailUiState: PlaceDetailUiState,
+    isShowPinch: Boolean = false,
     isScrollable: Boolean,
     onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
@@ -26,14 +26,31 @@ fun MapBottomSheetNavHost(
     onFocusChange: (Boolean) -> Unit,
     navHostController: NavHostController = rememberNavController()
 ) {
-    LaunchedEffect(placeDetailUiState.detailPlace) {
-        if (placeDetailUiState.detailPlace != null) {
-            val currentDestination = navHostController.currentBackStackEntry?.destination?.route
-            val detailDestination = MapBottomSheetDestination.Detail::class.qualifiedName
-            if (currentDestination != detailDestination) {
+    val pinchRoute = MapBottomSheetDestination.Pinch::class.qualifiedName
+    val detailRoute = MapBottomSheetDestination.Detail::class.qualifiedName
+
+    LaunchedEffect(placeDetailUiState.detailPlace, isShowPinch) {
+        if (!isShowPinch && placeDetailUiState.detailPlace != null) {
+            val current = navHostController.currentBackStackEntry?.destination?.route
+            if (current != detailRoute) {
                 navHostController.navigate(MapBottomSheetDestination.Detail) {
                     launchSingleTop = true
                 }
+            }
+        }
+    }
+
+    LaunchedEffect(isShowPinch) {
+        val current = navHostController.currentBackStackEntry?.destination?.route
+        if (isShowPinch) {
+            if (current != pinchRoute) {
+                navHostController.navigate(MapBottomSheetDestination.Pinch) {
+                    launchSingleTop = true
+                }
+            }
+        } else {
+            if (current == pinchRoute) {
+                navHostController.popBackStack()
             }
         }
     }
@@ -76,6 +93,10 @@ fun MapBottomSheetNavHost(
                 }
             )
         }
+
+        composable<MapBottomSheetDestination.Pinch> {
+
+        }
     }
 }
 
@@ -84,4 +105,6 @@ sealed interface MapBottomSheetDestination {
     data object Search: MapBottomSheetDestination
     @Serializable
     data object Detail: MapBottomSheetDestination
+    @Serializable
+    data object Pinch: MapBottomSheetDestination
 }

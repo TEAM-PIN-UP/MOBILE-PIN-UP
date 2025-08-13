@@ -269,7 +269,7 @@ fun MapScreen(
                             } else {
                                 painterResource(Res.drawable.ic_pinch_off)
                             },
-                            contentDescription = "bookmark filter"
+                            contentDescription = "pinch filter"
                         )
                     }
 
@@ -321,6 +321,7 @@ fun MapScreen(
                             isScrollable = alpha == 0f,
                             onValueChange = onValueChange,
                             onChipClick = onChipClick,
+                            isShowPinch = isShowPinch,
                             onPlaceClick = {
                                 onPlaceClick(it.kakaoPlaceId)
                             },

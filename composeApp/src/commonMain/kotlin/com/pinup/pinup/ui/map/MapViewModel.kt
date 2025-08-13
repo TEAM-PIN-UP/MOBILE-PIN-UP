@@ -78,10 +78,9 @@ class MapViewModel (
     }
 
     fun updateShowBookmarks() = viewModelScope.launch {
-        hLog("updateShowBookmarks")
         updateState {
             copy(
-                isShowBookmarks = !isShowBookmarks
+                isShowPinch = !isShowPinch
             )
         }
     }
@@ -324,7 +323,7 @@ data class MapUiState(
     val searchUiState: SearchUiState = SearchUiState(),
     val placeDetailUiState: PlaceDetailUiState = PlaceDetailUiState(),
     val isFocusLocation: Boolean = false,
-    val isShowBookmarks: Boolean = false,
+    val isShowPinch: Boolean = false,
     val currentPosition: Position? = null,
     val cameraPosition: Position? = null,
     val isCameraMoving: Boolean = false,
