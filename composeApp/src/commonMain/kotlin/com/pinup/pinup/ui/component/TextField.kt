@@ -166,7 +166,7 @@ fun RoundedTextField(
                                 textFieldValue.text.isNotEmpty() &&
                                 (isFocused || isTrailIconAlwaysShow) && readOnly.not()
                             ) {
-                                Spacer(modifier = Modifier.width(13.dp))
+                                Spacer(modifier = Modifier.weight(1f))
 
                                 Image(
                                     modifier = Modifier

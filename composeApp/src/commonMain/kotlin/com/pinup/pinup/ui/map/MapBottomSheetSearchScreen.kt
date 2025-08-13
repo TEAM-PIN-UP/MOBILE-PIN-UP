@@ -50,6 +50,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_chevron_bottom
+import pinup.composeapp.generated.resources.ic_close
 import pinup.composeapp.generated.resources.ic_search
 import pinup.composeapp.generated.resources.ic_search_back
 
@@ -83,6 +84,9 @@ fun MapBottomSheetSearchScreen(
     var userScrollable by remember {
         mutableStateOf(false)
     }
+    var isFocusSearch by remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(firstItemVisible, isExpanded, isDragUp) {
         userScrollable = isExpanded && (firstItemVisible.not() || isDragUp)
@@ -110,12 +114,23 @@ fun MapBottomSheetSearchScreen(
             ),
             placeholderTextColor = Colors.Gray400,
             cornerRounded = 100,
-            leadingIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_search_back) else painterResource(
+            leadingIcon = if (isFocusSearch) painterResource(Res.drawable.ic_search_back) else painterResource(
                 Res.drawable.ic_search
             ),
+            onLeadingIconClick = {
+                //TODO 포커스 모드 해제
+            },
+            tailIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_close) else null,
+            tailIconSize = 20,
+            onTailIconClick = {
+                onValueChange("")
+            },
             fixedBorderColor = Colors.Transparency,
             backgroundColor = Colors.Gray50,
-            onFocusChange = onFocusChange
+            onFocusChange = {
+                isFocusSearch = it
+                onFocusChange(it)
+            }
         )
 
         Row(
