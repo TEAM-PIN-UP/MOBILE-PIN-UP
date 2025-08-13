@@ -37,6 +37,7 @@ fun BookmarkedPlaceCard(
         Box {
             ReviewImage(
                 modifier = Modifier
+                    .size(100.dp)
                     .fillMaxWidth()
                     .aspectRatio(1f),
                 imgUrl = bookmarkedPlace.placeFirstReviewImageUrl

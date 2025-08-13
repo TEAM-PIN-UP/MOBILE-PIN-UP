@@ -37,8 +37,7 @@ fun ReviewImage(
     modifier: Modifier = Modifier,
 ) {
     RoundedBox(
-        modifier = modifier
-            .size(width = 300.dp, height = 170.dp),
+        modifier = modifier,
         cornerRounded = 8,
         backgroundColor = Colors.Neutral100,
     ) {

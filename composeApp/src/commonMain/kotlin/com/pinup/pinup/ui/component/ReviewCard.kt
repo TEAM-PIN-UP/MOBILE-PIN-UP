@@ -6,18 +6,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.PlaceReview
+import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 
@@ -29,89 +34,133 @@ fun ReviewCard(
 ) {
     Column(
         modifier = modifier
-            .padding(vertical = 8.dp)
+            .padding(vertical = 16.dp)
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = horizontalPadding)
+                .padding(start = horizontalPadding)
         ) {
             ReviewedProfileImageView(
-                imgUrl = placeReview.writerProfileImageUrl
+                imgUrl = placeReview.writerProfileImageUrl,
+                size = 33.dp
             )
 
-            Column(
-                modifier = Modifier
-                    .padding(start = 6.dp)
-            ) {
-                Text(
-                    text = placeReview.writerName,
-                    style = Typography.H5,
-                    color = Colors.Neutral800,
-                )
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = placeReview.writerName,
+                        style = Typography.B2.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        color = Colors.Gray800,
+                    )
+
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    Image(
+                        painter = painterResource(Res.drawable.ic_star),
+                        contentDescription = "star"
+                    )
+
+                    Spacer(modifier = Modifier.width(2.dp))
+
+                    Text(
+                        text = placeReview.starRating.toString(),
+                        style = Typography.B2.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        color = Colors.Gray800,
+                    )
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Text(
+                        text = "${placeReview.visitedDate} 방문",
+                        style = Typography.L2.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        color = Colors.Gray400
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(placeReview.reviewImageUrls) {
+                        ReviewImage(
+                            imgUrl = it,
+                            modifier = Modifier.size(143.dp)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
                     modifier = Modifier
-                        .padding(top = 3.dp),
-                    text = "총 리뷰 ${placeReview.writerTotalReviewCount}",
-                    style = Typography.H5,
-                    color = Colors.Neutral500,
+                        .padding(end = horizontalPadding),
+                    text = placeReview.content,
+                    style = Typography.B3.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = Colors.Gray700
                 )
-            }
 
-            Spacer(Modifier.weight(1f))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        //TODO 좋아요 기능 달기
+                        modifier = Modifier
+                            .clickableSingleWithNoRipple{
 
-            Image(
-                painter = painterResource(Res.drawable.ic_review_admin),
-                contentDescription = "my review admin"
-            )
-        }
+                            },
+                        painter = painterResource(Res.drawable.ic_heart_off),
+                        contentDescription = "heart"
+                    )
 
-        Row(
-            modifier = Modifier
-                .padding(horizontal = horizontalPadding)
-                .padding(top = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = placeReview.starRating.toString(),
-                style = Typography.B4,
-                color = Colors.Neutral800
-            )
+                    Spacer(modifier = Modifier.width(3.dp))
 
-            HalfStarRatingBar(
-                modifier = Modifier
-                    .padding(start = 2.dp),
-                rating = placeReview.starRating.toInt(),
-                size = 14.dp,
-                spacing = 0.dp
-            )
+                    Text(
+                        //TODO 좋아요 개수
+                        text = "10",
+                        style = Typography.L2.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        color = Colors.Gray800
+                    )
 
-            Text(
-                modifier = Modifier
-                    .padding(start = 8.dp),
-                text = "방문날짜 ${placeReview.visitedDate}",
-                style = Typography.C2,
-                color = Colors.Neutral500
-            )
-        }
+                    Spacer(modifier = Modifier.width(14.dp))
 
-        Text(
-            modifier = Modifier
-                .padding(horizontal = horizontalPadding)
-                .padding(top = 12.dp),
-            text = placeReview.content,
-            style = Typography.D2,
-            color = Colors.Neutral700
-        )
+                    Image(
+                        //TODO 댓글 핀로그 상세로 이동
+                        modifier = Modifier
+                            .clickableSingleWithNoRipple{
 
-        LazyRow(
-            modifier = Modifier
-                .padding(start = horizontalPadding)
-                .padding(top = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(placeReview.reviewImageUrls) {
-                ReviewImage(it)
+                            },
+                        painter = painterResource(Res.drawable.ic_comment),
+                        contentDescription = "comment"
+                    )
+
+                    Spacer(modifier = Modifier.width(3.dp))
+
+                    Text(
+                        //TODO 댓글 개수
+                        text = "200",
+                        style = Typography.L2.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        color = Colors.Gray800
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }

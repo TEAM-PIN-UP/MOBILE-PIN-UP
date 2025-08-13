@@ -188,7 +188,7 @@ class MapViewModel (
                 updateState {
                     copy(
                         placeDetailUiState = PlaceDetailUiState(it),
-                        cameraPosition = Position(it.mapPlace.latitude, it.mapPlace.longitude),
+                        cameraPosition = Position(it.mapPlace.latitude - 0.0078, it.mapPlace.longitude),
                         isFocusLocation = false,
                         isDetailClicked = true
                     )

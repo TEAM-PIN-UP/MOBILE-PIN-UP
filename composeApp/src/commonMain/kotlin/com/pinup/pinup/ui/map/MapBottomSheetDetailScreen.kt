@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 //import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
@@ -40,6 +42,7 @@ import com.pinup.pinup.ui.component.ReviewCard
 import com.pinup.pinup.ui.component.ReviewedPlaceCard
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
@@ -139,7 +142,7 @@ fun MapBottomSheetDetailScreen(
                 RoundedBox(
                     modifier = Modifier
                         .clickableSingleWithNoRipple {
-                            //onClickPinlog()
+                            onMoveWriteReview()
                         },
                     backgroundColor = Colors.Neutral50,
                     cornerRounded = 100
@@ -167,7 +170,6 @@ fun MapBottomSheetDetailScreen(
                         }
                     },
                 userScrollEnabled = userScrollable,
-                verticalArrangement = Arrangement.spacedBy(20.dp),
                 state = scrollState
             ) {
                 item {
@@ -184,108 +186,38 @@ fun MapBottomSheetDetailScreen(
 
                         PHorizontalDivider(
                             modifier = Modifier
-                                .height(10.dp)
+                                .height(8.dp)
                                 .background(color = Colors.Neutral50)
                         )
+
+                        Spacer(modifier = Modifier.height(20.dp))
                     }
                 }
                 item {
-                    Box(
+                    Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp)
+                            .padding(start = 20.dp)
                     ) {
                         Text(
-                            modifier = Modifier
-                                .padding(vertical = 7.5.dp)
-                                .align(Alignment.CenterStart),
-                            text = "핀버디 리뷰",
-                            style = Typography.H3,
-                            color = Colors.Neutral800
+                            text = Texts.Word.PINLOG,
+                            style = Typography.B1.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = Colors.Gray800
                         )
 
-                        RoundedBox(
-                            modifier = Modifier
-                                .align(Alignment.CenterEnd)
-                                .clickableSingleWithNoRipple {
-                                    onMoveWriteReview()
-                                },
-                            backgroundColor = Colors.Neutral800,
-                            cornerRounded = 100,
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(horizontal = 12.dp)
-                                    .padding(vertical = 10.dp)
-                                    .align(Alignment.Center),
-                                text = "리뷰 작성",
-                                style = Typography.H4,
-                                color = Colors.White
-                            )
-                        }
+                        Spacer(modifier = Modifier.width(4.dp))
+
+                        Text(
+                            text = detailPlace.mapPlace.reviewCount.toString(),
+                            style = Typography.B1.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = Colors.Gray800
+                        )
                     }
-                }
 
-                item {
-                    RoundedBox(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        cornerRounded = 8,
-                        backgroundColor = Colors.Neutral50
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = detailPlace.mapPlace.averageStarRating.toString(),
-                                        style = Typography.H1,
-                                        color = Colors.Neutral800,
-                                    )
-
-                                    Text(
-                                        modifier = Modifier
-                                            .padding(start = 7.dp),
-                                        text = "/ 5",
-                                        style = Typography.H3,
-                                        color = Colors.Neutral400,
-                                    )
-                                }
-
-                                Row(
-                                    modifier = Modifier
-                                        .padding(top = 6.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = detailPlace.mapPlace.reviewCount.toString(),
-                                        style = Typography.B5,
-                                        color = Colors.Neutral800,
-                                    )
-                                    Text(
-                                        text = "명의 후기",
-                                        style = Typography.B5,
-                                        color = Colors.Neutral400,
-                                    )
-                                }
-                            }
-
-                            RatingGraphView(
-                                modifier = Modifier
-                                    .padding(vertical = 12.dp),
-                                ratingGraph = detailPlace.ratingGraph,
-                                totalReviewCount = detailPlace.mapPlace.reviewCount
-                            )
-                        }
-                    }
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
 
                 items(detailPlace.placeReviews) {
@@ -293,6 +225,12 @@ fun MapBottomSheetDetailScreen(
                         modifier = Modifier,
                         placeReview = it,
                         horizontalPadding = 20.dp
+                    )
+
+                    PHorizontalDivider(
+                        modifier = Modifier
+                            .height(1.dp)
+                            .background(color = Colors.Neutral50)
                     )
                 }
             }

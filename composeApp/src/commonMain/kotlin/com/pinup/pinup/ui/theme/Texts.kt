@@ -17,6 +17,7 @@ object Texts {
         const val CONFIRM = "확인"
         const val VERIFY = "인증하기"
         const val PIN_MAP = "핀맵"
+        const val PINLOG = "핀로그"
         const val FEED = "피드"
         const val ARTICLE = "아티클"
         const val MY = "마이"
