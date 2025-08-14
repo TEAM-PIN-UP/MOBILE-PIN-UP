@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pinup.pinup.domain.model.Category
+import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.ui.model.ChipState
 import kotlinx.collections.immutable.toPersistentList
@@ -95,7 +97,46 @@ fun MapBottomSheetNavHost(
         }
 
         composable<MapBottomSheetDestination.Pinch> {
-
+            MapBottomSheetPinchScreen(
+                //TODO 여기도 임시, 테스트용 더미
+                chipStates = listOf(
+                    ChipState(
+                        icon = null,
+                        text = "더미1",
+                        isSelected = true,
+                        type = Category.NONE
+                    ),
+                    ChipState(
+                        icon = null,
+                        text = "더미2",
+                        isSelected = false,
+                        type = Category.NONE
+                    ),
+                    ChipState(
+                        icon = null,
+                        text = "더미3",
+                        isSelected = false,
+                        type = Category.NONE
+                    ),
+                ),
+                pinchList = listOf(
+                    PinchListItem(
+                        id = 1,
+                        title = "하늘은 푸르고",
+                        description = "끼얏호우~"
+                    ),
+                    PinchListItem(
+                        id = 2,
+                        title = "비가 언제쯤 그칠까",
+                        description = "비가 오니까 습하고 어쩌구 저쩌구.."
+                    ),
+                    PinchListItem(
+                        id = 3,
+                        title = "비가 부릅니다 깡",
+                        description = "태양이 싫어 태양이 싫어"
+                    ),
+                )
+            )
         }
     }
 }
