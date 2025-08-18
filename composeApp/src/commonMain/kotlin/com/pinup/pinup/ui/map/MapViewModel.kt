@@ -304,6 +304,23 @@ class MapViewModel (
             )
         }
     }
+
+    fun getPinchDetailList(id : Int) = viewModelScope.launch {
+        //TODO 임시
+        val request = uiState.value.locationBound
+        val chipState = uiState.value.searchUiState.chipStates.first { it.isSelected }
+        val currentLatLng = uiState.value.currentPosition
+        resultResponse(
+            response = getReviewedPlacesUseCase(request, currentLatLng, SortType.NEAR, chipState.type),
+            successCallback = {
+                updateState {
+                    copy(
+                        pinchDetail = it
+                    )
+                }
+            }
+        )
+    }
 }
 
 data class SearchUiState(

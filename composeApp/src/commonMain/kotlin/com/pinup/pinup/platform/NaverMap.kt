@@ -19,7 +19,7 @@ expect fun PlatformNaverMap(
     searchUiState: SearchUiState,
     pinchDetailList: List<ReviewedPlace>,
     placeDetailUiState: PlaceDetailUiState,
-    isShowBookmarks: Boolean,
+    isShowPinch: Boolean,
     cameraPosition: Position?,
     onPlaceClick: (String) -> Unit,
     onCameraStateChange: (CameraState) -> Unit

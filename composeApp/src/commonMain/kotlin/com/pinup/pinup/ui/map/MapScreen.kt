@@ -86,6 +86,7 @@ fun MapScreen(
     onChipClick: (ChipState) -> Unit = {},
     onPlaceClick: (String) -> Unit = { },
     onClearDetailPlace: () -> Unit = {},
+    onPinchListClick: (Int) -> Unit = {},
     onUpdateBookmark: (String, Boolean) -> Unit = { _, _ -> },
     onUpdateSortType: (SortType) -> Unit = {},
     onUpdatePosition: () -> Unit = {},
@@ -235,7 +236,7 @@ fun MapScreen(
                 searchUiState = searchUiState,
                 placeDetailUiState = placeDetailUiState,
                 pinchDetailList = pinchDetailList,
-                isShowBookmarks = isShowPinch,
+                isShowPinch = isShowPinch,
                 cameraPosition = cameraPosition,
                 onPlaceClick = onPlaceClick,
                 onCameraStateChange = onCameraStateChange
@@ -323,6 +324,7 @@ fun MapScreen(
                         MapBottomSheetNavHost(
                             searchUiState = searchUiState,
                             placeDetailUiState = placeDetailUiState,
+                            pinchDetailList = pinchDetailList,
                             isScrollable = alpha == 0f,
                             onValueChange = onValueChange,
                             onChipClick = onChipClick,
@@ -330,6 +332,7 @@ fun MapScreen(
                             onPlaceClick = {
                                 onPlaceClick(it.kakaoPlaceId)
                             },
+                            onPinchListClick = onPinchListClick,
                             onClearDetailPlace = onClearDetailPlace,
                             onUpdateBookmark = onUpdateBookmark,
                             onSelectSortTypeClick = { scope.launch { sheetState.show() } },

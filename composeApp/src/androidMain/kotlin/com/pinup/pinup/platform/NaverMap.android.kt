@@ -1,6 +1,5 @@
 package com.pinup.pinup.platform
 
-import android.graphics.BitmapFactory
 import android.view.Gravity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -15,8 +14,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.naver.maps.geometry.LatLng
@@ -33,7 +30,6 @@ import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.PolylineOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
-import com.naver.maps.map.overlay.OverlayImage
 import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Position
@@ -47,14 +43,12 @@ import com.pinup.pinup.ui.map.SearchUiState
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_cafe_marker
 import pinup.composeapp.generated.resources.ic_cafe_marker_on
 import pinup.composeapp.generated.resources.ic_food_marker
 import pinup.composeapp.generated.resources.ic_food_marker_on
-import pinup.composeapp.generated.resources.ic_my_position
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
@@ -65,11 +59,12 @@ actual fun PlatformNaverMap(
     searchUiState: SearchUiState,
     pinchDetailList: List<ReviewedPlace>,
     placeDetailUiState: PlaceDetailUiState,
-    isShowBookmarks: Boolean,
+    isShowPinch: Boolean,
     cameraPosition: Position?,
     onPlaceClick: (String) -> Unit,
     onCameraStateChange: (CameraState) -> Unit
 ) {
+    hLog(pinchDetailList.toString())
     val scope = rememberCoroutineScope()
     val cameraPositionState = rememberCameraPositionState()
     LaunchedEffect(cameraPosition) {
@@ -80,7 +75,7 @@ actual fun PlatformNaverMap(
             )
             hLog("카메라 이동됨 >>> 현재 카메라: $nowCameraPosition")
             hLog("카메라 이동됨 >>> 바뀐 카메라: $cameraPosition")
-            hLog("카메라 이동됨 >>> 결과: ${if(it == nowCameraPosition) "같음, 취소 됨" else "다름, 이동 됨"}")
+            hLog("카메라 이동됨 >>> 결과: ${if (it == nowCameraPosition) "같음, 취소 됨" else "다름, 이동 됨"}")
             if (it == nowCameraPosition) return@let
             scope.launch {
                 cameraPositionState.animate(
@@ -147,7 +142,7 @@ actual fun PlatformNaverMap(
             )
         }
 
-        if (isShowBookmarks) {
+        if (isShowPinch && pinchDetailList.isNotEmpty()) {
             PolylineOverlay(
                 coords = pinchDetailList.map {
                     LatLng(it.latitude, it.longitude)
@@ -178,6 +173,7 @@ actual fun PlatformNaverMap(
                                     Category.RESTAURANT -> {
                                         painterResource(Res.drawable.ic_cafe_marker_on)
                                     }
+
                                     else -> {
                                         painterResource(Res.drawable.ic_food_marker_on)
                                     }
@@ -190,6 +186,7 @@ actual fun PlatformNaverMap(
                                     Category.RESTAURANT -> {
                                         painterResource(Res.drawable.ic_food_marker)
                                     }
+
                                     else -> {
                                         painterResource(Res.drawable.ic_cafe_marker)
                                     }
@@ -217,9 +214,14 @@ actual fun PlatformNaverMap(
                     }
                 }
             }
-        } else {
+        }
+
+        if(!isShowPinch) {
             searchUiState.reviewedPlaces.forEach {
-                key(it.kakaoPlaceId, it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
+                key(
+                    it.kakaoPlaceId,
+                    it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId
+                ) {
                     MarkerComposable(
                         keys = arrayOf(it.kakaoPlaceId),
                         state = MarkerState(
@@ -241,6 +243,7 @@ actual fun PlatformNaverMap(
                                         Category.RESTAURANT -> {
                                             painterResource(Res.drawable.ic_cafe_marker_on)
                                         }
+
                                         else -> {
                                             painterResource(Res.drawable.ic_food_marker_on)
                                         }
@@ -253,6 +256,7 @@ actual fun PlatformNaverMap(
                                         Category.RESTAURANT -> {
                                             painterResource(Res.drawable.ic_food_marker)
                                         }
+
                                         else -> {
                                             painterResource(Res.drawable.ic_cafe_marker)
                                         }

@@ -41,6 +41,7 @@ fun MapRoute(
         onValueChange = mapViewModel::updateSearchText,
         onPlaceClick = mapViewModel::getDetailPlace,
         onClearDetailPlace = mapViewModel::clearDetailPlace,
+        onPinchListClick = mapViewModel::getPinchDetailList,
         onUpdateBookmark = mapViewModel::updateBookmark,
         onUpdateSortType = mapViewModel::updateSortType,
         onUpdatePosition = mapViewModel::collectPosition,
