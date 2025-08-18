@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.key
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -34,10 +35,10 @@ import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.PositionBounds
-import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.extentions.toLatLng
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.map.MapViewModel
+import com.pinup.pinup.ui.map.PinchUiState
 import com.pinup.pinup.ui.map.PlaceDetailUiState
 import com.pinup.pinup.ui.map.SearchUiState
 import com.pinup.pinup.ui.theme.Colors
@@ -47,8 +48,10 @@ import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_cafe_marker
 import pinup.composeapp.generated.resources.ic_cafe_marker_on
+import pinup.composeapp.generated.resources.ic_cafe_marker_pinch
 import pinup.composeapp.generated.resources.ic_food_marker
 import pinup.composeapp.generated.resources.ic_food_marker_on
+import pinup.composeapp.generated.resources.ic_food_marker_pinch
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
@@ -57,14 +60,13 @@ actual fun PlatformNaverMap(
     viewModel: MapViewModel,
     position: Position,
     searchUiState: SearchUiState,
-    pinchDetailList: List<ReviewedPlace>,
+    pinchUiState: PinchUiState,
     placeDetailUiState: PlaceDetailUiState,
     isShowPinch: Boolean,
     cameraPosition: Position?,
     onPlaceClick: (String) -> Unit,
     onCameraStateChange: (CameraState) -> Unit
 ) {
-    hLog(pinchDetailList.toString())
     val scope = rememberCoroutineScope()
     val cameraPositionState = rememberCameraPositionState()
     LaunchedEffect(cameraPosition) {
@@ -142,74 +144,85 @@ actual fun PlatformNaverMap(
             )
         }
 
-        if (isShowPinch && pinchDetailList.isNotEmpty()) {
+        if (isShowPinch && pinchUiState.pinchDetailList.isNotEmpty()) {
             PolylineOverlay(
-                coords = pinchDetailList.map {
+                coords = pinchUiState.pinchDetailList.map {
                     LatLng(it.latitude, it.longitude)
                 },
                 width = 1.dp,
                 color = Colors.Negative,
                 pattern = arrayOf(1.dp, 3.dp)
             )
-            pinchDetailList.forEach {
-                MarkerComposable(
-                    keys = arrayOf(it.kakaoPlaceId),
-                    state = MarkerState(
-                        position = LatLng(it.latitude, it.longitude),
-                    ),
-                    anchor = Offset(0.5f, 0.25f),
-                    onClick = { _ ->
-                        onPlaceClick(it.kakaoPlaceId)
-                        true
-                    }
+            pinchUiState.pinchDetailList.forEach {
+                key(
+                    it.kakaoPlaceId,
+                    it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId
                 ) {
-                    Column(
-                        modifier = Modifier,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    MarkerComposable(
+                        keys = arrayOf(it.kakaoPlaceId),
+                        state = MarkerState(
+                            position = LatLng(it.latitude, it.longitude),
+                        ),
+                        anchor = Offset(0.5f, 0.25f),
+                        onClick = { _ ->
+                            onPlaceClick(it.kakaoPlaceId)
+                            true
+                        }
                     ) {
-                        if (it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
-                            Image(
-                                painter = when (it.placeCategory) {
-                                    Category.RESTAURANT -> {
-                                        painterResource(Res.drawable.ic_cafe_marker_on)
-                                    }
 
-                                    else -> {
-                                        painterResource(Res.drawable.ic_food_marker_on)
-                                    }
-                                },
-                                contentDescription = "marker"
-                            )
-                        } else {
-                            Image(
-                                painter = when (it.placeCategory) {
-                                    Category.RESTAURANT -> {
-                                        painterResource(Res.drawable.ic_food_marker)
-                                    }
-
-                                    else -> {
-                                        painterResource(Res.drawable.ic_cafe_marker)
-                                    }
-                                },
-                                contentDescription = "marker"
-                            )
+                        SideEffect {
+                            hLog("Marker(${it.kakaoPlaceId}) recomposed")
                         }
 
-                        RoundedBox(
+                        Column(
                             modifier = Modifier,
-                            backgroundColor = Colors.Black_25,
-                            cornerRounded = 100
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(vertical = 2.dp, horizontal = 6.dp)
-                                    .widthIn(max = 72.dp),
-                                text = it.name,
-                                style = Typography.B6,
-                                color = Colors.White,
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1
-                            )
+                            if (it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
+                                hLog("나 커짐")
+                                Image(
+                                    painter = when (it.placeCategory) {
+                                        Category.RESTAURANT -> {
+                                            painterResource(Res.drawable.ic_food_marker_on)
+                                        }
+
+                                        else -> {
+                                            painterResource(Res.drawable.ic_cafe_marker_on)
+                                        }
+                                    },
+                                    contentDescription = "marker"
+                                )
+                            } else {
+                                Image(
+                                    painter = when (it.placeCategory) {
+                                        Category.RESTAURANT -> {
+                                            painterResource(Res.drawable.ic_food_marker_pinch)
+                                        }
+
+                                        else -> {
+                                            painterResource(Res.drawable.ic_cafe_marker_pinch)
+                                        }
+                                    },
+                                    contentDescription = "marker"
+                                )
+                            }
+
+                            RoundedBox(
+                                modifier = Modifier,
+                                backgroundColor = Colors.Black_25,
+                                cornerRounded = 100
+                            ) {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(vertical = 2.dp, horizontal = 6.dp)
+                                        .widthIn(max = 72.dp),
+                                    text = it.name,
+                                    style = Typography.B6,
+                                    color = Colors.White,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1
+                                )
+                            }
                         }
                     }
                 }
@@ -241,11 +254,11 @@ actual fun PlatformNaverMap(
                                 Image(
                                     painter = when (it.placeCategory) {
                                         Category.RESTAURANT -> {
-                                            painterResource(Res.drawable.ic_cafe_marker_on)
+                                            painterResource(Res.drawable.ic_food_marker_on)
                                         }
 
                                         else -> {
-                                            painterResource(Res.drawable.ic_food_marker_on)
+                                            painterResource(Res.drawable.ic_cafe_marker_on)
                                         }
                                     },
                                     contentDescription = "marker"

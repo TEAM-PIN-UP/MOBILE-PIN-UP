@@ -78,9 +78,13 @@ class MapViewModel (
         }
     }
 
-    fun updateShowBookmarks() = viewModelScope.launch {
+    fun updateShowPinch() = viewModelScope.launch {
+        clearDetailPlace()
         updateState {
             copy(
+                pinchUiState = pinchUiState.copy(
+                    pinchDetailList = if(isShowPinch) emptyList() else pinchUiState.pinchDetailList,
+                ),
                 isShowPinch = !isShowPinch
             )
         }
@@ -315,11 +319,23 @@ class MapViewModel (
             successCallback = {
                 updateState {
                     copy(
-                        pinchDetail = it
+                        pinchUiState = pinchUiState.copy(
+                            pinchDetailList = it
+                        )
                     )
                 }
             }
         )
+    }
+
+    fun clearPinchDetailList() {
+        updateState {
+            copy(
+                pinchUiState = pinchUiState.copy(
+                    pinchDetailList = emptyList()
+                )
+            )
+        }
     }
 }
 
@@ -336,12 +352,16 @@ data class PlaceDetailUiState(
     val detailPlace: DetailPlace? = null
 )
 
+data class PinchUiState(
+    val pinchList: List<PinchListItem> = emptyList(),
+    val pinchDetailList : List<ReviewedPlace> = emptyList(),
+)
+
 data class MapUiState(
     var locationBound: LocationBound = LocationBound(),
     val searchUiState: SearchUiState = SearchUiState(),
     val placeDetailUiState: PlaceDetailUiState = PlaceDetailUiState(),
-    val pinchList: List<PinchListItem> = emptyList(),
-    val pinchDetail : List<ReviewedPlace> = emptyList(),
+    val pinchUiState: PinchUiState = PinchUiState(),
     val isFocusLocation: Boolean = false,
     val isShowPinch: Boolean = false,
     val currentPosition: Position? = null,

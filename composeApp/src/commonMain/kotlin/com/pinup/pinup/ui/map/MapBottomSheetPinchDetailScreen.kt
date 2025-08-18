@@ -2,6 +2,7 @@ package com.pinup.pinup.ui.map
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,9 +34,9 @@ import pinup.composeapp.generated.resources.ic_back
 fun MapBottomSheetPinchDetailScreen(
     id: Int,
     title: String,
-    detailPlaceList: List<ReviewedPlace>,
+    pinchUiState: PinchUiState,
     onClickArticle: (Int) -> Unit = {},
-    onClickPinch: (Int) -> Unit = {},
+    onClickPinch: (String) -> Unit = {},
     onClickBack: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
@@ -96,9 +97,12 @@ fun MapBottomSheetPinchDetailScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn(
-            state = scrollState
+            modifier = Modifier
+                .background(color = Colors.Gray50),
+            state = scrollState,
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(detailPlaceList) {
+            items(pinchUiState.pinchDetailList) {
                 ReviewedPlaceCard(
                     name = it.name,
                     rating = it.averageStarRating,
@@ -107,7 +111,7 @@ fun MapBottomSheetPinchDetailScreen(
                     reviewerProfileImageUrls = it.reviewerProfileImageUrls,
                     reviewImageUrls = it.reviewImageUrls,
                     onItemClick = {
-                        onClickPinch(1)
+                        onClickPinch(it.kakaoPlaceId)
                     }
                 )
             }

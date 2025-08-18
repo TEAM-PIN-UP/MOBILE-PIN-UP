@@ -12,6 +12,7 @@ import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.ui.map.MapViewModel
+import com.pinup.pinup.ui.map.PinchUiState
 import com.pinup.pinup.ui.map.PlaceDetailUiState
 import com.pinup.pinup.ui.map.SearchUiState
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -22,7 +23,7 @@ actual fun PlatformNaverMap(
     viewModel: MapViewModel,
     position: Position,
     searchUiState: SearchUiState,
-    pinchDetailList: List<ReviewedPlace>,
+    pinchUiState: PinchUiState,
     placeDetailUiState: PlaceDetailUiState,
     isShowPinch: Boolean,
     cameraPosition: Position?,

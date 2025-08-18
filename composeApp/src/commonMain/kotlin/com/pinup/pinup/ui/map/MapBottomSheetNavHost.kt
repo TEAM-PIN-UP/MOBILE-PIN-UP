@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.ReviewedPlace
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.model.ChipState
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
@@ -17,13 +18,13 @@ import kotlinx.serialization.Serializable
 fun MapBottomSheetNavHost(
     searchUiState: SearchUiState,
     placeDetailUiState: PlaceDetailUiState,
-    pinchList: List<PinchListItem> = emptyList(),
-    pinchDetailList: List<ReviewedPlace> = emptyList(),
+    pinchUiState: PinchUiState,
+    clearPinchList: () -> Unit = {},
     isShowPinch: Boolean = false,
     isScrollable: Boolean,
     onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
-    onPlaceClick: (ReviewedPlace) -> Unit = {},
+    onPlaceClick: (String) -> Unit = {},
     onPinchListClick: (Int) -> Unit = {},
     onClearDetailPlace: () -> Unit = {},
     onUpdateBookmark: (String, Boolean) -> Unit = { _, _ -> },
@@ -34,8 +35,8 @@ fun MapBottomSheetNavHost(
     val pinchRoute = MapBottomSheetDestination.Pinch::class.qualifiedName
     val detailRoute = MapBottomSheetDestination.Detail::class.qualifiedName
 
-    LaunchedEffect(placeDetailUiState.detailPlace, isShowPinch) {
-        if (!isShowPinch && placeDetailUiState.detailPlace != null) {
+    LaunchedEffect(placeDetailUiState.detailPlace) {
+        if (placeDetailUiState.detailPlace != null) {
             val current = navHostController.currentBackStackEntry?.destination?.route
             if (current != detailRoute) {
                 navHostController.navigate(MapBottomSheetDestination.Detail) {
@@ -46,6 +47,7 @@ fun MapBottomSheetNavHost(
     }
 
     LaunchedEffect(isShowPinch) {
+        hLog("하이 $isShowPinch")
         val current = navHostController.currentBackStackEntry?.destination?.route
         if (isShowPinch) {
             if (current != pinchRoute) {
@@ -56,6 +58,12 @@ fun MapBottomSheetNavHost(
         } else {
             if (current == pinchRoute) {
                 navHostController.popBackStack()
+            }
+            else {
+                navHostController.popBackStack(
+                    route = MapBottomSheetDestination.Search,
+                    inclusive = false
+                )
             }
         }
     }
@@ -75,7 +83,7 @@ fun MapBottomSheetNavHost(
                 onValueChange = onValueChange,
                 onChipClick = onChipClick,
                 onPlaceClick = {
-                    onPlaceClick(it)
+                    onPlaceClick(it.kakaoPlaceId)
                 },
                 onSelectSortTypeClick = onSelectSortTypeClick,
                 onFocusChange = onFocusChange
@@ -151,9 +159,13 @@ fun MapBottomSheetNavHost(
             MapBottomSheetPinchDetailScreen(
                 id = 1,
                 title = "비가 언제쯤 그칠까",
-                detailPlaceList = pinchDetailList,
+                pinchUiState = pinchUiState,
                 onClickBack = {
+                    clearPinchList()
                     navHostController.popBackStack()
+                },
+                onClickPinch = { id ->
+                    onPlaceClick(id)
                 }
             )
         }
