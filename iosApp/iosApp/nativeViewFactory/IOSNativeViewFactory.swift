@@ -29,7 +29,7 @@ struct MapView: View {
                 position: viewModel.mapUiState.currentPosition,
                 cameraPosition: viewModel.mapUiState.cameraPosition,
                 searchUiState: viewModel.mapUiState.searchUiState,
-                isShowBookmarks: viewModel.mapUiState.isShowBookmarks,
+                isShowBookmarks: viewModel.mapUiState.isShowPinch,
                 onCameraStateChange: viewModel.onCameraStateChange,
                 addMarker: viewModel.addMarker,
                 clearMarker: viewModel.clearMarker

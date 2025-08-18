@@ -31,12 +31,14 @@ import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.MarkerComposable
 import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.PolylineOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.overlay.OverlayImage
 import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.PositionBounds
+import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.extentions.toLatLng
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.map.MapViewModel
@@ -61,6 +63,7 @@ actual fun PlatformNaverMap(
     viewModel: MapViewModel,
     position: Position,
     searchUiState: SearchUiState,
+    pinchDetailList: List<ReviewedPlace>,
     placeDetailUiState: PlaceDetailUiState,
     isShowBookmarks: Boolean,
     cameraPosition: Position?,
@@ -144,8 +147,16 @@ actual fun PlatformNaverMap(
             )
         }
 
-        searchUiState.reviewedPlaces.filter { if (isShowBookmarks) it.bookmark else true }.forEach {
-            key(it.kakaoPlaceId, it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
+        if (isShowBookmarks) {
+            PolylineOverlay(
+                coords = pinchDetailList.map {
+                    LatLng(it.latitude, it.longitude)
+                },
+                width = 1.dp,
+                color = Colors.Negative,
+                pattern = arrayOf(1.dp, 3.dp)
+            )
+            pinchDetailList.forEach {
                 MarkerComposable(
                     keys = arrayOf(it.kakaoPlaceId),
                     state = MarkerState(
@@ -202,6 +213,70 @@ actual fun PlatformNaverMap(
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1
                             )
+                        }
+                    }
+                }
+            }
+        } else {
+            searchUiState.reviewedPlaces.forEach {
+                key(it.kakaoPlaceId, it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
+                    MarkerComposable(
+                        keys = arrayOf(it.kakaoPlaceId),
+                        state = MarkerState(
+                            position = LatLng(it.latitude, it.longitude),
+                        ),
+                        anchor = Offset(0.5f, 0.25f),
+                        onClick = { _ ->
+                            onPlaceClick(it.kakaoPlaceId)
+                            true
+                        }
+                    ) {
+                        Column(
+                            modifier = Modifier,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            if (it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
+                                Image(
+                                    painter = when (it.placeCategory) {
+                                        Category.RESTAURANT -> {
+                                            painterResource(Res.drawable.ic_cafe_marker_on)
+                                        }
+                                        else -> {
+                                            painterResource(Res.drawable.ic_food_marker_on)
+                                        }
+                                    },
+                                    contentDescription = "marker"
+                                )
+                            } else {
+                                Image(
+                                    painter = when (it.placeCategory) {
+                                        Category.RESTAURANT -> {
+                                            painterResource(Res.drawable.ic_food_marker)
+                                        }
+                                        else -> {
+                                            painterResource(Res.drawable.ic_cafe_marker)
+                                        }
+                                    },
+                                    contentDescription = "marker"
+                                )
+                            }
+
+                            RoundedBox(
+                                modifier = Modifier,
+                                backgroundColor = Colors.Black_25,
+                                cornerRounded = 100
+                            ) {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(vertical = 2.dp, horizontal = 6.dp)
+                                        .widthIn(max = 72.dp),
+                                    text = it.name,
+                                    style = Typography.B6,
+                                    color = Colors.White,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1
+                                )
+                            }
                         }
                     }
                 }

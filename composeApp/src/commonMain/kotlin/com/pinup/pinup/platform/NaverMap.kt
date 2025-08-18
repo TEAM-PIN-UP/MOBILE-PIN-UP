@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Position
+import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.ui.map.MapViewModel
 import com.pinup.pinup.ui.map.PlaceDetailUiState
 import com.pinup.pinup.ui.map.SearchUiState
@@ -16,6 +17,7 @@ expect fun PlatformNaverMap(
     viewModel: MapViewModel,
     position: Position,
     searchUiState: SearchUiState,
+    pinchDetailList: List<ReviewedPlace>,
     placeDetailUiState: PlaceDetailUiState,
     isShowBookmarks: Boolean,
     cameraPosition: Position?,

@@ -22,8 +22,8 @@ class NaverMapViewModel: ObservableObject {
     
     init(viewModel: MapViewModel) {
         self.viewModel = viewModel
-        self.mapUiState = viewModel.mapUiState.value as! MapUiState
-        viewModel.mapUiState.collect(collector: Collector<MapUiState> { mapUiState in
+        self.mapUiState = viewModel.uiState.value as! MapUiState
+        viewModel.uiState.collect(collector: Collector<MapUiState> { mapUiState in
             // do what ever you want
             print("mapUiState: \(mapUiState)")
             self.mapUiState = mapUiState

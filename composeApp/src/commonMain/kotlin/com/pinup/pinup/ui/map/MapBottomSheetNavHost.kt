@@ -17,6 +17,8 @@ import kotlinx.serialization.Serializable
 fun MapBottomSheetNavHost(
     searchUiState: SearchUiState,
     placeDetailUiState: PlaceDetailUiState,
+    pinchList: List<PinchListItem> = emptyList(),
+    pinchDetailList: List<ReviewedPlace> = emptyList(),
     isShowPinch: Boolean = false,
     isScrollable: Boolean,
     onValueChange: (String) -> Unit = {},
@@ -138,6 +140,49 @@ fun MapBottomSheetNavHost(
                 )
             )
         }
+
+        composable<MapBottomSheetDestination.PinchDetail> {
+            MapBottomSheetPinchScreen(
+                //TODO 여기도 임시, 테스트용 더미
+                chipStates = listOf(
+                    ChipState(
+                        icon = null,
+                        text = "더미1",
+                        isSelected = true,
+                        type = Category.NONE
+                    ),
+                    ChipState(
+                        icon = null,
+                        text = "더미2",
+                        isSelected = false,
+                        type = Category.NONE
+                    ),
+                    ChipState(
+                        icon = null,
+                        text = "더미3",
+                        isSelected = false,
+                        type = Category.NONE
+                    ),
+                ),
+                pinchList = listOf(
+                    PinchListItem(
+                        id = 1,
+                        title = "하늘은 푸르고",
+                        description = "끼얏호우~"
+                    ),
+                    PinchListItem(
+                        id = 2,
+                        title = "비가 언제쯤 그칠까",
+                        description = "비가 오니까 습하고 어쩌구 저쩌구.."
+                    ),
+                    PinchListItem(
+                        id = 3,
+                        title = "비가 부릅니다 깡",
+                        description = "태양이 싫어 태양이 싫어"
+                    ),
+                )
+            )
+        }
     }
 }
 
@@ -148,4 +193,6 @@ sealed interface MapBottomSheetDestination {
     data object Detail: MapBottomSheetDestination
     @Serializable
     data object Pinch: MapBottomSheetDestination
+    @Serializable
+    data object PinchDetail: MapBottomSheetDestination
 }

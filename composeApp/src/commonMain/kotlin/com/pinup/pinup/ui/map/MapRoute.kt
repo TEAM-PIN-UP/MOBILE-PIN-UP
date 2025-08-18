@@ -33,6 +33,8 @@ fun MapRoute(
         isCameraMoving = mapUiState.value.isCameraMoving,
         isDetailClicked = mapUiState.value.isDetailClicked,
         profileImage = mapUiState.value.profileImage,
+        pinchList = mapUiState.value.pinchList,
+        pinchDetailList = mapUiState.value.pinchDetail,
         onClickBottomNav = onBottomMenuClick,
         onCameraStateChange = mapViewModel::getPlaces,
         onChipClick = mapViewModel::updateChipState,

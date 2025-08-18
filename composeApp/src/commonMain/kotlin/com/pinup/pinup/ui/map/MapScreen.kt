@@ -34,7 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.pinup.pinup.domain.model.CameraState
+import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.Position
+import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
@@ -74,6 +76,8 @@ fun MapScreen(
     isShowPinch: Boolean,
     isCameraMoving: Boolean,
     isDetailClicked: Boolean,
+    pinchList: List<PinchListItem> = emptyList(),
+    pinchDetailList: List<ReviewedPlace> = emptyList(),
     profileImage: String,
     position: Position = Position.INVALID,
     cameraPosition: Position? = null,
@@ -230,6 +234,7 @@ fun MapScreen(
                 position = position,
                 searchUiState = searchUiState,
                 placeDetailUiState = placeDetailUiState,
+                pinchDetailList = pinchDetailList,
                 isShowBookmarks = isShowPinch,
                 cameraPosition = cameraPosition,
                 onPlaceClick = onPlaceClick,

@@ -5,6 +5,7 @@ import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.LocationBound
+import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.ReviewedPlace
@@ -322,6 +323,8 @@ data class MapUiState(
     var locationBound: LocationBound = LocationBound(),
     val searchUiState: SearchUiState = SearchUiState(),
     val placeDetailUiState: PlaceDetailUiState = PlaceDetailUiState(),
+    val pinchList: List<PinchListItem> = emptyList(),
+    val pinchDetail : List<ReviewedPlace> = emptyList(),
     val isFocusLocation: Boolean = false,
     val isShowPinch: Boolean = false,
     val currentPosition: Position? = null,
