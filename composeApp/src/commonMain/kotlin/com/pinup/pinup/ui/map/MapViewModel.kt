@@ -229,6 +229,14 @@ class MapViewModel (
         }
     }
 
+    fun consumedDetailClicked() = viewModelScope.launch {
+        updateState {
+            copy(
+                isDetailClicked = false
+            )
+        }
+    }
+
     fun updateBookmark(kakaoPlaceId: String, nowState: Boolean) = viewModelScope.launch {
         val result = if (nowState) {
             deleteBookmarkUseCase(kakaoPlaceId)

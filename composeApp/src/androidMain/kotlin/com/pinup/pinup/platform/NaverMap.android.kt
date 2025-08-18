@@ -169,17 +169,11 @@ actual fun PlatformNaverMap(
                             true
                         }
                     ) {
-
-                        SideEffect {
-                            hLog("Marker(${it.kakaoPlaceId}) recomposed")
-                        }
-
                         Column(
                             modifier = Modifier,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             if (it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
-                                hLog("나 커짐")
                                 Image(
                                     painter = when (it.placeCategory) {
                                         Category.RESTAURANT -> {

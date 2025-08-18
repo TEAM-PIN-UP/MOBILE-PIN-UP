@@ -47,6 +47,7 @@ fun MapRoute(
         onUpdatePosition = mapViewModel::collectPosition,
         onUpdateShowBookmarks = mapViewModel::updateShowPinch,
         onUpdateFocusLocation = mapViewModel::updateFocusLocation,
-        onFocusChange = mapViewModel::updateFocusSearch
+        onFocusChange = mapViewModel::updateFocusSearch,
+        consumeDetailClicked = mapViewModel::consumedDetailClicked
     )
 }

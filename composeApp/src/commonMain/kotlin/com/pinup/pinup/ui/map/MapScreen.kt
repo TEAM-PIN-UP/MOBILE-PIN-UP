@@ -93,7 +93,8 @@ fun MapScreen(
     onUpdateShowBookmarks: () -> Unit = {},
     onUpdateFocusLocation: (Boolean) -> Unit = {},
     onFocusChange: (Boolean) -> Unit = {},
-    onClickBottomNav: (MainDestination) -> Unit
+    onClickBottomNav: (MainDestination) -> Unit,
+    consumeDetailClicked: () -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -317,6 +318,7 @@ fun MapScreen(
                         onSheetHeightChanged = {
                             bottomSheetHeight = it
                         },
+                        consumeDetailClicked = consumeDetailClicked,
                         isMoving = isCameraMoving,
                         isDetailClicked = isDetailClicked,
                         isFocusSearch = searchUiState.isFocus
