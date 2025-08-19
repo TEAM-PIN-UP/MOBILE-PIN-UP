@@ -109,5 +109,14 @@ object Texts {
         const val WRITE_DESCRIPTION = "작성된 핀로그는 핀버디만 볼 수 있어요"
         const val SEARCH_HINT = "장소 검색하기"
         const val SEARCH_RESULT = "검색 결과"
+        fun getSelectDateTitle(place : String) = buildAnnotatedString {
+            withStyle(style = SpanStyle(color = Colors.Main)) {
+                append("‘${place}’")
+            }
+            withStyle(style = SpanStyle(color = Colors.Gray800)) {
+                append("은\n 언제 방문하셨나요?")
+            }
+        }
+        const val SELECT_DATE_HINT = "날짜 선택"
     }
 }

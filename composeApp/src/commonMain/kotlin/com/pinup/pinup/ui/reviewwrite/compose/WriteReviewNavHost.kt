@@ -75,7 +75,14 @@ fun WriteReviewNavHost(
                 uiState.value.selectedPlace?.let {
                     SelectDateScreen(
                         placeName = it.name,
-                        onSelectedDate = writeReviewViewModel::selectDate
+                        onSelectedDate = writeReviewViewModel::selectDate,
+                        selectedDate = uiState.value.visitedDate,
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
+                        onClickNext = {
+                            navHostController.navigate(WriteReviewDestination.WriteReview)
+                        }
                     )
                 }
             }

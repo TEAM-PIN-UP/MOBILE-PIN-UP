@@ -4,8 +4,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,13 +15,18 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.DatePicker
+import com.pinup.pinup.ui.component.PButton
 import com.pinup.pinup.ui.component.RoundedBox
+import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
@@ -28,7 +35,10 @@ import pinup.composeapp.generated.resources.ic_calendar
 @Composable
 fun SelectDateScreen(
     placeName: String,
-    onSelectedDate: (String) -> Unit = {}
+    onSelectedDate: (String) -> Unit = {},
+    selectedDate: String = "",
+    onBackPressed: () -> Unit = {},
+    onClickNext: () -> Unit = {},
 ) {
     val isShowTimePicker = remember { mutableStateOf(false) }
 
@@ -37,81 +47,86 @@ fun SelectDateScreen(
             .fillMaxSize()
             .background(color = Colors.White)
             .padding(horizontal = 20.dp)
-
     ) {
-        Image(
-            modifier = Modifier
-                .padding(top = 40.dp),
-            painter = painterResource(Res.drawable.ic_calendar),
-            contentDescription = null
+        TitleBar(
+            title = Texts.PinLog.WRITE_PINLOG,
+            onLeftButtonClick = onBackPressed
         )
 
-        Row(
-            modifier = Modifier
-                .padding(top = 16.dp),
-        ) {
-            Text(
-                text = "‘$placeName’",
-                color = Colors.Neutral800,
-                style = Typography.H1
-            )
-
-            Text(
-                modifier = Modifier
-                    .padding(start = 4.dp),
-                text = "은/는",
-                color = Colors.Neutral400,
-                style = Typography.H1
-            )
-        }
+        Spacer(modifier = Modifier.height(38.dp))
 
         Text(
-            modifier = Modifier
-                .padding(top = 8.dp),
-            text = "언제 방문하셨나요?",
-            color = Colors.Neutral400,
-            style = Typography.H1
+            text = Texts.PinLog.getSelectDateTitle(placeName),
+            style = Typography.D2.copy(
+                fontWeight = FontWeight.Bold
+            )
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         RoundedBox(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 28.dp)
                 .clickableWithNoRipple {
                     isShowTimePicker.value = true
                 },
-            cornerRounded = 8,
-            cornerColor = Colors.Neutral200
+            cornerRounded = 100,
+            cornerColor = Colors.Gray100
         ) {
-            Text(
+            Row(
                 modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .padding(start = 12.dp),
-                text = "날짜 선택",
-                style = Typography.B3,
-                color = Colors.Neutral800
-            )
-        }
-
-        if (isShowTimePicker.value) {
-            Dialog(
-                onDismissRequest = {
-                    isShowTimePicker.value = false
-                },
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                DatePicker(
+                Text(
                     modifier = Modifier
-                        .background(
-                            color = Colors.White,
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .wrapContentSize(),
-                    onCompleteClick = { visitedDate ->
-                        isShowTimePicker.value = false
-                        onSelectedDate(visitedDate)
-                    }
+                        .padding(vertical = 16.dp)
+                        .padding(start = 20.dp),
+                    text = selectedDate.ifEmpty { Texts.PinLog.SELECT_DATE_HINT },
+                    style = Typography.B2.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = if (selectedDate.isEmpty()) Colors.Gray600 else Colors.Gray800
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Image(
+                    painter = painterResource(Res.drawable.ic_calendar),
+                    contentDescription = null
                 )
             }
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        PButton(
+            text = Texts.Word.NEXT,
+            isEnable = selectedDate.isNotEmpty(),
+            onClick = {
+                onClickNext()
+            }
+        )
+    }
+
+    if (isShowTimePicker.value) {
+        Dialog(
+            onDismissRequest = {
+                isShowTimePicker.value = false
+            },
+        ) {
+            DatePicker(
+                modifier = Modifier
+                    .background(
+                        color = Colors.White,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .wrapContentSize(),
+                onCompleteClick = { visitedDate ->
+                    isShowTimePicker.value = false
+                    onSelectedDate(visitedDate)
+                }
+            )
         }
     }
 }
