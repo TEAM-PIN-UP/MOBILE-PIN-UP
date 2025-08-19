@@ -19,7 +19,7 @@ class ImageRepositoryImpl (
     override suspend fun uploadImage(
         type: ImageUploadType,
         image: ByteArray
-    ): PResult<Unit> {
+    ): PResult<String> {
         return imageRemoteDataSource.uploadImage(type, image)
     }
 }

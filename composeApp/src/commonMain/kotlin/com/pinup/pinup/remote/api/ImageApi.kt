@@ -24,5 +24,5 @@ interface ImageApi {
     suspend fun uploadImage(
         @Path type : String,
         @Body multipart: MultiPartFormDataContent
-    ): PResult<PResponse<Unit>>
+    ): PResult<PResponse<String>>
 }

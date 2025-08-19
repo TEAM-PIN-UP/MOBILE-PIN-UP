@@ -38,7 +38,7 @@ class ImageRemoteDataSourceImpl (
     override suspend fun uploadImage(
         type: ImageUploadType,
         image: ByteArray
-    ): PResult<Unit> {
+    ): PResult<String> {
         val timeStamp = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).nanosecond
         val multipart = MultiPartFormDataContent(formData {
             append("image", image, Headers.build {

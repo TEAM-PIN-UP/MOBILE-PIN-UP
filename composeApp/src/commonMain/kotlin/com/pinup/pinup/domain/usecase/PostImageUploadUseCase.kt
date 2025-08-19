@@ -7,7 +7,7 @@ import com.pinup.pinup.domain.repository.ImageRepository
 class PostImageUploadUseCase (
     private val imageRepository: ImageRepository
 ) {
-    suspend operator fun invoke(type: ImageUploadType, image: ByteArray): PResult<Unit> {
+    suspend operator fun invoke(type: ImageUploadType, image: ByteArray): PResult<String> {
         return imageRepository.uploadImage(type, image)
     }
 }
