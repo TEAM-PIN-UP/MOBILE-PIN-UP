@@ -25,7 +25,7 @@ object ApiPath {
 
     object ImagePath {
         private const val IMAGE = "api/{type}"
-        const val SEVERAL_IMAGE = "$IMAGE/IMAGES"
-        const val ONE_IMAGE = "$IMAGE/IMAGE"
+        const val SEVERAL_IMAGE = "$IMAGE/images"
+        const val ONE_IMAGE = "$IMAGE/image"
     }
 }

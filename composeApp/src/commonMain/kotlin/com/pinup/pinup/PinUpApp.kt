@@ -88,10 +88,10 @@ fun PinUpApp(
                 ){
                     OnboardingRoute(
                         onMoveSignUpOnboarding = {
-                            navHostController.navigate(PinUpAppDestination.Main)
+                            navHostController.navigate(PinUpAppDestination.ChoiceSignUp)
                         },
                         onMoveLogin = {
-                            navHostController.navigate(PinUpAppDestination.Main)
+                            navHostController.navigate(PinUpAppDestination.Login)
                         }
                     )
                 }

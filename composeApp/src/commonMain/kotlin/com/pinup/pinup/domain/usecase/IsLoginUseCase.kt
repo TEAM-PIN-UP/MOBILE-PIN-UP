@@ -12,23 +12,22 @@ class IsLoginUseCase(
 ) {
     suspend operator fun invoke(): Boolean {
         val isLogin = membersRepository.getAccessToken().isNotEmpty()
-
-        if (isLogin) {
-            val result = getMemberInfoUseCase().getSuccessOrNull()
-            if (result != null) {
-                saveUserInfoUseCase(
-                    UserInfo(
-                        memberId = result.profile.memberId,
-                        email = result.profile.email,
-                        name = result.profile.name,
-                        nickname = result.profile.nickname,
-                        profileUrl = result.profile.profilePictureUrl ?: "",
-                        snsType = SNSType.GOOGLE
-                    )
-                )
-            }
-        }
-
+//        if (isLogin) {
+//            val result = getMemberInfoUseCase().getSuccessOrNull()
+//            if (result != null) {
+//                saveUserInfoUseCase(
+//                    UserInfo(
+//                        memberId = result.profile.memberId,
+//                        email = result.profile.email,
+//                        name = result.profile.name,
+//                        nickname = result.profile.nickname,
+//                        profileUrl = result.profile.profilePictureUrl ?: "",
+//                        snsType = SNSType.GOOGLE
+//                    )
+//                )
+//            }
+//        }
+//TODO 임시 확인용
         return isLogin
     }
 }
