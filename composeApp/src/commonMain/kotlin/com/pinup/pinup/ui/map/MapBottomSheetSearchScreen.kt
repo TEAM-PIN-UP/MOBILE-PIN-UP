@@ -68,10 +68,9 @@ fun MapBottomSheetSearchScreen(
     sortType: SortType,
     isExpanded: Boolean,
     places: List<Place>,
-    onSearchPlaceClick: (Place) -> Unit = {},
     onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
-    onPlaceClick: (ReviewedPlace) -> Unit = {},
+    onPlaceClick: (String) -> Unit = {},
     onSelectSortTypeClick: () -> Unit = {},
     onFocusChange: (Boolean) -> Unit ={},
 ) {
@@ -125,7 +124,9 @@ fun MapBottomSheetSearchScreen(
         if (isFocusSearch) {
             FocusScreen(
                 places = places,
-                onPlaceClick = onSearchPlaceClick
+                onPlaceClick = {
+                    onPlaceClick(it.kakaoPlaceId)
+                }
             )
         } else {
             NonFocusScreen(
@@ -134,7 +135,9 @@ fun MapBottomSheetSearchScreen(
                 sortType = sortType,
                 isExpanded = isExpanded,
                 onChipClick = onChipClick,
-                onPlaceClick = onPlaceClick,
+                onPlaceClick = {
+                    onPlaceClick(it.kakaoPlaceId)
+                },
                 onSelectSortTypeClick = onSelectSortTypeClick
             )
         }

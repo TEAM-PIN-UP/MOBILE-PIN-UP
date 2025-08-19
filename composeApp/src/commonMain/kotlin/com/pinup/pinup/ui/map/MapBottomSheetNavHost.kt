@@ -82,9 +82,7 @@ fun MapBottomSheetNavHost(
                 isExpanded = isScrollable,
                 onValueChange = onValueChange,
                 onChipClick = onChipClick,
-                onPlaceClick = {
-                    onPlaceClick(it.kakaoPlaceId)
-                },
+                onPlaceClick = onPlaceClick,
                 onSelectSortTypeClick = onSelectSortTypeClick,
                 onFocusChange = onFocusChange
             )
