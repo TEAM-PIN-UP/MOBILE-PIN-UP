@@ -107,6 +107,8 @@ fun SelectDateScreen(
                 onClickNext()
             }
         )
+
+        Spacer(modifier = Modifier.height(42.dp))
     }
 
     if (isShowTimePicker.value) {

@@ -1,37 +1,23 @@
 package com.pinup.pinup.ui.reviewwrite
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.WriteReview
 import com.pinup.pinup.domain.usecase.RegisterReviewUseCase
-import com.pinup.pinup.platform.hLog
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import com.pinup.pinup.ui.base.BaseViewModel
+import com.pinup.pinup.ui.base.UiEvent
+import com.pinup.pinup.ui.base.UiState
 import kotlinx.coroutines.launch
-
 
 class WriteReviewViewModel (
     private val registerReviewUseCase: RegisterReviewUseCase
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(WriteReviewUiState())
-    val uiState: StateFlow<WriteReviewUiState>
-        get() = _uiState.asStateFlow()
+) : BaseViewModel<WriteReviewUiState, WriteReviewUiEvent>(WriteReviewUiState()) {
 
-    private val _uiEvent = MutableSharedFlow<WriteReviewUiEvent>()
-    val uiEvent: SharedFlow<WriteReviewUiEvent>
-        get() = _uiEvent.asSharedFlow()
     var kakaoPlaceId: String? = null
 
     fun updateContent(inputText: String) {
-        _uiState.update {
-            it.copy(
+        updateState {
+            copy(
                 content = inputText
             )
         }
@@ -39,68 +25,61 @@ class WriteReviewViewModel (
 
 
     fun selectPlace(place: Place) = viewModelScope.launch {
-        _uiState.update {
-            it.copy(
+        updateState {
+            copy(
                 selectedPlace = place
             )
         }
-        _uiEvent.emit(WriteReviewUiEvent.MoveSelectDate)
+        emitEvent(WriteReviewUiEvent.MoveSelectDate)
     }
 
     fun selectDate(visitedDate: String) = viewModelScope.launch {
-        _uiState.update {
-            it.copy(
+        updateState {
+            copy(
                 visitedDate = visitedDate
             )
         }
-        _uiEvent.emit(WriteReviewUiEvent.MoveWriteReview)
     }
 
     fun addImage(imgPath: ByteArray) = viewModelScope.launch {
-        _uiState.update {
-            it.copy(
-                imagePaths = it.imagePaths + imgPath
+        updateState {
+            copy(
+                imagePaths = imagePaths + imgPath
             )
         }
     }
 
     fun removeImage(imgPath: ByteArray) = viewModelScope.launch {
-        _uiState.update {
-            it.copy(
-                imagePaths = it.imagePaths - imgPath
+        updateState {
+            copy(
+                imagePaths = imagePaths - imgPath
             )
         }
     }
 
     fun updateRating(rating: Int) = viewModelScope.launch {
-        _uiState.update {
-            it.copy(
+        updateState{
+            copy(
                 starRating = rating
             )
         }
     }
 
     fun registerReview() = viewModelScope.launch {
-        val files = _uiState.value.imagePaths
+        val files = uiState.value.imagePaths
         val writeReview = WriteReview(
-            content = _uiState.value.content,
-            starRating = _uiState.value.starRating.toDouble(),
-            visitedDate = _uiState.value.visitedDate
+            content = uiState.value.content,
+            starRating = uiState.value.starRating.toDouble(),
+            visitedDate = uiState.value.visitedDate
         )
-        val place = _uiState.value.selectedPlace ?: return@launch
-        when (val result = registerReviewUseCase(files = files, writeReview = writeReview, place = place)) {
-            is PResult.Fail -> {
-                hLog("fail >>> ${result.failState}")
-                hLog("writeReview >>> ${writeReview}")
-                hLog("fail >>> ${place}")
-
+        val place = uiState.value.selectedPlace ?: return@launch
+        resultResponse(
+            response = registerReviewUseCase(files = files, writeReview = writeReview, place = place),
+            successCallback = {
+                kakaoPlaceId = it
+                emitEvent(WriteReviewUiEvent.SuccessWriteReview)
             }
-
-            is PResult.Success -> {
-                kakaoPlaceId = result.data
-                _uiEvent.emit(WriteReviewUiEvent.SuccessWriteReview)
-            }
-        }
+        )
     }
 }
 
@@ -110,9 +89,9 @@ data class WriteReviewUiState(
     val starRating: Int = 0,
     val content: String = "",
     val imagePaths: List<ByteArray> = emptyList()
-)
+) : UiState
 
-sealed interface WriteReviewUiEvent {
+sealed interface WriteReviewUiEvent : UiEvent {
     data object MoveSelectDate : WriteReviewUiEvent
     data object MoveWriteReview : WriteReviewUiEvent
     data object SuccessWriteReview : WriteReviewUiEvent
