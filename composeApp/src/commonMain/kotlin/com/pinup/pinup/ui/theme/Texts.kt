@@ -102,4 +102,12 @@ object Texts {
         const val SEARCH_RESULT = "검색 결과"
         const val GO_ARTICLE = "아티클 바로가기"
     }
+
+    object PinLog {
+        const val WRITE_PINLOG = "핀로그 작성"
+        const val WRITE_TITLE = "어떤 장소의 핀로그를\n작성할까요?"
+        const val WRITE_DESCRIPTION = "작성된 핀로그는 핀버디만 볼 수 있어요"
+        const val SEARCH_HINT = "장소 검색하기"
+        const val SEARCH_RESULT = "검색 결과"
+    }
 }

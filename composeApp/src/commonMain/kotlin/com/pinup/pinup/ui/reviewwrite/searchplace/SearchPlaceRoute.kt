@@ -9,6 +9,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun SearchPlaceRoute(
     onPlaceClick: (Place) -> Unit = {},
+    onBackPressed: () -> Unit = {},
     searchPlaceViewModel: SearchPlaceViewModel = koinViewModel()
 ) {
     val uiState = searchPlaceViewModel.uiState.collectAsStateWithLifecycle()
@@ -18,6 +19,7 @@ fun SearchPlaceRoute(
         query = query.value,
         places = uiState.value.places.toPersistentList(),
         onValueChange = searchPlaceViewModel::updateQuery,
-        onPlaceClick = onPlaceClick
+        onPlaceClick = onPlaceClick,
+        onBackPressed = onBackPressed
     )
 }

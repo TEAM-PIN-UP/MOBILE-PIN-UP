@@ -1,12 +1,13 @@
 package com.pinup.pinup.ui.reviewwrite.searchplace
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,12 +18,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Place
+import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.SearchedPlaceCard
+import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
 import pinup.composeapp.generated.resources.*
@@ -34,6 +39,7 @@ fun SearchPlaceScreen(
     places: PersistentList<Place>,
     onValueChange: (String) -> Unit = {},
     onPlaceClick: (Place) -> Unit = {},
+    onBackPressed: () -> Unit = {},
 ) {
     var isFocused by remember { mutableStateOf(false) }
     Column(
@@ -41,84 +47,97 @@ fun SearchPlaceScreen(
             .fillMaxSize()
             .background(color = Colors.White)
             .padding(horizontal = 20.dp)
-
     ) {
+
+        TitleBar(
+            title = Texts.PinLog.WRITE_PINLOG,
+            onLeftButtonClick = onBackPressed
+        )
+
+        PHorizontalDivider()
+
+
         AnimatedVisibility(
             visible = isFocused.not(),
         ) {
             Column {
-                Image(
-                    modifier = Modifier
-                        .padding(top = 40.dp),
-                    painter = painterResource(Res.drawable.ic_write_review),
-                    contentDescription = null
-                )
+
+                Spacer(modifier = Modifier.height(38.dp))
 
                 Text(
-                    modifier = Modifier
-                        .padding(top = 16.dp),
-                    text = "어떤 장소의 리뷰를",
-                    color = Colors.Neutral800,
-                    style = Typography.H1
+                    text = Texts.PinLog.WRITE_TITLE,
+                    color = Colors.Black,
+                    style = Typography.D2.copy(
+                        fontWeight = FontWeight.Bold
+                    )
                 )
 
-                Text(
-                    modifier = Modifier
-                        .padding(top = 8.dp),
-                    text = "작성할까요?",
-                    color = Colors.Neutral800,
-                    style = Typography.H1
-                )
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    modifier = Modifier
-                        .padding(top = 16.dp),
-                    text = "*작성 된 리뷰는 핀버디만 볼 수 있어요.",
-                    color = Colors.Error,
-                    style = Typography.B3
+                    text = Texts.PinLog.WRITE_DESCRIPTION,
+                    color = Colors.Main,
+                    style = Typography.B3.copy(
+                        fontWeight = FontWeight.Medium
+                    )
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(30.dp))
+
         RoundedTextField(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 28.dp),
+                .fillMaxWidth(),
             text = query,
+            textStyle = Typography.T2.copy(
+                fontWeight = FontWeight.Medium
+            ),
             onValueChange = onValueChange,
-            placeholder = "리뷰 쓸 장소를 검색해주세요.",
+            placeholder = Texts.PinLog.SEARCH_HINT,
+            placeholderStyle = Typography.T2.copy(
+                fontWeight = FontWeight.Medium
+            ),
+            placeholderTextColor = Colors.Gray400,
             cornerRounded = 100,
             leadingIcon = painterResource(Res.drawable.ic_search),
-            backgroundColor = Colors.Neutral50,
-            unfocusedBorderColor = Colors.Neutral50,
-            focusedBorderColor = Colors.Neutral50,
+            tailIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_close) else null,
+            tailIconSize = 20,
+            onTailIconClick = {
+                onValueChange("")
+            },
+            fixedBorderColor = Colors.Transparency,
+            backgroundColor = Colors.Gray50,
             onFocusChange = {
                 isFocused = it
-            }
+            },
         )
 
+        Spacer(modifier = Modifier.height(28.dp))
+
         AnimatedVisibility(
-            modifier = Modifier
-                .padding(top = 12.dp),
             visible = isFocused,
         ) {
             Column {
                 Text(
                     modifier = Modifier
                         .padding(top = 12.dp),
-                    text = "검색 결과",
-                    style = Typography.H4,
-                    color = Colors.Neutral800
+                    text = Texts.PinLog.SEARCH_RESULT,
+                    style = Typography.B2.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = Colors.Gray800
                 )
 
                 LazyColumn(
                     modifier = Modifier
-                        .padding(top = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(24.dp)
+                        .padding(top = 20.dp),
+                    verticalArrangement = Arrangement.spacedBy(30.dp)
                 ) {
                     items(places) {
                         SearchedPlaceCard(
                             name = it.name,
-                            category = Category.CAFE,
+                            category = Category.of(it.categoryCode),
                             address = it.address,
                             reviewCount = it.reviewCount,
                             onClick = {

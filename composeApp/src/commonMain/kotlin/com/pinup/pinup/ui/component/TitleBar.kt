@@ -28,13 +28,13 @@ fun TitleBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .height(56.dp),
     ) {
         Image(
             modifier = Modifier
                 .clickableWithNoRipple { onLeftButtonClick() }
-                .align(Alignment.CenterStart)
-                .statusBarsPadding(),
+                .align(Alignment.CenterStart),
             painter = painterResource(Res.drawable.ic_back),
             contentDescription = null
         )

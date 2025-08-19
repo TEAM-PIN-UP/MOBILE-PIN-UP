@@ -51,7 +51,8 @@ fun PinUpApp(
     val uiState = startAppViewModel.uiState.collectAsStateWithLifecycle()
     val startDestination = when (uiState.value.isLogin) {
         true -> {
-            PinUpAppDestination.Main
+            //TODO 원래 Main 손쉬운 테스트용
+            PinUpAppDestination.WriteReview
         }
         false -> {
             PinUpAppDestination.Onboarding

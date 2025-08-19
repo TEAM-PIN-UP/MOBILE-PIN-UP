@@ -58,22 +58,16 @@ fun WriteReviewNavHost(
                 color = Colors.White
             )
     ) {
-        TitleBar(
-            title = "리뷰 작성",
-            onLeftButtonClick = {
-                onBackPressed()
-            }
-        )
-
-        PHorizontalDivider()
-
         NavHost(
             navController = navHostController,
             startDestination = WriteReviewDestination.SearchPlace
         ) {
             composable<WriteReviewDestination.SearchPlace> {
                 SearchPlaceRoute(
-                    onPlaceClick = writeReviewViewModel::selectPlace
+                    onPlaceClick = writeReviewViewModel::selectPlace,
+                    onBackPressed = {
+                        navHostController.popBackStack()
+                    },
                 )
             }
 
