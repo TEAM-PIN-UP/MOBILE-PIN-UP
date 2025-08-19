@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Place
-import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.SearchedPlaceCard
 import com.pinup.pinup.ui.component.TitleBar
@@ -54,9 +53,6 @@ fun SearchPlaceScreen(
             onLeftButtonClick = onBackPressed
         )
 
-        PHorizontalDivider()
-
-
         AnimatedVisibility(
             visible = isFocused.not(),
         ) {
@@ -82,9 +78,11 @@ fun SearchPlaceScreen(
                     )
                 )
             }
+
+            Spacer(modifier = Modifier.height(6.dp))
         }
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
         RoundedTextField(
             modifier = Modifier
@@ -120,8 +118,6 @@ fun SearchPlaceScreen(
         ) {
             Column {
                 Text(
-                    modifier = Modifier
-                        .padding(top = 12.dp),
                     text = Texts.PinLog.SEARCH_RESULT,
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.Medium
