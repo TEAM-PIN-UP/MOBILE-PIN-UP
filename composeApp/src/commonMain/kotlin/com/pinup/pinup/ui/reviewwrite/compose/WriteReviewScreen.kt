@@ -60,6 +60,8 @@ fun WriteReviewScreen(
     onRegisterClick: () -> Unit = {},
     onBackPressed: () -> Unit = {},
 ) {
+    val minLength = 10
+    val maxLength = 10000
     val maxImageSize = 3
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
@@ -304,8 +306,20 @@ fun WriteReviewScreen(
                 ),
                 placeholder = Texts.PinLog.PINLOG_HINT,
                 onValueChange = onValueChange,
-                maxLength = 10000
+                maxLength = maxLength
             )
+
+            if (reviewText.length < minLength || reviewText.length > maxLength) {
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = if(reviewText.length < minLength) Texts.PinLog.PINLOG_MORE_LENGTH else Texts.PinLog.PINLOG_TOO_MUCH_LENGTH,
+                    style = Typography.L1.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = Colors.Gray400
+                )
+            }
         }
     }
 

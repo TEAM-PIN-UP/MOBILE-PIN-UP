@@ -42,6 +42,7 @@ import androidx.constraintlayout.compose.Dimension
 import com.pinup.pinup.ui.theme.Colors
 
 import com.pinup.pinup.ui.theme.Typography
+import com.pinup.pinup.util.formatWithCommas
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -178,15 +179,19 @@ fun ReviewTextField(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = text.length.toString(),
-                    style = Typography.B5,
-                    color = Colors.Neutral800
+                    text = formatWithCommas(text.length),
+                    style = Typography.L1.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = Colors.Gray900
                 )
 
                 Text(
-                    text = " / $maxLength",
-                    style = Typography.B5,
-                    color = Colors.Neutral300
+                    text = " / ${formatWithCommas(maxLength)}",
+                    style = Typography.L1.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = Colors.Gray300
                 )
             }
         }

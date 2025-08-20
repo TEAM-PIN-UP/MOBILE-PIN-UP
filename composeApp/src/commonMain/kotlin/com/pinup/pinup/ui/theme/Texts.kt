@@ -124,5 +124,7 @@ object Texts {
         const val IMAGE_UPLOAD = "사진 업로드"
         const val PINLOG_HINT = "작성된 핀로그는 나의 핀버디들에게만 보여요!\n\n\n" +
                 "*주의: 욕설, 비방 목적 혹은 명예 훼손성 내용은 작성 시 삭제 처리 될 수 있습니다."
+        const val PINLOG_MORE_LENGTH = "10자 이상 작성해 주세요."
+        const val PINLOG_TOO_MUCH_LENGTH = "입력 가능 글자 수를 초과했어요."
     }
 }
