@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,11 +29,11 @@ import com.pinup.pinup.ui.theme.Typography
 
 @Composable
 fun ReviewDialog(
-    rating: Int,
+    rating: Float,
     onDismissRequest: () -> Unit,
-    onConfirmClick: (Int) -> Unit = {},
+    onConfirmClick: (Float) -> Unit = {},
 ) {
-    val selectedRating = remember { mutableIntStateOf(rating) }
+    val selectedRating = remember { mutableFloatStateOf(rating) }
     Dialog(
         onDismissRequest = onDismissRequest,
     ) {
@@ -67,9 +68,9 @@ fun ReviewDialog(
             HalfStarRatingBar(
                 modifier = Modifier
                     .padding(top = 20.dp),
-                rating = selectedRating.intValue,
+                rating = selectedRating.floatValue,
             ) {
-                selectedRating.intValue = it
+                selectedRating.floatValue = it
             }
 
             Row(
@@ -104,7 +105,7 @@ fun ReviewDialog(
                         .background(color = Colors.Neutral800)
                         .padding(vertical = 14.dp)
                         .clickableWithNoRipple {
-                            onConfirmClick(selectedRating.intValue)
+                            onConfirmClick(selectedRating.floatValue)
                         }
                 )
             }

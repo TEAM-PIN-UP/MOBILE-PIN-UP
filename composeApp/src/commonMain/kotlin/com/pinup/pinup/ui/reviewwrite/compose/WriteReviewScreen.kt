@@ -234,7 +234,7 @@ fun WriteReviewScreen(
                         .padding(top = 12.dp)
                 ) {
                     HalfStarRatingBar(
-                        rating = myRating,
+                        rating = myRating.toFloat(),
                         size = 26.dp,
                         spacing = 6.dp,
                         onRatingChanged = {
@@ -297,13 +297,13 @@ fun WriteReviewScreen(
 
     if (isShowRatingDialog.value) {
         ReviewDialog(
-            rating = myRating,
+            rating = myRating.toFloat(),
             onDismissRequest = {
                 isShowRatingDialog.value = false
             },
             onConfirmClick = {
                 isShowRatingDialog.value = false
-                onRatingSelected(it)
+                onRatingSelected(it.toInt())
             }
         )
     }
