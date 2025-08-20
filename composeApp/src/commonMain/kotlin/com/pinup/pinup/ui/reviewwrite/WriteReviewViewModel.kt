@@ -49,6 +49,14 @@ class WriteReviewViewModel (
         }
     }
 
+    fun onClickedImage(imgPath: ByteArray) = viewModelScope.launch {
+        updateState {
+            copy(
+                clickedImage = imgPath
+            )
+        }
+    }
+
     fun removeImage(imgPath: ByteArray) = viewModelScope.launch {
         updateState {
             copy(
@@ -88,7 +96,8 @@ data class WriteReviewUiState(
     val visitedDate: String = "",
     val starRating: Double = 0.0,
     val content: String = "",
-    val imagePaths: List<ByteArray> = emptyList()
+    val imagePaths: List<ByteArray> = emptyList(),
+    val clickedImage: ByteArray = ByteArray(0)
 ) : UiState {
     val isEnableRegister: Boolean = (starRating != 0.0) && (content.length >= 10)
 }

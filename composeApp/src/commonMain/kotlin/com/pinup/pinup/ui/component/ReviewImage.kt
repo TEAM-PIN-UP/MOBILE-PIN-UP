@@ -7,6 +7,7 @@ import androidx.compose.ui.layout.ContentScale
 
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 
 
@@ -14,12 +15,16 @@ import com.pinup.pinup.ui.theme.Colors
 fun ReviewImage(
     imgUrl: ByteArray,
     modifier: Modifier = Modifier,
+    onClickImage: (ByteArray) -> Unit = {},
 ) {
     RoundedBox(
         modifier = modifier
-            .size(100.dp),
+            .size(100.dp)
+            .clickableWithNoRipple{
+                onClickImage(imgUrl)
+            },
         cornerRounded = 8,
-        backgroundColor = Colors.Neutral100,
+        backgroundColor = Colors.Gray100,
     ) {
         if (imgUrl.isNotEmpty()) {
             AsyncImage(
@@ -35,11 +40,15 @@ fun ReviewImage(
 fun ReviewImage(
     imgUrl: String,
     modifier: Modifier = Modifier,
+    onClickImage: (String) -> Unit = {},
 ) {
     RoundedBox(
-        modifier = modifier,
+        modifier = modifier
+            .clickableWithNoRipple{
+                onClickImage(imgUrl)
+            },
         cornerRounded = 8,
-        backgroundColor = Colors.Neutral100,
+        backgroundColor = Colors.Gray100,
     ) {
         if (imgUrl.isNotEmpty()) {
             AsyncImage(

@@ -98,9 +98,11 @@ fun WriteReviewNavHost(
                         imagePaths = uiState.value.imagePaths,
                         myRating = uiState.value.starRating,
                         isEnableButton = uiState.value.isEnableRegister,
+                        clickedImage = uiState.value.clickedImage,
                         onValueChange = writeReviewViewModel::updateContent,
                         onRemoveImage = writeReviewViewModel::removeImage,
                         onAddImage = writeReviewViewModel::addImage,
+                        onClickImage = writeReviewViewModel::onClickedImage,
                         onRatingSelected = writeReviewViewModel::updateRating,
                         onRegisterClick = writeReviewViewModel::registerReview,
                         onBackPressed = {

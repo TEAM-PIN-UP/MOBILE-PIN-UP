@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,12 +20,20 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import coil3.compose.AsyncImage
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.HalfStarRatingBar
@@ -52,11 +61,13 @@ fun WriteReviewScreen(
     imagePaths: List<ByteArray>,
     myRating: Double,
     isEnableButton: Boolean,
+    clickedImage: ByteArray,
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit = {},
     onRatingSelected: (Double) -> Unit = {},
     onAddImage: (ByteArray) -> Unit = {},
     onRemoveImage: (ByteArray) -> Unit = {},
+    onClickImage: (ByteArray) -> Unit = {},
     onRegisterClick: () -> Unit = {},
     onBackPressed: () -> Unit = {},
 ) {
@@ -65,6 +76,7 @@ fun WriteReviewScreen(
     val maxImageSize = 3
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
+    var isShowImageDetailDialog by remember { mutableStateOf(false) }
     val singleImagePicker = rememberImagePickerLauncher(
         selectionMode = SelectionMode.Single,
         scope = scope,
@@ -74,6 +86,45 @@ fun WriteReviewScreen(
             }
         }
     )
+
+    if (isShowImageDetailDialog) {
+        Dialog(
+            onDismissRequest = {
+                isShowImageDetailDialog = false
+            },
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false,
+                dismissOnClickOutside = false
+            )
+        ) {
+            Column(
+                modifier = modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(end = 20.dp)
+                        .clickableWithNoRipple {
+                            isShowImageDetailDialog = false
+                        },
+                    painter = painterResource(Res.drawable.ic_cancle_white),
+                    contentDescription = null
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                AsyncImage(
+                    modifier = Modifier
+                        .aspectRatio(1f)
+                        .fillMaxWidth(),
+                    model = clickedImage,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -188,7 +239,11 @@ fun WriteReviewScreen(
                         ReviewImage(
                             modifier = Modifier
                                 .padding(top = 8.dp, end = 7.dp),
-                            imgUrl = it
+                            imgUrl = it,
+                            onClickImage = {
+                                onClickImage(it)
+                                isShowImageDetailDialog = true
+                            }
                         )
 
                         Image(
