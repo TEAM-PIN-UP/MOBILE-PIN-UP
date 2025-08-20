@@ -6,35 +6,36 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.HalfStarRatingBar
 import com.pinup.pinup.ui.component.PButton
 import com.pinup.pinup.ui.component.PHorizontalDivider
-import com.pinup.pinup.ui.component.ReviewDialog
 import com.pinup.pinup.ui.component.ReviewImage
 import com.pinup.pinup.ui.component.ReviewTextField
 import com.pinup.pinup.ui.component.RoundedBox
+import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
@@ -49,17 +50,18 @@ fun WriteReviewScreen(
     reviewCount: Int,
     reviewText: String,
     imagePaths: List<ByteArray>,
-    myRating: Int,
+    myRating: Double,
+    isEnableButton: Boolean,
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit = {},
-    onRatingSelected: (Int) -> Unit = {},
+    onRatingSelected: (Double) -> Unit = {},
     onAddImage: (ByteArray) -> Unit = {},
     onRemoveImage: (ByteArray) -> Unit = {},
     onRegisterClick: () -> Unit = {},
+    onBackPressed: () -> Unit = {},
 ) {
     val maxImageSize = 3
     val scrollState = rememberScrollState()
-    val isShowRatingDialog = remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     val singleImagePicker = rememberImagePickerLauncher(
         selectionMode = SelectionMode.Single,
@@ -71,240 +73,266 @@ fun WriteReviewScreen(
         }
     )
 
-    ConstraintLayout(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                color = Colors.White
+            .verticalScroll(
+                state = scrollState
+            ),
+    ){
+        TitleBar(
+            modifier = Modifier
+                .padding(start = 20.dp),
+            title = Texts.PinLog.WRITE_PINLOG,
+            onLeftButtonClick = onBackPressed
+        )
+
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 8.dp)
+        ) {
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Text(
+                text = placeName,
+                style = Typography.T1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray900,
             )
-    ) {
-        val (content, cta) = createRefs()
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = address,
+                style = Typography.B3.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Colors.Gray400,
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Row (
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(18.dp),
+                    painter = painterResource(Res.drawable.ic_star),
+                    contentDescription = "rating"
+                )
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                Text(
+                    text = rating.toString(),
+                    style = Typography.B2.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = Colors.Gray900
+                )
+
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = Texts.Word.PINLOG,
+                    style = Typography.L1.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = Colors.Gray700
+                )
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                Text(
+                    text = reviewCount.toString(),
+                    style = Typography.L1.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = Colors.Gray700
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        PHorizontalDivider(
+            modifier = Modifier
+                .padding(end = 40.dp)
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+                .padding(start = 20.dp)
+        ) {
+            Text(
+                text = Texts.PinLog.IMAGE_UPLOAD,
+                style = Typography.B2.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Colors.Gray800,
+            )
+
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                items(imagePaths) {
+                    Box {
+                        ReviewImage(
+                            modifier = Modifier
+                                .padding(top = 8.dp, end = 7.dp),
+                            imgUrl = it
+                        )
+
+                        Image(
+                            modifier = Modifier
+                                .size(20.dp)
+                                .align(Alignment.TopEnd)
+                                .clickableWithNoRipple {
+                                    onRemoveImage(it)
+                                },
+                            painter = painterResource(Res.drawable.ic_remove),
+                            contentDescription = "image remove"
+                        )
+                    }
+                }
+
+                if (imagePaths.size < maxImageSize) {
+                    item {
+                        RoundedBox(
+                            modifier = modifier
+                                .padding(top = 8.dp)
+                                .size(100.dp)
+                                .clickableSingleWithNoRipple {
+                                    singleImagePicker.launch()
+                                },
+                            cornerRounded = 8,
+                            backgroundColor = Colors.Gray50,
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                            ) {
+                                Image(
+                                    painter = painterResource(Res.drawable.ic_camera_gray),
+                                    contentDescription = "select image",
+                                )
+
+                                Spacer(modifier = Modifier.height(5.dp))
+
+                                Text(
+                                    text = "${imagePaths.size}/$maxImageSize",
+                                    style = Typography.L1.copy(
+                                        fontWeight = FontWeight.Bold
+                                    ),
+                                    color = Colors.Gray300,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        PHorizontalDivider(
+            modifier = Modifier
+                .padding(end = 40.dp)
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 8.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = Texts.Word.RATING,
+                style = Typography.B2.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Colors.Gray800,
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            HalfStarRatingBar(
+                rating = myRating,
+                size = 18.dp,
+                spacing = 4.dp,
+                onRatingChanged = onRatingSelected
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        PHorizontalDivider(
+            modifier = Modifier
+                .padding(end = 40.dp)
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
-                .constrainAs(content) {
-                    linkTo(top = parent.top, bottom = cta.top, bias = 0f)
-                    height = Dimension.fillToConstraints
-                }
-                .verticalScroll(
-                    state = scrollState
-                ),
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(top = 12.dp),
-                    text = placeName,
-                    style = Typography.H2,
-                    color = Colors.Neutral800,
-                )
-
-                Text(
-                    modifier = Modifier
-                        .padding(top = 8.dp),
-                    text = address,
-                    style = Typography.B4,
-                    color = Colors.Neutral400,
-                )
-
-                Row (
-                    modifier = Modifier
-                        .padding(top = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(Res.drawable.ic_star),
-                        contentDescription = "rating"
-                    )
-
-                    Text(
-                        modifier = Modifier
-                            .padding(start = 2.dp),
-                        text = rating.toString(),
-                        style = Typography.H4,
-                        color = Colors.Neutral800
-                    )
-
-                    Text(
-                        modifier = Modifier
-                            .padding(start = 6.dp),
-                        text = "리뷰 $reviewCount",
-                        style = Typography.B4,
-                        color = Colors.Neutral700
-                    )
-                }
-            }
-
-            PHorizontalDivider(
-                modifier = Modifier
-                    .padding(vertical = 20.dp)
+            Text(
+                text = Texts.PinLog.WRITE_PINLOG_TITLE,
+                style = Typography.B2.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Colors.Gray800,
             )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "사진 업로드",
-                    style = Typography.H4,
-                    color = Colors.Neutral800,
-                )
+            Spacer(modifier = Modifier.height(8.dp))
 
-                LazyRow(
-                    modifier = modifier
-                        .padding(top = 12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    if (imagePaths.size < maxImageSize) {
-                        item {
-                            RoundedBox(
-                                modifier = modifier
-                                    .size(100.dp)
-                                    .clickableSingleWithNoRipple {
-                                        singleImagePicker.launch()
-                                    },
-                                cornerRounded = 8,
-                                backgroundColor = Colors.Neutral100,
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .align(Alignment.Center)
-                                ) {
-                                    Image(
-                                        painter = painterResource(Res.drawable.ic_camera_gray),
-                                        contentDescription = "select image",
-                                    )
-
-                                    Text(
-                                        modifier = Modifier
-                                            .padding(top = 5.dp),
-                                        text = "${imagePaths.size} / $maxImageSize",
-                                        style = Typography.H5,
-                                        color = Colors.Neutral300,
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
-                            }
-                        }
-                    }
-
-                    items(imagePaths) {
-                        Box {
-                            ReviewImage(
-                                imgUrl = it
-                            )
-
-                            Image(
-                                modifier = Modifier
-                                    .align(Alignment.TopEnd)
-                                    .padding(top = 5.dp, end = 5.dp)
-                                    .clickableWithNoRipple {
-                                        onRemoveImage(it)
-                                    },
-                                painter = painterResource(Res.drawable.ic_remove),
-                                contentDescription = "image remove"
-                            )
-                        }
-                    }
-                }
-            }
-
-            PHorizontalDivider(
-                modifier = Modifier
-                    .padding(vertical = 20.dp)
+            ReviewTextField(
+                text = reviewText,
+                textColor = Colors.Gray800,
+                textStyle = Typography.B3.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                placeholder = Texts.PinLog.PINLOG_HINT,
+                onValueChange = onValueChange,
+                maxLength = 10000
             )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = "별점",
-                    style = Typography.H4,
-                    color = Colors.Neutral800,
-                )
-
-                Row(
-                    modifier = Modifier
-                        .padding(top = 12.dp)
-                ) {
-                    HalfStarRatingBar(
-                        rating = myRating.toFloat(),
-                        size = 26.dp,
-                        spacing = 6.dp,
-                        onRatingChanged = {
-                            isShowRatingDialog.value = true
-                        }
-                    )
-                }
-            }
-
-            PHorizontalDivider(
-                modifier = Modifier
-                    .padding(vertical = 20.dp)
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 100.dp)
-            ) {
-                Text(
-                    text = "리뷰 작성하기",
-                    style = Typography.H4,
-                    color = Colors.Neutral800,
-                )
-
-                ReviewTextField(
-                    modifier = Modifier
-                        .padding(top = 12.dp),
-                    text = reviewText,
-                    placeholder = "작성 된 리뷰는 나의 친구들에게만 보여요\n\n" +
-                            "*주의: 욕설, 비방 목적 혹은 명예 훼손성 내용은 작성 시 삭제 처리 될 수 있습니다.",
-                    onValueChange = onValueChange,
-                    maxLength = 400
-                )
-            }
-
         }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
 
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .constrainAs(cta) {
-                    bottom.linkTo(parent.bottom)
-                }
-        ) {
-
+                .background(color = Colors.White)
+        ){
             PHorizontalDivider()
 
             PButton(
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
                     .padding(top = 8.dp, bottom = 14.dp),
-                text = "리뷰 등록하기",
+                text = Texts.PinLog.REGISTER_PINLOG,
                 onClick = {
                     onRegisterClick()
-                }
+                },
+                isEnable = isEnableButton
             )
-        }
-    }
 
-    if (isShowRatingDialog.value) {
-        ReviewDialog(
-            rating = myRating.toFloat(),
-            onDismissRequest = {
-                isShowRatingDialog.value = false
-            },
-            onConfirmClick = {
-                isShowRatingDialog.value = false
-                onRatingSelected(it.toInt())
-            }
-        )
+            Spacer(modifier = Modifier.height(42.dp))
+        }
     }
 }

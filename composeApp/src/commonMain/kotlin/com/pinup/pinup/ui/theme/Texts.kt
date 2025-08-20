@@ -21,6 +21,7 @@ object Texts {
         const val FEED = "피드"
         const val ARTICLE = "아티클"
         const val MY = "마이"
+        const val RATING = "별점"
     }
 
     object Onboarding {
@@ -105,6 +106,8 @@ object Texts {
 
     object PinLog {
         const val WRITE_PINLOG = "핀로그 작성"
+        const val WRITE_PINLOG_TITLE = "핀로그 작성하기"
+        const val REGISTER_PINLOG = "핀로그 등록하기"
         const val WRITE_TITLE = "어떤 장소의 핀로그를\n작성할까요?"
         const val WRITE_DESCRIPTION = "작성된 핀로그는 핀버디만 볼 수 있어요"
         const val SEARCH_HINT = "장소 검색하기"
@@ -118,5 +121,8 @@ object Texts {
             }
         }
         const val SELECT_DATE_HINT = "날짜 선택"
+        const val IMAGE_UPLOAD = "사진 업로드"
+        const val PINLOG_HINT = "작성된 핀로그는 나의 핀버디들에게만 보여요!\n\n\n" +
+                "*주의: 욕설, 비방 목적 혹은 명예 훼손성 내용은 작성 시 삭제 처리 될 수 있습니다."
     }
 }

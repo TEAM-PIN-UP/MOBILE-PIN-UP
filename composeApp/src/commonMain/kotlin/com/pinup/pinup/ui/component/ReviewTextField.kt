@@ -3,6 +3,7 @@ package com.pinup.pinup.ui.component
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,6 +29,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -45,7 +47,7 @@ import com.pinup.pinup.ui.theme.Typography
 @Composable
 fun ReviewTextField(
     modifier: Modifier = Modifier,
-    textFieldHeight: Int = 205,
+    textFieldHeight: Int = 195,
     text: String = "",
     placeholder: String = "",
     onValueChange: (String) -> Unit,
@@ -53,18 +55,18 @@ fun ReviewTextField(
     onFocusChange: (Boolean) -> Unit = {},
     readOnly: Boolean = false,
     enabled: Boolean = true,
-    backgroundColor: Color = Colors.Neutral50,
+    backgroundColor: Color = Colors.Gray50,
     cornerRounded: Int = 8,
     textStyle: TextStyle = TextStyle(),
     visualTransformation: VisualTransformation = VisualTransformation.None,
-    placeholderTextColor: Color = Colors.Neutral400,
+    placeholderTextColor: Color = Colors.Gray400,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
         imeAction = ImeAction.Done,
         keyboardType = KeyboardType.Text,
     ),
     keyboardActions: KeyboardActions = KeyboardActions(),
     focusRequester: FocusRequester = FocusRequester(),
-    contentPadding: PaddingValues = PaddingValues(14.dp),
+    contentPadding: PaddingValues = PaddingValues(vertical = 24.dp, horizontal = 19.dp),
     cursorColor: Color = Color.Black,
     textColor: Color = Colors.Neutral800,
     maxLength: Int = Int.MAX_VALUE,
@@ -143,7 +145,9 @@ fun ReviewTextField(
                                 modifier = Modifier
                                     .fillMaxSize(),
                                 text = placeholder,
-                                style = Typography.D1,
+                                style = Typography.B3.copy(
+                                    fontWeight = FontWeight.Medium
+                                ),
                                 color = placeholderTextColor,
                             )
                         },

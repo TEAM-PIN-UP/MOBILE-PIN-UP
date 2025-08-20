@@ -57,7 +57,7 @@ class WriteReviewViewModel (
         }
     }
 
-    fun updateRating(rating: Int) = viewModelScope.launch {
+    fun updateRating(rating: Double) = viewModelScope.launch {
         updateState{
             copy(
                 starRating = rating
@@ -86,10 +86,12 @@ class WriteReviewViewModel (
 data class WriteReviewUiState(
     val selectedPlace: Place? = null,
     val visitedDate: String = "",
-    val starRating: Int = 0,
+    val starRating: Double = 0.0,
     val content: String = "",
     val imagePaths: List<ByteArray> = emptyList()
-) : UiState
+) : UiState {
+    val isEnableRegister: Boolean = (starRating != 0.0) && (content.length >= 10)
+}
 
 sealed interface WriteReviewUiEvent : UiEvent {
     data object MoveSelectDate : WriteReviewUiEvent

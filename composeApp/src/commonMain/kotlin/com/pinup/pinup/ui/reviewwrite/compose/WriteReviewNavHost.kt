@@ -97,11 +97,15 @@ fun WriteReviewNavHost(
                         reviewCount = it.reviewCount,
                         imagePaths = uiState.value.imagePaths,
                         myRating = uiState.value.starRating,
+                        isEnableButton = uiState.value.isEnableRegister,
                         onValueChange = writeReviewViewModel::updateContent,
                         onRemoveImage = writeReviewViewModel::removeImage,
                         onAddImage = writeReviewViewModel::addImage,
                         onRatingSelected = writeReviewViewModel::updateRating,
                         onRegisterClick = writeReviewViewModel::registerReview,
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        }
                     )
                 }
             }
