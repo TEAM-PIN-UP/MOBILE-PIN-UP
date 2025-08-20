@@ -12,7 +12,7 @@ class ImageRepositoryImpl (
     override suspend fun uploadSeveralImages(
         type: ImageUploadType,
         files: List<ByteArray>
-    ): PResult<Unit> {
+    ): PResult<List<String>> {
         return imageRemoteDataSource.uploadSeveralImages(type, files)
     }
 

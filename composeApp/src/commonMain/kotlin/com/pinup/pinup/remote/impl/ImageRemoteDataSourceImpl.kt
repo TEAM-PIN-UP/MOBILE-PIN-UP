@@ -19,11 +19,11 @@ class ImageRemoteDataSourceImpl (
     override suspend fun uploadSeveralImages(
         type: ImageUploadType,
         files: List<ByteArray>
-    ): PResult<Unit> {
+    ): PResult<List<String>> {
         val timeStamp = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).nanosecond
         val multipart = MultiPartFormDataContent(formData {
             files.forEach {
-                append("multipartFiles", it, Headers.build {
+                append("images", it, Headers.build {
                     append(HttpHeaders.ContentType, "image/png")
                     append(HttpHeaders.ContentDisposition, "filename=$timeStamp.png")
                 })

@@ -17,7 +17,7 @@ interface ImageApi {
     suspend fun uploadSeveralImages(
         @Path type : String,
         @Body multipart: MultiPartFormDataContent
-    ): PResult<PResponse<Unit>>
+    ): PResult<PResponse<List<String>>>
 
     @Multipart
     @POST(ApiPath.ImagePath.ONE_IMAGE)
