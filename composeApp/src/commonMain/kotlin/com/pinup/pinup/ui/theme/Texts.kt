@@ -24,6 +24,8 @@ object Texts {
         const val MY = "마이"
         const val RATING = "별점"
         const val DO_RETURN = "돌아가기"
+        const val COMMENT = "댓글"
+        const val DO_REPLY_COMMENT = "답글달기"
     }
 
     object Onboarding {
@@ -130,5 +132,6 @@ object Texts {
         const val PINLOG_TOO_MUCH_LENGTH = "입력 가능 글자 수를 초과했어요."
         const val PINLOG_DIALOG_TITLE = "핀로그 작성 완료!"
         const val PINLOG_DIALOG_BODY = "등록한 핀로그를\n확인하시겠어요?"
+        const val DETAIL_TITLE = "핀로그 상세"
     }
 }

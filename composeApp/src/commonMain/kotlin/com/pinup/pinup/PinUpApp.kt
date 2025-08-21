@@ -28,6 +28,7 @@ import com.pinup.pinup.ui.main.compose.MainNavHost
 import com.pinup.pinup.ui.onboarding.OnboardingRoute
 import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpRoute
 import com.pinup.pinup.ui.pinbuddy.PinBuddyRoute
+import com.pinup.pinup.ui.pinlogDetail.PinlogDetailRoute
 import com.pinup.pinup.ui.reviewwrite.compose.WriteReviewNavHost
 import com.pinup.pinup.ui.setting.SettingNavHost
 import com.pinup.pinup.ui.signup.compose.SignUpRoute
@@ -51,10 +52,12 @@ fun PinUpApp(
     val uiState = startAppViewModel.uiState.collectAsStateWithLifecycle()
     val startDestination = when (uiState.value.isLogin) {
         true -> {
-            PinUpAppDestination.Main
+            //TODO TEST용 원래 MAIN
+            PinUpAppDestination.PinlogDetail
         }
         false -> {
-            PinUpAppDestination.Onboarding
+            //TODO TEST용 원래 ONBOARDING
+            PinUpAppDestination.PinlogDetail
         }
         else -> {
             return
@@ -241,6 +244,14 @@ fun PinUpApp(
                     )
                 }
 
+                composable<PinUpAppDestination.PinlogDetail> {
+                    PinlogDetailRoute(
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
+                    )
+                }
+
                 composable<PinUpAppDestination.AddPinBuddy> {
                     AddPinBuddyRoute(
                         onBackPressed = {
@@ -315,6 +326,8 @@ sealed interface PinUpAppDestination {
     }
     @Serializable
     data object WriteReview : PinUpAppDestination
+    @Serializable
+    data object PinlogDetail : PinUpAppDestination
     @Serializable
     data object AddPinBuddy : PinUpAppDestination
     @Serializable
