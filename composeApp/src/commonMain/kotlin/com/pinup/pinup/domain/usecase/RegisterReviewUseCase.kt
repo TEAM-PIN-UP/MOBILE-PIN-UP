@@ -1,5 +1,6 @@
 package com.pinup.pinup.domain.usecase
 
+import com.pinup.pinup.data.request.pinlog.AddReviewRequest
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.WriteReview
@@ -10,14 +11,8 @@ class RegisterReviewUseCase (
     private val reviewsRepository: ReviewsRepository,
 ) {
     suspend operator fun invoke(
-        files: List<ByteArray>,
-        writeReview: WriteReview,
-        place: Place,
+        request: AddReviewRequest,
     ): PResult<String> {
-        return reviewsRepository.registerReviews(
-            files = files,
-            writeReview = writeReview,
-            place = place
-        )
+        return reviewsRepository.registerReviews(request)
     }
 }

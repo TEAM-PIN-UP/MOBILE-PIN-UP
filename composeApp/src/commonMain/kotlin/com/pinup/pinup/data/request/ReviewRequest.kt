@@ -7,7 +7,8 @@ import kotlinx.serialization.Serializable
 data class ReviewRequest(
     val content: String,
     val starRating: Double,
-    val visitedDate: String
+    val visitedDate: String,
+    val reviewImageUrls: List<String>,
 ) {
     companion object {
         fun of(writeReview: WriteReview): ReviewRequest {
@@ -15,6 +16,7 @@ data class ReviewRequest(
                 content = writeReview.content,
                 starRating = writeReview.starRating,
                 visitedDate = writeReview.visitedDate,
+                reviewImageUrls = emptyList()
             )
         }
     }

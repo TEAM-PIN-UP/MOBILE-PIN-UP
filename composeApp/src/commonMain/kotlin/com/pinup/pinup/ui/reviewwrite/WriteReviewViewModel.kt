@@ -1,8 +1,12 @@
 package com.pinup.pinup.ui.reviewwrite
 
 import androidx.lifecycle.viewModelScope
+import com.pinup.pinup.data.request.PlaceRequest
+import com.pinup.pinup.data.request.ReviewRequest
+import com.pinup.pinup.data.request.pinlog.AddReviewRequest
+import com.pinup.pinup.domain.model.ImageUploadType
 import com.pinup.pinup.domain.model.Place
-import com.pinup.pinup.domain.model.WriteReview
+import com.pinup.pinup.domain.usecase.PostSeveralImagesUploadUseCase
 import com.pinup.pinup.domain.usecase.RegisterReviewUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
@@ -10,7 +14,8 @@ import com.pinup.pinup.ui.base.UiState
 import kotlinx.coroutines.launch
 
 class WriteReviewViewModel (
-    private val registerReviewUseCase: RegisterReviewUseCase
+    private val registerReviewUseCase: RegisterReviewUseCase,
+    private val imagesUploadUseCase: PostSeveralImagesUploadUseCase
 ) : BaseViewModel<WriteReviewUiState, WriteReviewUiEvent>(WriteReviewUiState()) {
 
     var kakaoPlaceId: String? = null
@@ -75,14 +80,37 @@ class WriteReviewViewModel (
 
     fun registerReview() = viewModelScope.launch {
         val files = uiState.value.imagePaths
-        val writeReview = WriteReview(
-            content = uiState.value.content,
-            starRating = uiState.value.starRating.toDouble(),
-            visitedDate = uiState.value.visitedDate
-        )
-        val place = uiState.value.selectedPlace ?: return@launch
         resultResponse(
-            response = registerReviewUseCase(files = files, writeReview = writeReview, place = place),
+            response = imagesUploadUseCase(
+                type = ImageUploadType.REVIEWS,
+                files = files
+            ),
+            successCallback = ::uploadPinLog
+        )
+    }
+
+    private fun uploadPinLog(images: List<String>) = viewModelScope.launch {
+        val place = uiState.value.selectedPlace ?: return@launch
+        val request = AddReviewRequest(
+            reviewRequest = ReviewRequest(
+                content = uiState.value.content,
+                starRating = uiState.value.starRating,
+                visitedDate = uiState.value.visitedDate,
+                reviewImageUrls = images
+            ),
+            placeRequest = PlaceRequest(
+                kakaoPlaceId = place.kakaoPlaceId,
+                name = place.name,
+                category = place.placeCategory,
+                address = place.address,
+                roadAddress = place.roadAddress,
+                latitude = place.latitude,
+                longitude = place.longitude
+            )
+        )
+
+        resultResponse(
+            response = registerReviewUseCase(request),
             successCallback = {
                 kakaoPlaceId = it
                 emitEvent(WriteReviewUiEvent.SuccessWriteReview)

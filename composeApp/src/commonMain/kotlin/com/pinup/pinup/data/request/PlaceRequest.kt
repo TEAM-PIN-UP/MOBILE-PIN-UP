@@ -5,13 +5,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PlaceRequest(
-    val address: String,
-    val category: String,
     val kakaoPlaceId: String,
+    val name: String,
+    val category: String,
+    val address: String,
+    val roadAddress: String,
     val latitude: Double,
     val longitude: Double,
-    val name: String,
-    val roadAddress: String
 ) {
     companion object {
         fun of(place: Place): PlaceRequest {

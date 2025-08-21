@@ -28,4 +28,8 @@ object ApiPath {
         const val SEVERAL_IMAGE = "$IMAGE/images"
         const val ONE_IMAGE = "$IMAGE/image"
     }
+
+    object PinLog {
+        const val PINLOG = "api/reviews"
+    }
 }
