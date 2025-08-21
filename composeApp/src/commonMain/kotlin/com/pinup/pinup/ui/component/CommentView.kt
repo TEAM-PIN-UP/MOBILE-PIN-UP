@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.pinup.pinup.domain.model.Comment
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
@@ -23,18 +24,13 @@ import pinup.composeapp.generated.resources.ic_menu_dot
 @Composable
 fun CommentView(
     modifier: Modifier = Modifier,
-    id: Int = 0,
-    profileImageUrl: String = "",
-    nickname: String = "",
-    createdAt: String = "",
-    content: String = "",
-    isOwn: Boolean = false,
+    comment: Comment = Comment(),
 ) {
     Row(
         modifier = modifier
     ) {
         ProfileImageView(
-            imgUrl = profileImageUrl,
+            imgUrl = comment.author.profileImageUrls,
             size = 36.dp,
         )
 
@@ -45,7 +41,7 @@ fun CommentView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = nickname,
+                    text = comment.author.nickname,
                     style = Typography.L1.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -55,7 +51,7 @@ fun CommentView(
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
-                    text = createdAt,
+                    text = comment.createdAt,
                     style = Typography.L2.copy(
                         fontWeight = FontWeight.Medium
                     ),
@@ -64,7 +60,7 @@ fun CommentView(
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                if (isOwn) {
+                if (comment.isOwn) {
                     Image(
                         modifier = Modifier
                             .size(16.dp),
@@ -77,7 +73,7 @@ fun CommentView(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = content,
+                text = comment.content,
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -93,6 +89,70 @@ fun CommentView(
                 ),
                 color = Colors.Gray500
             )
+
+            if (comment.replies.isNotEmpty()) {
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                comment.replies.forEach {
+                    Row(
+                    ) {
+                        ProfileImageView(
+                            imgUrl = it.author.profileImageUrls,
+                            size = 36.dp,
+                        )
+
+                        Spacer(modifier = Modifier.width(9.dp))
+
+                        Column {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = it.author.nickname,
+                                    style = Typography.L1.copy(
+                                        fontWeight = FontWeight.SemiBold
+                                    ),
+                                    color = Colors.Gray900
+                                )
+
+                                Spacer(modifier = Modifier.width(4.dp))
+
+                                Text(
+                                    text = it.createdAt,
+                                    style = Typography.L2.copy(
+                                        fontWeight = FontWeight.Medium
+                                    ),
+                                    color = Colors.Gray500
+                                )
+
+                                Spacer(modifier = Modifier.weight(1f))
+
+                                if (it.isOwn) {
+                                    Image(
+                                        modifier = Modifier
+                                            .size(16.dp),
+                                        painter = painterResource(Res.drawable.ic_menu_dot),
+                                        contentDescription = null
+                                    )
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(4.dp))
+
+                            Text(
+                                text = it.content,
+                                style = Typography.B3.copy(
+                                    fontWeight = FontWeight.Medium
+                                ),
+                                color = Colors.Gray700
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
+                }
+            }
         }
     }
 }

@@ -133,5 +133,6 @@ object Texts {
         const val PINLOG_DIALOG_TITLE = "핀로그 작성 완료!"
         const val PINLOG_DIALOG_BODY = "등록한 핀로그를\n확인하시겠어요?"
         const val DETAIL_TITLE = "핀로그 상세"
+        const val COMMENT_HINT = "댓글을 입력하세요"
     }
 }

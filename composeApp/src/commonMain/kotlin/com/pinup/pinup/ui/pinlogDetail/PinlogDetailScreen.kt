@@ -1,8 +1,10 @@
 package com.pinup.pinup.ui.pinlogDetail
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -25,21 +27,26 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.pinup.pinup.domain.model.AuthorInfo
+import com.pinup.pinup.domain.model.Comment
+import com.pinup.pinup.domain.model.ReplyComment
+import com.pinup.pinup.domain.model.UserInfo
 import com.pinup.pinup.ui.component.CommentView
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.PagerIndicator
 import com.pinup.pinup.ui.component.ProfileImageView
 import com.pinup.pinup.ui.component.RoundedBox
+import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_bookmark_off
 import pinup.composeapp.generated.resources.ic_bookmark_on
 import pinup.composeapp.generated.resources.ic_comment
+import pinup.composeapp.generated.resources.ic_comment_upload
 import pinup.composeapp.generated.resources.ic_heart_off
 import pinup.composeapp.generated.resources.ic_heat_on
 import pinup.composeapp.generated.resources.ic_menu_dot
@@ -65,8 +72,88 @@ fun PinlogDetailScreen(
     likeCount: Int = 100,
     isLikedByUse: Boolean = false,
     commentCount: Int = 100,
-    comments: List<String> = emptyList(),
+    comments: List<Comment> = listOf(
+        Comment(
+            id = 0,
+            content = "테스트1",
+            parentId = 0,
+            isOwn = true,
+            author = AuthorInfo(
+                id = 0,
+                profileImageUrls = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
+                nickname = "닉네임1"
+            ),
+            createdAt = "18분전"
+        ),
+        Comment(
+            id = 1,
+            content = "테스트2",
+            parentId = 1,
+            isOwn = true,
+            author = AuthorInfo(
+                id = 1,
+                profileImageUrls = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
+                nickname = "닉네임2"
+            ),
+            replies = listOf(
+                ReplyComment(
+                    id = 3,
+                    content = "테스트3",
+                    parentId = 3,
+                    isOwn = true,
+                    author = AuthorInfo(
+                        id = 3,
+                        profileImageUrls = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
+                        nickname = "닉네임3"
+                    ),
+                    createdAt = "18분전"
+                ),
+            ),
+            createdAt = "18분전"
+        ),
+        Comment(
+            id = 4,
+            content = "테스트4",
+            parentId = 4,
+            isOwn = true,
+            author = AuthorInfo(
+                id = 4,
+                profileImageUrls = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
+                nickname = "닉네임4"
+            ),
+            replies = listOf(
+                ReplyComment(
+                    id = 5,
+                    content = "테스트5",
+                    parentId = 5,
+                    isOwn = true,
+                    author = AuthorInfo(
+                        id = 5,
+                        profileImageUrls = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
+                        nickname = "닉네임5"
+                    ),
+                    createdAt = "18분전"
+                ),
+                ReplyComment(
+                    id = 6,
+                    content = "테스트6",
+                    parentId = 6,
+                    isOwn = true,
+                    author = AuthorInfo(
+                        id = 6,
+                        profileImageUrls = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
+                        nickname = "닉네임6"
+                    ),
+                    createdAt = "18분전"
+                ),
+            ),
+            createdAt = "18분전"
+        ),
+    ),
     isScrapByUser: Boolean = false,
+    query: String = "gkdkgdk",
+    userInfo: UserInfo = UserInfo(),
+    onValueChange: (String) -> Unit = {},
     onBackPressed: () -> Unit = {},
 ) {
 
@@ -337,12 +424,13 @@ fun PinlogDetailScreen(
 
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = Texts.Word.COMMENT,
                         style = Typography.T2.copy(
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.Medium
                         ),
                         color = Colors.Gray800,
                     )
@@ -352,7 +440,7 @@ fun PinlogDetailScreen(
                     Text(
                         text = commentCount.toString(),
                         style = Typography.T2.copy(
-                            fontWeight = FontWeight.SemiBold
+                            fontWeight = FontWeight.Medium
                         ),
                         color = Colors.Gray800,
                     )
@@ -366,16 +454,61 @@ fun PinlogDetailScreen(
             }
 
             items(comments){
-                CommentView()
+                CommentView(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp),
+                    comment = it
+                )
 
                 Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }
-}
 
-@Preview
-@Composable
-fun Test(){
-    PinlogDetailScreen()
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+
+        PHorizontalDivider()
+
+        Row(
+            modifier = Modifier
+                .background(Colors.White)
+                .padding(vertical = 8.dp, horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            ProfileImageView(
+                imgUrl = userInfo.profileUrl,
+                size = 35.dp
+            )
+
+            Spacer(modifier = Modifier.width(4.dp))
+
+            RoundedTextField(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = query,
+                textStyle = Typography.B3.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                onValueChange = onValueChange,
+                placeholder = Texts.PinLog.COMMENT_HINT,
+                placeholderStyle = Typography.B3.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                placeholderTextColor = Colors.Gray500,
+                cornerRounded = 100,
+                tailIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_comment_upload) else null,
+                tailIconSize = 38,
+                onTailIconClick = {
+                    //onValueChange("")
+                },
+                fixedBorderColor = Colors.Gray300,
+                backgroundColor = Colors.White,
+                contentPadding = PaddingValues(12.dp)
+            )
+        }
+    }
 }
