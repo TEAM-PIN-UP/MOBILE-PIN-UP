@@ -15,6 +15,7 @@ object Texts {
         const val SKIP = "건너뛰기"
         const val EMAIL = "이메일"
         const val CONFIRM = "확인"
+        const val DO_CONFiRM = "확인하기"
         const val VERIFY = "인증하기"
         const val PIN_MAP = "핀맵"
         const val PINLOG = "핀로그"
@@ -22,6 +23,7 @@ object Texts {
         const val ARTICLE = "아티클"
         const val MY = "마이"
         const val RATING = "별점"
+        const val DO_RETURN = "돌아가기"
     }
 
     object Onboarding {
@@ -122,9 +124,11 @@ object Texts {
         }
         const val SELECT_DATE_HINT = "날짜 선택"
         const val IMAGE_UPLOAD = "사진 업로드"
-        const val PINLOG_HINT = "작성된 핀로그는 나의 핀버디들에게만 보여요!\n\n\n" +
+        const val PINLOG_HINT = "작성된 핀로그는 나의 핀버디들에게만 보여요!\n\n" +
                 "*주의: 욕설, 비방 목적 혹은 명예 훼손성 내용은 작성 시 삭제 처리 될 수 있습니다."
         const val PINLOG_MORE_LENGTH = "10자 이상 작성해 주세요."
         const val PINLOG_TOO_MUCH_LENGTH = "입력 가능 글자 수를 초과했어요."
+        const val PINLOG_DIALOG_TITLE = "핀로그 작성 완료!"
+        const val PINLOG_DIALOG_BODY = "등록한 핀로그를\n확인하시겠어요?"
     }
 }

@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -45,18 +46,20 @@ fun PDialog(
         Column(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 38.dp)
                 .clip(shape = RoundedCornerShape(16.dp))
                 .background(color = Color.White)
-                .padding(PaddingValues(all = 20.dp)),
+                .padding(horizontal = 24.dp, vertical = 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
                 text = titleText,
-                color = Colors.Neutral800,
-                style = Typography.H2,
+                color = Colors.Gray800,
+                style = Typography.T1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
                 textAlign = TextAlign.Center
             )
 
@@ -66,8 +69,10 @@ fun PDialog(
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = descriptionText,
-                    color = Colors.Neutral500,
-                    style = Typography.D1,
+                    color = Colors.Gray500,
+                    style = Typography.B2.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
                     textAlign = TextAlign.Center,
                 )
             }
@@ -80,14 +85,16 @@ fun PDialog(
                 leftButtonText?.let {
                     Text(
                         text = it,
-                        color = Colors.Neutral400,
-                        style = Typography.H4,
+                        color = Colors.Gray500,
+                        style = Typography.B2.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .weight(1f)
                             .background(color = Colors.White)
                             .clickableSingleWithNoRipple { onLeftButtonClick.invoke() }
-                            .padding(PaddingValues(vertical = 14.dp))
+                            .padding(PaddingValues(vertical = 16.dp))
                     )
                 }
 
@@ -99,13 +106,15 @@ fun PDialog(
                     Text(
                         text = rightButtonText,
                         color = Colors.White,
-                        style = Typography.H4,
+                        style = Typography.B2.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .weight(1f)
                             .clip(shape = RoundedCornerShape(100.dp))
                             .background(color = Colors.Neutral800)
-                            .padding(PaddingValues(vertical = 14.dp))
+                            .padding(PaddingValues(vertical = 16.dp))
                             .clickableSingleWithNoRipple { onRightButtonClick.invoke() }
                     )
                 }

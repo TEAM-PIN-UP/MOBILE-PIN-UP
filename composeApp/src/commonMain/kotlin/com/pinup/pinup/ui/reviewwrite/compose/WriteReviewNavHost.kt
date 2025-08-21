@@ -19,6 +19,7 @@ import com.pinup.pinup.ui.reviewwrite.WriteReviewUiEvent
 import com.pinup.pinup.ui.reviewwrite.WriteReviewViewModel
 import com.pinup.pinup.ui.reviewwrite.searchplace.SearchPlaceRoute
 import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
@@ -116,10 +117,10 @@ fun WriteReviewNavHost(
 
     if (isShowCompleteDialog.value) {
         PDialog(
-            titleText = "리뷰 작성 완료!",
-            descriptionText = "등록한 리뷰를\n확인하시겠어요?",
-            leftButtonText = "아니요",
-            rightButtonText = "확인",
+            titleText = Texts.PinLog.PINLOG_DIALOG_TITLE,
+            descriptionText = Texts.PinLog.PINLOG_DIALOG_BODY,
+            leftButtonText = Texts.Word.DO_RETURN,
+            rightButtonText = Texts.Word.DO_CONFiRM,
             onLeftButtonClick = {
                 isShowCompleteDialog.value = false
                 onBackPressed()
