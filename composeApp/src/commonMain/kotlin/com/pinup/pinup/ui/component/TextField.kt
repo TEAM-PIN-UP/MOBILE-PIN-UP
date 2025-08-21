@@ -162,13 +162,15 @@ fun RoundedTextField(
                                 Spacer(modifier = Modifier.width(12.dp))
                             }
 
-                            innerTextField.invoke()
+                            Box(Modifier.weight(1f)) {
+                                innerTextField()
+                            }
 
                             if (tailIcon != null &&
                                 textFieldValue.text.isNotEmpty() &&
                                 (isFocused || isTrailIconAlwaysShow) && readOnly.not()
                             ) {
-                                Spacer(modifier = Modifier.weight(1f))
+                                Spacer(modifier = Modifier.width(12.dp))
 
                                 Image(
                                     modifier = Modifier

@@ -151,7 +151,7 @@ fun PinlogDetailScreen(
         ),
     ),
     isScrapByUser: Boolean = false,
-    query: String = "gkdkgdk",
+    query: String = "",
     userInfo: UserInfo = UserInfo(),
     onValueChange: (String) -> Unit = {},
     onBackPressed: () -> Unit = {},
@@ -493,13 +493,14 @@ fun PinlogDetailScreen(
                 textStyle = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),
+                singleLine = false,
                 onValueChange = onValueChange,
                 placeholder = Texts.PinLog.COMMENT_HINT,
                 placeholderStyle = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),
                 placeholderTextColor = Colors.Gray500,
-                cornerRounded = 100,
+                cornerRounded = 24,
                 tailIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_comment_upload) else null,
                 tailIconSize = 38,
                 onTailIconClick = {

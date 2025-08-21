@@ -18,6 +18,7 @@ import com.pinup.pinup.StartAppViewModel
 import com.pinup.pinup.ui.findAccount.findPassword.FindPasswordViewModel
 import com.pinup.pinup.ui.onboarding.OnboardingViewModel
 import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpViewModel
+import com.pinup.pinup.ui.pinlogDetail.PinlogDetailViewModel
 
 val viewModelModule = module {
     viewModelOf(::OnboardingViewModel)
@@ -28,6 +29,7 @@ val viewModelModule = module {
     viewModelOf(::FindPasswordViewModel)
     viewModelOf(::SettingViewModel)
     viewModelOf(::WriteReviewViewModel)
+    viewModelOf(::PinlogDetailViewModel)
     viewModelOf(::SearchPlaceViewModel)
     viewModelOf(::PinBuddyViewModel)
     viewModelOf(::MyViewModel)
