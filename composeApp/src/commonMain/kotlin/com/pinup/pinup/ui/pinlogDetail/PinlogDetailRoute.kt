@@ -11,6 +11,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun PinlogDetailRoute(
     viewModel: PinlogDetailViewModel = koinViewModel(),
     onBackPressed: () -> Unit = {},
+    onClickEdit: (Int) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -27,7 +28,9 @@ fun PinlogDetailRoute(
         onBackPressed = onBackPressed,
         query = uiState.myComment,
         onValueChange = viewModel::updateMyComment,
-        onClickEdit = {},
+        onClickEdit = {
+            onClickEdit(viewModel.reviewId)
+        },
         onClickDelete = viewModel::deleteReview
     )
 }

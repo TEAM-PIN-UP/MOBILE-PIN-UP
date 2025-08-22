@@ -249,6 +249,9 @@ fun PinUpApp(
                         onBackPressed = {
                             navHostController.popBackStack()
                         },
+                        onClickEdit = {
+                            navHostController.navigate(PinUpAppDestination.WriteReview(it))
+                        }
                     )
                 }
 
@@ -325,7 +328,9 @@ sealed interface PinUpAppDestination {
         data class DetailPlace(val kakaoPlaceId: String) : PinUpAppDestination
     }
     @Serializable
-    data object WriteReview : PinUpAppDestination
+    data class WriteReview(
+        val reviewId: Int,
+    ) : PinUpAppDestination
     @Serializable
     data class PinlogDetail(
         val reviewId: Int,

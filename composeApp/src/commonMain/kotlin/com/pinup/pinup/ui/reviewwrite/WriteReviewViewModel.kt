@@ -1,11 +1,13 @@
 package com.pinup.pinup.ui.reviewwrite
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.data.request.PlaceRequest
 import com.pinup.pinup.data.request.ReviewRequest
 import com.pinup.pinup.data.request.pinlog.AddReviewRequest
 import com.pinup.pinup.domain.model.ImageUploadType
 import com.pinup.pinup.domain.model.Place
+import com.pinup.pinup.domain.usecase.EditPinlogUseCase
 import com.pinup.pinup.domain.usecase.PostSeveralImagesUploadUseCase
 import com.pinup.pinup.domain.usecase.RegisterReviewUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
@@ -14,9 +16,18 @@ import com.pinup.pinup.ui.base.UiState
 import kotlinx.coroutines.launch
 
 class WriteReviewViewModel (
+    savedStateHandle: SavedStateHandle,
     private val registerReviewUseCase: RegisterReviewUseCase,
-    private val imagesUploadUseCase: PostSeveralImagesUploadUseCase
+    private val imagesUploadUseCase: PostSeveralImagesUploadUseCase,
+    private val editPinlogUseCase: EditPinlogUseCase,
 ) : BaseViewModel<WriteReviewUiState, WriteReviewUiEvent>(WriteReviewUiState()) {
+
+    companion object {
+        private const val REVIEW_ID = "reviewId"
+
+    }
+
+    val reviewId = savedStateHandle.get<Int>(REVIEW_ID) ?: 0
 
     var kakaoPlaceId: String? = null
 

@@ -16,7 +16,6 @@ class PinlogDetailViewModel(
 
     companion object {
         private const val REVIEW_ID = "reviewId"
-        private const val PAGE_SIZE = 20
 
     }
 
