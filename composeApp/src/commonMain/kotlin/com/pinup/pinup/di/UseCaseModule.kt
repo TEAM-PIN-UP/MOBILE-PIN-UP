@@ -18,6 +18,7 @@ val useCaseModule = module {
     single<GetMyProfileUseCase> { GetMyProfileUseCase(get()) }
     single<GetPhotoReviewsUseCase> { GetPhotoReviewsUseCase(get()) }
     single<GetPinBuddiesUseCase> { GetPinBuddiesUseCase(get()) }
+    single<GetPinlogDetailUseCase> { GetPinlogDetailUseCase(get()) }
     single<GetReceivePinBuddyRequestsUseCase> { GetReceivePinBuddyRequestsUseCase(get()) }
     single<GetReviewedPlacesUseCase> { GetReviewedPlacesUseCase(get()) }
     single<GetSentPinBuddyRequestsUseCase> { GetSentPinBuddyRequestsUseCase(get()) }
