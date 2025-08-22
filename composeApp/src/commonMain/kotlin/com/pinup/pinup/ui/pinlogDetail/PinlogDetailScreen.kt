@@ -18,8 +18,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -31,9 +36,11 @@ import com.pinup.pinup.domain.model.AuthorInfo
 import com.pinup.pinup.domain.model.Comment
 import com.pinup.pinup.domain.model.ReplyComment
 import com.pinup.pinup.domain.model.UserInfo
+import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.CommentView
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.PagerIndicator
+import com.pinup.pinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.pinup.ui.component.ProfileImageView
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.RoundedTextField
@@ -41,6 +48,8 @@ import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_bookmark_off
@@ -55,6 +64,7 @@ import pinup.composeapp.generated.resources.ic_star
 
 @Composable
 fun PinlogDetailScreen(
+    reviewId: Int = -1,
     placeName: String = "우동 카덴",
     visitDate: String = "25.06.22",
     profileImage: String = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
@@ -154,362 +164,395 @@ fun PinlogDetailScreen(
     query: String = "",
     userInfo: UserInfo = UserInfo(),
     onValueChange: (String) -> Unit = {},
+    onClickPlaceDetail: (String) -> Unit = {},
     onBackPressed: () -> Unit = {},
+    onClickEdit: () -> Unit = {},
+    onClickDelete: () -> Unit = {},
 ) {
 
+    val scope: CoroutineScope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(
+        ModalBottomSheetValue.Hidden
+    )
     val pagerState = rememberPagerState(pageCount = { reviewImageUrls.size })
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ){
-        TitleBar(
-            modifier = Modifier
-                .padding(start = 20.dp),
-            title = Texts.PinLog.DETAIL_TITLE,
-            onLeftButtonClick = onBackPressed
-        )
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
+    ModalBottomSheetLayout(
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        sheetContent = {
+            PinlogMenuBottomSheet(
+                onClickEdit = {
+                    scope.launch { sheetState.hide() }
+                },
+                onClickDelete = {
+                    scope.launch { sheetState.hide() }
+                },
+            )
+        },
+        sheetBackgroundColor = Colors.White,
+        sheetState = sheetState,
+    ) {
+        Box {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ){
+                TitleBar(
                     modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                    ) {
+                        .padding(start = 20.dp),
+                    title = Texts.PinLog.DETAIL_TITLE,
+                    onLeftButtonClick = onBackPressed
+                )
 
-                        Text(
-                            text = placeName,
-                            style = Typography.B2.copy(
-                                fontWeight = FontWeight.SemiBold
-                            ),
-                            color = Colors.Black,
-                        )
-
-                        Spacer(modifier = Modifier.height(6.dp))
-
-                        Text(
-                            text = "$visitDate 방문",
-                            style = Typography.L2.copy(
-                                fontWeight = FontWeight.Medium
-                            ),
-                            color = Colors.Gray400,
-                        )
-                    }
-
-                    Image(
-                        painter = painterResource(Res.drawable.ic_right_arrow_300),
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(Colors.Gray400)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                PHorizontalDivider()
-
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-
-            item {
-                Row(
+                LazyColumn(
                     modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxSize()
                 ) {
-                    ProfileImageView(
-                        imgUrl = profileImage,
-                        size = 36.dp,
-                    )
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                    ) {
-                        Text(
-                            text = userName,
-                            style = Typography.B2.copy(
-                                fontWeight = FontWeight.SemiBold
-                            ),
-                            color = Colors.Gray900,
-                        )
-
-                        Spacer(modifier = Modifier.height(2.dp))
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
 
                         Row(
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                            ) {
+
+                                Text(
+                                    text = placeName,
+                                    style = Typography.B2.copy(
+                                        fontWeight = FontWeight.SemiBold
+                                    ),
+                                    color = Colors.Black,
+                                )
+
+                                Spacer(modifier = Modifier.height(6.dp))
+
+                                Text(
+                                    text = "$visitDate 방문",
+                                    style = Typography.L2.copy(
+                                        fontWeight = FontWeight.Medium
+                                    ),
+                                    color = Colors.Gray400,
+                                )
+                            }
+
+                            Image(
+                                modifier = Modifier
+                                    .clickableWithNoRipple {
+                                        onClickPlaceDetail("")
+                                    },
+                                painter = painterResource(Res.drawable.ic_right_arrow_300),
+                                contentDescription = null,
+                                colorFilter = ColorFilter.tint(Colors.Gray400)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        PHorizontalDivider()
+
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            ProfileImageView(
+                                imgUrl = profileImage,
+                                size = 36.dp,
+                            )
+
+                            Spacer(modifier = Modifier.width(12.dp))
+
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                            ) {
+                                Text(
+                                    text = userName,
+                                    style = Typography.B2.copy(
+                                        fontWeight = FontWeight.SemiBold
+                                    ),
+                                    color = Colors.Gray900,
+                                )
+
+                                Spacer(modifier = Modifier.height(2.dp))
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = Texts.Word.PINLOG,
+                                        style = Typography.L2.copy(
+                                            fontWeight = FontWeight.Medium
+                                        ),
+                                        color = Colors.Gray500,
+                                    )
+
+                                    Spacer(modifier = Modifier.width(2.dp))
+
+                                    Text(
+                                        text = reviewCount.toString(),
+                                        style = Typography.L2.copy(
+                                            fontWeight = FontWeight.Medium
+                                        ),
+                                        color = Colors.Gray800,
+                                    )
+                                }
+                            }
+
+                            if (isOwn) {
+                                Image(
+                                    modifier = Modifier
+                                        .clickableWithNoRipple {
+                                            scope.launch { sheetState.show() }
+                                        },
+                                    painter = painterResource(Res.drawable.ic_menu_dot),
+                                    contentDescription = null,
+                                )
+                            }
+                        }
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Column {
+                            Row(
+                                modifier = Modifier
+                                    .padding(horizontal = 20.dp)
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    painter = painterResource(Res.drawable.ic_star),
+                                    contentDescription = null
+                                )
+
+                                Spacer(modifier = Modifier.width(2.dp))
+
+                                Text(
+                                    text = starRating.toString(),
+                                    style = Typography.B2.copy(
+                                        fontWeight = FontWeight.Medium
+                                    ),
+                                    color = Colors.Gray900,
+                                )
+
+                                Spacer(modifier = Modifier.weight(1f))
+
+                                Text(
+                                    text = "$createdDate 작성",
+                                    style = Typography.L2.copy(
+                                        fontWeight = FontWeight.Medium
+                                    ),
+                                    color = Colors.Gray400,
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            if (reviewImageUrls.isNotEmpty()) {
+                                Box {
+                                    HorizontalPager(
+                                        state = pagerState,
+                                    ) { page ->
+                                        RoundedBox(
+                                            modifier = Modifier
+                                                .padding(horizontal = 20.dp),
+                                            cornerRounded = 8,
+                                            backgroundColor = Colors.Gray100,
+                                        ) {
+                                            AsyncImage(
+                                                modifier = Modifier
+                                                    .aspectRatio(1f)
+                                                    .fillMaxWidth(),
+                                                model = reviewImageUrls[page],
+                                                contentScale = ContentScale.Crop,
+                                                contentDescription = "default profile image"
+                                            )
+                                        }
+                                    }
+
+                                    Column(
+                                        modifier = Modifier
+                                            .align(Alignment.BottomCenter)
+                                    ) {
+                                        PagerIndicator(
+                                            page = pagerState.pageCount,
+                                            selectedPage = pagerState.currentPage
+                                        )
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                    }
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            Text(
+                                modifier = Modifier
+                                    .padding(horizontal = 20.dp),
+                                text = content,
+                                style = Typography.B3.copy(
+                                    fontWeight = FontWeight.Medium
+                                ),
+                                color = Colors.Gray700,
+                            )
+
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            Row(
+                                modifier = Modifier
+                                    .padding(horizontal = 20.dp)
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    painter = painterResource(if (isLikedByUse) Res.drawable.ic_heat_on else Res.drawable.ic_heart_off),
+                                    contentDescription = null
+                                )
+
+                                Spacer(modifier = Modifier.width(3.dp))
+
+                                Text(
+                                    text = likeCount.toString(),
+                                    style = Typography.L2.copy(
+                                        fontWeight = FontWeight.SemiBold
+                                    ),
+                                    color = Colors.Gray800,
+                                )
+
+                                Spacer(modifier = Modifier.width(14.dp))
+
+                                Image(
+                                    painter = painterResource(Res.drawable.ic_comment),
+                                    contentDescription = null
+                                )
+
+                                Spacer(modifier = Modifier.width(4.dp))
+
+                                Text(
+                                    text = commentCount.toString(),
+                                    style = Typography.L2.copy(
+                                        fontWeight = FontWeight.SemiBold
+                                    ),
+                                    color = Colors.Gray800,
+                                )
+
+                                Spacer(modifier = Modifier.weight(1f))
+
+                                Image(
+                                    modifier = Modifier
+                                        .size(24.dp),
+                                    painter = painterResource(if (isScrapByUser) Res.drawable.ic_bookmark_on else Res.drawable.ic_bookmark_off),
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(50.dp))
+
+                        Row(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = Texts.Word.PINLOG,
-                                style = Typography.L2.copy(
+                                text = Texts.Word.COMMENT,
+                                style = Typography.T2.copy(
                                     fontWeight = FontWeight.Medium
                                 ),
-                                color = Colors.Gray500,
+                                color = Colors.Gray800,
                             )
 
-                            Spacer(modifier = Modifier.width(2.dp))
+                            Spacer(modifier = Modifier.width(4.dp))
 
                             Text(
-                                text = reviewCount.toString(),
-                                style = Typography.L2.copy(
+                                text = commentCount.toString(),
+                                style = Typography.T2.copy(
                                     fontWeight = FontWeight.Medium
                                 ),
                                 color = Colors.Gray800,
                             )
                         }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        PHorizontalDivider()
+
+                        Spacer(modifier = Modifier.height(20.dp))
                     }
 
-                    if (isOwn) {
-                        Image(
-                            painter = painterResource(Res.drawable.ic_menu_dot),
-                            contentDescription = null,
-                        )
-                    }
-                }
-            }
-
-            item {
-                Spacer(modifier = Modifier.height(20.dp))
-
-                Column {
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp)
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painterResource(Res.drawable.ic_star),
-                            contentDescription = null
-                        )
-
-                        Spacer(modifier = Modifier.width(2.dp))
-
-                        Text(
-                            text = starRating.toString(),
-                            style = Typography.B2.copy(
-                                fontWeight = FontWeight.Medium
-                            ),
-                            color = Colors.Gray900,
-                        )
-
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        Text(
-                            text = "$createdDate 작성",
-                            style = Typography.L2.copy(
-                                fontWeight = FontWeight.Medium
-                            ),
-                            color = Colors.Gray400,
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    if (reviewImageUrls.isNotEmpty()) {
-                        Box {
-                            HorizontalPager(
-                                state = pagerState,
-                            ) { page ->
-                                RoundedBox(
-                                    modifier = Modifier
-                                        .padding(horizontal = 20.dp),
-                                    cornerRounded = 8,
-                                    backgroundColor = Colors.Gray100,
-                                ) {
-                                    AsyncImage(
-                                        modifier = Modifier
-                                            .aspectRatio(1f)
-                                            .fillMaxWidth(),
-                                        model = reviewImageUrls[page],
-                                        contentScale = ContentScale.Crop,
-                                        contentDescription = "default profile image"
-                                    )
-                                }
-                            }
-
-                            Column(
-                                modifier = Modifier
-                                    .align(Alignment.BottomCenter)
-                            ) {
-                                PagerIndicator(
-                                    page = pagerState.pageCount,
-                                    selectedPage = pagerState.currentPage
-                                )
-
-                                Spacer(modifier = Modifier.height(8.dp))
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp),
-                        text = content,
-                        style = Typography.B3.copy(
-                            fontWeight = FontWeight.Medium
-                        ),
-                        color = Colors.Gray700,
-                    )
-
-                    Spacer(modifier = Modifier.height(20.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp)
-                            .fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painterResource(if (isLikedByUse) Res.drawable.ic_heat_on else Res.drawable.ic_heart_off),
-                            contentDescription = null
-                        )
-
-                        Spacer(modifier = Modifier.width(3.dp))
-
-                        Text(
-                            text = likeCount.toString(),
-                            style = Typography.L2.copy(
-                                fontWeight = FontWeight.SemiBold
-                            ),
-                            color = Colors.Gray800,
-                        )
-
-                        Spacer(modifier = Modifier.width(14.dp))
-
-                        Image(
-                            painter = painterResource(Res.drawable.ic_comment),
-                            contentDescription = null
-                        )
-
-                        Spacer(modifier = Modifier.width(4.dp))
-
-                        Text(
-                            text = commentCount.toString(),
-                            style = Typography.L2.copy(
-                                fontWeight = FontWeight.SemiBold
-                            ),
-                            color = Colors.Gray800,
-                        )
-
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        Image(
+                    items(comments){
+                        CommentView(
                             modifier = Modifier
-                                .size(24.dp),
-                            painter = painterResource(if (isScrapByUser) Res.drawable.ic_bookmark_on else Res.drawable.ic_bookmark_off),
-                            contentDescription = null
+                                .padding(horizontal = 16.dp),
+                            comment = it
                         )
+
+                        Spacer(modifier = Modifier.height(20.dp))
                     }
                 }
             }
-            
-            item {
-                Spacer(modifier = Modifier.height(50.dp))
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+            ) {
+                Spacer(modifier = Modifier.weight(1f))
+
+                PHorizontalDivider()
 
                 Row(
                     modifier = Modifier
-                        .padding(horizontal = 16.dp),
+                        .background(Colors.White)
+                        .padding(vertical = 8.dp, horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = Texts.Word.COMMENT,
-                        style = Typography.T2.copy(
-                            fontWeight = FontWeight.Medium
-                        ),
-                        color = Colors.Gray800,
+                    ProfileImageView(
+                        imgUrl = userInfo.profileUrl,
+                        size = 35.dp
                     )
 
                     Spacer(modifier = Modifier.width(4.dp))
 
-                    Text(
-                        text = commentCount.toString(),
-                        style = Typography.T2.copy(
+                    RoundedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        text = query,
+                        textStyle = Typography.B3.copy(
                             fontWeight = FontWeight.Medium
                         ),
-                        color = Colors.Gray800,
+                        singleLine = false,
+                        onValueChange = onValueChange,
+                        placeholder = Texts.PinLog.COMMENT_HINT,
+                        placeholderStyle = Typography.B3.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        placeholderTextColor = Colors.Gray500,
+                        cornerRounded = 24,
+                        tailIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_comment_upload) else null,
+                        tailIconSize = 38,
+                        onTailIconClick = {
+                            //onValueChange("")
+                        },
+                        fixedBorderColor = Colors.Gray300,
+                        backgroundColor = Colors.White,
+                        contentPadding = PaddingValues(12.dp)
                     )
                 }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                PHorizontalDivider()
-
-                Spacer(modifier = Modifier.height(20.dp))
             }
-
-            items(comments){
-                CommentView(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp),
-                    comment = it
-                )
-
-                Spacer(modifier = Modifier.height(20.dp))
-            }
-        }
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-    ) {
-        Spacer(modifier = Modifier.weight(1f))
-
-        PHorizontalDivider()
-
-        Row(
-            modifier = Modifier
-                .background(Colors.White)
-                .padding(vertical = 8.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            ProfileImageView(
-                imgUrl = userInfo.profileUrl,
-                size = 35.dp
-            )
-
-            Spacer(modifier = Modifier.width(4.dp))
-
-            RoundedTextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                text = query,
-                textStyle = Typography.B3.copy(
-                    fontWeight = FontWeight.Medium
-                ),
-                singleLine = false,
-                onValueChange = onValueChange,
-                placeholder = Texts.PinLog.COMMENT_HINT,
-                placeholderStyle = Typography.B3.copy(
-                    fontWeight = FontWeight.Medium
-                ),
-                placeholderTextColor = Colors.Gray500,
-                cornerRounded = 24,
-                tailIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_comment_upload) else null,
-                tailIconSize = 38,
-                onTailIconClick = {
-                    //onValueChange("")
-                },
-                fixedBorderColor = Colors.Gray300,
-                backgroundColor = Colors.White,
-                contentPadding = PaddingValues(12.dp)
-            )
         }
     }
 }

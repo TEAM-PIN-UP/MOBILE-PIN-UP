@@ -13,8 +13,11 @@ fun PinlogDetailRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     PinlogDetailScreen(
+        reviewId = viewModel.reviewId,
         onBackPressed = onBackPressed,
         query = uiState.myComment,
-        onValueChange = viewModel::updateMyComment
+        onValueChange = viewModel::updateMyComment,
+        onClickEdit = {},
+        onClickDelete = viewModel::deleteReview
     )
 }

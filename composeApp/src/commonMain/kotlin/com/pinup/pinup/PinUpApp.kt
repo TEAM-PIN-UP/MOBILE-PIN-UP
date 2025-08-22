@@ -327,7 +327,9 @@ sealed interface PinUpAppDestination {
     @Serializable
     data object WriteReview : PinUpAppDestination
     @Serializable
-    data object PinlogDetail : PinUpAppDestination
+    data class PinlogDetail(
+        val reviewId: Int,
+    ) : PinUpAppDestination
     @Serializable
     data object AddPinBuddy : PinUpAppDestination
     @Serializable
