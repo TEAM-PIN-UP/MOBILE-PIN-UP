@@ -2,6 +2,7 @@ package com.pinup.pinup.data.remote
 
 import com.pinup.pinup.data.request.ReviewRequest
 import com.pinup.pinup.data.request.pinlog.AddReviewRequest
+import com.pinup.pinup.data.request.review.CommentRequest
 import com.pinup.pinup.data.response.GetPinlogDetailResponse
 import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.domain.model.PResult
@@ -15,4 +16,7 @@ interface ReviewsRemoteDataSource {
 
     suspend fun editReview(reviewId: Int, request: ReviewRequest): PResult<PResponse<Unit>>
     suspend fun getReviewDetail(request: Int): PResult<PResponse<GetPinlogDetailResponse>>
+    suspend fun addComment(reviewId: Int, request: CommentRequest): PResult<PResponse<Unit>>
+    suspend fun deleteComment(reviewId: Int, commentId: Int): PResult<PResponse<Unit>>
+    suspend fun editComment(reviewId: Int, commentId: Int, content: String): PResult<PResponse<Unit>>
 }

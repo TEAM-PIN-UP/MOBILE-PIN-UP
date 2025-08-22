@@ -3,6 +3,8 @@ package com.pinup.pinup.remote.impl
 import com.pinup.pinup.data.remote.ReviewsRemoteDataSource
 import com.pinup.pinup.data.request.ReviewRequest
 import com.pinup.pinup.data.request.pinlog.AddReviewRequest
+import com.pinup.pinup.data.request.review.CommentEditRequest
+import com.pinup.pinup.data.request.review.CommentRequest
 import com.pinup.pinup.data.response.GetPinlogDetailResponse
 import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.domain.model.PResult
@@ -36,6 +38,38 @@ class ReviewsRemoteDataSourceImpl (
     override suspend fun getReviewDetail(request: Int): PResult<PResponse<GetPinlogDetailResponse>> {
         return reviewsApi.getReviewDetail(
             reviewId = request
+        )
+    }
+
+    override suspend fun addComment(
+        reviewId: Int,
+        request: CommentRequest
+    ): PResult<PResponse<Unit>> {
+        return reviewsApi.addComment(
+            reviewId = reviewId,
+            request = request
+        )
+    }
+
+    override suspend fun deleteComment(
+        reviewId: Int,
+        commentId: Int
+    ): PResult<PResponse<Unit>> {
+        return reviewsApi.deleteReview(
+            reviewId = reviewId,
+            commentId = commentId
+        )
+    }
+
+    override suspend fun editComment(
+        reviewId: Int,
+        commentId: Int,
+        content: String
+    ): PResult<PResponse<Unit>> {
+        return reviewsApi.editReview(
+            reviewId = reviewId,
+            commentId = commentId,
+            request = CommentEditRequest(content)
         )
     }
 }
