@@ -32,6 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
@@ -47,6 +48,7 @@ import com.pinup.pinup.domain.model.Comment
 import com.pinup.pinup.domain.model.ReplyComment
 import com.pinup.pinup.domain.model.UserInfo
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.ui.component.CommentMenuBottomSheet
 import com.pinup.pinup.ui.component.CommentView
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.PagerIndicator
@@ -57,6 +59,7 @@ import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
+import com.pinup.pinup.ui.theme.Texts.PinLog.COMMENT_REPLY_HINT
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -172,11 +175,17 @@ fun PinlogDetailScreen(
     isScrapByUser: Boolean = false,
     query: String = "",
     userInfo: UserInfo = UserInfo(),
+    replyId: Int? = null,
     onValueChange: (String) -> Unit = {},
     onClickPlaceDetail: (String) -> Unit = {},
     onBackPressed: () -> Unit = {},
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
+    onClickUploadComment: () -> Unit = {},
+    onClickEditComment: (Int, String) -> Unit = {_, _ -> },
+    onClickDeleteComment: (Int) -> Unit = {},
+    updateNonFocusMode: () -> Unit = {},
+    updateReplyCommentId: (Int) -> Unit = {},
 ) {
 
     val density = LocalDensity.current
@@ -186,25 +195,41 @@ fun PinlogDetailScreen(
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
+    var commentSheet by remember { mutableStateOf(false) }
     val pagerState = rememberPagerState(pageCount = { reviewImageUrls.size })
     val focusManager = LocalFocusManager.current
     val keyboard = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
+
+    var clickedCommentId by remember { mutableStateOf(0) }
+    var clickedComment by remember { mutableStateOf("") }
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContent = {
-            PinlogMenuBottomSheet(
-                onClickEdit = {
-                    scope.launch {
+            if (commentSheet) {
+                CommentMenuBottomSheet(
+                    onClickEdit = {
+                        onClickEditComment(clickedCommentId, clickedComment)
+                        scope.launch { sheetState.hide() }
+                    },
+                    onClickDelete = {
+                        onClickDeleteComment(clickedCommentId)
+                        scope.launch { sheetState.hide() }
+                    },
+                )
+            } else {
+                PinlogMenuBottomSheet(
+                    onClickEdit = {
                         onClickEdit()
-                        sheetState.hide()
-                    }
-                },
-                onClickDelete = {
-                    onClickDelete()
-                    scope.launch { sheetState.hide() }
-                },
-            )
+                        scope.launch { sheetState.hide() }
+                    },
+                    onClickDelete = {
+                        onClickDelete()
+                        scope.launch { sheetState.hide() }
+                    },
+                )
+            }
         },
         sheetBackgroundColor = Colors.White,
         sheetState = sheetState,
@@ -217,6 +242,7 @@ fun PinlogDetailScreen(
                         detectTapGestures(onTap = {
                             focusManager.clearFocus(force = true)
                             keyboard?.hide()
+                            updateNonFocusMode()
                         })
                     }
             ){
@@ -523,7 +549,16 @@ fun PinlogDetailScreen(
                         CommentView(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp),
-                            comment = it
+                            comment = it,
+                            onClickMenu = { id, comment ->
+                                commentSheet = true
+                                clickedCommentId = id
+                                clickedComment = comment
+                                scope.launch { sheetState.show() }
+                            },
+                            onReplyClick = { id ->
+                                updateReplyCommentId(id)
+                            }
                         )
 
                         Spacer(modifier = Modifier.height(20.dp))
@@ -563,7 +598,7 @@ fun PinlogDetailScreen(
                         ),
                         singleLine = false,
                         onValueChange = onValueChange,
-                        placeholder = Texts.PinLog.COMMENT_HINT,
+                        placeholder = if(replyId == null) Texts.PinLog.COMMENT_HINT else COMMENT_REPLY_HINT,
                         placeholderStyle = Typography.B3.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -572,11 +607,12 @@ fun PinlogDetailScreen(
                         tailIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_comment_upload) else null,
                         tailIconSize = 38,
                         onTailIconClick = {
-                            //onValueChange("")
+                            onClickUploadComment()
                         },
                         fixedBorderColor = Colors.Gray300,
                         backgroundColor = Colors.White,
-                        contentPadding = PaddingValues(12.dp)
+                        contentPadding = PaddingValues(12.dp),
+                        focusRequester = focusRequester
                     )
                 }
             }

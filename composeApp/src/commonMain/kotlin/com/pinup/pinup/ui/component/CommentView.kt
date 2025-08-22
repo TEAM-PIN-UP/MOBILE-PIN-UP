@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Comment
+import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
@@ -25,6 +26,8 @@ import pinup.composeapp.generated.resources.ic_menu_dot
 fun CommentView(
     modifier: Modifier = Modifier,
     comment: Comment = Comment(),
+    onClickMenu: (Int, String) -> Unit = {_, _ -> },
+    onReplyClick: (Int) -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -63,6 +66,9 @@ fun CommentView(
                 if (comment.isOwn) {
                     Image(
                         modifier = Modifier
+                            .clickableWithNoRipple {
+                                onClickMenu(comment.id, comment.content)
+                            }
                             .size(16.dp),
                         painter = painterResource(Res.drawable.ic_menu_dot),
                         contentDescription = null
@@ -83,6 +89,10 @@ fun CommentView(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
+                modifier = Modifier
+                    .clickableWithNoRipple {
+                        onReplyClick(comment.id)
+                    },
                 text = Texts.Word.DO_REPLY_COMMENT,
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
@@ -131,6 +141,9 @@ fun CommentView(
                                 if (it.isOwn) {
                                     Image(
                                         modifier = Modifier
+                                            .clickableWithNoRipple {
+                                                onClickMenu(it.id, it.content)
+                                            }
                                             .size(16.dp),
                                         painter = painterResource(Res.drawable.ic_menu_dot),
                                         contentDescription = null

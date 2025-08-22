@@ -39,6 +39,13 @@ fun PinlogDetailRoute(
         onClickEdit = {
             onClickEdit(viewModel.reviewId)
         },
-        onClickDelete = viewModel::deleteReview
+        onClickDelete = viewModel::deleteReview,
+        onClickUploadComment = viewModel::uploadComment,
+        onClickEditComment = viewModel::updateEditMode,
+        onClickDeleteComment = viewModel::deleteComment,
+        updateNonFocusMode = {
+            if(uiState.isEditComment || uiState.clickedReplyId != null) viewModel::updateNormalMode
+        },
+        updateReplyCommentId = viewModel::updateClickedReplyId
     )
 }
