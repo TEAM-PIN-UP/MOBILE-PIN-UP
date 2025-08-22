@@ -8,9 +8,11 @@ val useCaseModule = module {
     single<AddBookmarkUseCase> { AddBookmarkUseCase(get()) }
     single<CheckNickNameUseCase> { CheckNickNameUseCase(get()) }
     single<DeleteBookmarkUseCase> { DeleteBookmarkUseCase(get()) }
+    single<DeleteCommentUseCase> { DeleteCommentUseCase(get()) }
     single<DeletePinlogUseCase> { DeletePinlogUseCase(get()) }
     single<DeletePinBuddyUseCase> { DeletePinBuddyUseCase(get()) }
     single<DeleteRequestPinBuddyUseCase> { DeleteRequestPinBuddyUseCase(get()) }
+    single<EditCommentUseCase> { EditCommentUseCase(get()) }
     single<EditPinlogUseCase> { EditPinlogUseCase(get()) }
     single<GetBookmarksUseCase> { GetBookmarksUseCase(get()) }
     single<GetDetailPlaceUseCase> { GetDetailPlaceUseCase(get()) }
@@ -24,6 +26,7 @@ val useCaseModule = module {
     single<GetSentPinBuddyRequestsUseCase> { GetSentPinBuddyRequestsUseCase(get()) }
     single<GetTextReviewsUseCase> { GetTextReviewsUseCase(get()) }
     single<IsLoginUseCase> { IsLoginUseCase(get(), get(), get()) }
+    single<PostCommentUseCase> { PostCommentUseCase(get()) }
     single<PostEmailVerifyUseCase> { PostEmailVerifyUseCase(get()) }
     single<PostImageUploadUseCase> { PostImageUploadUseCase(get()) }
     single<PostSendVerifyCodeUseCase> { PostSendVerifyCodeUseCase(get()) }

@@ -212,6 +212,7 @@ fun PinlogDetailScreen(
                     onClickEdit = {
                         onClickEditComment(clickedCommentId, clickedComment)
                         scope.launch { sheetState.hide() }
+                        focusRequester.requestFocus()
                     },
                     onClickDelete = {
                         onClickDeleteComment(clickedCommentId)
@@ -558,6 +559,7 @@ fun PinlogDetailScreen(
                             },
                             onReplyClick = { id ->
                                 updateReplyCommentId(id)
+                                focusRequester.requestFocus()
                             }
                         )
 

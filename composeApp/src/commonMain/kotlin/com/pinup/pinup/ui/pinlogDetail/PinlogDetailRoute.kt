@@ -35,6 +35,7 @@ fun PinlogDetailRoute(
     PinlogDetailScreen(
         onBackPressed = onBackPressed,
         query = uiState.myComment,
+        replyId = uiState.clickedReplyId,
         onValueChange = viewModel::updateMyComment,
         onClickEdit = {
             onClickEdit(viewModel.reviewId)
