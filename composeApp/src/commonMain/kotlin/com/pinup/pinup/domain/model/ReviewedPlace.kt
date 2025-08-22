@@ -7,6 +7,7 @@ data class ReviewedPlace(
     val averageStarRating: Double,
     val bookmark: Boolean,
     val distance: String?,
+    val roadAddress: String = "",
     val kakaoPlaceId: String,
     val latitude: Double,
     val longitude: Double,

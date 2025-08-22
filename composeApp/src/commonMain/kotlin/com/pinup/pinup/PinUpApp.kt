@@ -53,11 +53,11 @@ fun PinUpApp(
     val startDestination = when (uiState.value.isLogin) {
         true -> {
             //TODO TEST용 원래 MAIN
-            PinUpAppDestination.PinlogDetail
+            PinUpAppDestination.PinlogDetail(0)
         }
         false -> {
             //TODO TEST용 원래 ONBOARDING
-            PinUpAppDestination.PinlogDetail
+            PinUpAppDestination.PinlogDetail(0)
         }
         else -> {
             return

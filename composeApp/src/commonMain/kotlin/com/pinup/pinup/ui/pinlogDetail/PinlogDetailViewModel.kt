@@ -14,11 +14,6 @@ class PinlogDetailViewModel(
     private val deletePinlogUseCase: DeletePinlogUseCase,
 ) : BaseViewModel<PinlogUiState, PinlogUiEvent>(PinlogUiState()) {
 
-    companion object {
-        private const val REVIEW_ID = "reviewId"
-
-    }
-
     val reviewId = savedStateHandle.get<Int>(REVIEW_ID) ?: 0
 
     fun updateMyComment(query: String) {
@@ -36,6 +31,11 @@ class PinlogDetailViewModel(
                 emitEvent(PinlogUiEvent.MoveBack)
             }
         )
+    }
+
+    companion object {
+        private const val REVIEW_ID = "reviewId"
+
     }
 }
 

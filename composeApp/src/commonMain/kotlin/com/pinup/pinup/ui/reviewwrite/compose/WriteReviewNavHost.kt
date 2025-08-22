@@ -49,6 +49,8 @@ fun WriteReviewNavHost(
                     WriteReviewUiEvent.SuccessWriteReview -> {
                         isShowCompleteDialog.value = true
                     }
+
+                    WriteReviewUiEvent.SuccessEditReview -> onBackPressed()
                 }
             }
     }
@@ -102,10 +104,10 @@ fun WriteReviewNavHost(
                         clickedImage = uiState.value.clickedImage,
                         onValueChange = writeReviewViewModel::updateContent,
                         onRemoveImage = writeReviewViewModel::removeImage,
-                        onAddImage = writeReviewViewModel::addImage,
+                        onAddImage = writeReviewViewModel::uploadImage,
                         onClickImage = writeReviewViewModel::onClickedImage,
                         onRatingSelected = writeReviewViewModel::updateRating,
-                        onRegisterClick = writeReviewViewModel::registerReview,
+                        onRegisterClick = writeReviewViewModel::uploadPinLog,
                         onBackPressed = {
                             navHostController.popBackStack()
                         }
