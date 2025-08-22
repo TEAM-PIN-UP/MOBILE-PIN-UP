@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class ReviewRequest(
     val content: String,
     val starRating: Double,
-    val visitedDate: String,
+    val visitedDate: String?,
     val reviewImageUrls: List<String>,
 ) {
     companion object {

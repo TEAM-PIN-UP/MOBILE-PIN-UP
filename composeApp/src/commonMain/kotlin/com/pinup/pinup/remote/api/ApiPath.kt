@@ -31,5 +31,6 @@ object ApiPath {
 
     object PinLog {
         const val PINLOG = "api/reviews"
+        const val PINLOG_MODIFY = "$PINLOG/{reviewId}"
     }
 }

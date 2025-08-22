@@ -8,8 +8,10 @@ val useCaseModule = module {
     single<AddBookmarkUseCase> { AddBookmarkUseCase(get()) }
     single<CheckNickNameUseCase> { CheckNickNameUseCase(get()) }
     single<DeleteBookmarkUseCase> { DeleteBookmarkUseCase(get()) }
+    single<DeletePinlogUseCase> { DeletePinlogUseCase(get()) }
     single<DeletePinBuddyUseCase> { DeletePinBuddyUseCase(get()) }
     single<DeleteRequestPinBuddyUseCase> { DeleteRequestPinBuddyUseCase(get()) }
+    single<EditPinlogUseCase> { EditPinlogUseCase(get()) }
     single<GetBookmarksUseCase> { GetBookmarksUseCase(get()) }
     single<GetDetailPlaceUseCase> { GetDetailPlaceUseCase(get()) }
     single<GetMemberInfoUseCase> { GetMemberInfoUseCase(get()) }
