@@ -24,11 +24,17 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -64,7 +70,6 @@ import pinup.composeapp.generated.resources.ic_star
 
 @Composable
 fun PinlogDetailScreen(
-    reviewId: Int = -1,
     placeName: String = "우동 카덴",
     visitDate: String = "25.06.22",
     profileImage: String = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
@@ -169,7 +174,9 @@ fun PinlogDetailScreen(
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
 ) {
-
+    val density = LocalDensity.current
+    var bottomBarHeightPx by remember { mutableStateOf(0) }
+    val bottomBarHeightDp = with(receiver = density) { bottomBarHeightPx.toDp() }
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
@@ -181,9 +188,13 @@ fun PinlogDetailScreen(
         sheetContent = {
             PinlogMenuBottomSheet(
                 onClickEdit = {
-                    scope.launch { sheetState.hide() }
+                    scope.launch {
+                        onClickEdit()
+                        sheetState.hide()
+                    }
                 },
                 onClickDelete = {
+                    onClickDelete()
                     scope.launch { sheetState.hide() }
                 },
             )
@@ -205,7 +216,8 @@ fun PinlogDetailScreen(
 
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = bottomBarHeightDp + 20.dp)
                 ) {
                     item {
                         Spacer(modifier = Modifier.height(16.dp))
@@ -508,9 +520,11 @@ fun PinlogDetailScreen(
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .align(Alignment.BottomCenter)
+                    .onGloballyPositioned { coords ->
+                        bottomBarHeightPx = coords.size.height
+                    }
             ) {
-                Spacer(modifier = Modifier.weight(1f))
 
                 PHorizontalDivider()
 
