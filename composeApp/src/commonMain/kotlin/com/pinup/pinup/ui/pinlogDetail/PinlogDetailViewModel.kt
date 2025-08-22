@@ -28,7 +28,7 @@ class PinlogDetailViewModel(
         resultResponse(
             response = deletePinlogUseCase(reviewId),
             successCallback = {
-                emitEvent(PinlogUiEvent.MoveBack)
+                emitEvent(PinlogUiEvent.SuccessDelete)
             }
         )
     }
@@ -46,5 +46,5 @@ data class PinlogUiState(
 ) : UiState
 
 sealed interface PinlogUiEvent : UiEvent {
-    data object MoveBack : PinlogUiEvent
+    data object SuccessDelete : PinlogUiEvent
 }

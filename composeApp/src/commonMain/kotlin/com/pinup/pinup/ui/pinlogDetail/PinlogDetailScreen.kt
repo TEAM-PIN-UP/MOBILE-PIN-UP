@@ -174,6 +174,7 @@ fun PinlogDetailScreen(
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
 ) {
+
     val density = LocalDensity.current
     var bottomBarHeightPx by remember { mutableStateOf(0) }
     val bottomBarHeightDp = with(receiver = density) { bottomBarHeightPx.toDp() }

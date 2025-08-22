@@ -139,4 +139,8 @@ object Texts {
         const val EDIT_COMMENT = "댓글 수정"
         const val DELETE_COMMENT = "댓글 삭제"
     }
+
+    object Toast {
+        const val DELETE_PINLOG = "핀로그가 삭제되었어요."
+    }
 }
