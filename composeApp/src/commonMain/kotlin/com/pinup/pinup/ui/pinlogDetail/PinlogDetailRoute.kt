@@ -72,6 +72,21 @@ fun PinlogDetailRoute(
     }
 
     PinlogDetailScreen(
+        placeName = uiState.pinlogDetail.placeName,
+        visitDate = uiState.pinlogDetail.visitedDate,
+        profileImage = uiState.pinlogDetail.writerProfileImageUrl,
+        userName = "닉네임",
+        reviewCount = uiState.pinlogDetail.authorReviewCount,
+        starRating = uiState.pinlogDetail.starRating,
+        createdDate = uiState.pinlogDetail.createdAt,
+        reviewImageUrls = uiState.pinlogDetail.reviewImageUrls,
+        content = uiState.pinlogDetail.content,
+        isOwn = uiState.pinlogDetail.isOwn,
+        likeCount = uiState.pinlogDetail.likeCount,
+        isLikedByUse = uiState.pinlogDetail.isLikedByUser,
+        commentCount = uiState.pinlogDetail.commentCount,
+        comments = uiState.pinlogDetail.comments,
+        isScrapByUser = uiState.pinlogDetail.isScrapByUser,
         onBackPressed = onBackPressed,
         query = uiState.myComment,
         replyId = uiState.clickedReplyId,
