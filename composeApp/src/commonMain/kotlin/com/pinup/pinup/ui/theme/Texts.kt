@@ -144,6 +144,8 @@ object Texts {
         const val DELETE_COMMENT = "댓글 삭제"
         const val DELETE_DIALOG_TITLE = "핀로그를 삭제할까요?"
         const val DELETE_DIALOG_DESCRIPTION = "삭제된 핀로그는 복구할 수 없습니다."
+        const val DELETE_COMMENT_DIALOG_TITLE = "댓글을 삭제할까요?"
+        const val DELETE_COMMENT_DIALOG_DESCRIPTION = "삭제된 댓글은 복구할 수 없습니다."
 
     }
 
