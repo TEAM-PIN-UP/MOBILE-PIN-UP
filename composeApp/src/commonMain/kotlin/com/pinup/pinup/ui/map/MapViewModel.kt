@@ -110,17 +110,19 @@ class MapViewModel (
         }
     }
 
-
-    fun getPlaces(cameraState: CameraState) = viewModelScope.launch {
+    fun updateCameraState(cameraState: CameraState) {
         updateState {
             copy(
+                cameraState = cameraState,
                 isCameraMoving = cameraState.isMoving
             )
         }
+    }
 
-        if (cameraState.isMoving.not()) {
-            updateCameraPosition(cameraState.position)
-            val latLngBounds = cameraState.contentBounds
+    fun getPlaces() = viewModelScope.launch {
+        if (uiState.value.cameraState != null) {
+            updateCameraPosition(uiState.value.cameraState!!.position)
+            val latLngBounds = uiState.value.cameraState!!.contentBounds
             val request = uiState.value.locationBound.copy(
                 neLatitude = latLngBounds.northEast.latitude.toString(),
                 neLongitude = latLngBounds.northEast.longitude.toString(),
@@ -143,10 +145,9 @@ class MapViewModel (
                     }
                 }
             )
-        } else {
-            if (cameraState.reason == CameraState.Reason.GESTURE && uiState.value.isFocusLocation) {
-                updateFocusLocation(false)
-            }
+        }
+        if (uiState.value.cameraState?.reason == CameraState.Reason.GESTURE && uiState.value.isFocusLocation) {
+            updateFocusLocation(false)
         }
     }
 
@@ -376,6 +377,7 @@ data class MapUiState(
     val cameraPosition: Position? = null,
     val isCameraMoving: Boolean = false,
     val isDetailClicked: Boolean = false,
+    val cameraState: CameraState? = null,
     val profileImage: String = "",
 ) : UiState
 

@@ -31,17 +31,17 @@ data class GetDetailPlaceResponse(
 
 @Serializable
 data class MapPlaceResponse(
-    val averageStarRating: Double,
-    val bookmark: Boolean,
-    val distance: String?,
     val kakaoPlaceId: String,
+    val name: String,
+    val averageStarRating: Double,
+    val reviewCount: Int,
+    val distance: String?,
     val latitude: Double,
     val longitude: Double,
-    val name: String,
     val placeCategory: String,
-    val reviewCount: Int,
     val reviewImageUrls: List<String>,
-    val reviewerProfileImageUrls: List<String?>
+    val reviewerProfileImageUrls: List<String?>,
+    val bookmark: Boolean,
 ) {
     companion object {
         fun MapPlaceResponse.toModel(): ReviewedPlace {
@@ -79,7 +79,7 @@ data class PlaceReviewResponse(
     val starRating: Double,
     val visitedDate: String,
     val writerName: String,
-    val writerProfileImageUrl: String,
+    val writerProfileImageUrl: String? = "",
     val writerTotalReviewCount: Int
 ) {
     companion object {

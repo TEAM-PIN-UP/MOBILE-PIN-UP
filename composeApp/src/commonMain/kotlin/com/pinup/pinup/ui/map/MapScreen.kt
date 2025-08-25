@@ -1,19 +1,25 @@
 package com.pinup.pinup.ui.map
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +36,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.LifecycleResumeEffect
@@ -45,10 +52,13 @@ import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.PBottomSheet
 import com.pinup.pinup.ui.component.PDialog
+import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.SortBottomSheet
 import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.model.ChipState
 import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
+import com.pinup.pinup.ui.theme.Typography
 import dev.icerock.moko.permissions.DeniedAlwaysException
 import dev.icerock.moko.permissions.DeniedException
 import dev.icerock.moko.permissions.Permission
@@ -66,6 +76,7 @@ import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_focus
 import pinup.composeapp.generated.resources.ic_pinch_off
 import pinup.composeapp.generated.resources.ic_pinch_on
+import pinup.composeapp.generated.resources.ic_rotate
 
 @Composable
 fun MapScreen(
@@ -78,7 +89,6 @@ fun MapScreen(
     isDetailClicked: Boolean,
     pinchUiState: PinchUiState,
     clearPinchList: () -> Unit = {},
-    profileImage: String,
     position: Position = Position.INVALID,
     cameraPosition: Position? = null,
     onCameraStateChange: (CameraState) -> Unit = { },
@@ -95,6 +105,7 @@ fun MapScreen(
     onFocusChange: (Boolean) -> Unit = {},
     onClickBottomNav: (MainDestination) -> Unit,
     consumeDetailClicked: () -> Unit = {},
+    onClickGetPlace: () -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -247,7 +258,43 @@ fun MapScreen(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
             ) {
-                val (button, sheet) = createRefs()
+                val (text, button, sheet) = createRefs()
+                RoundedBox(
+                    modifier = Modifier
+                        .alpha(alpha)
+                        .padding(bottom = 14.dp)
+                        .constrainAs(text) {
+                            bottom.linkTo(sheet.top)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        },
+                    cornerRounded = 999
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .clickable {
+                                onClickGetPlace()
+                            }
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = painterResource(Res.drawable.ic_rotate),
+                            contentDescription = null
+                        )
+
+                        Spacer(modifier = Modifier.width(4.dp))
+
+                        Text(
+                            text = Texts.PinMap.SEARCH_BUTTON,
+                            color = Colors.Gray800,
+                            style = Typography.B3.copy(
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
+                    }
+                }
+
                 Column(
                     modifier = Modifier
                         .alpha(alpha)

@@ -103,6 +103,7 @@ object Texts {
     }
 
     object PinMap {
+        const val SEARCH_BUTTON = "현 지도에서 검색"
         const val SEARCH_HINT = "장소/위치 검색하기"
         const val EMPTY_PINLOG = "아직 핀로그가 없어요!\n나만의 장소를 핀업해보세요:)"
         const val SEARCH_RESULT = "검색 결과"

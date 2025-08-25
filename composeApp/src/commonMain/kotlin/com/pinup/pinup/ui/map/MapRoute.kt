@@ -32,11 +32,10 @@ fun MapRoute(
         isShowPinch = mapUiState.value.isShowPinch,
         isCameraMoving = mapUiState.value.isCameraMoving,
         isDetailClicked = mapUiState.value.isDetailClicked,
-        profileImage = mapUiState.value.profileImage,
         pinchUiState = mapUiState.value.pinchUiState,
         clearPinchList = mapViewModel::clearPinchDetailList,
         onClickBottomNav = onBottomMenuClick,
-        onCameraStateChange = mapViewModel::getPlaces,
+        onCameraStateChange = mapViewModel::updateCameraState,
         onChipClick = mapViewModel::updateChipState,
         onValueChange = mapViewModel::updateSearchText,
         onPlaceClick = mapViewModel::getDetailPlace,
@@ -48,6 +47,7 @@ fun MapRoute(
         onUpdateShowBookmarks = mapViewModel::updateShowPinch,
         onUpdateFocusLocation = mapViewModel::updateFocusLocation,
         onFocusChange = mapViewModel::updateFocusSearch,
-        consumeDetailClicked = mapViewModel::consumedDetailClicked
+        consumeDetailClicked = mapViewModel::consumedDetailClicked,
+        onClickGetPlace = mapViewModel::getPlaces
     )
 }
