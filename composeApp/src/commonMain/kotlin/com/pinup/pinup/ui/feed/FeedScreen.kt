@@ -52,6 +52,8 @@ fun FeedScreen(
     onClickSearch: () -> Unit,
     onClickEdit: (Int) -> Unit = {},
     onClickDelete: (Int) -> Unit = {},
+    onClickDetail: (Int) -> Unit = {},
+    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -131,8 +133,8 @@ fun FeedScreen(
                             clickedReviewId = it
                             scope.launch { sheetState.show() }
                         },
-                        onClickLike = {},
-                        onClickDetail = {},
+                        onClickLike = onClickLike,
+                        onClickDetail = onClickDetail,
                         onClickScrap = {},
                     )
                 }

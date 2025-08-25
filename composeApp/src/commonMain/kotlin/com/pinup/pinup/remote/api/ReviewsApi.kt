@@ -33,8 +33,18 @@ interface ReviewsApi {
     @GET(ApiPath.PinLog.PINLOG)
     suspend fun getReviews(
         @Query(QUERY_CURSOR_ID) cursor: Int,
-        @Query(QUERY_SIZE) size: Int = 20,
+        @Query(QUERY_SIZE) size: Int,
     ): PResult<PResponse<GetReviewsResponse>>
+
+    @DELETE(ApiPath.PinLog.LIKE)
+    suspend fun deleteReviewLike(
+        @Path(PATH_REVIEW_ID) reviewId: Int
+    ): PResult<PResponse<Unit>>
+
+    @POST(ApiPath.PinLog.LIKE)
+    suspend fun addReviewLike(
+        @Path(PATH_REVIEW_ID) reviewId: Int
+    ): PResult<PResponse<Unit>>
 
     @GET(ApiPath.PinLog.PINLOG_MODIFY)
     suspend fun getReviewDetail(

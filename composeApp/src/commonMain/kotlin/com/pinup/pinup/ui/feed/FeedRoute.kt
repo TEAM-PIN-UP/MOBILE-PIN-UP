@@ -11,6 +11,7 @@ fun FeedRoute(
     onClickBottomNav: (MainDestination) -> Unit,
     viewModel: FeedViewModel = koinViewModel(),
     onClickEdit: (Int) -> Unit = {},
+    onClickDetail: (Int) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     FeedScreen(
@@ -22,5 +23,7 @@ fun FeedRoute(
             onClickEdit(it)
         },
         onClickDelete = viewModel::deleteReview,
+        onClickDetail = onClickDetail,
+        onClickLike = viewModel::likeChanged
     )
 }

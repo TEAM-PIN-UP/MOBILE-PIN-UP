@@ -42,7 +42,7 @@ import pinup.composeapp.generated.resources.ic_menu_dot
 fun FeedView(
     item: Review,
     onClickMenu: (Int) -> Unit = {},
-    onClickLike: (Int) -> Unit = {},
+    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
     onClickScrap: (Int) -> Unit = {},
 ) {
@@ -178,7 +178,7 @@ fun FeedView(
             Image(
                 modifier = Modifier
                     .clickableWithNoRipple {
-                        onClickLike(item.id)
+                        onClickLike(item.id, item.isLikedByUser)
                     },
                 painter = painterResource(if (item.isLikedByUser) Res.drawable.ic_heat_on else Res.drawable.ic_heart_off),
                 contentDescription = null

@@ -13,8 +13,10 @@ interface ReviewsRemoteDataSource {
     suspend fun registerReviews(
         request: AddReviewRequest
     ): PResult<PResponse<String>>
-    suspend fun getReviews(request: Int): PResult<PResponse<GetReviewsResponse>>
+    suspend fun getReviews(request: Int, size: Int): PResult<PResponse<GetReviewsResponse>>
     suspend fun deleteReview(request: Int): PResult<PResponse<Unit>>
+    suspend fun addReviewLike(request: Int): PResult<PResponse<Unit>>
+    suspend fun deleteReviewLike(request: Int): PResult<PResponse<Unit>>
 
     suspend fun editReview(reviewId: Int, request: ReviewRequest): PResult<PResponse<Unit>>
     suspend fun getReviewDetail(request: Int): PResult<PResponse<GetPinlogDetailResponse>>

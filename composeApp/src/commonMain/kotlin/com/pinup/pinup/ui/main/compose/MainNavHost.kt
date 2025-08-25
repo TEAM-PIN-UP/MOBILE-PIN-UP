@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.pinup.pinup.PinUpAppDestination
 import com.pinup.pinup.ui.bookmark.BookmarkRoute
 import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.feed.FeedRoute
@@ -87,6 +88,12 @@ fun MainNavHost(
                                 }
                             }
                         }
+                    },
+                    onClickEdit = {
+                        navHostController.navigate(PinUpAppDestination.WriteReview(it))
+                    },
+                    onClickDetail = {
+                        navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
                     }
                 )
             }

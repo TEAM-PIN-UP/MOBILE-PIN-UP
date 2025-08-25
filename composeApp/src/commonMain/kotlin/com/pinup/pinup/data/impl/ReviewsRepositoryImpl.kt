@@ -25,9 +25,9 @@ class ReviewsRepositoryImpl (
         ).mapSuccessData()
     }
 
-    override suspend fun getReviews(request: Int): PResult<PagingReview> {
+    override suspend fun getReviews(request: Int, size: Int): PResult<PagingReview> {
         return reviewsRemoteDataSource.getReviews(
-            request
+            request, size
         ).mapSuccessData().map {
             it.toModel()
         }
@@ -35,6 +35,18 @@ class ReviewsRepositoryImpl (
 
     override suspend fun deleteReview(request: Int): PResult<Unit> {
         return reviewsRemoteDataSource.deleteReview(
+            request
+        ).mapSuccessData()
+    }
+
+    override suspend fun addReviewLike(request: Int): PResult<Unit> {
+        return reviewsRemoteDataSource.addReviewLike(
+            request
+        ).mapSuccessData()
+    }
+
+    override suspend fun deleteReviewLike(request: Int): PResult<Unit> {
+        return reviewsRemoteDataSource.deleteReviewLike(
             request
         ).mapSuccessData()
     }

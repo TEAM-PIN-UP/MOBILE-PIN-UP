@@ -9,7 +9,6 @@ import com.pinup.pinup.data.response.GetPinlogDetailResponse
 import com.pinup.pinup.data.response.GetReviewsResponse
 import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.domain.model.PResult
-import com.pinup.pinup.domain.model.PagingReview
 import com.pinup.pinup.remote.api.ReviewsApi
 
 
@@ -24,14 +23,27 @@ class ReviewsRemoteDataSourceImpl (
         )
     }
 
-    override suspend fun getReviews(request: Int): PResult<PResponse<GetReviewsResponse>> {
+    override suspend fun getReviews(request: Int, size: Int): PResult<PResponse<GetReviewsResponse>> {
         return reviewsApi.getReviews(
-            cursor = request
+            cursor = request,
+            size = size
         )
     }
 
     override suspend fun deleteReview(request: Int): PResult<PResponse<Unit>> {
         return reviewsApi.deleteReview(
+            reviewId = request
+        )
+    }
+
+    override suspend fun addReviewLike(request: Int): PResult<PResponse<Unit>> {
+        return reviewsApi.addReviewLike(
+            reviewId = request
+        )
+    }
+
+    override suspend fun deleteReviewLike(request: Int): PResult<PResponse<Unit>> {
+        return reviewsApi.deleteReviewLike(
             reviewId = request
         )
     }

@@ -14,8 +14,10 @@ interface ReviewsRepository {
         request: AddReviewRequest
     ): PResult<String>
 
-    suspend fun getReviews(request: Int): PResult<PagingReview>
+    suspend fun getReviews(request: Int, size: Int): PResult<PagingReview>
     suspend fun deleteReview(request: Int): PResult<Unit>
+    suspend fun addReviewLike(request: Int): PResult<Unit>
+    suspend fun deleteReviewLike(request: Int): PResult<Unit>
 
     suspend fun editReview(reviewId: Int, request: ReviewRequest): PResult<Unit>
     suspend fun getReviewDetail(request: Int): PResult<PinlogDetail>
