@@ -28,7 +28,8 @@ import kotlinx.serialization.Serializable
 fun MainNavHost(
     navHostController: NavHostController = rememberNavController(),
     mainViewModel: MainViewModel = koinViewModel(),
-    onMoveWriteReview: () -> Unit,
+    onMoveWriteReview: (Int) -> Unit,
+    onMovePinlogDetail: (Int) -> Unit,
     onMoveAddPinBuddy: () -> Unit,
     onMovePinBuddy: () -> Unit,
     onMoveSetting: () -> Unit,
@@ -60,7 +61,7 @@ fun MainNavHost(
                 MapRoute(
                     onBottomMenuClick = {
                         if (MainDestination.Upload == it) {
-                            onMoveWriteReview()
+                            onMoveWriteReview(0)
                         } else {
                             navHostController.navigate(it) {
                                 launchSingleTop = true
@@ -72,8 +73,9 @@ fun MainNavHost(
                         }
                     },
                     onClickEdit = {
-                        navHostController.navigate(PinUpAppDestination.WriteReview(it))
-                    }
+                        onMoveWriteReview(it)
+                    },
+                    onMovePinlogDetail = onMovePinlogDetail
                 )
             }
 
@@ -81,7 +83,7 @@ fun MainNavHost(
                 FeedRoute(
                     onClickBottomNav = {
                         if (MainDestination.Upload == it) {
-                            onMoveWriteReview()
+                            onMoveWriteReview(0)
                         } else {
                             navHostController.navigate(it) {
                                 launchSingleTop = true
@@ -93,10 +95,10 @@ fun MainNavHost(
                         }
                     },
                     onClickEdit = {
-                        navHostController.navigate(PinUpAppDestination.WriteReview(it))
+                        onMoveWriteReview(it)
                     },
                     onClickDetail = {
-                        navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
+                        onMovePinlogDetail(it)
                     }
                 )
             }

@@ -214,7 +214,10 @@ fun PinUpApp(
                 composable<PinUpAppDestination.Main> {
                     MainNavHost(
                         onMoveWriteReview = {
-                            navHostController.navigate(PinUpAppDestination.WriteReview(0))
+                            navHostController.navigate(PinUpAppDestination.WriteReview(it))
+                        },
+                        onMovePinlogDetail = {
+                            navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
                         },
                         onMoveAddPinBuddy = {
                             navHostController.navigate(PinUpAppDestination.AddPinBuddy)

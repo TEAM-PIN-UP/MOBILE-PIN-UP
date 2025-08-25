@@ -32,6 +32,8 @@ fun ReviewCard(
     modifier: Modifier = Modifier,
     horizontalPadding: Dp = 0.dp,
     onClickMenu: (Int) -> Unit = {},
+    onClickLike: (Int) -> Unit = {},
+    onMovePinlogDetail: (Int) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -129,14 +131,15 @@ fun ReviewCard(
                     color = Colors.Gray700
                 )
 
+                Spacer(modifier = Modifier.height(20.dp))
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Image(
-                        //TODO 좋아요 기능 달기
                         modifier = Modifier
                             .clickableSingleWithNoRipple{
-
+                                onClickLike(placeReview.reviewId)
                             },
                         painter = painterResource(Res.drawable.ic_heart_off),
                         contentDescription = "heart"
@@ -156,10 +159,9 @@ fun ReviewCard(
                     Spacer(modifier = Modifier.width(14.dp))
 
                     Image(
-                        //TODO 댓글 핀로그 상세로 이동
                         modifier = Modifier
                             .clickableSingleWithNoRipple{
-
+                                onMovePinlogDetail(placeReview.reviewId)
                             },
                         painter = painterResource(Res.drawable.ic_comment),
                         contentDescription = "comment"

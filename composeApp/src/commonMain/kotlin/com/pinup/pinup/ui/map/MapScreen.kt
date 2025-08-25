@@ -109,6 +109,8 @@ fun MapScreen(
     onClickGetPlace: () -> Unit = {},
     onClickEdit: (Int) -> Unit = {},
     onClickDelete: (Int) -> Unit = {},
+    onClickLike: (Int) -> Unit = {},
+    onMovePinlogDetail: (Int) -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -411,7 +413,9 @@ fun MapScreen(
                                 clickedPinlogId = it
                                 sheetState.show()
                             } },
-                            onFocusChange = onFocusChange
+                            onFocusChange = onFocusChange,
+                            onClickLike = onClickLike,
+                            onMovePinlogDetail = onMovePinlogDetail
                         )
                     }
 

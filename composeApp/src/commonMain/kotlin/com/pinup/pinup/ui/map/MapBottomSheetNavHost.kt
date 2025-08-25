@@ -32,6 +32,8 @@ fun MapBottomSheetNavHost(
     onFocusChange: (Boolean) -> Unit,
     navHostController: NavHostController = rememberNavController(),
     onClickMenu: (Int) -> Unit = {},
+    onClickLike: (Int) -> Unit = {},
+    onMovePinlogDetail: (Int) -> Unit = {},
 ) {
     val pinchRoute = MapBottomSheetDestination.Pinch::class.qualifiedName
     val detailRoute = MapBottomSheetDestination.Detail::class.qualifiedName
@@ -103,7 +105,9 @@ fun MapBottomSheetNavHost(
                 onUpdateBookmark = { kakaoPlaceId, nowState ->
                     onUpdateBookmark(kakaoPlaceId, nowState)
                 },
-                onClickMenu = onClickMenu
+                onClickMenu = onClickMenu,
+                onClickLike = onClickLike,
+                onMovePinlogDetail = onMovePinlogDetail
             )
         }
 

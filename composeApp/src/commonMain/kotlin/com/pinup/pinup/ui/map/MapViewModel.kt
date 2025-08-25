@@ -16,6 +16,7 @@ import com.pinup.pinup.domain.usecase.DeletePinlogUseCase
 import com.pinup.pinup.domain.usecase.GetDetailPlaceUseCase
 import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.pinup.domain.usecase.GetReviewedPlacesUseCase
+import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.domain.usecase.SearchPlacesUseCase
 import com.pinup.pinup.event.DetailPlaceEventBus
 import com.pinup.pinup.platform.hLog
@@ -42,6 +43,7 @@ class MapViewModel (
     private val getMyProfileUseCase: GetMyProfileUseCase,
     private val searchPlacesUseCase: SearchPlacesUseCase,
     private val deletePinlogUseCase: DeletePinlogUseCase,
+    private val postReviewLikeChangeUseCase: PostReviewLikeChangeUseCase,
     val locationTracker: LocationTracker
 ) : BaseViewModel<MapUiState, MapUiEvent>(MapUiState()) {
     init {
@@ -358,6 +360,17 @@ class MapViewModel (
                     getDetailPlace(it.kakaoPlaceId)
                 }
                 emitEvent(MapUiEvent.SuccessDelete)
+            }
+        )
+    }
+
+    fun likeChanged(id: Int, isLike: Boolean) = viewModelScope.launch {
+        resultResponse(
+            response = postReviewLikeChangeUseCase(id, isLike),
+            successCallback = {
+                uiState.value.placeDetailUiState.detailPlace?.mapPlace?.let {
+                    getDetailPlace(it.kakaoPlaceId)
+                }
             }
         )
     }

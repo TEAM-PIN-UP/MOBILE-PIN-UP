@@ -25,6 +25,7 @@ import rememberSimpleToastState
 fun MapRoute(
     onBottomMenuClick: (MainDestination) -> Unit,
     onClickEdit: (Int) -> Unit = {},
+    onMovePinlogDetail: (Int) -> Unit = {},
 ) {
     val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
         accuracy = LocationTrackerAccuracy.Best
@@ -94,5 +95,7 @@ fun MapRoute(
             clickedPinlog = it
             isShowDeleteDialog.value = true
         },
+        onMovePinlogDetail = onMovePinlogDetail,
+        onClickLike = mapViewModel
     )
 }
