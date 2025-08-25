@@ -6,14 +6,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetReviewsResponse(
-    val content: List<ReviewResponse>,
+    val reviews: List<ReviewResponse>,
     val hasNext: Boolean,
     val nextCursor: Int
 ) {
     companion object {
         fun GetReviewsResponse.toModel() : PagingReview {
             return PagingReview(
-                reviews = content.map {
+                reviews = reviews.map {
                     it.toModel()
                 },
                 hasNext = hasNext,

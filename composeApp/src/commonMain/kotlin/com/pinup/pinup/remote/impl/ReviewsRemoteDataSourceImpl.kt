@@ -6,8 +6,10 @@ import com.pinup.pinup.data.request.pinlog.AddReviewRequest
 import com.pinup.pinup.data.request.review.CommentEditRequest
 import com.pinup.pinup.data.request.review.CommentRequest
 import com.pinup.pinup.data.response.GetPinlogDetailResponse
+import com.pinup.pinup.data.response.GetReviewsResponse
 import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.domain.model.PResult
+import com.pinup.pinup.domain.model.PagingReview
 import com.pinup.pinup.remote.api.ReviewsApi
 
 
@@ -19,6 +21,12 @@ class ReviewsRemoteDataSourceImpl (
     ): PResult<PResponse<String>> {
         return reviewsApi.registerReviews(
             request = request
+        )
+    }
+
+    override suspend fun getReviews(request: Int): PResult<PResponse<GetReviewsResponse>> {
+        return reviewsApi.getReviews(
+            cursor = request
         )
     }
 

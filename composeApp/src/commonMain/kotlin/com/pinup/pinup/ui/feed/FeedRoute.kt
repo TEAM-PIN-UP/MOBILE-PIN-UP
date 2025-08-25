@@ -9,14 +9,17 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun FeedRoute(
     onClickBottomNav: (MainDestination) -> Unit,
-    viewModel: FeedViewModel = koinViewModel()
+    viewModel: FeedViewModel = koinViewModel(),
+    onClickEdit: (Int) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     FeedScreen(
         reviewList = uiState.pagingReview.reviews,
         onClickBottomNav = onClickBottomNav,
         onClickSearch = {},
-        onClickEdit = {},
-        onClickDelete = {},
+        onClickEdit = {
+            onClickEdit(it)
+        },
+        onClickDelete = viewModel::deleteReview,
     )
 }

@@ -4,9 +4,10 @@ import com.pinup.pinup.data.remote.ReviewsRemoteDataSource
 import com.pinup.pinup.data.request.ReviewRequest
 import com.pinup.pinup.data.request.pinlog.AddReviewRequest
 import com.pinup.pinup.data.request.review.CommentRequest
-import com.pinup.pinup.data.response.GetDetailPlaceResponse.Companion.toModel
 import com.pinup.pinup.data.response.GetPinlogDetailResponse.Companion.toModel
+import com.pinup.pinup.data.response.GetReviewsResponse.Companion.toModel
 import com.pinup.pinup.domain.model.PResult
+import com.pinup.pinup.domain.model.PagingReview
 import com.pinup.pinup.domain.model.PinlogDetail
 import com.pinup.pinup.domain.model.map
 import com.pinup.pinup.domain.model.mapSuccessData
@@ -22,6 +23,14 @@ class ReviewsRepositoryImpl (
         return reviewsRemoteDataSource.registerReviews(
             request
         ).mapSuccessData()
+    }
+
+    override suspend fun getReviews(request: Int): PResult<PagingReview> {
+        return reviewsRemoteDataSource.getReviews(
+            request
+        ).mapSuccessData().map {
+            it.toModel()
+        }
     }
 
     override suspend fun deleteReview(request: Int): PResult<Unit> {
