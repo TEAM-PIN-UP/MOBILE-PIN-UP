@@ -2,8 +2,13 @@ package com.pinup.pinup.ui.map
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.pinup.domain.model.Position
+import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.pinlogDetail.PinlogUiEvent
 import com.pinup.pinup.ui.theme.Texts
@@ -27,6 +32,8 @@ fun MapRoute(
     val mapViewModel: MapViewModel = koinViewModel(parameters = { parametersOf(locationTrackerFactory.createLocationTracker()) })
     val mapUiState = mapViewModel.uiState.collectAsStateWithLifecycle()
     val toast = rememberSimpleToastState()
+    val isShowDeleteDialog = remember { mutableStateOf(false) }
+    var clickedPinlog by remember { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
         mapViewModel.uiEvent.collectLatest {
@@ -36,6 +43,22 @@ fun MapRoute(
                 }
             }
         }
+    }
+
+    if (isShowDeleteDialog.value) {
+        PDialog(
+            titleText = Texts.PinLog.DELETE_DIALOG_TITLE,
+            descriptionText = Texts.PinLog.DELETE_DIALOG_DESCRIPTION,
+            leftButtonText = Texts.Word.DO_RETURN,
+            rightButtonText = Texts.Word.DO_DELETE,
+            onLeftButtonClick = {
+                isShowDeleteDialog.value = false
+            },
+            onRightButtonClick = {
+                isShowDeleteDialog.value = false
+                mapViewModel.deleteReview(clickedPinlog)
+            },
+        )
     }
 
     BindLocationTrackerEffect(mapViewModel.locationTracker)
@@ -67,6 +90,9 @@ fun MapRoute(
         consumeDetailClicked = mapViewModel::consumedDetailClicked,
         onClickGetPlace = mapViewModel::getPlaces,
         onClickEdit = onClickEdit,
-        onClickDelete = mapViewModel::deleteReview,
+        onClickDelete = {
+            clickedPinlog = it
+            isShowDeleteDialog.value = true
+        },
     )
 }

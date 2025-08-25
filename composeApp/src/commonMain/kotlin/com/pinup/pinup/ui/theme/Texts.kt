@@ -24,6 +24,7 @@ object Texts {
         const val MY = "마이"
         const val RATING = "별점"
         const val DO_RETURN = "돌아가기"
+        const val DO_DELETE = "삭제하기"
         const val COMMENT = "댓글"
         const val DO_REPLY_COMMENT = "답글달기"
         const val SEE_MORE = "자세히 보기"
@@ -141,6 +142,9 @@ object Texts {
         const val DELETE_PINLOG = "핀로그 삭제"
         const val EDIT_COMMENT = "댓글 수정"
         const val DELETE_COMMENT = "댓글 삭제"
+        const val DELETE_DIALOG_TITLE = "핀로그를 삭제할까요?"
+        const val DELETE_DIALOG_DESCRIPTION = "삭제된 핀로그는 복구할 수 없습니다."
+
     }
 
     object Toast {

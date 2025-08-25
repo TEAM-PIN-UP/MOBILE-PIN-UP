@@ -354,6 +354,9 @@ class MapViewModel (
         resultResponse(
             response = deletePinlogUseCase(id),
             successCallback = {
+                uiState.value.placeDetailUiState.detailPlace?.mapPlace?.let {
+                    getDetailPlace(it.kakaoPlaceId)
+                }
                 emitEvent(MapUiEvent.SuccessDelete)
             }
         )
