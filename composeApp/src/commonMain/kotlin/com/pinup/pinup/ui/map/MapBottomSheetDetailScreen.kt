@@ -56,6 +56,7 @@ fun MapBottomSheetDetailScreen(
     onBackPressed: () -> Unit = {},
     onClearDetailPlace: () -> Unit = {},
     onUpdateBookmark: (String, Boolean) -> Unit = { _, _ -> },
+    onClickMenu: (Int) -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
     var dragOffset by remember {
@@ -199,17 +200,7 @@ fun MapBottomSheetDetailScreen(
                             .padding(start = 20.dp)
                     ) {
                         Text(
-                            text = Texts.Word.PINLOG,
-                            style = Typography.B1.copy(
-                                fontWeight = FontWeight.SemiBold
-                            ),
-                            color = Colors.Gray800
-                        )
-
-                        Spacer(modifier = Modifier.width(4.dp))
-
-                        Text(
-                            text = detailPlace.mapPlace.reviewCount.toString(),
+                            text = Texts.Word.PINLOG + " " + detailPlace.mapPlace.reviewCount.toString(),
                             style = Typography.B1.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
@@ -224,7 +215,8 @@ fun MapBottomSheetDetailScreen(
                     ReviewCard(
                         modifier = Modifier,
                         placeReview = it,
-                        horizontalPadding = 20.dp
+                        horizontalPadding = 20.dp,
+                        onClickMenu = onClickMenu
                     )
 
                     PHorizontalDivider(

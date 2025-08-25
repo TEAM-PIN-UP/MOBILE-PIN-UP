@@ -70,6 +70,9 @@ fun MainNavHost(
                                 }
                             }
                         }
+                    },
+                    onClickEdit = {
+                        navHostController.navigate(PinUpAppDestination.WriteReview(it))
                     }
                 )
             }

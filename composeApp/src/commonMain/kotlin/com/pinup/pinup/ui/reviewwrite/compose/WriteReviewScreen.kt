@@ -238,6 +238,7 @@ fun WriteReviewScreen(
                     Box {
                         ReviewImage(
                             modifier = Modifier
+                                .size(100.dp)
                                 .padding(top = 8.dp, end = 7.dp),
                             imgUrl = it,
                             onClickImage = {
@@ -263,7 +264,7 @@ fun WriteReviewScreen(
                     item {
                         RoundedBox(
                             modifier = modifier
-                                .padding(top = 8.dp)
+                                .padding(top = 7.dp)
                                 .size(100.dp)
                                 .clickableSingleWithNoRipple {
                                     singleImagePicker.launch()

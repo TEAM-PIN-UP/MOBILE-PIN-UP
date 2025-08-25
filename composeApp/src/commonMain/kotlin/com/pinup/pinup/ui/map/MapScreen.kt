@@ -52,6 +52,7 @@ import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.PBottomSheet
 import com.pinup.pinup.ui.component.PDialog
+import com.pinup.pinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.SortBottomSheet
 import com.pinup.pinup.ui.main.compose.MainDestination
@@ -106,11 +107,16 @@ fun MapScreen(
     onClickBottomNav: (MainDestination) -> Unit,
     consumeDetailClicked: () -> Unit = {},
     onClickGetPlace: () -> Unit = {},
+    onClickEdit: (Int) -> Unit = {},
+    onClickDelete: (Int) -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
+    var isPinlogSheet by remember { mutableStateOf(false) }
+    var clickedPinlogId by remember { mutableIntStateOf(0) }
+
     var parentHeightPx by remember { mutableIntStateOf(0) }
     val parentHeightDp = with(LocalDensity.current) { parentHeightPx.toDp() }
     var bottomBarHeightPx by remember { mutableIntStateOf(0) }
@@ -221,16 +227,29 @@ fun MapScreen(
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         sheetContent = {
-            SortBottomSheet(
-                selectedSortType = searchUiState.sortType,
-                allPermissionsGranted = isPermissionGranted.value,
-                onSortTypeSelect = {
-                    scope.launch {
-                        sheetState.hide()
-                        onUpdateSortType(it)
+            if (isPinlogSheet) {
+                PinlogMenuBottomSheet(
+                    onClickEdit = {
+                        onClickEdit(clickedPinlogId)
+                        scope.launch { sheetState.hide() }
+                    },
+                    onClickDelete = {
+                        onClickDelete(clickedPinlogId)
+                        scope.launch { sheetState.hide() }
+                    },
+                )
+            } else {
+                SortBottomSheet(
+                    selectedSortType = searchUiState.sortType,
+                    allPermissionsGranted = isPermissionGranted.value,
+                    onSortTypeSelect = {
+                        scope.launch {
+                            sheetState.hide()
+                            onUpdateSortType(it)
+                        }
                     }
-                }
-            )
+                )
+            }
         },
         sheetBackgroundColor = Colors.White,
         sheetState = sheetState,
@@ -383,7 +402,15 @@ fun MapScreen(
                             onPinchListClick = onPinchListClick,
                             onClearDetailPlace = onClearDetailPlace,
                             onUpdateBookmark = onUpdateBookmark,
-                            onSelectSortTypeClick = { scope.launch { sheetState.show() } },
+                            onSelectSortTypeClick = { scope.launch {
+                                isPinlogSheet = false
+                                sheetState.show()
+                            } },
+                            onClickMenu = { scope.launch {
+                                isPinlogSheet = true
+                                clickedPinlogId = it
+                                sheetState.show()
+                            } },
                             onFocusChange = onFocusChange
                         )
                     }

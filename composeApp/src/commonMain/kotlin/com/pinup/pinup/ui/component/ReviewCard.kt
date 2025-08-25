@@ -30,7 +30,8 @@ import com.pinup.pinup.ui.theme.Typography
 fun ReviewCard(
     placeReview: PlaceReview,
     modifier: Modifier = Modifier,
-    horizontalPadding: Dp = 0.dp
+    horizontalPadding: Dp = 0.dp,
+    onClickMenu: (Int) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -85,6 +86,22 @@ fun ReviewCard(
                         ),
                         color = Colors.Gray400
                     )
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    //TODO 만약 자신이 쓴 글 이라면
+                    if (true) {
+                        Image(
+                            modifier = Modifier
+                                .clickableSingleWithNoRipple {
+                                    onClickMenu(placeReview.reviewId)
+                                }
+                                .padding(end = 20.dp)
+                                .size(20.dp),
+                            painter = painterResource(Res.drawable.ic_menu_dot),
+                            contentDescription = null
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))

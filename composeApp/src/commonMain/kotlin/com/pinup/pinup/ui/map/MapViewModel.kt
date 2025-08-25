@@ -12,6 +12,7 @@ import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.domain.usecase.AddBookmarkUseCase
 import com.pinup.pinup.domain.usecase.DeleteBookmarkUseCase
+import com.pinup.pinup.domain.usecase.DeletePinlogUseCase
 import com.pinup.pinup.domain.usecase.GetDetailPlaceUseCase
 import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.pinup.domain.usecase.GetReviewedPlacesUseCase
@@ -22,6 +23,7 @@ import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
 import com.pinup.pinup.ui.model.ChipState
+import com.pinup.pinup.ui.pinlogDetail.PinlogUiEvent
 import dev.icerock.moko.geo.LocationTracker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -39,6 +41,7 @@ class MapViewModel (
     private val addBookmarkUseCase: AddBookmarkUseCase,
     private val getMyProfileUseCase: GetMyProfileUseCase,
     private val searchPlacesUseCase: SearchPlacesUseCase,
+    private val deletePinlogUseCase: DeletePinlogUseCase,
     val locationTracker: LocationTracker
 ) : BaseViewModel<MapUiState, MapUiEvent>(MapUiState()) {
     init {
@@ -346,6 +349,15 @@ class MapViewModel (
             )
         }
     }
+
+    fun deleteReview(id: Int) = viewModelScope.launch {
+        resultResponse(
+            response = deletePinlogUseCase(id),
+            successCallback = {
+                emitEvent(MapUiEvent.SuccessDelete)
+            }
+        )
+    }
 }
 
 data class SearchUiState(
@@ -382,4 +394,5 @@ data class MapUiState(
 ) : UiState
 
 sealed interface MapUiEvent : UiEvent {
+    data object SuccessDelete : MapUiEvent
 }
