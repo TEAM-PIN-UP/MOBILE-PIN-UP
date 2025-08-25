@@ -41,8 +41,8 @@ class MyViewModel (
             page = photoReviewPagination.pageNum,
             size = Pagination.DEFAULT_PAGE_SIZE
         ).getSuccessOrNull() ?: return@launch
-        photoReviewPagination.totalPage = photoReviews.totalPages
-        textReviewPagination.totalPage = textReviews.totalPages
+        photoReviewPagination.totalPage = photoReviews.nextCursor
+        textReviewPagination.totalPage = textReviews.nextCursor
         _uiState.update {
             it.copy(
                 member = memberInfo,

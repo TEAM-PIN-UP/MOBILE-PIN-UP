@@ -1,7 +1,7 @@
 package com.pinup.pinup.domain.model
 
 data class PagingReview(
-    val reviews: List<Review>,
-    val totalElements: Int,
-    val totalPages: Int
+    val reviews: List<Review> = emptyList(),
+    val hasNext: Boolean = false,
+    val nextCursor: Int = -1,
 )

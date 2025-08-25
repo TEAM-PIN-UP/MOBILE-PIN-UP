@@ -26,6 +26,7 @@ object Texts {
         const val DO_RETURN = "돌아가기"
         const val COMMENT = "댓글"
         const val DO_REPLY_COMMENT = "답글달기"
+        const val SEE_MORE = "자세히 보기"
     }
 
     object Onboarding {

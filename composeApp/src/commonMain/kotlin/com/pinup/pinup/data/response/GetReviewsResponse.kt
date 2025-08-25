@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetReviewsResponse(
     val content: List<ReviewResponse>,
-    val totalElements: Int,
-    val totalPages: Int
+    val hasNext: Boolean,
+    val nextCursor: Int
 ) {
     companion object {
         fun GetReviewsResponse.toModel() : PagingReview {
@@ -16,8 +16,8 @@ data class GetReviewsResponse(
                 reviews = content.map {
                     it.toModel()
                 },
-                totalPages = totalPages,
-                totalElements = totalElements
+                hasNext = hasNext,
+                nextCursor = nextCursor
             )
         }
     }

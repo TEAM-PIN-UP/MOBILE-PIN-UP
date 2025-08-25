@@ -5,26 +5,34 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ReviewResponse(
+    val id: Int,
+    val placeName: String,
     val content: String,
     val createdAt: String,
-    val kakaoPlaceId: String,
-    val placeName: String,
-    val reviewId: Int,
-    val reviewImageUrls: List<String>? = null,
     val starRating: Double,
-    val visitedDate: String
+    val writerProfileImageUrl: String,
+    val reviewImageUrls: List<String>?,
+    val isOwn: Boolean,
+    val likeCount: Int,
+    val isLikedByUser: Boolean,
+    val commentCount: Int,
+    val isScrapByUser: Boolean,
 ) {
     companion object {
         fun ReviewResponse.toModel(): Review {
             return Review(
+                id = id,
+                placeName = placeName,
                 content = content,
                 createdAt = createdAt,
-                kakaoPlaceId = kakaoPlaceId,
-                placeName = placeName,
-                reviewId = reviewId,
-                reviewImageUrls = reviewImageUrls,
                 starRating = starRating,
-                visitedDate = visitedDate,
+                writerProfileImageUrl = writerProfileImageUrl,
+                reviewImageUrls = reviewImageUrls,
+                isOwn = isOwn,
+                likeCount = likeCount,
+                isLikedByUser = isLikedByUser,
+                commentCount = commentCount,
+                isScrapByUser = isScrapByUser
             )
         }
     }

@@ -15,6 +15,7 @@ import com.pinup.pinup.ui.bookmark.BookmarkViewModel
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyViewModel
 import com.pinup.pinup.ui.reviewwrite.searchplace.SearchPlaceViewModel
 import com.pinup.pinup.StartAppViewModel
+import com.pinup.pinup.ui.feed.FeedViewModel
 import com.pinup.pinup.ui.findAccount.findPassword.FindPasswordViewModel
 import com.pinup.pinup.ui.onboarding.OnboardingViewModel
 import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpViewModel
@@ -36,6 +37,7 @@ val viewModelModule = module {
     viewModelOf(::MapViewModel)
     viewModelOf(::MainViewModel)
     viewModelOf(::BookmarkViewModel)
+    viewModelOf(::FeedViewModel)
     viewModelOf(::AddPinBuddyViewModel)
     viewModelOf(::StartAppViewModel)
 }

@@ -17,6 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.ui.bookmark.BookmarkRoute
 import com.pinup.pinup.ui.component.BottomBar
+import com.pinup.pinup.ui.feed.FeedRoute
 import com.pinup.pinup.ui.main.MainViewModel
 import com.pinup.pinup.ui.map.MapRoute
 import com.pinup.pinup.ui.my.MyRoute
@@ -73,7 +74,21 @@ fun MainNavHost(
             }
 
             composable<MainDestination.Feed> {
-                BookmarkRoute()
+                FeedRoute(
+                    onClickBottomNav = {
+                        if (MainDestination.Upload == it) {
+                            onMoveWriteReview()
+                        } else {
+                            navHostController.navigate(it) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
+                        }
+                    }
+                )
             }
 
             composable<MainDestination.Article> {

@@ -109,7 +109,7 @@ fun TextReview(
             modifier = Modifier
                 .padding(vertical = 4.dp)
                 .align(Alignment.End),
-            text = "방문 날짜 ${review.visitedDate}",
+            text = "방문 날짜 ${review.createdAt}",
             style = Typography.B6,
             color = Colors.Neutral400,
         )
