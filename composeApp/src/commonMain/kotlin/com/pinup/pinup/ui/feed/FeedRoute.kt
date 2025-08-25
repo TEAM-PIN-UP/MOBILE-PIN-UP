@@ -15,6 +15,7 @@ fun FeedRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     FeedScreen(
         reviewList = uiState.pagingReview.reviews,
+        getMoreFeed = viewModel::getFeedList,
         onClickBottomNav = onClickBottomNav,
         onClickSearch = {},
         onClickEdit = {

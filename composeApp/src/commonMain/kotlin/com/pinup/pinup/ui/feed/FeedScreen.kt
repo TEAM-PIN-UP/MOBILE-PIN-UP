@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Review
+import com.pinup.pinup.extentions.ScrollToEndCallback
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.FeedView
@@ -45,6 +47,7 @@ import pinup.composeapp.generated.resources.ic_search
 @Composable
 fun FeedScreen(
     reviewList: List<Review>,
+    getMoreFeed: () -> Unit = {},
     onClickBottomNav: (MainDestination) -> Unit,
     onClickSearch: () -> Unit,
     onClickEdit: (Int) -> Unit = {},
@@ -55,6 +58,11 @@ fun FeedScreen(
         ModalBottomSheetValue.Hidden
     )
     var clickedReviewId by remember { mutableStateOf(0) }
+    val scrollState = rememberLazyListState()
+
+    ScrollToEndCallback(scrollState) {
+        getMoreFeed()
+    }
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -114,6 +122,7 @@ fun FeedScreen(
                     .padding(horizontal = 20.dp)
                     .background(Colors.Gray50),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
+                state = scrollState
             ) {
                 items(reviewList){
                     FeedView(
