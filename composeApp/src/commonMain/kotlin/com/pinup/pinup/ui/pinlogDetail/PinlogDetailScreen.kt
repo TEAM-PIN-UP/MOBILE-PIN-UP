@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.pinup.pinup.domain.model.AuthorInfo
 import com.pinup.pinup.domain.model.Comment
+import com.pinup.pinup.domain.model.PinlogDetail
 import com.pinup.pinup.domain.model.ReplyComment
 import com.pinup.pinup.domain.model.UserInfo
 import com.pinup.pinup.extentions.clickableWithNoRipple
@@ -77,21 +78,7 @@ import pinup.composeapp.generated.resources.ic_star
 
 @Composable
 fun PinlogDetailScreen(
-    placeName: String,
-    visitDate: String,
-    profileImage: String,
-    userName: String,
-    reviewCount: Int,
-    starRating: Double,
-    createdDate: String,
-    reviewImageUrls: List<String>,
-    content: String,
-    isOwn: Boolean,
-    likeCount: Int,
-    isLikedByUse: Boolean,
-    commentCount: Int,
-    comments: List<Comment>,
-    isScrapByUser: Boolean,
+    pinlogDetail: PinlogDetail,
     query: String,
     userInfo: UserInfo,
     replyId: Int?,
@@ -115,7 +102,7 @@ fun PinlogDetailScreen(
         ModalBottomSheetValue.Hidden
     )
     var commentSheet by remember { mutableStateOf(false) }
-    val pagerState = rememberPagerState(pageCount = { reviewImageUrls.size })
+    val pagerState = rememberPagerState(pageCount = { pinlogDetail.reviewImageUrls.size })
     val focusManager = LocalFocusManager.current
     val keyboard = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
@@ -193,7 +180,7 @@ fun PinlogDetailScreen(
                             ) {
 
                                 Text(
-                                    text = placeName,
+                                    text = pinlogDetail.placeName,
                                     style = Typography.B2.copy(
                                         fontWeight = FontWeight.SemiBold
                                     ),
@@ -203,7 +190,7 @@ fun PinlogDetailScreen(
                                 Spacer(modifier = Modifier.height(6.dp))
 
                                 Text(
-                                    text = "$visitDate 방문",
+                                    text = "$pinlogDetail.visitDate 방문",
                                     style = Typography.L2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),
@@ -237,7 +224,7 @@ fun PinlogDetailScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             ProfileImageView(
-                                imgUrl = profileImage,
+                                imgUrl = userInfo.profileUrl,
                                 size = 36.dp,
                             )
 
@@ -248,7 +235,7 @@ fun PinlogDetailScreen(
                                     .weight(1f)
                             ) {
                                 Text(
-                                    text = userName,
+                                    text = pinlogDetail.writerName,
                                     style = Typography.B2.copy(
                                         fontWeight = FontWeight.SemiBold
                                     ),
@@ -271,7 +258,7 @@ fun PinlogDetailScreen(
                                     Spacer(modifier = Modifier.width(2.dp))
 
                                     Text(
-                                        text = reviewCount.toString(),
+                                        text = pinlogDetail.authorReviewCount.toString(),
                                         style = Typography.L2.copy(
                                             fontWeight = FontWeight.Medium
                                         ),
@@ -280,7 +267,7 @@ fun PinlogDetailScreen(
                                 }
                             }
 
-                            if (isOwn) {
+                            if (pinlogDetail.isOwn) {
                                 Image(
                                     modifier = Modifier
                                         .clickableWithNoRipple {
@@ -311,7 +298,7 @@ fun PinlogDetailScreen(
                                 Spacer(modifier = Modifier.width(2.dp))
 
                                 Text(
-                                    text = starRating.toString(),
+                                    text = pinlogDetail.starRating.toString(),
                                     style = Typography.B2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),
@@ -321,7 +308,7 @@ fun PinlogDetailScreen(
                                 Spacer(modifier = Modifier.weight(1f))
 
                                 Text(
-                                    text = "$createdDate 작성",
+                                    text = "$pinlogDetail.createdDate 작성",
                                     style = Typography.L2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),
@@ -331,7 +318,7 @@ fun PinlogDetailScreen(
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            if (reviewImageUrls.isNotEmpty()) {
+                            if (pinlogDetail.reviewImageUrls.isNotEmpty()) {
                                 Box {
                                     HorizontalPager(
                                         state = pagerState,
@@ -346,7 +333,7 @@ fun PinlogDetailScreen(
                                                 modifier = Modifier
                                                     .aspectRatio(1f)
                                                     .fillMaxWidth(),
-                                                model = reviewImageUrls[page],
+                                                model = pinlogDetail.reviewImageUrls[page],
                                                 contentScale = ContentScale.Crop,
                                                 contentDescription = "default profile image"
                                             )
@@ -372,7 +359,7 @@ fun PinlogDetailScreen(
                             Text(
                                 modifier = Modifier
                                     .padding(horizontal = 20.dp),
-                                text = content,
+                                text = pinlogDetail.content,
                                 style = Typography.B3.copy(
                                     fontWeight = FontWeight.Medium
                                 ),
@@ -388,14 +375,14 @@ fun PinlogDetailScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Image(
-                                    painter = painterResource(if (isLikedByUse) Res.drawable.ic_heat_on else Res.drawable.ic_heart_off),
+                                    painter = painterResource(if (pinlogDetail.isLikedByUser) Res.drawable.ic_heat_on else Res.drawable.ic_heart_off),
                                     contentDescription = null
                                 )
 
                                 Spacer(modifier = Modifier.width(3.dp))
 
                                 Text(
-                                    text = likeCount.toString(),
+                                    text = pinlogDetail.likeCount.toString(),
                                     style = Typography.L2.copy(
                                         fontWeight = FontWeight.SemiBold
                                     ),
@@ -412,7 +399,7 @@ fun PinlogDetailScreen(
                                 Spacer(modifier = Modifier.width(4.dp))
 
                                 Text(
-                                    text = commentCount.toString(),
+                                    text = pinlogDetail.commentCount.toString(),
                                     style = Typography.L2.copy(
                                         fontWeight = FontWeight.SemiBold
                                     ),
@@ -424,7 +411,7 @@ fun PinlogDetailScreen(
                                 Image(
                                     modifier = Modifier
                                         .size(24.dp),
-                                    painter = painterResource(if (isScrapByUser) Res.drawable.ic_bookmark_on else Res.drawable.ic_bookmark_off),
+                                    painter = painterResource(if (pinlogDetail.isScrapByUser) Res.drawable.ic_bookmark_on else Res.drawable.ic_bookmark_off),
                                     contentDescription = null
                                 )
                             }
@@ -450,7 +437,7 @@ fun PinlogDetailScreen(
                             Spacer(modifier = Modifier.width(4.dp))
 
                             Text(
-                                text = commentCount.toString(),
+                                text = pinlogDetail.commentCount.toString(),
                                 style = Typography.T2.copy(
                                     fontWeight = FontWeight.Medium
                                 ),
@@ -465,7 +452,7 @@ fun PinlogDetailScreen(
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 
-                    items(comments){
+                    items(pinlogDetail.comments){
                         CommentView(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp),

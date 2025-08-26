@@ -72,21 +72,7 @@ fun PinlogDetailRoute(
     }
 
     PinlogDetailScreen(
-        placeName = uiState.pinlogDetail.placeName,
-        visitDate = uiState.pinlogDetail.visitedDate,
-        profileImage = uiState.pinlogDetail.writerProfileImageUrl,
-        userName = uiState.pinlogDetail.writerName,
-        reviewCount = uiState.pinlogDetail.authorReviewCount,
-        starRating = uiState.pinlogDetail.starRating,
-        createdDate = uiState.pinlogDetail.createdAt,
-        reviewImageUrls = uiState.pinlogDetail.reviewImageUrls,
-        content = uiState.pinlogDetail.content,
-        isOwn = uiState.pinlogDetail.isOwn,
-        likeCount = uiState.pinlogDetail.likeCount,
-        isLikedByUse = uiState.pinlogDetail.isLikedByUser,
-        commentCount = uiState.pinlogDetail.commentCount,
-        comments = uiState.pinlogDetail.comments,
-        isScrapByUser = uiState.pinlogDetail.isScrapByUser,
+        pinlogDetail = uiState.pinlogDetail,
         onBackPressed = onBackPressed,
         query = uiState.myComment,
         replyId = uiState.clickedReplyId,
@@ -106,6 +92,7 @@ fun PinlogDetailRoute(
         updateNonFocusMode = {
             if(uiState.isEditComment || uiState.clickedReplyId != null) viewModel::updateNormalMode
         },
-        updateReplyCommentId = viewModel::updateClickedReplyId
+        updateReplyCommentId = viewModel::updateClickedReplyId,
+        userInfo = uiState.userInfo
     )
 }

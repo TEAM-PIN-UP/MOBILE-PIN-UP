@@ -5,14 +5,18 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.data.request.review.CommentRequest
 import com.pinup.pinup.domain.model.Comment
 import com.pinup.pinup.domain.model.PinlogDetail
+import com.pinup.pinup.domain.model.UserInfo
 import com.pinup.pinup.domain.usecase.DeleteCommentUseCase
 import com.pinup.pinup.domain.usecase.DeletePinlogUseCase
 import com.pinup.pinup.domain.usecase.EditCommentUseCase
+import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.pinup.domain.usecase.GetPinlogDetailUseCase
 import com.pinup.pinup.domain.usecase.PostCommentUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class PinlogDetailViewModel(
@@ -21,7 +25,8 @@ class PinlogDetailViewModel(
     private val uploadCommentUseCase: PostCommentUseCase,
     private val deleteCommentUseCase: DeleteCommentUseCase,
     private val editCommentUseCase: EditCommentUseCase,
-    private val getPinlogDetailUseCase: GetPinlogDetailUseCase
+    private val getPinlogDetailUseCase: GetPinlogDetailUseCase,
+    private val getMyProfileUseCase: GetMyProfileUseCase
 ) : BaseViewModel<PinlogUiState, PinlogUiEvent>(PinlogUiState()) {
 
     companion object {
@@ -33,6 +38,7 @@ class PinlogDetailViewModel(
 
     init {
         getPinlogDetail()
+        getUserInfo()
     }
     private var commentId = -1
 
@@ -128,6 +134,17 @@ class PinlogDetailViewModel(
             )
         }
     }
+
+    private fun getUserInfo() = viewModelScope.launch {
+        getMyProfileUseCase()
+            .collectLatest { profile ->
+                updateState {
+                    copy(
+                        userInfo = profile
+                    )
+                }
+            }
+    }
 }
 
 
@@ -137,6 +154,7 @@ data class PinlogUiState(
     val myComment: String = "",
     val clickedReplyId: Int? = null,
     val isEditComment: Boolean = false,
+    val userInfo: UserInfo = UserInfo()
 ) : UiState
 
 sealed interface PinlogUiEvent : UiEvent {
