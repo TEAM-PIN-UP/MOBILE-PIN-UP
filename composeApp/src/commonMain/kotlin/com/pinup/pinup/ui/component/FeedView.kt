@@ -48,7 +48,10 @@ fun FeedView(
 ) {
     var isOverflow by remember { mutableStateOf(false) }
 
-    Column {
+    Column(
+        modifier = Modifier
+            .padding(bottom = 20.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),

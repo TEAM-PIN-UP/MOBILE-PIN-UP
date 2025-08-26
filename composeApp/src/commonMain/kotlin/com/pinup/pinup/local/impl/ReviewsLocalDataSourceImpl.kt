@@ -22,15 +22,15 @@ class ReviewsLocalDataSourceImpl(
         return cachedRecentSearchList.asStateFlow()
     }
 
+    /** 이미 있는 검색어는 제거 후 맨 앞(0)에 삽입, 최대 10개 유지 */
     override suspend fun saveRecentSearch(search: String) {
         dataStore.edit { prefs ->
             val list = readListFromPrefs(prefs).toMutableList()
 
-            // 공백만 있는 입력은 무시(원치 않으면 제거)
             val normalized = search.trim()
             if (normalized.isEmpty()) return@edit
 
-            // 이미 존재하면 제거해서 앞으로 보냄
+            // 중복은 제거 후 앞으로 이동
             list.removeAll { it == normalized }
             list.add(0, normalized)
 
@@ -40,6 +40,7 @@ class ReviewsLocalDataSourceImpl(
         }
     }
 
+    /** 전달된 index의 항목만 제거 */
     override suspend fun deleteRecentSearch(index: Int) {
         dataStore.edit { prefs ->
             val list = readListFromPrefs(prefs).toMutableList()
@@ -50,6 +51,8 @@ class ReviewsLocalDataSourceImpl(
             }
         }
     }
+
+    // --- 내부 유틸 ---
 
     private suspend fun ensureLoaded() {
         if (cachedRecentSearchList.value.isNotEmpty()) return
@@ -67,16 +70,14 @@ class ReviewsLocalDataSourceImpl(
         return result
     }
 
-    private suspend fun writeListToPrefs(
-        prefs: MutablePreferences,
-        list: List<String>
-    ) {
+    /** 여기서 Map 캐스팅 금지! MutablePreferences API를 직접 사용 */
+    private fun writeListToPrefs(prefs: MutablePreferences, list: List<String>) {
         for (i in 0 until MAX_RECENT) {
             val key = stringPreferencesKey("$KEY_PREFIX$i")
             if (i < list.size) {
-                (prefs as MutableMap<Preferences.Key<String>, String>)[key] = list[i]
+                prefs[key] = list[i]        // 값 설정
             } else {
-                (prefs as MutableMap<Preferences.Key<String>, String?>).remove(key)
+                prefs.remove(key)           // 남는 키는 제거
             }
         }
     }

@@ -19,9 +19,19 @@ fun FeedRoute(
         FeedSearchScreen(
             query = uiState.searchText,
             profile = uiState.profileUrl,
+            reviewList = uiState.pagingReview.reviews,
+            recentSearchList = uiState.recentSearchList,
             onValueChange = viewModel::updateSearchText,
+            onClickSearch = viewModel::onClickSearch,
+            onClickDeleteRecentSearch = viewModel::deleteRecentSearch,
             onClickBack = viewModel::updateSearchMode,
             onClickBottomNav = onClickBottomNav,
+            onClickEdit = {
+                onClickEdit(it)
+            },
+            onClickDelete = viewModel::deleteReview,
+            onClickDetail = onClickDetail,
+            onClickLike = viewModel::likeChanged,
         )
     } else {
         FeedScreen(
