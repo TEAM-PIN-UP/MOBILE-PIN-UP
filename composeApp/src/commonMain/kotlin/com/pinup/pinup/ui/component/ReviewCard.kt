@@ -141,15 +141,14 @@ fun ReviewCard(
                             .clickableSingleWithNoRipple{
                                 onClickLike(placeReview.reviewId, placeReview.isLikeByUser)
                             },
-                        painter = painterResource(Res.drawable.ic_heart_off),
+                        painter = painterResource( if(placeReview.isLikeByUser) Res.drawable.ic_heat_on else Res.drawable.ic_heart_off),
                         contentDescription = "heart"
                     )
 
                     Spacer(modifier = Modifier.width(3.dp))
 
                     Text(
-                        //TODO 좋아요 개수
-                        text = "10",
+                        text = placeReview.likeCount.toString(),
                         style = Typography.L2.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
@@ -170,8 +169,7 @@ fun ReviewCard(
                     Spacer(modifier = Modifier.width(3.dp))
 
                     Text(
-                        //TODO 댓글 개수
-                        text = "200",
+                        text = placeReview.commentCount.toString(),
                         style = Typography.L2.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
