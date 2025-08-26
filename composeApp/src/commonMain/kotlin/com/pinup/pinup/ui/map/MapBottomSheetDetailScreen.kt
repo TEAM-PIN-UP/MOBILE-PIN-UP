@@ -57,7 +57,7 @@ fun MapBottomSheetDetailScreen(
     onClearDetailPlace: () -> Unit = {},
     onUpdateBookmark: (String, Boolean) -> Unit = { _, _ -> },
     onClickMenu: (Int) -> Unit = {},
-    onClickLike: (Int) -> Unit = {},
+    onClickLike: (Int, Boolean) -> Unit = {_, _ ->},
     onMovePinlogDetail: (Int) -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()

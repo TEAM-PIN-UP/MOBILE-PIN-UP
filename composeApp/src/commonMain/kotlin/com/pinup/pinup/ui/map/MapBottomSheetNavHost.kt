@@ -32,7 +32,7 @@ fun MapBottomSheetNavHost(
     onFocusChange: (Boolean) -> Unit,
     navHostController: NavHostController = rememberNavController(),
     onClickMenu: (Int) -> Unit = {},
-    onClickLike: (Int) -> Unit = {},
+    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onMovePinlogDetail: (Int) -> Unit = {},
 ) {
     val pinchRoute = MapBottomSheetDestination.Pinch::class.qualifiedName

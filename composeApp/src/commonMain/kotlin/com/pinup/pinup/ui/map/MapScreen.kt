@@ -109,7 +109,7 @@ fun MapScreen(
     onClickGetPlace: () -> Unit = {},
     onClickEdit: (Int) -> Unit = {},
     onClickDelete: (Int) -> Unit = {},
-    onClickLike: (Int) -> Unit = {},
+    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onMovePinlogDetail: (Int) -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()

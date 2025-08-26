@@ -96,6 +96,6 @@ fun MapRoute(
             isShowDeleteDialog.value = true
         },
         onMovePinlogDetail = onMovePinlogDetail,
-        onClickLike = mapViewModel
+        onClickLike = mapViewModel::likeChanged
     )
 }

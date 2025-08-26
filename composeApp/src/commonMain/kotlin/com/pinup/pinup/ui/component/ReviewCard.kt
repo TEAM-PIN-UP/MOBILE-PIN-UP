@@ -32,7 +32,7 @@ fun ReviewCard(
     modifier: Modifier = Modifier,
     horizontalPadding: Dp = 0.dp,
     onClickMenu: (Int) -> Unit = {},
-    onClickLike: (Int) -> Unit = {},
+    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onMovePinlogDetail: (Int) -> Unit = {},
 ) {
     Column(
@@ -139,7 +139,7 @@ fun ReviewCard(
                     Image(
                         modifier = Modifier
                             .clickableSingleWithNoRipple{
-                                onClickLike(placeReview.reviewId)
+                                onClickLike(placeReview.reviewId, placeReview.isLikeByUser)
                             },
                         painter = painterResource(Res.drawable.ic_heart_off),
                         contentDescription = "heart"

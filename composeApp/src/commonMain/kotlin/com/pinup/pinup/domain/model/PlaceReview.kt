@@ -11,5 +11,8 @@ data class PlaceReview(
     val visitedDate: String,
     val writerName: String,
     val writerProfileImageUrl: String?,
-    val writerTotalReviewCount: Int
+    val writerTotalReviewCount: Int,
+    val isLikeByUser: Boolean = false,
+    val likeCount: Int = 0,
+    val commentCount: Int = 0
 )

@@ -15,5 +15,5 @@ data class ReviewedPlace(
     val placeCategory: Category,
     val reviewCount: Int,
     val reviewImageUrls: List<String>,
-    val reviewerProfileImageUrls: List<String?>
+    val reviewerProfileImageUrls: List<String?>,
 )

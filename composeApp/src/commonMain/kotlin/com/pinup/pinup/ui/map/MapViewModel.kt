@@ -24,7 +24,6 @@ import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
 import com.pinup.pinup.ui.model.ChipState
-import com.pinup.pinup.ui.pinlogDetail.PinlogUiEvent
 import dev.icerock.moko.geo.LocationTracker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
