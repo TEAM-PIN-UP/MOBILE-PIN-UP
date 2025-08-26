@@ -75,7 +75,7 @@ fun PinlogDetailRoute(
         placeName = uiState.pinlogDetail.placeName,
         visitDate = uiState.pinlogDetail.visitedDate,
         profileImage = uiState.pinlogDetail.writerProfileImageUrl,
-        userName = "닉네임",
+        userName = uiState.pinlogDetail.writerName,
         reviewCount = uiState.pinlogDetail.authorReviewCount,
         starRating = uiState.pinlogDetail.starRating,
         createdDate = uiState.pinlogDetail.createdAt,

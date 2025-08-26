@@ -66,7 +66,7 @@ fun FeedView(
                     .weight(1f)
             ) {
                 Text(
-                    text = item.placeName,
+                    text = item.writerName,
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.SemiBold
                     ),

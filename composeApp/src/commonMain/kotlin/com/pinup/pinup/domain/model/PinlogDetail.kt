@@ -3,6 +3,7 @@ package com.pinup.pinup.domain.model
 data class PinlogDetail(
     val id: Int = 0,
     val placeName: String = "",
+    val writerName: String = "",
     val kakaoPlaceId: String = "",
     val content: String = "",
     val createdAt: String = "",

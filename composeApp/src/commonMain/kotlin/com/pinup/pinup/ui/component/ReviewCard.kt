@@ -91,8 +91,7 @@ fun ReviewCard(
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    //TODO 만약 자신이 쓴 글 이라면
-                    if (true) {
+                    if (placeReview.isOwn) {
                         Image(
                             modifier = Modifier
                                 .clickableSingleWithNoRipple {

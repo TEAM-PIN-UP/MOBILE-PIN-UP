@@ -14,5 +14,6 @@ data class PlaceReview(
     val writerTotalReviewCount: Int,
     val isLikeByUser: Boolean = false,
     val likeCount: Int = 0,
-    val commentCount: Int = 0
+    val commentCount: Int = 0,
+    val isOwn: Boolean = false
 )

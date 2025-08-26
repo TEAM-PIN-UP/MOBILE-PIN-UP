@@ -77,105 +77,24 @@ import pinup.composeapp.generated.resources.ic_star
 
 @Composable
 fun PinlogDetailScreen(
-    placeName: String = "우동 카덴",
-    visitDate: String = "25.06.22",
-    profileImage: String = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
-    userName: String = "닉네임",
-    reviewCount: Int = 24,
-    starRating: Double = 4.5,
-    createdDate: String = "25.07.14",
-    reviewImageUrls: List<String> = listOf(
-        "https://lh3.googleusercontent.com/d/1YRKXQv5YHJKz4cD-8efcRaKQ1ENnN9U7",
-        "https://lh3.googleusercontent.com/d/1Wp8SvCGWnliHUfIrQEpTFyJKae7axrBc",
-        "https://lh3.googleusercontent.com/d/1XY6r4cmUqtNPEImG9ZmqxzOfOHbmCaxX"
-    ),
-    content: String = "이건 테스트용 글입니다.",
-    isOwn: Boolean = true,
-    likeCount: Int = 100,
-    isLikedByUse: Boolean = false,
-    commentCount: Int = 100,
-    comments: List<Comment> = listOf(
-        Comment(
-            id = 0,
-            content = "테스트1",
-            parentId = 0,
-            isOwn = true,
-            author = AuthorInfo(
-                id = 0,
-                profileImageUrls = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
-                nickname = "닉네임1"
-            ),
-            createdAt = "18분전"
-        ),
-        Comment(
-            id = 1,
-            content = "테스트2",
-            parentId = 1,
-            isOwn = true,
-            author = AuthorInfo(
-                id = 1,
-                profileImageUrls = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
-                nickname = "닉네임2"
-            ),
-            replies = listOf(
-                ReplyComment(
-                    id = 3,
-                    content = "테스트3",
-                    parentId = 3,
-                    isOwn = true,
-                    author = AuthorInfo(
-                        id = 3,
-                        profileImageUrls = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
-                        nickname = "닉네임3"
-                    ),
-                    createdAt = "18분전"
-                ),
-            ),
-            createdAt = "18분전"
-        ),
-        Comment(
-            id = 4,
-            content = "테스트4",
-            parentId = 4,
-            isOwn = true,
-            author = AuthorInfo(
-                id = 4,
-                profileImageUrls = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
-                nickname = "닉네임4"
-            ),
-            replies = listOf(
-                ReplyComment(
-                    id = 5,
-                    content = "테스트5",
-                    parentId = 5,
-                    isOwn = true,
-                    author = AuthorInfo(
-                        id = 5,
-                        profileImageUrls = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
-                        nickname = "닉네임5"
-                    ),
-                    createdAt = "18분전"
-                ),
-                ReplyComment(
-                    id = 6,
-                    content = "테스트6",
-                    parentId = 6,
-                    isOwn = true,
-                    author = AuthorInfo(
-                        id = 6,
-                        profileImageUrls = "https://lh3.googleusercontent.com/d/1O90AKH6CG243YwWTAmXKMtqNI3cVV0Lu",
-                        nickname = "닉네임6"
-                    ),
-                    createdAt = "18분전"
-                ),
-            ),
-            createdAt = "18분전"
-        ),
-    ),
-    isScrapByUser: Boolean = false,
-    query: String = "",
-    userInfo: UserInfo = UserInfo(),
-    replyId: Int? = null,
+    placeName: String,
+    visitDate: String,
+    profileImage: String,
+    userName: String,
+    reviewCount: Int,
+    starRating: Double,
+    createdDate: String,
+    reviewImageUrls: List<String>,
+    content: String,
+    isOwn: Boolean,
+    likeCount: Int,
+    isLikedByUse: Boolean,
+    commentCount: Int,
+    comments: List<Comment>,
+    isScrapByUser: Boolean,
+    query: String,
+    userInfo: UserInfo,
+    replyId: Int?,
     onValueChange: (String) -> Unit = {},
     onClickPlaceDetail: (String) -> Unit = {},
     onBackPressed: () -> Unit = {},

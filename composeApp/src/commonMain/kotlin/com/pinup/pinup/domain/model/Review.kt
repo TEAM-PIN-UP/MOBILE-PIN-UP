@@ -2,6 +2,7 @@ package com.pinup.pinup.domain.model
 
 data class Review(
     val id: Int,
+    val writerName: String = "",
     val placeName: String,
     val content: String,
     val createdAt: String,
