@@ -1,5 +1,6 @@
 package com.pinup.pinup.data.impl
 
+import com.pinup.pinup.data.local.ReviewsLocalDataSource
 import com.pinup.pinup.data.remote.ReviewsRemoteDataSource
 import com.pinup.pinup.data.request.ReviewRequest
 import com.pinup.pinup.data.request.pinlog.AddReviewRequest
@@ -12,10 +13,12 @@ import com.pinup.pinup.domain.model.PinlogDetail
 import com.pinup.pinup.domain.model.map
 import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.domain.repository.ReviewsRepository
+import kotlinx.coroutines.flow.StateFlow
 
 
 class ReviewsRepositoryImpl (
     private val reviewsRemoteDataSource: ReviewsRemoteDataSource,
+    private val reviewsLocalDataSource: ReviewsLocalDataSource,
 ) : ReviewsRepository {
     override suspend fun registerReviews(
         request: AddReviewRequest
@@ -96,5 +99,17 @@ class ReviewsRepositoryImpl (
             commentId = commentId,
             content = content
         ).mapSuccessData()
+    }
+
+    override suspend fun getRecentSearchList(): StateFlow<List<String>> {
+        return reviewsLocalDataSource.getRecentSearch()
+    }
+
+    override suspend fun deleteRecentSearch(index: Int) {
+        reviewsLocalDataSource.deleteRecentSearch(index)
+    }
+
+    override suspend fun saveRecentSearch(search: String) {
+        reviewsLocalDataSource.saveRecentSearch(search)
     }
 }

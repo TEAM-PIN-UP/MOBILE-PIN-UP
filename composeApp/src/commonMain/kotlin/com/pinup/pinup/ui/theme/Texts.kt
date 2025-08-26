@@ -149,6 +149,10 @@ object Texts {
 
     }
 
+    object FEED {
+        const val RECENT_SEARCH = "최근 검색어"
+    }
+
     object Toast {
         const val DELETE_PINLOG = "핀로그가 삭제되었어요."
     }

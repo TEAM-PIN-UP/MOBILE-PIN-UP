@@ -26,5 +26,5 @@ val repositoryModule = module {
     single<MembersRepository> { MembersRepositoryImpl(get(), get()) }
     single<PinBuddyRepository> { PinBuddyRepositoryImpl(get()) }
     single<PlacesRepository> { PlacesRepositoryImpl(get()) }
-    single<ReviewsRepository> { ReviewsRepositoryImpl(get()) }
+    single<ReviewsRepository> { ReviewsRepositoryImpl(get(), get()) }
 }

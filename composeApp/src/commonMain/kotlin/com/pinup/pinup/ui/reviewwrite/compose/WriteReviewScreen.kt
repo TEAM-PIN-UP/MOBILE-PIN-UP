@@ -109,7 +109,7 @@ fun WriteReviewScreen(
                         .clickableWithNoRipple {
                             isShowImageDetailDialog = false
                         },
-                    painter = painterResource(Res.drawable.ic_cancle_white),
+                    painter = painterResource(Res.drawable.ic_cancel_white),
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.height(16.dp))
