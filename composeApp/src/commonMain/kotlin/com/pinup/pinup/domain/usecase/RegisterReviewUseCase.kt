@@ -12,7 +12,7 @@ class RegisterReviewUseCase (
 ) {
     suspend operator fun invoke(
         request: AddReviewRequest,
-    ): PResult<String> {
+    ): PResult<Int> {
         return reviewsRepository.registerReviews(request)
     }
 }

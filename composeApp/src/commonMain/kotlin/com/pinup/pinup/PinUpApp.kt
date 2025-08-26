@@ -237,10 +237,7 @@ fun PinUpApp(
                             navHostController.popBackStack()
                         },
                         onMoveDetailPlace = {
-                            scope.launch {
-                                DetailPlaceEventBus.sendEvent(it)
-                                navHostController.popBackStack()
-                            }
+                            navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
                         }
                     )
                 }

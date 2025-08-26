@@ -12,7 +12,7 @@ import com.pinup.pinup.domain.model.PagingReview
 interface ReviewsRemoteDataSource {
     suspend fun registerReviews(
         request: AddReviewRequest
-    ): PResult<PResponse<String>>
+    ): PResult<PResponse<Int>>
     suspend fun getReviews(request: Int, size: Int): PResult<PResponse<GetReviewsResponse>>
     suspend fun deleteReview(request: Int): PResult<PResponse<Unit>>
     suspend fun addReviewLike(request: Int): PResult<PResponse<Unit>>

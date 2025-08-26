@@ -12,7 +12,7 @@ import com.pinup.pinup.domain.model.WriteReview
 interface ReviewsRepository {
     suspend fun registerReviews(
         request: AddReviewRequest
-    ): PResult<String>
+    ): PResult<Int>
 
     suspend fun getReviews(request: Int, size: Int): PResult<PagingReview>
     suspend fun deleteReview(request: Int): PResult<Unit>

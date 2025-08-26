@@ -28,7 +28,7 @@ interface ReviewsApi {
     @POST(ApiPath.PinLog.PINLOG)
     suspend fun registerReviews(
         @Body request: AddReviewRequest
-    ): PResult<PResponse<String>>
+    ): PResult<PResponse<Int>>
 
     @GET(ApiPath.PinLog.PINLOG)
     suspend fun getReviews(

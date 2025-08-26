@@ -28,7 +28,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun WriteReviewNavHost(
     writeReviewViewModel: WriteReviewViewModel = koinViewModel(),
     onBackPressed: () -> Unit,
-    onMoveDetailPlace: (String) -> Unit,
+    onMoveDetailPlace: (Int) -> Unit,
 ) {
     val uiState = writeReviewViewModel.uiState.collectAsStateWithLifecycle()
     val navHostController = rememberNavController()
@@ -129,7 +129,7 @@ fun WriteReviewNavHost(
             },
             onRightButtonClick = {
                 isShowCompleteDialog.value = false
-                writeReviewViewModel.kakaoPlaceId?.let(onMoveDetailPlace)
+                writeReviewViewModel.writeReviewId?.let(onMoveDetailPlace)
             },
         )
     }

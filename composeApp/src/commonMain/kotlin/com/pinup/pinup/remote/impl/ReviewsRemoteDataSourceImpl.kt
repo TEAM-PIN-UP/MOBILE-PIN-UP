@@ -17,7 +17,7 @@ class ReviewsRemoteDataSourceImpl (
 ) : ReviewsRemoteDataSource {
     override suspend fun registerReviews(
         request: AddReviewRequest
-    ): PResult<PResponse<String>> {
+    ): PResult<PResponse<Int>> {
         return reviewsApi.registerReviews(
             request = request
         )

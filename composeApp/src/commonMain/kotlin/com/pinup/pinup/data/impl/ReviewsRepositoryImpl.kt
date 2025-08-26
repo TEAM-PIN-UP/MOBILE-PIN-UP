@@ -19,7 +19,7 @@ class ReviewsRepositoryImpl (
 ) : ReviewsRepository {
     override suspend fun registerReviews(
         request: AddReviewRequest
-    ): PResult<String> {
+    ): PResult<Int> {
         return reviewsRemoteDataSource.registerReviews(
             request
         ).mapSuccessData()

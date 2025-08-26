@@ -35,7 +35,7 @@ class WriteReviewViewModel (
 
     val reviewId = savedStateHandle.get<Int>(REVIEW_ID) ?: 0
 
-    var kakaoPlaceId: String? = null
+    var writeReviewId: Int? = null
 
     init {
         if (reviewId != 0) {
@@ -176,7 +176,7 @@ class WriteReviewViewModel (
         resultResponse(
             response = registerReviewUseCase(request),
             successCallback = {
-                kakaoPlaceId = it
+                writeReviewId = it
                 emitEvent(WriteReviewUiEvent.SuccessWriteReview)
             }
         )
