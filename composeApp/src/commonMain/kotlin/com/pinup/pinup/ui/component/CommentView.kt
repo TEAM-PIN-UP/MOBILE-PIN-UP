@@ -1,11 +1,11 @@
 package com.pinup.pinup.ui.component
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,10 +18,8 @@ import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
-import org.jetbrains.compose.resources.painterResource
-import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_menu_dot
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CommentView(
     modifier: Modifier = Modifier,
@@ -60,25 +58,16 @@ fun CommentView(
                     ),
                     color = Colors.Gray500
                 )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                if (comment.isOwn) {
-                    Image(
-                        modifier = Modifier
-                            .clickableWithNoRipple {
-                                onClickMenu(comment.id, comment.content)
-                            }
-                            .size(16.dp),
-                        painter = painterResource(Res.drawable.ic_menu_dot),
-                        contentDescription = null
-                    )
-                }
             }
 
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
+                modifier = Modifier
+                    .combinedClickable(
+                        onClick = {},
+                        onLongClick = { if(comment.isOwn) onClickMenu(comment.id, comment.content) },
+                    ),
                 text = comment.content,
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
@@ -135,25 +124,16 @@ fun CommentView(
                                     ),
                                     color = Colors.Gray500
                                 )
-
-                                Spacer(modifier = Modifier.weight(1f))
-
-                                if (it.isOwn) {
-                                    Image(
-                                        modifier = Modifier
-                                            .clickableWithNoRipple {
-                                                onClickMenu(it.id, it.content)
-                                            }
-                                            .size(16.dp),
-                                        painter = painterResource(Res.drawable.ic_menu_dot),
-                                        contentDescription = null
-                                    )
-                                }
                             }
 
                             Spacer(modifier = Modifier.height(4.dp))
 
                             Text(
+                                modifier = Modifier
+                                    .combinedClickable(
+                                        onClick = {},
+                                        onLongClick = { if(comment.isOwn) onClickMenu(comment.id, comment.content) },
+                                    ),
                                 text = it.content,
                                 style = Typography.B3.copy(
                                     fontWeight = FontWeight.Medium
