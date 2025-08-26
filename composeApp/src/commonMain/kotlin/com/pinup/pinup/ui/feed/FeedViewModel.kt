@@ -4,36 +4,40 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.model.PagingReview
 import com.pinup.pinup.domain.usecase.DeletePinlogUseCase
 import com.pinup.pinup.domain.usecase.GetFeedUseCase
+import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class FeedViewModel(
     private val deletePinlogUseCase: DeletePinlogUseCase,
     private val getFeedUseCase: GetFeedUseCase,
-    private val postReviewLikeChangeUseCase: PostReviewLikeChangeUseCase
+    private val postReviewLikeChangeUseCase: PostReviewLikeChangeUseCase,
+    private val getMyProfileUseCase: GetMyProfileUseCase
 ) : BaseViewModel<FeedUiState, UiEvent>(FeedUiState()) {
 
     init {
         getFeedList()
+        getMyProfile()
     }
 
     fun getFeedList(id: Int = uiState.value.pagingReview.nextCursor) = viewModelScope.launch {
-        resultResponse(
-            response = getFeedUseCase(id),
-            successCallback = {
-                updateState {
-                    copy(
-                        prevCursor = id,
-                        pagingReview = it.copy(
-                            reviews = pagingReview.reviews + it.reviews
-                        ),
-                    )
-                }
-            }
-        )
+//        resultResponse(
+//            response = getFeedUseCase(id),
+//            successCallback = {
+//                updateState {
+//                    copy(
+//                        prevCursor = id,
+//                        pagingReview = it.copy(
+//                            reviews = pagingReview.reviews + it.reviews
+//                        ),
+//                    )
+//                }
+//            }
+//        )
     }
 
     fun deleteReview(id: Int) = viewModelScope.launch {
@@ -75,9 +79,38 @@ class FeedViewModel(
         )
     }
 
+    fun updateSearchMode() {
+        updateState {
+            copy(
+                searchMode = !searchMode
+            )
+        }
+    }
+
+    fun updateSearchText(text: String) {
+        updateState {
+            copy(
+                searchText = text
+            )
+        }
+    }
+
+    private fun getMyProfile() = viewModelScope.launch {
+        getMyProfileUseCase()
+            .collectLatest {
+                updateState {
+                    copy(
+                        profileUrl = it.profileUrl
+                    )
+                }
+            }
+    }
 }
 
 data class FeedUiState(
     val pagingReview: PagingReview = PagingReview(),
     val prevCursor: Int = 0,
+    val searchMode: Boolean = false,
+    val searchText: String = "",
+    val profileUrl: String = "",
 ): UiState

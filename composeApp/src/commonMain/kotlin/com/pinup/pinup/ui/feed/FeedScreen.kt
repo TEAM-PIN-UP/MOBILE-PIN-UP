@@ -47,6 +47,7 @@ import pinup.composeapp.generated.resources.ic_search
 @Composable
 fun FeedScreen(
     reviewList: List<Review>,
+    profile: String,
     getMoreFeed: () -> Unit = {},
     onClickBottomNav: (MainDestination) -> Unit,
     onClickSearch: () -> Unit,
@@ -148,7 +149,7 @@ fun FeedScreen(
         ){
             BottomBar(
                 selectedMenu = MainDestination.Feed,
-                profileImage = "",
+                profileImage = profile,
                 onBottomMenuClick = onClickBottomNav
             )
         }
