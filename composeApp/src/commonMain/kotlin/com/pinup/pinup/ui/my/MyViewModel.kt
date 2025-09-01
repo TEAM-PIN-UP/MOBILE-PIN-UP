@@ -1,9 +1,7 @@
 package com.pinup.pinup.ui.my
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.model.Member
-import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.Pagination
 import com.pinup.pinup.domain.model.Profile
 import com.pinup.pinup.domain.model.RelationType
@@ -12,11 +10,9 @@ import com.pinup.pinup.domain.model.getSuccessOrNull
 import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPhotoReviewsUseCase
 import com.pinup.pinup.domain.usecase.GetTextReviewsUseCase
-import com.pinup.pinup.platform.hLog
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import com.pinup.pinup.ui.base.BaseViewModel
+import com.pinup.pinup.ui.base.UiEvent
+import com.pinup.pinup.ui.base.UiState
 import kotlinx.coroutines.launch
 
 
@@ -24,10 +20,7 @@ class MyViewModel (
     private val getMemberInfoUseCase: GetMemberInfoUseCase,
     private val getPhotoReviewsUseCase: GetPhotoReviewsUseCase,
     private val getTextReviewsUseCase: GetTextReviewsUseCase,
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(MyUiState())
-    val uiState: StateFlow<MyUiState>
-        get() = _uiState.asStateFlow()
+) : BaseViewModel<MyUiState, UiEvent>(MyUiState()) {
     private val photoReviewPagination = Pagination()
     private val textReviewPagination = Pagination()
 
@@ -43,8 +36,8 @@ class MyViewModel (
         ).getSuccessOrNull() ?: return@launch
         photoReviewPagination.totalPage = photoReviews.nextCursor
         textReviewPagination.totalPage = textReviews.nextCursor
-        _uiState.update {
-            it.copy(
+        updateState {
+            copy(
                 member = memberInfo,
                 photoReviews = photoReviews.reviews,
                 textReviews = textReviews.reviews
@@ -53,56 +46,50 @@ class MyViewModel (
     }
 
     fun updateProfile() = viewModelScope.launch {
-        when (val result = getMemberInfoUseCase()) {
-            is PResult.Fail -> {
-                hLog("result >>> ${result.failState}")
-            }
-            is PResult.Success -> {
-                _uiState.update {
-                    it.copy(
-                        member = result.data
+        resultResponse(
+            response = getMemberInfoUseCase(),
+            successCallback = {
+                updateState {
+                    copy(
+                        member = it
                     )
                 }
             }
-        }
+        )
     }
 
     fun getPhotoReviews() = viewModelScope.launch {
         if (photoReviewPagination.isLast) return@launch
-        when (val result = getPhotoReviewsUseCase(
-            page = photoReviewPagination.nextPage(),
-            size = Pagination.DEFAULT_PAGE_SIZE
-        )) {
-            is PResult.Fail -> {
-                hLog("result >>> ${result.failState}")
-            }
-            is PResult.Success -> {
-                _uiState.update {
-                    it.copy(
-                        photoReviews = it.photoReviews + result.data.reviews,
+        resultResponse(
+            response = getPhotoReviewsUseCase(
+                page = photoReviewPagination.nextPage(),
+                size = Pagination.DEFAULT_PAGE_SIZE
+            ),
+            successCallback = {
+                updateState {
+                    copy(
+                        photoReviews = photoReviews + it.reviews,
                     )
                 }
             }
-        }
+        )
     }
 
     fun getTextReviews() = viewModelScope.launch {
         if (textReviewPagination.isLast) return@launch
-        when (val result = getTextReviewsUseCase(
-            page = photoReviewPagination.nextPage(),
-            size = Pagination.DEFAULT_PAGE_SIZE)
-        ) {
-            is PResult.Fail -> {
-                hLog("result >>> ${result.failState}")
-            }
-            is PResult.Success -> {
-                _uiState.update {
-                    it.copy(
-                        textReviews = it.textReviews + result.data.reviews,
+        resultResponse(
+            response = getTextReviewsUseCase(
+                page = photoReviewPagination.nextPage(),
+                size = Pagination.DEFAULT_PAGE_SIZE
+            ),
+            successCallback = {
+                updateState {
+                    copy(
+                        textReviews = textReviews + it.reviews,
                     )
                 }
             }
-        }
+        )
     }
 }
 
@@ -125,4 +112,4 @@ data class MyUiState(
     ),
     val textReviews: List<Review> = emptyList(),
     val photoReviews: List<Review> = emptyList()
-)
+) : UiState

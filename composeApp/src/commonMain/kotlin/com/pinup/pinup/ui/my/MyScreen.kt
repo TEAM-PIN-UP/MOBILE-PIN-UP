@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,6 +34,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -46,6 +48,7 @@ import com.pinup.pinup.ui.component.ProfileImageView
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.TextReview
 import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -72,30 +75,34 @@ fun MyScreen(
             .background(
                 color = Colors.White
             )
+            .statusBarsPadding()
     ) {
         Row(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
-                .padding(vertical = 13.dp),
+                .padding(vertical = 15.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "My",
-                style = Typography.H2,
-                color = Colors.Neutral800
+                text = member.profile.nickname,
+                style = Typography.T1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray800
             )
 
             Spacer(Modifier.weight(1f))
 
             Image(
                 modifier = Modifier
-                    .padding(end = 16.dp)
                     .clickableSingleWithNoRipple {
                         onAlarmClick()
                     },
                 painter = painterResource(Res.drawable.ic_alarm),
                 contentDescription = "alarm"
             )
+
+            Spacer(modifier = Modifier.width(16.dp))
 
             Image(
                 modifier = Modifier
@@ -112,72 +119,84 @@ fun MyScreen(
         Column(
             modifier = Modifier
                 .padding(top = 20.dp, bottom = 16.dp)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 16.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 ProfileImageView(
                     imgUrl = member.profile.profilePictureUrl,
-                    size = 56.dp
+                    size = 60.dp
                 )
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
+                        .padding(start = 32.dp, end = 16.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
                         modifier = Modifier
-                            .widthIn(min = 44.dp),
+                            .padding(start = 20.dp)
+                            .widthIn(min = 34.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             text = member.profile.reviewCount.toString(),
-                            color = Colors.Neutral800,
-                            style = Typography.H4
+                            color = Colors.Gray900,
+                            style = Typography.B2.copy(
+                                fontWeight = FontWeight.SemiBold
+                            )
                         )
 
                         Text(
                             modifier = Modifier
                                 .padding(top = 4.dp),
-                            text = "리뷰",
-                            color = Colors.Neutral500,
-                            style = Typography.B4
+                            text = Texts.Word.PINLOG,
+                            color = Colors.Gray400,
+                            style = Typography.B3.copy(
+                                fontWeight = FontWeight.SemiBold
+                            )
                         )
                     }
 
                     PVerticalDivider(
-                        modifier = Modifier.height(24.dp)
+                        modifier = Modifier.height(22.dp)
                     )
+
                     Column(
                         modifier = Modifier
-                            .widthIn(min = 44.dp),
+                            .widthIn(min = 34.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             text = member.profile.averageStarRating.toString(),
-                            color = Colors.Neutral800,
-                            style = Typography.H4
+                            color = Colors.Gray900,
+                            style = Typography.B2.copy(
+                                fontWeight = FontWeight.SemiBold
+                            )
                         )
 
                         Text(
                             modifier = Modifier
                                 .padding(top = 4.dp),
-                            text = "평균 평점",
-                            color = Colors.Neutral500,
-                            style = Typography.B4
+                            text = Texts.PROFILE.AVERAGE_STAR_RATING,
+                            color = Colors.Gray400,
+                            style = Typography.B3.copy(
+                                fontWeight = FontWeight.SemiBold
+                            )
                         )
                     }
 
                     PVerticalDivider(
-                        modifier = Modifier.height(24.dp)
+                        modifier = Modifier.height(22.dp)
                     )
+
                     Column(
                         modifier = Modifier
-                            .widthIn(min = 44.dp)
+                            .padding(end = 20.dp)
+                            .widthIn(min = 34.dp)
                             .clickableSingleWithNoRipple {
                                 onMovePinBuddy()
                             },
@@ -185,16 +204,20 @@ fun MyScreen(
                     ) {
                         Text(
                             text = member.profile.pinBuddyCount.toString(),
-                            color = Colors.Neutral800,
-                            style = Typography.H4
+                            color = Colors.Gray900,
+                            style = Typography.B2.copy(
+                                fontWeight = FontWeight.SemiBold
+                            )
                         )
 
                         Text(
                             modifier = Modifier
                                 .padding(top = 4.dp),
-                            text = "핀버디",
-                            color = Colors.Neutral500,
-                            style = Typography.B4
+                            text = Texts.Word.PIN_BUDDY,
+                            color = Colors.Gray400,
+                            style = Typography.B3.copy(
+                                fontWeight = FontWeight.SemiBold
+                            )
                         )
                     }
                 }

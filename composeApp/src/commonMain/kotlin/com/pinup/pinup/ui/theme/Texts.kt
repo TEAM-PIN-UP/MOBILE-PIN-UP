@@ -28,6 +28,7 @@ object Texts {
         const val COMMENT = "댓글"
         const val DO_REPLY_COMMENT = "답글달기"
         const val SEE_MORE = "자세히 보기"
+        const val PIN_BUDDY = "핀버디"
     }
 
     object Onboarding {
@@ -151,6 +152,10 @@ object Texts {
 
     object FEED {
         const val RECENT_SEARCH = "최근 검색어"
+    }
+
+    object PROFILE {
+        const val AVERAGE_STAR_RATING = "평균 별점"
     }
 
     object Toast {

@@ -15,7 +15,7 @@ fun MyRoute(
     val uiState = myViewModel.uiState.collectAsStateWithLifecycle()
 
     LifecycleResumeEffect(Unit) {
-        myViewModel.initMyInfo()
+       // myViewModel.initMyInfo()
         onPauseOrDispose { }
     }
 
