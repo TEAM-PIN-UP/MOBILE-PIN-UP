@@ -156,6 +156,8 @@ object Texts {
 
     object PROFILE {
         const val AVERAGE_STAR_RATING = "평균 별점"
+        const val SHARE_PROFILE = "프로필 공유"
+        const val ADD_PIN_BUDDY = "핀버디 추가"
     }
 
     object Toast {

@@ -29,8 +29,11 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -67,8 +70,9 @@ fun MyScreen(
     onMovePinBuddy: () -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
-    val pages = remember { listOf("포토 리뷰","텍스트 리뷰") }
-    val pagerState = rememberPagerState{ pages.size }
+    val pages = remember { listOf("포토 리뷰", "텍스트 리뷰") }
+    var index by remember { mutableStateOf(0) }
+    val pagerState = rememberPagerState { pages.size }
 
     Column(
         modifier = modifier
@@ -76,6 +80,7 @@ fun MyScreen(
                 color = Colors.White
             )
             .statusBarsPadding()
+            .fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
@@ -223,65 +228,38 @@ fun MyScreen(
                 }
             }
 
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
-                modifier = Modifier
-                    .padding(top = 16.dp),
                 text = member.profile.nickname,
-                style = Typography.H4,
-                color = Colors.Neutral800,
+                style = Typography.B2.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray900,
             )
 
-            if (member.profile.bio.isBlank()) {
-                RoundedBox(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.dp),
-                    cornerColor = Colors.Neutral100,
-                    cornerRounded = 8,
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(start = 16.dp)
-                            .padding(vertical = 14.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painterResource(Res.drawable.ic_my_description),
-                            contentDescription = "my description"
-                        )
+            Spacer(modifier = Modifier.height(12.dp))
 
-                        Text(
-                            modifier = Modifier
-                                .padding(start = 10.dp),
-                            text = "나를 소개해보세요",
-                            style = Typography.B4,
-                            color = Colors.Neutral400,
-                        )
-                    }
-                }
-            } else {
-                Text(
-                    modifier = Modifier
-                        .padding(top = 12.dp),
-                    text = member.profile.bio,
-                    style = Typography.B4,
-                    color = Colors.Neutral600,
-                )
-            }
+            Text(
+                text = member.profile.bio,
+                style = Typography.B3.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Colors.Gray400,
+            )
 
-            Row(
-                modifier = Modifier
-                    .padding(top = 20.dp)
-            ) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row {
                 RoundedBox(
                     modifier = Modifier
                         .weight(1f),
                     cornerRounded = 8,
-                    backgroundColor = Colors.Neutral100,
+                    backgroundColor = Colors.Gray100,
                 ) {
                     Row(
                         modifier = Modifier
-                            .padding(vertical = 12.dp)
+                            .padding(vertical = 12.dp, horizontal = 16.dp)
                             .align(Alignment.Center),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -293,14 +271,16 @@ fun MyScreen(
                         Text(
                             modifier = Modifier
                                 .padding(start = 6.dp),
-                            text = "프로필 공유",
-                            style = Typography.H4,
-                            color = Colors.Neutral800,
+                            text = Texts.PROFILE.SHARE_PROFILE,
+                            style = Typography.L1.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = Colors.Gray800,
                         )
                     }
                 }
 
-                Spacer(Modifier.width(11.dp))
+                Spacer(Modifier.width(10.dp))
 
                 RoundedBox(
                     modifier = Modifier
@@ -309,11 +289,11 @@ fun MyScreen(
                             onAddPinBuddyClick()
                         },
                     cornerRounded = 8,
-                    backgroundColor = Colors.Neutral100,
+                    backgroundColor = Colors.Gray100,
                 ) {
                     Row(
                         modifier = Modifier
-                            .padding(vertical = 12.dp)
+                            .padding(vertical = 12.dp, horizontal = 16.dp)
                             .align(Alignment.Center),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
@@ -325,61 +305,80 @@ fun MyScreen(
                         Text(
                             modifier = Modifier
                                 .padding(start = 6.dp),
-                            text = "핀버디 추가",
-                            style = Typography.H4,
-                            color = Colors.Neutral800,
+                            text = Texts.PROFILE.ADD_PIN_BUDDY,
+                            style = Typography.L1.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = Colors.Gray800,
                         )
                     }
                 }
             }
         }
 
-        LazyRow(
+        Row(
             modifier = Modifier
-                .padding(top = 8.dp, start = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
         ) {
-            itemsIndexed(pages) { index, item ->
-                Column(
-                    modifier = Modifier
-                        .width(IntrinsicSize.Min)
-                        .clickableWithNoRipple {
-                            scope.launch {
-                                pagerState.animateScrollToPage(index)
-                            }
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickableWithNoRipple {
+                        scope.launch {
+                            index = 0
+                            pagerState.animateScrollToPage(index)
                         }
-                ) {
-                    Text(
-                        modifier = Modifier
-                            .width(IntrinsicSize.Max)
-                            .padding(top = 12.dp, bottom = 11.dp),
-                        text = if (index == 0) {
-                            if (photoReviews.isNotEmpty()) {
-                                "$item ${photoReviews.size}"
-                            } else {
-                                item
-                            }
-                        } else {
-                            if (textReviews.isNotEmpty()) {
-                                "$item ${textReviews.size}"
-                            } else {
-                                item
-                            }
-                        },
-                        style = Typography.H3,
-                        color = if (pagerState.currentPage == index) Colors.Neutral800 else Colors.Neutral300,
-                        textAlign = TextAlign.Center
-                    )
+                    }
+            ) {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 12.dp, bottom = 11.dp),
+                    text = pages[0],
+                    style = Typography.H3,
+                    color = if (index == 0) Colors.Neutral800 else Colors.Neutral300,
+                    textAlign = TextAlign.Center
+                )
 
-                    Box(
-                        modifier = Modifier
-                            .height(3.dp)
-                            .fillMaxWidth()
-                            .background(
-                                color = if (pagerState.currentPage == index) Colors.Neutral800 else Colors.Transparency
-                            )
-                    )
-                }
+                Box(
+                    modifier = Modifier
+                        .height(1.dp)
+                        .fillMaxWidth()
+                        .background(
+                            color = if (index == 0) Colors.Neutral800 else Colors.Transparency
+                        )
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickableWithNoRipple {
+                        scope.launch {
+                            index = 1
+                            pagerState.animateScrollToPage(index)
+                        }
+                    }
+            ) {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 12.dp, bottom = 11.dp),
+                    text = pages[1],
+                    style = Typography.H3,
+                    color = if (index == 1) Colors.Neutral800 else Colors.Neutral300,
+                    textAlign = TextAlign.Center
+                )
+
+                Box(
+                    modifier = Modifier
+                        .height(1.dp)
+                        .fillMaxWidth()
+                        .background(
+                            color = if (index == 1) Colors.Neutral800 else Colors.Transparency
+                        )
+                )
             }
         }
 
