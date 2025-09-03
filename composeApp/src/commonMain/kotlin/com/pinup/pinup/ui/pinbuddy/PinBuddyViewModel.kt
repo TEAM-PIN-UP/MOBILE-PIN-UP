@@ -1,8 +1,6 @@
 package com.pinup.pinup.ui.pinbuddy
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.Pagination
 import com.pinup.pinup.domain.model.PinBuddyRequest
 import com.pinup.pinup.domain.model.Profile
@@ -14,11 +12,9 @@ import com.pinup.pinup.domain.usecase.GetPinBuddiesUseCase
 import com.pinup.pinup.domain.usecase.GetReceivePinBuddyRequestsUseCase
 import com.pinup.pinup.domain.usecase.GetSentPinBuddyRequestsUseCase
 import com.pinup.pinup.domain.usecase.RejectPinBuddyUseCase
-import com.pinup.pinup.platform.hLog
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import com.pinup.pinup.ui.base.BaseViewModel
+import com.pinup.pinup.ui.base.UiEvent
+import com.pinup.pinup.ui.base.UiState
 import kotlinx.coroutines.launch
 
 
@@ -30,16 +26,13 @@ class PinBuddyViewModel (
     private val deleteRequestPinBuddyUseCase: DeleteRequestPinBuddyUseCase,
     private val acceptPinBuddyUseCase: AcceptPinBuddyUseCase,
     private val rejectPinBuddyUseCase: RejectPinBuddyUseCase,
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(PinBuddyUiState())
-    val uiState: StateFlow<PinBuddyUiState>
-        get() = _uiState.asStateFlow()
+) : BaseViewModel<PinBuddyUiState, UiEvent>(PinBuddyUiState()) {
     private val pinBuddyPagination = Pagination()
     private val sentPinBuddyPagination = Pagination()
     private val receivePinBuddyPagination = Pagination()
 
     init {
-        initPinBuddies()
+       // initPinBuddies()
     }
 
     private fun initPinBuddies() = viewModelScope.launch {
@@ -47,9 +40,8 @@ class PinBuddyViewModel (
         val sentPinBuddyRequests = getSentPinBuddyRequestsUseCase(sentPinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE).getSuccessOrNull() ?: return@launch
         val receivePinBuddyRequests = getReceivePinBuddyRequestsUseCase(receivePinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE).getSuccessOrNull() ?: return@launch
 
-
-        _uiState.update {
-            it.copy(
+        updateState {
+            copy(
                 pinBuddies = pinBuddies.profiles,
                 sentPinBuddyRequests = sentPinBuddyRequests.pinBuddyRequests,
                 receivePinBuddyRequests = receivePinBuddyRequests.pinBuddyRequests,
@@ -58,93 +50,79 @@ class PinBuddyViewModel (
     }
 
     fun deletePinBuddy(friendId: Int) = viewModelScope.launch {
-        when (val result = deletePinBuddyUseCase(friendId.toString())) {
-            is PResult.Fail -> {
-                hLog("result >>> ${result.failState}")
-            }
-            is PResult.Success -> {
+        resultResponse(
+            response = deletePinBuddyUseCase(friendId.toString()),
+            successCallback = {
                 updatePinBuddies()
             }
-        }
+        )
     }
 
     fun deletePinBuddyRequest(memberId: Int) = viewModelScope.launch {
-        when (val result = deleteRequestPinBuddyUseCase(memberId)) {
-            is PResult.Fail -> {
-                hLog("result >>> ${result.failState}")
-            }
-            is PResult.Success -> {
+        resultResponse(
+            response = deleteRequestPinBuddyUseCase(memberId),
+            successCallback = {
                 updatePinBuddyRequests()
             }
-        }
+        )
     }
 
     fun acceptPinBuddy(friendRequestId: Int) = viewModelScope.launch {
-        when (val result = acceptPinBuddyUseCase(friendRequestId)) {
-            is PResult.Fail -> {
-                hLog("result >>> ${result.failState}")
-            }
-            is PResult.Success -> {
+        resultResponse(
+            response = acceptPinBuddyUseCase(friendRequestId),
+            successCallback = {
                 updatePinBuddies()
                 updateReceivePinBuddyRequests()
             }
-        }
+        )
     }
 
     fun rejectPinBuddy(friendRequestId: Int) = viewModelScope.launch {
-        when (val result = rejectPinBuddyUseCase(friendRequestId)) {
-            is PResult.Fail -> {
-                hLog("result >>> ${result.failState}")
-            }
-            is PResult.Success -> {
+        resultResponse(
+            response = rejectPinBuddyUseCase(friendRequestId),
+            successCallback = {
                 updateReceivePinBuddyRequests()
             }
-        }
+        )
     }
 
     private fun updateReceivePinBuddyRequests() = viewModelScope.launch {
-        when (val result = getReceivePinBuddyRequestsUseCase(sentPinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE)) {
-            is PResult.Fail -> {
-                hLog("result >>> ${result.failState}")
-            }
-            is PResult.Success -> {
-                _uiState.update {
-                    it.copy(
-                        receivePinBuddyRequests = result.data.pinBuddyRequests,
+        resultResponse(
+            response = getReceivePinBuddyRequestsUseCase(sentPinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE),
+            successCallback = {
+                updateState {
+                    copy(
+                        receivePinBuddyRequests = it.pinBuddyRequests
                     )
                 }
             }
-        }
+        )
     }
 
     private fun updatePinBuddies() = viewModelScope.launch {
-        when (val result = getPinBuddiesUseCase(pinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE)) {
-            is PResult.Fail -> {
-                hLog("result >>> ${result.failState}")
-            }
-            is PResult.Success -> {
-                _uiState.update {
-                    it.copy(
-                        pinBuddies = result.data.profiles,
+        resultResponse(
+            response = getPinBuddiesUseCase(pinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE),
+            successCallback = {
+                updateState {
+                    copy(
+                        pinBuddies = it.profiles,
                     )
                 }
             }
-        }
+        )
     }
 
     private fun updatePinBuddyRequests() = viewModelScope.launch {
-        when (val result = getSentPinBuddyRequestsUseCase(sentPinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE)) {
-            is PResult.Fail -> {
-                hLog("result >>> ${result.failState}")
-            }
-            is PResult.Success -> {
-                _uiState.update {
-                    it.copy(
-                        sentPinBuddyRequests = result.data.pinBuddyRequests,
+        resultResponse(
+            response = getSentPinBuddyRequestsUseCase(sentPinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE),
+            successCallback = {
+                updateState {
+                    copy(
+                        sentPinBuddyRequests = it.pinBuddyRequests,
                     )
                 }
             }
-        }
+        )
     }
 }
 
@@ -152,4 +130,4 @@ data class PinBuddyUiState(
     val pinBuddies: List<Profile> = emptyList(),
     val sentPinBuddyRequests: List<PinBuddyRequest> = emptyList(),
     val receivePinBuddyRequests: List<PinBuddyRequest> = emptyList(),
-)
+) : UiState
