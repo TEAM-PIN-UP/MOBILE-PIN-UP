@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -59,6 +60,7 @@ fun PinBuddyScreen(
 ) {
     val isShowCompleteDialog = remember { mutableStateOf<Pair<Boolean, Int?>>(false to null) }
     val pages = remember { listOf(Texts.Word.PIN_BUDDY, Texts.PROFILE.RECEIVE_REQUEST , Texts.PROFILE.SENT_REQUEST) }
+    val listSize = remember { listOf(pinBuddies.size, receivePinBuddyRequests.size, sentPinBuddyRequests.size) }
     val pagerState = rememberPagerState{ pages.size }
 
     Column(
@@ -102,7 +104,7 @@ fun PinBuddyScreen(
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            text = item,
+                            text = "$item ${listSize[index]}",
                             style = if (pagerState.currentPage == index) Typography.B1.copy(fontWeight = FontWeight.SemiBold)
                                     else Typography.T2.copy(fontWeight = FontWeight.Medium),
                             color = if (pagerState.currentPage == index) Colors.Gray800 else Colors.Gray300,
@@ -189,68 +191,41 @@ private fun PinBuddyList(
     onProfileClick: (Int) -> Unit,
     onDeletePinBuddy: (Int) -> Unit,
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
             .padding(horizontal = 20.dp)
+            .padding(top = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .padding(top = 12.dp, bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "나의 핀버디",
-                style = Typography.H3,
-                color = Colors.Neutral800,
-            )
-
-            if (pinBuddies.isNotEmpty()) {
-                Text(
-                    modifier = Modifier
-                        .padding(start = 4.dp),
-                    text = pinBuddies.size.toString(),
-                    style = Typography.H3,
-                    color = Colors.Neutral400,
-                )
-            }
-        }
-
-        LazyColumn(
-            modifier = Modifier
-                .padding(top = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            items(pinBuddies) {
-                UserCard(
-                    modifier = Modifier
-                        .clickableSingleWithNoRipple {
-                            onProfileClick(it.memberId)
-                        },
-                    imgUrl = it.profilePictureUrl,
-                    nickname = it.nickname,
-                    reviewCount = it.reviewCount,
-                    pinBuddyCount = it.pinBuddyCount,
-                    buttonContainer = {
-                        RoundedBox(
+        items(pinBuddies) {
+            UserCard(
+                modifier = Modifier
+                    .clickableSingleWithNoRipple {
+                        onProfileClick(it.memberId)
+                    },
+                imgUrl = it.profilePictureUrl,
+                nickname = it.nickname,
+                buttonContainer = {
+                    RoundedBox(
+                        modifier = Modifier
+                            .clickableSingleWithNoRipple {
+                                onDeletePinBuddy(it.memberId)
+                            },
+                        cornerRounded = 8,
+                        backgroundColor = Colors.Gray200,
+                    ) {
+                        Text(
                             modifier = Modifier
-                                .clickableSingleWithNoRipple {
-                                    onDeletePinBuddy(it.memberId)
-                                },
-                            cornerRounded = 6,
-                            backgroundColor = Colors.Neutral100,
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(vertical = 8.dp, horizontal = 12.dp),
-                                text = "삭제",
-                                color = Colors.Neutral800,
-                                style = Typography.H6
+                                .padding(vertical = 8.dp, horizontal = 12.dp),
+                            text = Texts.Word.DELETE,
+                            color = Colors.Gray500,
+                            style = Typography.L1.copy(
+                                fontWeight = FontWeight.SemiBold
                             )
-                        }
+                        )
                     }
-                )
-            }
+                }
+            )
         }
     }
 }
@@ -261,68 +236,41 @@ private fun SentPinBuddyRequestList(
     onProfileClick: (Int) -> Unit,
     onDeletePinBuddyRequest: (Int) -> Unit,
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
             .padding(horizontal = 20.dp)
+            .padding(top = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .padding(top = 12.dp, bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "보낸 신청",
-                style = Typography.H3,
-                color = Colors.Neutral800,
-            )
-
-            if (sentPinBuddyRequests.isNotEmpty()) {
-                Text(
-                    modifier = Modifier
-                        .padding(start = 4.dp),
-                    text = sentPinBuddyRequests.size.toString(),
-                    style = Typography.H3,
-                    color = Colors.Neutral400,
-                )
-            }
-        }
-
-        LazyColumn(
-            modifier = Modifier
-                .padding(top = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            items(sentPinBuddyRequests) {
-                UserCard(
-                    modifier = Modifier
-                        .clickableSingleWithNoRipple {
-                            onProfileClick(it.receiver.memberId)
-                        },
-                    imgUrl = it.receiver.profilePictureUrl,
-                    nickname = it.receiver.nickname,
-                    reviewCount = it.receiver.reviewCount,
-                    pinBuddyCount = it.receiver.pinBuddyCount,
-                    buttonContainer = {
-                        RoundedBox(
+        items(sentPinBuddyRequests) {
+            UserCard(
+                modifier = Modifier
+                    .clickableSingleWithNoRipple {
+                        onProfileClick(it.receiver.memberId)
+                    },
+                imgUrl = it.receiver.profilePictureUrl,
+                nickname = it.receiver.nickname,
+                buttonContainer = {
+                    RoundedBox(
+                        modifier = Modifier
+                            .clickableSingleWithNoRipple {
+                                onDeletePinBuddyRequest(it.id)
+                            },
+                        cornerRounded = 8,
+                        backgroundColor = Colors.Gray200,
+                    ) {
+                        Text(
                             modifier = Modifier
-                                .clickableSingleWithNoRipple {
-                                    onDeletePinBuddyRequest(it.id)
-                                },
-                            cornerRounded = 6,
-                            backgroundColor = Colors.Neutral100,
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(vertical = 8.dp, horizontal = 12.dp),
-                                text = "신청 취소",
-                                color = Colors.Neutral800,
-                                style = Typography.H6
+                                .padding(vertical = 8.dp, horizontal = 12.dp),
+                            text = Texts.PROFILE.CANCEL_SENT_REQUEST,
+                            color = Colors.Gray500,
+                            style = Typography.L1.copy(
+                                fontWeight = FontWeight.SemiBold
                             )
-                        }
+                        )
                     }
-                )
-            }
+                }
+            )
         }
     }
 }
@@ -334,88 +282,65 @@ private fun ReceivePinBuddyRequestList(
     onRejectClick: (Int) -> Unit,
     onAcceptClick: (Int) -> Unit,
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
             .padding(horizontal = 20.dp)
+            .padding(top = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .padding(top = 12.dp, bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "받은 신청",
-                style = Typography.H3,
-                color = Colors.Neutral800,
-            )
-
-            if (receivePinBuddyRequests.isNotEmpty()) {
-                Text(
-                    modifier = Modifier
-                        .padding(start = 4.dp),
-                    text = receivePinBuddyRequests.size.toString(),
-                    style = Typography.H3,
-                    color = Colors.Neutral400,
-                )
-            }
-        }
-
-        LazyColumn(
-            modifier = Modifier
-                .padding(top = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            items(receivePinBuddyRequests) {
-                UserCard(
-                    modifier = Modifier
-                        .clickableSingleWithNoRipple {
-                            onProfileClick(it.sender.memberId)
-                        },
-                    imgUrl = it.sender.profilePictureUrl,
-                    nickname = it.sender.nickname,
-                    reviewCount = it.sender.reviewCount,
-                    pinBuddyCount = it.sender.pinBuddyCount,
-                    buttonContainer = {
-                        Row {
-                            RoundedBox(
+        items(receivePinBuddyRequests) {
+            UserCard(
+                modifier = Modifier
+                    .clickableSingleWithNoRipple {
+                        onProfileClick(it.sender.memberId)
+                    },
+                imgUrl = it.sender.profilePictureUrl,
+                nickname = it.sender.nickname,
+                buttonContainer = {
+                    Row {
+                        RoundedBox(
+                            modifier = Modifier
+                                .clickableSingleWithNoRipple {
+                                    onAcceptClick(it.id)
+                                },
+                            cornerRounded = 8,
+                            backgroundColor = Colors.Gray800,
+                        ) {
+                            Text(
                                 modifier = Modifier
-                                    .clickableSingleWithNoRipple {
-                                        onAcceptClick(it.id)
-                                    },
-                                cornerRounded = 6,
-                                backgroundColor = Colors.Neutral100,
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .padding(vertical = 8.dp, horizontal = 12.dp),
-                                    text = "수락",
-                                    color = Colors.Neutral800,
-                                    style = Typography.H6
+                                    .padding(vertical = 8.dp, horizontal = 12.dp),
+                                text = Texts.Word.ACCEPT,
+                                color = Colors.Gray100,
+                                style = Typography.L1.copy(
+                                    fontWeight = FontWeight.SemiBold
                                 )
-                            }
-                            RoundedBox(
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(10.dp))
+
+                        RoundedBox(
+                            modifier = Modifier
+                                .clickableSingleWithNoRipple {
+                                    onRejectClick(it.id)
+                                },
+                            cornerRounded = 6,
+                            cornerColor = Colors.Gray200,
+                            backgroundColor = Colors.Gray200
+                        ) {
+                            Text(
                                 modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .clickableSingleWithNoRipple {
-                                        onRejectClick(it.id)
-                                    },
-                                cornerRounded = 6,
-                                cornerColor = Colors.Neutral100,
-                                backgroundColor = Colors.White
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .padding(vertical = 8.dp, horizontal = 12.dp),
-                                    text = "거절",
-                                    color = Colors.Neutral800,
-                                    style = Typography.H6
+                                    .padding(vertical = 8.dp, horizontal = 12.dp),
+                                text = Texts.Word.REFUSE,
+                                color = Colors.Gray500,
+                                style = Typography.L1.copy(
+                                    fontWeight = FontWeight.SemiBold
                                 )
-                            }
+                            )
                         }
                     }
-                )
-            }
+                }
+            )
         }
     }
 }

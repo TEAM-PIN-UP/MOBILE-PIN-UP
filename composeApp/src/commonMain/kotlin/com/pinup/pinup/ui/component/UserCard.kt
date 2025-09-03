@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
@@ -17,8 +19,6 @@ import com.pinup.pinup.ui.theme.Typography
 fun UserCard(
     imgUrl: String?,
     nickname: String,
-    reviewCount: Int,
-    pinBuddyCount: Int,
     modifier: Modifier = Modifier,
     buttonContainer: @Composable () -> Unit = {}
 ) {
@@ -32,56 +32,15 @@ fun UserCard(
             size = 40.dp
         )
 
-        Column(
-            modifier = Modifier
-                .padding(start = 8.dp)
-        ) {
-            Text(
-                text = nickname,
-                color = Colors.Neutral800,
-                style = Typography.B3
-            )
+        Spacer(modifier = Modifier.width(8.dp))
 
-            Row(
-                modifier = Modifier
-                    .padding(top = 4.dp),
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "리뷰",
-                        color = Colors.Neutral400,
-                        style = Typography.B5
-                    )
-                    Text(
-                        modifier = Modifier
-                            .padding(start = 2.dp),
-                        text = reviewCount.toString(),
-                        color = Colors.Neutral800,
-                        style = Typography.B5
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .padding(start = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "핀버디",
-                        color = Colors.Neutral400,
-                        style = Typography.B5
-                    )
-                    Text(
-                        modifier = Modifier
-                            .padding(start = 2.dp),
-                        text = pinBuddyCount.toString(),
-                        color = Colors.Neutral800,
-                        style = Typography.B5
-                    )
-                }
-            }
-        }
+        Text(
+            text = nickname,
+            color = Colors.Gray800,
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.SemiBold
+            )
+        )
 
         Spacer(Modifier.weight(1f))
 

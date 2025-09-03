@@ -24,12 +24,15 @@ object Texts {
         const val MY = "마이"
         const val RATING = "별점"
         const val DO_RETURN = "돌아가기"
+        const val DELETE = "삭제"
         const val DO_DELETE = "삭제하기"
         const val COMMENT = "댓글"
         const val DO_REPLY_COMMENT = "답글달기"
         const val SEE_MORE = "자세히 보기"
         const val PIN_BUDDY = "핀버디"
         const val SCRAP = "스크랩"
+        const val ACCEPT = "수락"
+        const val REFUSE = "거절"
     }
 
     object Onboarding {
@@ -161,6 +164,7 @@ object Texts {
         const val ADD_PIN_BUDDY = "핀버디 추가"
         const val RECEIVE_REQUEST = "받은 신청"
         const val SENT_REQUEST = "보낸 신청"
+        const val CANCEL_SENT_REQUEST = "신청 취소"
     }
 
     object Toast {
