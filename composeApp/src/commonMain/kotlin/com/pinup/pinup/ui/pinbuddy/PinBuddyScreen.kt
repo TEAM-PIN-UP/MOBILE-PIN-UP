@@ -5,16 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
@@ -43,6 +40,8 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.text.font.FontWeight
+import com.pinup.pinup.ui.theme.Texts
 
 @Composable
 fun PinBuddyScreen(
@@ -59,7 +58,7 @@ fun PinBuddyScreen(
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     val isShowCompleteDialog = remember { mutableStateOf<Pair<Boolean, Int?>>(false to null) }
-    val pages = remember { listOf("핀버디","받은 신청","보낸 신청") }
+    val pages = remember { listOf(Texts.Word.PIN_BUDDY, Texts.PROFILE.RECEIVE_REQUEST , Texts.PROFILE.SENT_REQUEST) }
     val pagerState = rememberPagerState{ pages.size }
 
     Column(
@@ -68,7 +67,9 @@ fun PinBuddyScreen(
             .fillMaxSize()
     ) {
         TitleBar(
-            title = "핀버디",
+            modifier = Modifier
+                .padding(start = 20.dp),
+            title = Texts.Word.PIN_BUDDY,
             onLeftButtonClick = {
                 onBackPressed()
             }
@@ -76,36 +77,40 @@ fun PinBuddyScreen(
 
         PHorizontalDivider()
 
-        LazyRow(
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
             modifier = Modifier
-                .padding(top = 8.dp, start = 20.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            itemsIndexed(pages) { index, item ->
+            pages.forEachIndexed{ index, item ->
                 Column(
                     modifier = Modifier
-                        .width(IntrinsicSize.Min)
+                        .weight(1f)
                         .clickableWithNoRipple {
                             scope.launch {
                                 pagerState.animateScrollToPage(index)
                             }
                         }
                 ) {
-                    Row {
+                    Row(
+                        modifier = Modifier
+                            .padding(top = 12.dp, bottom = 11.dp),
+                    ) {
                         Text(
                             modifier = Modifier
-                                .width(IntrinsicSize.Max)
-                                .padding(top = 12.dp, bottom = 11.dp),
+                                .fillMaxWidth(),
                             text = item,
-                            style = Typography.H3,
-                            color = if (pagerState.currentPage == index) Colors.Neutral800 else Colors.Neutral300,
+                            style = if (pagerState.currentPage == index) Typography.B1.copy(fontWeight = FontWeight.SemiBold)
+                                    else Typography.T2.copy(fontWeight = FontWeight.Medium),
+                            color = if (pagerState.currentPage == index) Colors.Gray800 else Colors.Gray300,
                             textAlign = TextAlign.Center
                         )
 
-                        if (index == 1 && receivePinBuddyRequests.isNotEmpty()) {
+                        if (receivePinBuddyRequests.isNotEmpty()) {
                             Image(
-                                modifier = Modifier
-                                    .padding(top = 12.dp),
                                 painter = painterResource(Res.drawable.ic_new_alarm),
                                 contentDescription = "new pinBuddy request"
                             )
@@ -114,10 +119,10 @@ fun PinBuddyScreen(
 
                     Box(
                         modifier = Modifier
-                            .height(3.dp)
+                            .height(1.dp)
                             .fillMaxWidth()
                             .background(
-                                color = if (pagerState.currentPage == index) Colors.Neutral800 else Colors.Transparency
+                                color = if (pagerState.currentPage == index) Colors.Gray800 else Colors.Transparency
                             )
                     )
                 }

@@ -356,8 +356,8 @@ fun MyScreen(
                             .align(Alignment.CenterHorizontally)
                             .padding(top = 12.dp, bottom = 11.dp),
                         text = Texts.Word.PINLOG,
-                        style = Typography.H3,
-                        color = if (index == 0) Colors.Neutral800 else Colors.Neutral300,
+                        style = if (index == 0) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(fontWeight = FontWeight.Medium),
+                        color = if (index == 0) Colors.Gray800 else Colors.Gray300,
                         textAlign = TextAlign.Center
                     )
 
@@ -366,7 +366,7 @@ fun MyScreen(
                             .height(1.dp)
                             .fillMaxWidth()
                             .background(
-                                color = if (index == 0) Colors.Neutral800 else Colors.Transparency
+                                color = if (index == 0) Colors.Gray800 else Colors.Transparency
                             )
                     )
                 }
@@ -386,8 +386,8 @@ fun MyScreen(
                             .align(Alignment.CenterHorizontally)
                             .padding(top = 12.dp, bottom = 11.dp),
                         text = Texts.Word.SCRAP,
-                        style = Typography.H3,
-                        color = if (index == 1) Colors.Neutral800 else Colors.Neutral300,
+                        style = if (index == 1) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(fontWeight = FontWeight.Medium),
+                        color = if (index == 1) Colors.Gray800 else Colors.Gray300,
                         textAlign = TextAlign.Center
                     )
 
@@ -396,7 +396,7 @@ fun MyScreen(
                             .height(1.dp)
                             .fillMaxWidth()
                             .background(
-                                color = if (index == 1) Colors.Neutral800 else Colors.Transparency
+                                color = if (index == 1) Colors.Gray800 else Colors.Transparency
                             )
                     )
                 }
