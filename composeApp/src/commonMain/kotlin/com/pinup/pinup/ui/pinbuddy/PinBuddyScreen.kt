@@ -40,6 +40,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
 import com.pinup.pinup.ui.theme.Texts
 
@@ -190,41 +191,65 @@ private fun PinBuddyList(
     onProfileClick: (Int) -> Unit,
     onDeletePinBuddy: (Int) -> Unit,
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .padding(horizontal = 20.dp)
-            .padding(top = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
-        items(pinBuddies) {
-            UserCard(
-                modifier = Modifier
-                    .clickableSingleWithNoRipple {
-                        onProfileClick(it.memberId)
-                    },
-                imgUrl = it.profilePictureUrl,
-                nickname = it.nickname,
-                buttonContainer = {
-                    RoundedBox(
-                        modifier = Modifier
-                            .clickableSingleWithNoRipple {
-                                onDeletePinBuddy(it.memberId)
-                            },
-                        cornerRounded = 8,
-                        backgroundColor = Colors.Gray200,
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(vertical = 8.dp, horizontal = 12.dp),
-                            text = Texts.Word.DELETE,
-                            color = Colors.Gray500,
-                            style = Typography.L1.copy(
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        )
-                    }
-                }
+    if (pinBuddies.isEmpty()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.ic_empty_pin_buddy),
+                contentDescription = null
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = Texts.PROFILE.EMPTY_PIN_BUDDY,
+                color = Colors.Gray400,
+                style = Typography.B1.copy(
+                    fontWeight = FontWeight.SemiBold
+                )
+            )
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .padding(top = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
+            items(pinBuddies) {
+                UserCard(
+                    modifier = Modifier
+                        .clickableSingleWithNoRipple {
+                            onProfileClick(it.memberId)
+                        },
+                    imgUrl = it.profilePictureUrl,
+                    nickname = it.nickname,
+                    buttonContainer = {
+                        RoundedBox(
+                            modifier = Modifier
+                                .clickableSingleWithNoRipple {
+                                    onDeletePinBuddy(it.memberId)
+                                },
+                            cornerRounded = 8,
+                            backgroundColor = Colors.Gray200,
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(vertical = 8.dp, horizontal = 12.dp),
+                                text = Texts.Word.DELETE,
+                                color = Colors.Gray500,
+                                style = Typography.L1.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            )
+                        }
+                    }
+                )
+            }
         }
     }
 }
@@ -235,41 +260,65 @@ private fun SentPinBuddyRequestList(
     onProfileClick: (Int) -> Unit,
     onDeletePinBuddyRequest: (Int) -> Unit,
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .padding(horizontal = 20.dp)
-            .padding(top = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
-        items(sentPinBuddyRequests) {
-            UserCard(
-                modifier = Modifier
-                    .clickableSingleWithNoRipple {
-                        onProfileClick(it.receiver.memberId)
-                    },
-                imgUrl = it.receiver.profilePictureUrl,
-                nickname = it.receiver.nickname,
-                buttonContainer = {
-                    RoundedBox(
-                        modifier = Modifier
-                            .clickableSingleWithNoRipple {
-                                onDeletePinBuddyRequest(it.id)
-                            },
-                        cornerRounded = 8,
-                        backgroundColor = Colors.Gray200,
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(vertical = 8.dp, horizontal = 12.dp),
-                            text = Texts.PROFILE.CANCEL_SENT_REQUEST,
-                            color = Colors.Gray500,
-                            style = Typography.L1.copy(
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        )
-                    }
-                }
+    if (sentPinBuddyRequests.isEmpty()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.ic_empty_pin_buddy),
+                contentDescription = null
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = Texts.PROFILE.EMPTY_SENT_PIN_BUDDY,
+                color = Colors.Gray400,
+                style = Typography.B1.copy(
+                    fontWeight = FontWeight.SemiBold
+                )
+            )
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .padding(top = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
+            items(sentPinBuddyRequests) {
+                UserCard(
+                    modifier = Modifier
+                        .clickableSingleWithNoRipple {
+                            onProfileClick(it.receiver.memberId)
+                        },
+                    imgUrl = it.receiver.profilePictureUrl,
+                    nickname = it.receiver.nickname,
+                    buttonContainer = {
+                        RoundedBox(
+                            modifier = Modifier
+                                .clickableSingleWithNoRipple {
+                                    onDeletePinBuddyRequest(it.id)
+                                },
+                            cornerRounded = 8,
+                            backgroundColor = Colors.Gray200,
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(vertical = 8.dp, horizontal = 12.dp),
+                                text = Texts.PROFILE.CANCEL_SENT_REQUEST,
+                                color = Colors.Gray500,
+                                style = Typography.L1.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            )
+                        }
+                    }
+                )
+            }
         }
     }
 }
@@ -281,65 +330,89 @@ private fun ReceivePinBuddyRequestList(
     onRejectClick: (Int) -> Unit,
     onAcceptClick: (Int) -> Unit,
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .padding(horizontal = 20.dp)
-            .padding(top = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
-    ) {
-        items(receivePinBuddyRequests) {
-            UserCard(
-                modifier = Modifier
-                    .clickableSingleWithNoRipple {
-                        onProfileClick(it.sender.memberId)
-                    },
-                imgUrl = it.sender.profilePictureUrl,
-                nickname = it.sender.nickname,
-                buttonContainer = {
-                    Row {
-                        RoundedBox(
-                            modifier = Modifier
-                                .clickableSingleWithNoRipple {
-                                    onAcceptClick(it.id)
-                                },
-                            cornerRounded = 8,
-                            backgroundColor = Colors.Gray800,
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(vertical = 8.dp, horizontal = 12.dp),
-                                text = Texts.Word.ACCEPT,
-                                color = Colors.Gray100,
-                                style = Typography.L1.copy(
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            )
-                        }
+    if (receivePinBuddyRequests.isEmpty()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.ic_empty_pin_buddy),
+                contentDescription = null
+            )
 
-                        Spacer(modifier = Modifier.width(10.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-                        RoundedBox(
-                            modifier = Modifier
-                                .clickableSingleWithNoRipple {
-                                    onRejectClick(it.id)
-                                },
-                            cornerRounded = 6,
-                            cornerColor = Colors.Gray200,
-                            backgroundColor = Colors.Gray200
-                        ) {
-                            Text(
+            Text(
+                text = Texts.PROFILE.EMPTY_RECEIVE_PIN_BUDDY,
+                color = Colors.Gray400,
+                style = Typography.B1.copy(
+                    fontWeight = FontWeight.SemiBold
+                )
+            )
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .padding(top = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
+        ) {
+            items(receivePinBuddyRequests) {
+                UserCard(
+                    modifier = Modifier
+                        .clickableSingleWithNoRipple {
+                            onProfileClick(it.sender.memberId)
+                        },
+                    imgUrl = it.sender.profilePictureUrl,
+                    nickname = it.sender.nickname,
+                    buttonContainer = {
+                        Row {
+                            RoundedBox(
                                 modifier = Modifier
-                                    .padding(vertical = 8.dp, horizontal = 12.dp),
-                                text = Texts.Word.REFUSE,
-                                color = Colors.Gray500,
-                                style = Typography.L1.copy(
-                                    fontWeight = FontWeight.SemiBold
+                                    .clickableSingleWithNoRipple {
+                                        onAcceptClick(it.id)
+                                    },
+                                cornerRounded = 8,
+                                backgroundColor = Colors.Gray800,
+                            ) {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(vertical = 8.dp, horizontal = 12.dp),
+                                    text = Texts.Word.ACCEPT,
+                                    color = Colors.Gray100,
+                                    style = Typography.L1.copy(
+                                        fontWeight = FontWeight.SemiBold
+                                    )
                                 )
-                            )
+                            }
+
+                            Spacer(modifier = Modifier.width(10.dp))
+
+                            RoundedBox(
+                                modifier = Modifier
+                                    .clickableSingleWithNoRipple {
+                                        onRejectClick(it.id)
+                                    },
+                                cornerRounded = 6,
+                                cornerColor = Colors.Gray200,
+                                backgroundColor = Colors.Gray200
+                            ) {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(vertical = 8.dp, horizontal = 12.dp),
+                                    text = Texts.Word.REFUSE,
+                                    color = Colors.Gray500,
+                                    style = Typography.L1.copy(
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                )
+                            }
                         }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }

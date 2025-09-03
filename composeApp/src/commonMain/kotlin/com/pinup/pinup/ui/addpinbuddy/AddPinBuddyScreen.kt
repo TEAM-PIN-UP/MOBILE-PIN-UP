@@ -124,8 +124,6 @@ fun AddPinBuddyScreen(
                             UserCard(
                                 imgUrl = it.profile.profilePictureUrl,
                                 nickname = it.profile.nickname,
-                                reviewCount = it.profile.reviewCount,
-                                pinBuddyCount = it.profile.pinBuddyCount,
                                 buttonContainer = {
                                     RoundedBox(
                                         modifier = Modifier

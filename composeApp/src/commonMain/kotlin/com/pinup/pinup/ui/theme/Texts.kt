@@ -167,6 +167,9 @@ object Texts {
         const val CANCEL_SENT_REQUEST = "신청 취소"
         const val DIALOG_DELETE_PIN_BUDDY_TITLE = "핀버디를 삭제할까요?"
         const val DIALOG_DELETE_PIN_BUDDY_DESCRIPTION = "삭제한 핀버디에게 언제든지\n다시 핀버디를 신청할 수 있습니다."
+        const val EMPTY_PIN_BUDDY = "아직 핀버디가 없어요!\n먼저 핀버디를 신청해 보는 건 어때요?"
+        const val EMPTY_RECEIVE_PIN_BUDDY = "받은 핀버디 신청이 없어요.\n핀버디 신청이 오면 이곳에 표시돼요!"
+        const val EMPTY_SENT_PIN_BUDDY = "보낸 신청이 없어요.\n나와 취향이 비슷한 핀버디를 찾아보세요!"
     }
 
     object Toast {
