@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -168,10 +167,10 @@ fun PinBuddyScreen(
 
     if (isShowCompleteDialog.value.first) {
         PDialog(
-            titleText = "핀버디를 삭제 하시겠어요?",
-            descriptionText = "핀버디 삭제 시 재요청해야\n다시 핀버디를 맺을 수 있어요",
-            leftButtonText = "취소",
-            rightButtonText = "삭제",
+            titleText = Texts.PROFILE.DIALOG_DELETE_PIN_BUDDY_TITLE,
+            descriptionText = Texts.PROFILE.DIALOG_DELETE_PIN_BUDDY_DESCRIPTION,
+            leftButtonText = Texts.Word.DO_RETURN,
+            rightButtonText = Texts.Word.DO_DELETE,
             onLeftButtonClick = {
                 isShowCompleteDialog.value = false to null
             },

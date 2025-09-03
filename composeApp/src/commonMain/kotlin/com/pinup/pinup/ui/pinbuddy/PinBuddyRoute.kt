@@ -1,9 +1,14 @@
 package com.pinup.pinup.ui.pinbuddy
 
+import PToastHost
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pinup.pinup.ui.theme.Texts
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
+import rememberSimpleToastState
 
 @Composable
 fun PinBuddyRoute(
@@ -12,6 +17,29 @@ fun PinBuddyRoute(
     pinBuddyViewModel: PinBuddyViewModel = koinViewModel()
 ) {
     val uiState = pinBuddyViewModel.uiState.collectAsStateWithLifecycle()
+    val toast = rememberSimpleToastState()
+
+    LaunchedEffect(Unit) {
+        pinBuddyViewModel.uiEvent.collectLatest {
+            when(it) {
+                PinBuddyUiEvent.SuccessAccept -> {
+                    toast.show(Texts.Toast.ACCEPT_PIN_BUDDY)
+                }
+                PinBuddyUiEvent.SuccessCancel -> {
+                    toast.show(Texts.Toast.CANCEL_PIN_BUDDY_REQEUST)
+                }
+                PinBuddyUiEvent.SuccessDelete -> {
+                    toast.show(Texts.Toast.DELETE_PIN_BUDDY)
+                }
+                PinBuddyUiEvent.SuccessRefuse -> {
+                    toast.show(Texts.Toast.REFUSE_PIN_BUDDY)
+                }
+            }
+        }
+    }
+
+    PToastHost(state = toast)
+
     PinBuddyScreen(
         pinBuddies = uiState.value.pinBuddies.toPersistentList(),
         sentPinBuddyRequests = uiState.value.sentPinBuddyRequests.toPersistentList(),

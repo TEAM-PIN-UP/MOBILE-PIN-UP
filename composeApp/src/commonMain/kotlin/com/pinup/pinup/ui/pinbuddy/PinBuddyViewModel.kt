@@ -26,7 +26,7 @@ class PinBuddyViewModel (
     private val deleteRequestPinBuddyUseCase: DeleteRequestPinBuddyUseCase,
     private val acceptPinBuddyUseCase: AcceptPinBuddyUseCase,
     private val rejectPinBuddyUseCase: RejectPinBuddyUseCase,
-) : BaseViewModel<PinBuddyUiState, UiEvent>(PinBuddyUiState()) {
+) : BaseViewModel<PinBuddyUiState, PinBuddyUiEvent>(PinBuddyUiState()) {
     private val pinBuddyPagination = Pagination()
     private val sentPinBuddyPagination = Pagination()
     private val receivePinBuddyPagination = Pagination()
@@ -53,6 +53,7 @@ class PinBuddyViewModel (
         resultResponse(
             response = deletePinBuddyUseCase(friendId.toString()),
             successCallback = {
+                emitEvent(PinBuddyUiEvent.SuccessDelete)
                 updatePinBuddies()
             }
         )
@@ -62,6 +63,7 @@ class PinBuddyViewModel (
         resultResponse(
             response = deleteRequestPinBuddyUseCase(memberId),
             successCallback = {
+                emitEvent(PinBuddyUiEvent.SuccessCancel)
                 updatePinBuddyRequests()
             }
         )
@@ -71,6 +73,7 @@ class PinBuddyViewModel (
         resultResponse(
             response = acceptPinBuddyUseCase(friendRequestId),
             successCallback = {
+                emitEvent(PinBuddyUiEvent.SuccessAccept)
                 updatePinBuddies()
                 updateReceivePinBuddyRequests()
             }
@@ -81,6 +84,7 @@ class PinBuddyViewModel (
         resultResponse(
             response = rejectPinBuddyUseCase(friendRequestId),
             successCallback = {
+                emitEvent(PinBuddyUiEvent.SuccessRefuse)
                 updateReceivePinBuddyRequests()
             }
         )
@@ -131,3 +135,10 @@ data class PinBuddyUiState(
     val sentPinBuddyRequests: List<PinBuddyRequest> = emptyList(),
     val receivePinBuddyRequests: List<PinBuddyRequest> = emptyList(),
 ) : UiState
+
+sealed interface PinBuddyUiEvent : UiEvent {
+    data object SuccessDelete : PinBuddyUiEvent
+    data object SuccessAccept : PinBuddyUiEvent
+    data object SuccessRefuse : PinBuddyUiEvent
+    data object SuccessCancel : PinBuddyUiEvent
+}

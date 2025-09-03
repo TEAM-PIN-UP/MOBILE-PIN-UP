@@ -165,9 +165,15 @@ object Texts {
         const val RECEIVE_REQUEST = "받은 신청"
         const val SENT_REQUEST = "보낸 신청"
         const val CANCEL_SENT_REQUEST = "신청 취소"
+        const val DIALOG_DELETE_PIN_BUDDY_TITLE = "핀버디를 삭제할까요?"
+        const val DIALOG_DELETE_PIN_BUDDY_DESCRIPTION = "삭제한 핀버디에게 언제든지\n다시 핀버디를 신청할 수 있습니다."
     }
 
     object Toast {
         const val DELETE_PINLOG = "핀로그가 삭제되었어요."
+        const val DELETE_PIN_BUDDY = "해당 핀버디가 삭제되었어요"
+        const val ACCEPT_PIN_BUDDY = "핀버디 신청을 수락했어요"
+        const val REFUSE_PIN_BUDDY = "핀버디 신청을 거절했어요"
+        const val CANCEL_PIN_BUDDY_REQEUST = "핀버디 신청을 취소했어요"
     }
 }
