@@ -11,6 +11,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
@@ -23,7 +24,9 @@ import pinup.composeapp.generated.resources.ic_back
 fun TitleBar(
     title : String = "",
     modifier: Modifier = Modifier,
-    onLeftButtonClick: () -> Unit = {}
+    onLeftButtonClick: () -> Unit = {},
+    rightIcon: Painter? = null,
+    onRightButtonClick: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -46,5 +49,17 @@ fun TitleBar(
             style = Typography.H3,
             color = Colors.Neutral800
         )
+
+        rightIcon?.let {
+            Image(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .clickableWithNoRipple {
+                        onRightButtonClick()
+                    },
+                painter = it,
+                contentDescription = null
+            )
+        }
     }
 }

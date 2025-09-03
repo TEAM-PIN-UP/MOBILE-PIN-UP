@@ -14,6 +14,7 @@ import rememberSimpleToastState
 fun PinBuddyRoute(
     onBackPressed: () -> Unit,
     onMoveUserProfile: (Int) -> Unit,
+    onClickSearch: () -> Unit = {},
     pinBuddyViewModel: PinBuddyViewModel = koinViewModel()
 ) {
     val uiState = pinBuddyViewModel.uiState.collectAsStateWithLifecycle()
@@ -49,6 +50,7 @@ fun PinBuddyRoute(
         onDeletePinBuddyRequest = pinBuddyViewModel::deletePinBuddyRequest,
         onProfileClick = onMoveUserProfile,
         onAcceptClick = pinBuddyViewModel::acceptPinBuddy,
-        onRejectClick = pinBuddyViewModel::rejectPinBuddy
+        onRejectClick = pinBuddyViewModel::rejectPinBuddy,
+        onClickSearch = onClickSearch
     )
 }

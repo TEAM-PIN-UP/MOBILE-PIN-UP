@@ -282,6 +282,9 @@ fun PinUpApp(
                         },
                         onMoveUserProfile = {
                             navHostController.navigate(PinUpAppDestination.UserProfile(it))
+                        },
+                        onClickSearch = {
+                            navHostController.navigate(PinUpAppDestination.AddPinBuddy)
                         }
                     )
                 }

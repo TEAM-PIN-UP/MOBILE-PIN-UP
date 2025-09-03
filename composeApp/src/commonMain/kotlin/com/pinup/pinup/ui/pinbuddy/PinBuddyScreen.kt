@@ -56,6 +56,7 @@ fun PinBuddyScreen(
     onAcceptClick: (Int) -> Unit = {},
     onRejectClick: (Int) -> Unit = {},
     onProfileClick: (Int) -> Unit = {},
+    onClickSearch: () -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     val isShowCompleteDialog = remember { mutableStateOf<Pair<Boolean, Int?>>(false to null) }
@@ -70,11 +71,11 @@ fun PinBuddyScreen(
     ) {
         TitleBar(
             modifier = Modifier
-                .padding(start = 20.dp),
+                .padding(horizontal = 20.dp),
             title = Texts.Word.PIN_BUDDY,
-            onLeftButtonClick = {
-                onBackPressed()
-            }
+            onLeftButtonClick = onBackPressed,
+            rightIcon = painterResource(Res.drawable.ic_search),
+            onRightButtonClick = onClickSearch
         )
 
         PHorizontalDivider()
