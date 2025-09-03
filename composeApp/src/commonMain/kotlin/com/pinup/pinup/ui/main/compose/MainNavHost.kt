@@ -33,6 +33,7 @@ fun MainNavHost(
     onMoveAddPinBuddy: () -> Unit,
     onMovePinBuddy: () -> Unit,
     onMoveSetting: () -> Unit,
+    onClickEdit: (Int) -> Unit = {},
 ) {
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
     val selectedMenuBar = remember { mutableStateOf<MainDestination>(MainDestination.Map) }
@@ -111,7 +112,21 @@ fun MainNavHost(
                 MyRoute(
                     onAddPinBuddyClick = onMoveAddPinBuddy,
                     onMovePinBuddy = onMovePinBuddy,
-                    onMoveSetting = onMoveSetting
+                    onMoveSetting = onMoveSetting,
+                    onClickBottomNav = {
+                        if (MainDestination.Upload == it) {
+                            onMoveWriteReview(0)
+                        } else {
+                            navHostController.navigate(it) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
+                        }
+                    },
+                    onClickEdit = onClickEdit
                 )
             }
         }

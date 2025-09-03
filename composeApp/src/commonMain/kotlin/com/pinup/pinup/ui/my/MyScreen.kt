@@ -5,10 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,17 +15,15 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,20 +32,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.ui.component.BottomBar
+import com.pinup.pinup.ui.component.FeedView
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.PVerticalDivider
+import com.pinup.pinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.pinup.ui.component.ProfileImageView
 import com.pinup.pinup.ui.component.RoundedBox
-import com.pinup.pinup.ui.component.TextReview
+import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
@@ -61,400 +58,408 @@ import pinup.composeapp.generated.resources.*
 @Composable
 fun MyScreen(
     member: Member,
-    photoReviews: List<Review>,
-    textReviews: List<Review>,
+    reviews: List<Review>,
+    onClickBottomNav: (MainDestination) -> Unit,
     modifier: Modifier = Modifier,
     onAlarmClick: () -> Unit = {},
     onSettingClick: () -> Unit = {},
     onAddPinBuddyClick: () -> Unit = {},
     onMovePinBuddy: () -> Unit = {},
-    scope: CoroutineScope = rememberCoroutineScope()
+    onClickEdit: (Int) -> Unit = {},
+    onClickDelete: (Int) -> Unit = {},
 ) {
-    val pages = remember { listOf("포토 리뷰", "텍스트 리뷰") }
     var index by remember { mutableStateOf(0) }
-    val pagerState = rememberPagerState { pages.size }
+    val pagerState = rememberPagerState { 2 }
+    val scope: CoroutineScope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState(
+        ModalBottomSheetValue.Hidden
+    )
+    var clickedReviewId by remember { mutableStateOf(0) }
 
-    Column(
-        modifier = modifier
-            .background(
-                color = Colors.White
+
+    ModalBottomSheetLayout(
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        sheetContent = {
+            PinlogMenuBottomSheet(
+                onClickEdit = {
+                    onClickEdit(clickedReviewId)
+                    scope.launch { sheetState.hide() }
+                },
+                onClickDelete = {
+                    onClickDelete(clickedReviewId)
+                    scope.launch { sheetState.hide() }
+                },
             )
-            .statusBarsPadding()
-            .fillMaxWidth()
+        },
+        sheetBackgroundColor = Colors.White,
+        sheetState = sheetState,
     ) {
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .padding(vertical = 15.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = member.profile.nickname,
-                style = Typography.T1.copy(
-                    fontWeight = FontWeight.SemiBold
-                ),
-                color = Colors.Gray800
-            )
-
-            Spacer(Modifier.weight(1f))
-
-            Image(
-                modifier = Modifier
-                    .clickableSingleWithNoRipple {
-                        onAlarmClick()
-                    },
-                painter = painterResource(Res.drawable.ic_alarm),
-                contentDescription = "alarm"
-            )
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Image(
-                modifier = Modifier
-                    .clickableSingleWithNoRipple {
-                        onSettingClick()
-                    },
-                painter = painterResource(Res.drawable.ic_setting),
-                contentDescription = "setting"
-            )
-        }
-
-        PHorizontalDivider()
-
         Column(
-            modifier = Modifier
-                .padding(top = 20.dp, bottom = 16.dp)
-                .padding(horizontal = 16.dp)
+            modifier = modifier
+                .background(
+                    color = Colors.White
+                )
+                .statusBarsPadding()
+                .fillMaxWidth()
         ) {
             Row(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .padding(vertical = 15.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ProfileImageView(
-                    imgUrl = member.profile.profilePictureUrl,
-                    size = 60.dp
+                Text(
+                    text = member.profile.nickname,
+                    style = Typography.T1.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = Colors.Gray800
                 )
 
-                Row(
+                Spacer(Modifier.weight(1f))
+
+                Image(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 32.dp, end = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                        .clickableSingleWithNoRipple {
+                            onAlarmClick()
+                        },
+                    painter = painterResource(Res.drawable.ic_alarm),
+                    contentDescription = "alarm"
+                )
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Image(
+                    modifier = Modifier
+                        .clickableSingleWithNoRipple {
+                            onSettingClick()
+                        },
+                    painter = painterResource(Res.drawable.ic_setting),
+                    contentDescription = "setting"
+                )
+            }
+
+            PHorizontalDivider()
+
+            Column(
+                modifier = Modifier
+                    .padding(top = 20.dp, bottom = 16.dp)
+                    .padding(horizontal = 16.dp)
+            ) {
+                Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(start = 20.dp)
-                            .widthIn(min = 34.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = member.profile.reviewCount.toString(),
-                            color = Colors.Gray900,
-                            style = Typography.B2.copy(
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        )
-
-                        Text(
-                            modifier = Modifier
-                                .padding(top = 4.dp),
-                            text = Texts.Word.PINLOG,
-                            color = Colors.Gray400,
-                            style = Typography.B3.copy(
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        )
-                    }
-
-                    PVerticalDivider(
-                        modifier = Modifier.height(22.dp)
+                    ProfileImageView(
+                        imgUrl = member.profile.profilePictureUrl,
+                        size = 60.dp
                     )
 
-                    Column(
+                    Row(
                         modifier = Modifier
-                            .widthIn(min = 34.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .fillMaxWidth()
+                            .padding(start = 32.dp, end = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = member.profile.averageStarRating.toString(),
-                            color = Colors.Gray900,
-                            style = Typography.B2.copy(
-                                fontWeight = FontWeight.SemiBold
+                        Column(
+                            modifier = Modifier
+                                .padding(start = 20.dp)
+                                .widthIn(min = 34.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = member.profile.reviewCount.toString(),
+                                color = Colors.Gray900,
+                                style = Typography.B2.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                )
                             )
+
+                            Text(
+                                modifier = Modifier
+                                    .padding(top = 4.dp),
+                                text = Texts.Word.PINLOG,
+                                color = Colors.Gray400,
+                                style = Typography.B3.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            )
+                        }
+
+                        PVerticalDivider(
+                            modifier = Modifier.height(22.dp)
                         )
 
-                        Text(
+                        Column(
                             modifier = Modifier
-                                .padding(top = 4.dp),
-                            text = Texts.PROFILE.AVERAGE_STAR_RATING,
-                            color = Colors.Gray400,
-                            style = Typography.B3.copy(
-                                fontWeight = FontWeight.SemiBold
+                                .widthIn(min = 34.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = member.profile.averageStarRating.toString(),
+                                color = Colors.Gray900,
+                                style = Typography.B2.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                )
                             )
+
+                            Text(
+                                modifier = Modifier
+                                    .padding(top = 4.dp),
+                                text = Texts.PROFILE.AVERAGE_STAR_RATING,
+                                color = Colors.Gray400,
+                                style = Typography.B3.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            )
+                        }
+
+                        PVerticalDivider(
+                            modifier = Modifier.height(22.dp)
                         )
+
+                        Column(
+                            modifier = Modifier
+                                .padding(end = 20.dp)
+                                .widthIn(min = 34.dp)
+                                .clickableSingleWithNoRipple {
+                                    onMovePinBuddy()
+                                },
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = member.profile.pinBuddyCount.toString(),
+                                color = Colors.Gray900,
+                                style = Typography.B2.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            )
+
+                            Text(
+                                modifier = Modifier
+                                    .padding(top = 4.dp),
+                                text = Texts.Word.PIN_BUDDY,
+                                color = Colors.Gray400,
+                                style = Typography.B3.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = member.profile.nickname,
+                    style = Typography.B2.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = Colors.Gray900,
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Text(
+                    text = member.profile.bio,
+                    style = Typography.B3.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    color = Colors.Gray400,
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row {
+                    RoundedBox(
+                        modifier = Modifier
+                            .weight(1f),
+                        cornerRounded = 8,
+                        backgroundColor = Colors.Gray100,
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .padding(vertical = 12.dp, horizontal = 16.dp)
+                                .align(Alignment.Center),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Image(
+                                painter = painterResource(Res.drawable.ic_share_profile),
+                                contentDescription = "share profile"
+                            )
+
+                            Text(
+                                modifier = Modifier
+                                    .padding(start = 6.dp),
+                                text = Texts.PROFILE.SHARE_PROFILE,
+                                style = Typography.L1.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                ),
+                                color = Colors.Gray800,
+                            )
+                        }
                     }
 
-                    PVerticalDivider(
-                        modifier = Modifier.height(22.dp)
-                    )
+                    Spacer(Modifier.width(10.dp))
 
-                    Column(
+                    RoundedBox(
                         modifier = Modifier
-                            .padding(end = 20.dp)
-                            .widthIn(min = 34.dp)
+                            .weight(1f)
                             .clickableSingleWithNoRipple {
-                                onMovePinBuddy()
+                                onAddPinBuddyClick()
                             },
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        cornerRounded = 8,
+                        backgroundColor = Colors.Gray100,
                     ) {
-                        Text(
-                            text = member.profile.pinBuddyCount.toString(),
-                            color = Colors.Gray900,
-                            style = Typography.B2.copy(
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        )
-
-                        Text(
+                        Row(
                             modifier = Modifier
-                                .padding(top = 4.dp),
-                            text = Texts.Word.PIN_BUDDY,
-                            color = Colors.Gray400,
-                            style = Typography.B3.copy(
-                                fontWeight = FontWeight.SemiBold
+                                .padding(vertical = 12.dp, horizontal = 16.dp)
+                                .align(Alignment.Center),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Image(
+                                painter = painterResource(Res.drawable.ic_add_pinbuddy),
+                                contentDescription = "add pinbuddy"
                             )
-                        )
+
+                            Text(
+                                modifier = Modifier
+                                    .padding(start = 6.dp),
+                                text = Texts.PROFILE.ADD_PIN_BUDDY,
+                                style = Typography.L1.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                ),
+                                color = Colors.Gray800,
+                            )
+                        }
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = member.profile.nickname,
-                style = Typography.B2.copy(
-                    fontWeight = FontWeight.SemiBold
-                ),
-                color = Colors.Gray900,
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = member.profile.bio,
-                style = Typography.B3.copy(
-                    fontWeight = FontWeight.Medium
-                ),
-                color = Colors.Gray400,
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row {
-                RoundedBox(
-                    modifier = Modifier
-                        .weight(1f),
-                    cornerRounded = 8,
-                    backgroundColor = Colors.Gray100,
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(vertical = 12.dp, horizontal = 16.dp)
-                            .align(Alignment.Center),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Image(
-                            painter = painterResource(Res.drawable.ic_share_profile),
-                            contentDescription = "share profile"
-                        )
-
-                        Text(
-                            modifier = Modifier
-                                .padding(start = 6.dp),
-                            text = Texts.PROFILE.SHARE_PROFILE,
-                            style = Typography.L1.copy(
-                                fontWeight = FontWeight.SemiBold
-                            ),
-                            color = Colors.Gray800,
-                        )
-                    }
-                }
-
-                Spacer(Modifier.width(10.dp))
-
-                RoundedBox(
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+            ) {
+                Column(
                     modifier = Modifier
                         .weight(1f)
-                        .clickableSingleWithNoRipple {
-                            onAddPinBuddyClick()
-                        },
-                    cornerRounded = 8,
-                    backgroundColor = Colors.Gray100,
+                        .clickableWithNoRipple {
+                            scope.launch {
+                                index = 0
+                                pagerState.animateScrollToPage(index)
+                            }
+                        }
                 ) {
-                    Row(
+                    Text(
                         modifier = Modifier
-                            .padding(vertical = 12.dp, horizontal = 16.dp)
-                            .align(Alignment.Center),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Image(
-                            painter = painterResource(Res.drawable.ic_add_pinbuddy),
-                            contentDescription = "add pinbuddy"
-                        )
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 12.dp, bottom = 11.dp),
+                        text = Texts.Word.PINLOG,
+                        style = Typography.H3,
+                        color = if (index == 0) Colors.Neutral800 else Colors.Neutral300,
+                        textAlign = TextAlign.Center
+                    )
 
-                        Text(
-                            modifier = Modifier
-                                .padding(start = 6.dp),
-                            text = Texts.PROFILE.ADD_PIN_BUDDY,
-                            style = Typography.L1.copy(
-                                fontWeight = FontWeight.SemiBold
-                            ),
-                            color = Colors.Gray800,
-                        )
-                    }
+                    Box(
+                        modifier = Modifier
+                            .height(1.dp)
+                            .fillMaxWidth()
+                            .background(
+                                color = if (index == 0) Colors.Neutral800 else Colors.Transparency
+                            )
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clickableWithNoRipple {
+                            scope.launch {
+                                index = 1
+                                pagerState.animateScrollToPage(index)
+                            }
+                        }
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(top = 12.dp, bottom = 11.dp),
+                        text = Texts.Word.SCRAP,
+                        style = Typography.H3,
+                        color = if (index == 1) Colors.Neutral800 else Colors.Neutral300,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Box(
+                        modifier = Modifier
+                            .height(1.dp)
+                            .fillMaxWidth()
+                            .background(
+                                color = if (index == 1) Colors.Neutral800 else Colors.Transparency
+                            )
+                    )
                 }
             }
-        }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-        ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .clickableWithNoRipple {
-                        scope.launch {
-                            index = 0
-                            pagerState.animateScrollToPage(index)
-                        }
-                    }
+            PHorizontalDivider()
+
+            HorizontalPager(
+                state = pagerState,
+                userScrollEnabled = false
             ) {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = 12.dp, bottom = 11.dp),
-                    text = pages[0],
-                    style = Typography.H3,
-                    color = if (index == 0) Colors.Neutral800 else Colors.Neutral300,
-                    textAlign = TextAlign.Center
-                )
-
-                Box(
-                    modifier = Modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .background(
-                            color = if (index == 0) Colors.Neutral800 else Colors.Transparency
-                        )
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .clickableWithNoRipple {
-                        scope.launch {
-                            index = 1
-                            pagerState.animateScrollToPage(index)
-                        }
-                    }
-            ) {
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(top = 12.dp, bottom = 11.dp),
-                    text = pages[1],
-                    style = Typography.H3,
-                    color = if (index == 1) Colors.Neutral800 else Colors.Neutral300,
-                    textAlign = TextAlign.Center
-                )
-
-                Box(
-                    modifier = Modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .background(
-                            color = if (index == 1) Colors.Neutral800 else Colors.Transparency
-                        )
-                )
-            }
-        }
-
-        PHorizontalDivider()
-
-        HorizontalPager(
-            state = pagerState,
-            userScrollEnabled = false
-        ) {
-            if (it == 0) {
-                PhotoReviewList(
-                    photoReviews = photoReviews
-                )
-            } else {
-                TextReviewList(
-                    textReviews = textReviews
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun PhotoReviewList(
-    photoReviews: List<Review>
-) {
-    val lazyGridState = rememberLazyGridState()
-    if (photoReviews.isEmpty()) {
-        ReviewEmptyScreen()
-    } else {
-        LazyVerticalGrid(
-            modifier = Modifier
-                .fillMaxSize(),
-            state = lazyGridState,
-            columns = GridCells.Fixed(3),
-            horizontalArrangement = Arrangement.spacedBy(1.5.dp),
-            verticalArrangement = Arrangement.spacedBy(1.5.dp)
-        ) {
-            items(photoReviews) {
-                Box(
-                    modifier = Modifier
-                        .aspectRatio(1f)
-                        .background(Colors.Neutral200),
-                    contentAlignment = Alignment.Center
-                ) {
-                    AsyncImage(
-                        model = it.reviewImageUrls?.first(),
-                        contentScale = ContentScale.Crop,
-                        contentDescription = "review image"
+                if (it == 0) {
+                    MyPinLogList(
+                        reviewList = reviews
+                    )
+                } else {
+                    MyPinLogList(
+                        reviewList = reviews
                     )
                 }
             }
         }
     }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Bottom
+    ){
+        BottomBar(
+            selectedMenu = MainDestination.My,
+            profileImage = member.profile.profilePictureUrl ?: "",
+            onBottomMenuClick = onClickBottomNav
+        )
+    }
 }
 
 @Composable
-fun TextReviewList(
-    textReviews: List<Review>
+fun MyPinLogList(
+    reviewList: List<Review>
 ) {
-    val lazyGridState = rememberLazyListState()
-    if (textReviews.isEmpty()) {
+    val scrollState = rememberLazyListState()
+    if (reviewList.isEmpty()) {
         ReviewEmptyScreen()
     } else {
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .background(Colors.Neutral100),
-            state = lazyGridState,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+                .padding(horizontal = 20.dp)
+                .padding(top = 16.dp)
+                .background(Colors.Gray50),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            state = scrollState
         ) {
-            items(textReviews) {
-                TextReview(
-                    review = it,
-                    onAdminClick = {},
-                    onDetailClick = {}
+            items(reviewList){
+                FeedView(
+                    item = it,
+                    onClickMenu = {
+//                    clickedReviewId = it
+//                    scope.launch { sheetState.show() }
+                    },
+//                onClickLike = onClickLike,
+//                onClickDetail = onClickDetail,
+                    onClickScrap = {},
                 )
             }
         }

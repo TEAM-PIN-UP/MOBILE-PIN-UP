@@ -3,6 +3,7 @@ package com.pinup.pinup.ui.my
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pinup.pinup.ui.main.compose.MainDestination
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -11,6 +12,8 @@ fun MyRoute(
     onAddPinBuddyClick: () -> Unit,
     onMovePinBuddy: () -> Unit,
     onMoveSetting: () -> Unit,
+    onClickBottomNav: (MainDestination) -> Unit,
+    onClickEdit: (Int) -> Unit = {},
 ) {
     val uiState = myViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -21,10 +24,14 @@ fun MyRoute(
 
     MyScreen(
         member = uiState.value.member,
-        photoReviews = uiState.value.photoReviews,
-        textReviews = uiState.value.textReviews,
+        reviews = uiState.value.photoReviews,
         onAddPinBuddyClick = onAddPinBuddyClick,
         onMovePinBuddy = onMovePinBuddy,
-        onSettingClick = onMoveSetting
+        onSettingClick = onMoveSetting,
+        onClickBottomNav = onClickBottomNav,
+        onClickEdit = {
+            onClickEdit(it)
+        },
+        onClickDelete = myViewModel::deleteReview,
     )
 }

@@ -7,6 +7,7 @@ import com.pinup.pinup.domain.model.Profile
 import com.pinup.pinup.domain.model.RelationType
 import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.domain.model.getSuccessOrNull
+import com.pinup.pinup.domain.usecase.DeletePinlogUseCase
 import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPhotoReviewsUseCase
 import com.pinup.pinup.domain.usecase.GetTextReviewsUseCase
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
 
 
 class MyViewModel (
+    private val deletePinlogUseCase: DeletePinlogUseCase,
     private val getMemberInfoUseCase: GetMemberInfoUseCase,
     private val getPhotoReviewsUseCase: GetPhotoReviewsUseCase,
     private val getTextReviewsUseCase: GetTextReviewsUseCase,
@@ -88,6 +90,15 @@ class MyViewModel (
                         textReviews = textReviews + it.reviews,
                     )
                 }
+            }
+        )
+    }
+
+    fun deleteReview(id: Int) = viewModelScope.launch {
+        resultResponse(
+            response = deletePinlogUseCase(id),
+            successCallback = {
+                getPhotoReviews()
             }
         )
     }

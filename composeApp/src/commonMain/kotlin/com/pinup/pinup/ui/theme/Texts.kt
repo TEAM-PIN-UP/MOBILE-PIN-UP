@@ -29,6 +29,7 @@ object Texts {
         const val DO_REPLY_COMMENT = "답글달기"
         const val SEE_MORE = "자세히 보기"
         const val PIN_BUDDY = "핀버디"
+        const val SCRAP = "스크랩"
     }
 
     object Onboarding {

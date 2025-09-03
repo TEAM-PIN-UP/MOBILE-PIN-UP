@@ -38,8 +38,7 @@ import com.pinup.pinup.ui.component.PVerticalDivider
 import com.pinup.pinup.ui.component.ProfileImageView
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.TitleBar
-import com.pinup.pinup.ui.my.PhotoReviewList
-import com.pinup.pinup.ui.my.TextReviewList
+import com.pinup.pinup.ui.my.MyPinLogList
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
@@ -322,12 +321,12 @@ fun UserProfileScreen(
                 LockReviewScreen()
             } else {
                 if (it == 0) {
-                    PhotoReviewList(
-                        photoReviews = photoReviews
+                    MyPinLogList(
+                        reviewList = photoReviews
                     )
                 } else {
-                    TextReviewList(
-                        textReviews = textReviews
+                    MyPinLogList(
+                        reviewList = photoReviews
                     )
                 }
             }
