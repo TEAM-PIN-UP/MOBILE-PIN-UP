@@ -19,5 +19,7 @@ fun AddPinBuddyRoute(
         onBackPressed = onBackPressed,
         onSearch = viewModel::search,
         onProfileClick = onMoveUserProfile,
+        recentSearchList = emptyList(),
+        onClickDeleteRecentSearch = {}
     )
 }

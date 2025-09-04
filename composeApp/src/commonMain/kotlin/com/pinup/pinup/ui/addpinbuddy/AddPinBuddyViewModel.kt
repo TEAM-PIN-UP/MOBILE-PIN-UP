@@ -1,49 +1,42 @@
 package com.pinup.pinup.ui.addpinbuddy
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.PinBuddy
 import com.pinup.pinup.domain.usecase.SearchUserUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import com.pinup.pinup.ui.base.BaseViewModel
+import com.pinup.pinup.ui.base.UiEvent
+import com.pinup.pinup.ui.base.UiState
 import kotlinx.coroutines.launch
 
 
 class AddPinBuddyViewModel (
     private val searchUserUseCase: SearchUserUseCase
-) : ViewModel() {
-    private val _uiState = MutableStateFlow(AddPinBuddyUiState())
-    val uiState: StateFlow<AddPinBuddyUiState>
-        get() = _uiState.asStateFlow()
+) : BaseViewModel<AddPinBuddyUiState, UiEvent>(AddPinBuddyUiState()) {
 
     fun updateQuery(inputText: String) = viewModelScope.launch {
-        _uiState.update {
-            it.copy(
+        updateState {
+            copy(
                 query = inputText
             )
         }
     }
 
-    fun search(query: String) = viewModelScope.launch {
-        when (val result = searchUserUseCase(query)) {
-            is PResult.Fail -> {
-
-            }
-            is PResult.Success -> {
-                _uiState.update {
-                    it.copy(
-                        pinBuddies = result.data
+    fun search() = viewModelScope.launch {
+        resultResponse(
+            response = searchUserUseCase(uiState.value.query),
+            successCallback = {
+                updateState {
+                    copy(
+                        pinBuddies = it
                     )
                 }
             }
-        }
+        )
     }
 }
 
 data class AddPinBuddyUiState(
     val query: String = "",
-    val pinBuddies: List<PinBuddy>? = null
-)
+    val pinBuddies: List<PinBuddy>? = null,
+    val recentSearchList: List<String> = emptyList()
+) : UiState

@@ -211,7 +211,8 @@ private fun PinBuddyList(
                 color = Colors.Gray400,
                 style = Typography.B1.copy(
                     fontWeight = FontWeight.SemiBold
-                )
+                ),
+                textAlign = TextAlign.Center
             )
         }
     } else {
@@ -280,7 +281,8 @@ private fun SentPinBuddyRequestList(
                 color = Colors.Gray400,
                 style = Typography.B1.copy(
                     fontWeight = FontWeight.SemiBold
-                )
+                ),
+                textAlign = TextAlign.Center
             )
         }
     } else {
@@ -350,7 +352,8 @@ private fun ReceivePinBuddyRequestList(
                 color = Colors.Gray400,
                 style = Typography.B1.copy(
                     fontWeight = FontWeight.SemiBold
-                )
+                ),
+                textAlign = TextAlign.Center
             )
         }
     } else {
