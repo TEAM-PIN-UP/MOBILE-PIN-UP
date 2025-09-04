@@ -126,7 +126,10 @@ fun MainNavHost(
                             }
                         }
                     },
-                    onClickEdit = onClickEdit
+                    onClickEdit = onClickEdit,
+                    onClickPinLog = {
+                        navHostController.navigate(MainDestination.Upload)
+                    }
                 )
             }
         }

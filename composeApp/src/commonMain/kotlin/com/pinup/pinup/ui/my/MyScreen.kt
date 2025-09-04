@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
@@ -32,7 +33,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Member
@@ -67,6 +70,7 @@ fun MyScreen(
     onMovePinBuddy: () -> Unit = {},
     onClickEdit: (Int) -> Unit = {},
     onClickDelete: (Int) -> Unit = {},
+    onClickPinLog: () -> Unit = {},
 ) {
     var index by remember { mutableStateOf(0) }
     val pagerState = rememberPagerState { 2 }
@@ -410,7 +414,12 @@ fun MyScreen(
             ) {
                 if (it == 0) {
                     MyPinLogList(
-                        reviewList = reviews
+                        reviewList = reviews,
+                        onClickMenu = {
+                            clickedReviewId = it
+                            scope.launch { sheetState.show() }
+                        },
+                        onClickPinLog = onClickPinLog
                     )
                 } else {
                     MyPinLogList(
@@ -436,11 +445,17 @@ fun MyScreen(
 
 @Composable
 fun MyPinLogList(
-    reviewList: List<Review>
+    reviewList: List<Review>,
+    onClickMenu: (Int) -> Unit = {},
+    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
+    onClickDetail: (Int) -> Unit = {},
+    onClickPinLog: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
     if (reviewList.isEmpty()) {
-        ReviewEmptyScreen()
+        ReviewEmptyScreen(
+            onClickPinLog = onClickPinLog
+        )
     } else {
         LazyColumn(
             modifier = Modifier
@@ -453,12 +468,9 @@ fun MyPinLogList(
             items(reviewList){
                 FeedView(
                     item = it,
-                    onClickMenu = {
-//                    clickedReviewId = it
-//                    scope.launch { sheetState.show() }
-                    },
-//                onClickLike = onClickLike,
-//                onClickDetail = onClickDetail,
+                    onClickMenu = onClickMenu,
+                    onClickLike = onClickLike,
+                    onClickDetail = onClickDetail,
                     onClickScrap = {},
                 )
             }
@@ -467,27 +479,51 @@ fun MyPinLogList(
 }
 
 @Composable
-fun ReviewEmptyScreen() {
+fun ReviewEmptyScreen(
+    onClickPinLog: () -> Unit = {},
+) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .background(color = Colors.White)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            modifier = Modifier
-                .padding(top = 100.dp)
-                .align(Alignment.CenterHorizontally),
-            painter = painterResource(Res.drawable.ic_empty_review),
-            contentDescription = "empty"
-        )
         Text(
-            modifier = Modifier
-                .padding(top = 16.dp)
-                .fillMaxWidth()
-                .background(color = Colors.White),
-            text = "아직 작성한 리뷰가 없어요!",
-            color = Colors.Neutral800,
-            style = Typography.H4,
+            text = Texts.PROFILE.EMPTY_MY_PINLOG,
+            color = Colors.Gray400,
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.Medium
+            ),
             textAlign = TextAlign.Center
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(
+            modifier = Modifier
+                .clickableWithNoRipple {
+                    onClickPinLog()
+                },
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = Texts.PROFILE.WRITE_FIRST_PINLOG,
+                color = Colors.Gray600,
+                style = Typography.B2.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.width(4.dp))
+
+            Image(
+                modifier = Modifier
+                    .size(14.dp),
+                painter = painterResource(Res.drawable.ic_right_arrow),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(Colors.Gray600)
+            )
+        }
     }
 }
