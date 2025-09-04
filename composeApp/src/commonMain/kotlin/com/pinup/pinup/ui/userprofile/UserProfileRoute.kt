@@ -17,6 +17,5 @@ fun UserProfileRoute(
         onRequestCancel = viewModel::deleteRequestPinBuddy,
         onRemovePinBuddy = viewModel::deletePinBuddy,
         onRequestPinBuddy = viewModel::requestPinBuddy,
-        onBackPressed = onBackPressed,
     )
 }

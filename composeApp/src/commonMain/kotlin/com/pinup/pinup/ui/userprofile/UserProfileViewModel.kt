@@ -75,7 +75,7 @@ class UserProfileViewModel (
         }
     }
 
-    fun requestPinBuddy(memberId: Int) = viewModelScope.launch {
+    fun requestPinBuddy() = viewModelScope.launch {
         when (val result = requestPinBuddyUseCase(memberId)) {
             is PResult.Fail -> {
 
@@ -86,7 +86,7 @@ class UserProfileViewModel (
         }
     }
 
-    fun deleteRequestPinBuddy(memberId: Int) = viewModelScope.launch {
+    fun deleteRequestPinBuddy() = viewModelScope.launch {
         when (val result = deleteRequestPinBuddyUseCase(memberId)) {
             is PResult.Fail -> {
 
@@ -97,7 +97,7 @@ class UserProfileViewModel (
         }
     }
 
-    fun deletePinBuddy(memberId: Int) = viewModelScope.launch {
+    fun deletePinBuddy() = viewModelScope.launch {
         when (val result = deletePinBuddyUseCase(memberId.toString())) {
             is PResult.Fail -> {
 

@@ -33,6 +33,7 @@ object Texts {
         const val SCRAP = "스크랩"
         const val ACCEPT = "수락"
         const val REFUSE = "거절"
+        const val CLOSE = "닫기"
     }
 
     object Onboarding {
@@ -172,6 +173,12 @@ object Texts {
         const val EMPTY_SENT_PIN_BUDDY = "보낸 신청이 없어요.\n나와 취향이 비슷한 핀버디를 찾아보세요!"
         const val SEARCH_RESULT = "검색 결과"
         const val ALREADY_REQUEST_PIN_BUDDY = "요청 진행중"
+        const val REQUEST_PIN_BUDDY = "핀버디 신청"
+        const val CANCEL_PIN_BUDDY_REQUEST = "핀버디 신청 취소하기"
+        const val REMOVE_PIN_BUDDY_DIALOG_TITLE = "핀버디를 삭제할까요?"
+        const val REMOVE_PIN_BUDDY_DIALOG_DESCRIPTION = "삭제한 핀버디에게 언제든지\n다시 핀버디를 신청할 수 있습니다."
+        const val ROCK_PROFILE = "작성된 핀로그가 궁금하다면\n핀버디를 신청해 주세요!"
+
     }
 
     object Toast {
