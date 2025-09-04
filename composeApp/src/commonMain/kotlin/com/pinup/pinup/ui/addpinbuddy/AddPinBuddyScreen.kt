@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -61,7 +62,8 @@ fun AddPinBuddyScreen(
     ) {
         Row(
             modifier = Modifier
-                .padding(vertical = 8.dp),
+                .statusBarsPadding()
+                .padding(vertical = 8.dp, horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -118,7 +120,12 @@ fun AddPinBuddyScreen(
         PHorizontalDivider()
 
         if (query.isEmpty()) {
-            Column {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+            ) {
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Text(
                     text = Texts.FEED.RECENT_SEARCH,
                     color = Colors.Gray800,
