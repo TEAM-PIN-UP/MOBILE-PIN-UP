@@ -270,7 +270,7 @@ private fun SentPinBuddyRequestList(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(Res.drawable.ic_empty_pin_buddy),
+                painter = painterResource(Res.drawable.ic_empty_sent_buddy),
                 contentDescription = null
             )
 
@@ -341,7 +341,7 @@ private fun ReceivePinBuddyRequestList(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(Res.drawable.ic_empty_pin_buddy),
+                painter = painterResource(Res.drawable.ic_empty_receive_buddy),
                 contentDescription = null
             )
 

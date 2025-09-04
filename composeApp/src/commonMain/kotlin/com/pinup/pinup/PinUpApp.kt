@@ -271,6 +271,9 @@ fun PinUpApp(
                     UserProfileRoute(
                         onBackPressed = {
                             navHostController.popBackStack()
+                        },
+                        onClickDetail = { it ->
+                            navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
                         }
                     )
                 }

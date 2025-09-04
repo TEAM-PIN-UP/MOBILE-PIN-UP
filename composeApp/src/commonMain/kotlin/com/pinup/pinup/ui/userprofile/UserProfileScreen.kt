@@ -3,9 +3,7 @@ package com.pinup.pinup.ui.userprofile
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -18,11 +16,8 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ModalBottomSheetLayout
@@ -45,18 +40,13 @@ import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.RelationType
 import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
-import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.FeedView
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.PVerticalDivider
 import com.pinup.pinup.ui.component.PinBuddyBottomSheet
-import com.pinup.pinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.pinup.ui.component.ProfileImageView
 import com.pinup.pinup.ui.component.RoundedBox
-import com.pinup.pinup.ui.component.TitleBar
-import com.pinup.pinup.ui.my.MyPinLogList
-import com.pinup.pinup.ui.my.ReviewEmptyScreen
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
@@ -69,13 +59,14 @@ import pinup.composeapp.generated.resources.*
 fun UserProfileScreen(
     member: Member,
     photoReviews: List<Review>,
-    textReviews: List<Review>,
     modifier: Modifier = Modifier,
     onRequestPinBuddy: () -> Unit = {},
     onAlarmClick: () -> Unit = {},
     onSettingClick: () -> Unit = {},
     onRequestCancel: () -> Unit = {},
     onRemovePinBuddy: () -> Unit = {},
+    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
+    onClickDetail: (Int) -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     val pages = remember { listOf("포토 리뷰","텍스트 리뷰") }
@@ -324,7 +315,9 @@ fun UserProfileScreen(
                 LockReviewScreen()
             } else {
                 UserPinlogList(
-                    reviewList = photoReviews
+                    reviewList = photoReviews,
+                    onClickDetail = onClickDetail,
+                    onClickLike = onClickLike,
                 )
             }
         }
@@ -502,13 +495,10 @@ fun UserPinlogList(
     reviewList: List<Review>,
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
-    onClickPinLog: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
     if (reviewList.isEmpty()) {
-        ReviewEmptyScreen(
-            onClickPinLog = onClickPinLog
-        )
+        ReviewEmptyScreen()
     } else {
         LazyColumn(
             modifier = Modifier
@@ -527,5 +517,33 @@ fun UserPinlogList(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ReviewEmptyScreen() {
+    Column(
+        modifier = Modifier
+            .background(color = Colors.White)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(150.dp))
+
+        Image(
+            painter = painterResource(Res.drawable.ic_normal_face),
+            contentDescription = null
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = Texts.PROFILE.EMPTY_USER_PINLOG,
+            color = Colors.Gray400,
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.Medium
+            ),
+            textAlign = TextAlign.Center
+        )
     }
 }

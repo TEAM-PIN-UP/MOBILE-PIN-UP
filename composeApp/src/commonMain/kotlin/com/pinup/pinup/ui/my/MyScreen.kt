@@ -483,15 +483,17 @@ fun MyPinLogList(
 }
 
 @Composable
-fun ReviewEmptyScreen(
+private fun ReviewEmptyScreen(
     onClickPinLog: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
             .background(color = Colors.White)
             .fillMaxSize(),
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(116.dp))
+
         Text(
             text = Texts.PROFILE.EMPTY_MY_PINLOG,
             color = Colors.Gray400,

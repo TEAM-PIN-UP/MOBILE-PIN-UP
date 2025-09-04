@@ -172,6 +172,7 @@ object Texts {
         const val EMPTY_RECEIVE_PIN_BUDDY = "받은 핀버디 신청이 없어요.\n핀버디 신청이 오면 이곳에 표시돼요!"
         const val EMPTY_SENT_PIN_BUDDY = "보낸 신청이 없어요.\n나와 취향이 비슷한 핀버디를 찾아보세요!"
         const val EMPTY_MY_PINLOG = "아직 핀로그가 없어요!\n나만의 장소를 핀업해보세요:)"
+        const val EMPTY_USER_PINLOG = "핀버디가 작성한 핀로그가 없어요!\n조금만 더 기다려볼까요?"
         const val SEARCH_RESULT = "검색 결과"
         const val ALREADY_REQUEST_PIN_BUDDY = "요청 진행중"
         const val REQUEST_PIN_BUDDY = "핀버디 신청"

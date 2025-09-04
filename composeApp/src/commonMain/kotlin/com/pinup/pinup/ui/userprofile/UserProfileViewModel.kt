@@ -16,8 +16,12 @@ import com.pinup.pinup.domain.usecase.DeleteRequestPinBuddyUseCase
 import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPhotoReviewsUseCase
 import com.pinup.pinup.domain.usecase.GetTextReviewsUseCase
+import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.domain.usecase.RejectPinBuddyUseCase
 import com.pinup.pinup.domain.usecase.RequestPinBuddyUseCase
+import com.pinup.pinup.ui.base.BaseViewModel
+import com.pinup.pinup.ui.base.UiEvent
+import com.pinup.pinup.ui.base.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,11 +39,9 @@ class UserProfileViewModel (
     private val deleteRequestPinBuddyUseCase: DeleteRequestPinBuddyUseCase,
     private val acceptPinBuddyUseCase: AcceptPinBuddyUseCase,
     private val deletePinBuddyUseCase: DeletePinBuddyUseCase,
-) : ViewModel() {
+    private val postReviewLikeChangeUseCase : PostReviewLikeChangeUseCase
+) : BaseViewModel<UserProfileUiState, UiEvent>(UserProfileUiState()) {
     val memberId = savedStateHandle.get<Int>(MEMBER_ID) ?: 0
-    private val _uiState = MutableStateFlow(UserProfileUiState())
-    val uiState: StateFlow<UserProfileUiState>
-        get() = _uiState.asStateFlow()
     private val photoReviewPagination = Pagination()
     private val textReviewPagination = Pagination()
 
@@ -51,8 +53,8 @@ class UserProfileViewModel (
         val memberInfo = getMemberInfoUseCase(memberId).getSuccessOrNull() ?: return@launch
         val photoReviews = getPhotoReviewsUseCase(memberId, photoReviewPagination.pageNum, PAGE_SIZE).getSuccessOrNull() ?: return@launch
         val textReviews = getTextReviewsUseCase(memberId, textReviewPagination.pageNum, PAGE_SIZE).getSuccessOrNull() ?: return@launch
-        _uiState.update {
-            it.copy(
+        updateState {
+            copy(
                 member = memberInfo,
                 photoReviews = photoReviews.reviews,
                 textReviews = textReviews.reviews
@@ -61,51 +63,74 @@ class UserProfileViewModel (
     }
 
     private fun updateUserProfile() = viewModelScope.launch {
-        when (val result = getMemberInfoUseCase(memberId)) {
-            is PResult.Fail -> {
-
-            }
-            is PResult.Success -> {
-                _uiState.update {
-                    it.copy(
-                        member = result.data,
+        resultResponse(
+            response = getMemberInfoUseCase(memberId),
+            successCallback = {
+                updateState {
+                    copy(
+                        member = it,
                     )
                 }
             }
-        }
+        )
     }
 
     fun requestPinBuddy() = viewModelScope.launch {
-        when (val result = requestPinBuddyUseCase(memberId)) {
-            is PResult.Fail -> {
-
-            }
-            is PResult.Success -> {
+        resultResponse(
+            response = requestPinBuddyUseCase(memberId),
+            successCallback = {
                 updateUserProfile()
             }
-        }
+        )
     }
 
     fun deleteRequestPinBuddy() = viewModelScope.launch {
-        when (val result = deleteRequestPinBuddyUseCase(memberId)) {
-            is PResult.Fail -> {
-
-            }
-            is PResult.Success -> {
+        resultResponse(
+            response = deleteRequestPinBuddyUseCase(memberId),
+            successCallback = {
                 updateUserProfile()
             }
-        }
+        )
     }
 
     fun deletePinBuddy() = viewModelScope.launch {
-        when (val result = deletePinBuddyUseCase(memberId.toString())) {
-            is PResult.Fail -> {
-
-            }
-            is PResult.Success -> {
+        resultResponse(
+            response = deletePinBuddyUseCase(memberId.toString()),
+            successCallback = {
                 updateUserProfile()
             }
-        }
+        )
+    }
+
+    fun likeChanged(id: Int, isLike: Boolean) = viewModelScope.launch {
+        resultResponse(
+            response = postReviewLikeChangeUseCase(id, isLike),
+            successCallback = {
+                handleSuccessLikeChanged(id)
+            }
+        )
+    }
+
+    private fun handleSuccessLikeChanged(id: Int) = viewModelScope.launch {
+        //TODO 수정 예정
+//        resultResponse(
+//            response = getPhotoReviewsUseCase(id, 1),
+//            successCallback = { result ->
+//                updateState {
+//                    copy(
+//                        pagingReview = pagingReview.copy(
+//                            reviews = pagingReview.reviews.map {
+//                                if (it.id == result.reviews[0].id) {
+//                                    result.reviews[0]
+//                                } else {
+//                                    it
+//                                }
+//                            }
+//                        )
+//                    )
+//                }
+//            }
+//        )
     }
 
     companion object {
@@ -134,4 +159,4 @@ data class UserProfileUiState(
     ),
     val textReviews: List<Review> = emptyList(),
     val photoReviews: List<Review> = emptyList()
-)
+) : UiState
