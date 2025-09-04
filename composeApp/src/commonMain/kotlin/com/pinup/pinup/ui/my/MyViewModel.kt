@@ -11,6 +11,7 @@ import com.pinup.pinup.domain.usecase.DeletePinlogUseCase
 import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPhotoReviewsUseCase
 import com.pinup.pinup.domain.usecase.GetTextReviewsUseCase
+import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
@@ -22,6 +23,7 @@ class MyViewModel (
     private val getMemberInfoUseCase: GetMemberInfoUseCase,
     private val getPhotoReviewsUseCase: GetPhotoReviewsUseCase,
     private val getTextReviewsUseCase: GetTextReviewsUseCase,
+    private val postReviewLikeChangeUseCase: PostReviewLikeChangeUseCase,
 ) : BaseViewModel<MyUiState, UiEvent>(MyUiState()) {
     private val photoReviewPagination = Pagination()
     private val textReviewPagination = Pagination()
@@ -101,6 +103,37 @@ class MyViewModel (
                 getPhotoReviews()
             }
         )
+    }
+
+    fun likeChanged(id: Int, isLike: Boolean) = viewModelScope.launch {
+        resultResponse(
+            response = postReviewLikeChangeUseCase(id, isLike),
+            successCallback = {
+                handleSuccessLikeChanged(id)
+            }
+        )
+    }
+
+    private fun handleSuccessLikeChanged(id: Int) = viewModelScope.launch {
+        //TODO 수정 예정
+//        resultResponse(
+//            response = getPhotoReviewsUseCase(id, 1),
+//            successCallback = { result ->
+//                updateState {
+//                    copy(
+//                        pagingReview = pagingReview.copy(
+//                            reviews = pagingReview.reviews.map {
+//                                if (it.id == result.reviews[0].id) {
+//                                    result.reviews[0]
+//                                } else {
+//                                    it
+//                                }
+//                            }
+//                        )
+//                    )
+//                }
+//            }
+//        )
     }
 }
 

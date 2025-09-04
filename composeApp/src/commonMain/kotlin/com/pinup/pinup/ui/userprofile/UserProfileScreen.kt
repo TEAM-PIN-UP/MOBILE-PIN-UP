@@ -17,8 +17,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,6 +46,7 @@ import com.pinup.pinup.domain.model.RelationType
 import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.ui.component.FeedView
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.PVerticalDivider
@@ -52,6 +56,7 @@ import com.pinup.pinup.ui.component.ProfileImageView
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.my.MyPinLogList
+import com.pinup.pinup.ui.my.ReviewEmptyScreen
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
@@ -318,7 +323,7 @@ fun UserProfileScreen(
             if (member.relationType != RelationType.FRIEND) {
                 LockReviewScreen()
             } else {
-                MyPinLogList(
+                UserPinlogList(
                     reviewList = photoReviews
                 )
             }
@@ -489,5 +494,38 @@ private fun LockReviewScreen() {
             ),
             textAlign = TextAlign.Center
         )
+    }
+}
+
+@Composable
+fun UserPinlogList(
+    reviewList: List<Review>,
+    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
+    onClickDetail: (Int) -> Unit = {},
+    onClickPinLog: () -> Unit = {},
+) {
+    val scrollState = rememberLazyListState()
+    if (reviewList.isEmpty()) {
+        ReviewEmptyScreen(
+            onClickPinLog = onClickPinLog
+        )
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .padding(top = 16.dp)
+                .background(Colors.Gray50),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            state = scrollState
+        ) {
+            items(reviewList){
+                FeedView(
+                    item = it,
+                    onClickLike = onClickLike,
+                    onClickDetail = onClickDetail,
+                    onClickScrap = {},
+                )
+            }
+        }
     }
 }

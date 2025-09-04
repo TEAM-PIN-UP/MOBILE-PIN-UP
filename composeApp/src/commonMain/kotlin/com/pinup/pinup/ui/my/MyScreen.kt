@@ -71,6 +71,8 @@ fun MyScreen(
     onClickEdit: (Int) -> Unit = {},
     onClickDelete: (Int) -> Unit = {},
     onClickPinLog: () -> Unit = {},
+    onClickDetail: (Int) -> Unit = {},
+    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
 ) {
     var index by remember { mutableStateOf(0) }
     val pagerState = rememberPagerState { 2 }
@@ -419,7 +421,9 @@ fun MyScreen(
                             clickedReviewId = it
                             scope.launch { sheetState.show() }
                         },
-                        onClickPinLog = onClickPinLog
+                        onClickPinLog = onClickPinLog,
+                        onClickLike = onClickLike,
+                        onClickDetail = onClickDetail
                     )
                 } else {
                     MyPinLogList(
