@@ -19,4 +19,7 @@ interface MembersRepository {
     suspend fun getMemberInfo(memberId: Int?): PResult<Member>
     suspend fun getTextReviews(memberId: Int?, page: Int, size: Int): PResult<PagingReview>
     suspend fun getPhotoReviews(memberId: Int?, page: Int, size: Int): PResult<PagingReview>
+    suspend fun getRecentSearchList(): StateFlow<List<String>>
+    suspend fun deleteRecentSearch(index: Int)
+    suspend fun saveRecentSearch(search: String)
 }

@@ -12,4 +12,7 @@ interface MembersLocalDataSource {
     suspend fun getRefreshToken(): String
     suspend fun getUserInfo(): StateFlow<UserInfo>
     suspend fun logout()
+    suspend fun deleteRecentSearch(index: Int)
+    suspend fun getRecentSearch(): StateFlow<List<String>>
+    suspend fun saveRecentSearch(search: String)
 }

@@ -70,7 +70,6 @@ class ReviewsLocalDataSourceImpl(
         return result
     }
 
-    /** 여기서 Map 캐스팅 금지! MutablePreferences API를 직접 사용 */
     private fun writeListToPrefs(prefs: MutablePreferences, list: List<String>) {
         for (i in 0 until MAX_RECENT) {
             val key = stringPreferencesKey("$KEY_PREFIX$i")

@@ -12,6 +12,7 @@ val useCaseModule = module {
     single<DeletePinlogUseCase> { DeletePinlogUseCase(get()) }
     single<DeletePinBuddyUseCase> { DeletePinBuddyUseCase(get()) }
     single<DeleteRecentSearchUseCase> { DeleteRecentSearchUseCase(get()) }
+    single<DeleteRecentPinBuddySearchUseCase> { DeleteRecentPinBuddySearchUseCase(get()) }
     single<DeleteRequestPinBuddyUseCase> { DeleteRequestPinBuddyUseCase(get()) }
     single<EditCommentUseCase> { EditCommentUseCase(get()) }
     single<EditPinlogUseCase> { EditPinlogUseCase(get()) }
@@ -24,6 +25,7 @@ val useCaseModule = module {
     single<GetPinBuddiesUseCase> { GetPinBuddiesUseCase(get()) }
     single<GetPinlogDetailUseCase> { GetPinlogDetailUseCase(get()) }
     single<GetRecentSearchUseCase> { GetRecentSearchUseCase(get()) }
+    single<GetRecentPinBuddySearchUseCase> { GetRecentPinBuddySearchUseCase(get()) }
     single<GetReceivePinBuddyRequestsUseCase> { GetReceivePinBuddyRequestsUseCase(get()) }
     single<GetReviewedPlacesUseCase> { GetReviewedPlacesUseCase(get()) }
     single<GetSentPinBuddyRequestsUseCase> { GetSentPinBuddyRequestsUseCase(get()) }
@@ -42,6 +44,7 @@ val useCaseModule = module {
     single<RejectPinBuddyUseCase> { RejectPinBuddyUseCase(get()) }
     single<RequestPinBuddyUseCase> { RequestPinBuddyUseCase(get()) }
     single<SaveRecentSearchUseCase> { SaveRecentSearchUseCase(get()) }
+    single<SaveRecentPinBuddySearchUseCase> { SaveRecentPinBuddySearchUseCase(get()) }
     single<SaveTokenUseCase> { SaveTokenUseCase(get()) }
     single<SaveUserInfoUseCase> { SaveUserInfoUseCase(get()) }
     single<SearchPlacesUseCase> { SearchPlacesUseCase(get()) }

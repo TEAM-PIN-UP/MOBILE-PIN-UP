@@ -80,4 +80,16 @@ class MembersRepositoryImpl (
                 it.toModel()
             }
     }
+
+    override suspend fun getRecentSearchList(): StateFlow<List<String>> {
+        return membersLocalDataSource.getRecentSearch()
+    }
+
+    override suspend fun deleteRecentSearch(index: Int) {
+        membersLocalDataSource.deleteRecentSearch(index)
+    }
+
+    override suspend fun saveRecentSearch(search: String) {
+        membersLocalDataSource.saveRecentSearch(search)
+    }
 }
