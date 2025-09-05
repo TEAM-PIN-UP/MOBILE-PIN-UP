@@ -25,7 +25,7 @@ fun MyRoute(
     val isShowDeleteDialog = remember { mutableStateOf(false) }
 
     LifecycleResumeEffect(Unit) {
-       // myViewModel.initMyInfo()
+        myViewModel.initMyInfo()
         onPauseOrDispose { }
     }
 

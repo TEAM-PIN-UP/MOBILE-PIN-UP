@@ -34,6 +34,8 @@ object Texts {
         const val ACCEPT = "수락"
         const val REFUSE = "거절"
         const val CLOSE = "닫기"
+        const val SETTING = "설정"
+        const val ETC = "기타"
     }
 
     object Onboarding {
@@ -181,6 +183,21 @@ object Texts {
         const val REMOVE_PIN_BUDDY_DIALOG_DESCRIPTION = "삭제한 핀버디에게 언제든지\n다시 핀버디를 신청할 수 있습니다."
         const val ROCK_PROFILE = "작성된 핀로그가 궁금하다면\n핀버디를 신청해 주세요!"
         const val WRITE_FIRST_PINLOG = "첫 핀로그 작성하기"
+    }
+
+    object Setting {
+        const val PROFILE_SETTING_TITLE = "계정 설정"
+        const val PROFILE_SETTING = "프로필 편집"
+        const val PROFILE_INFO = "계정 정보"
+        const val CHANGE_PASSWORD = "비밀번호 변경"
+        const val CS_TITLE = "고객센터"
+        const val QA = "문의하기"
+        const val SUGGEST = "건의하기"
+        const val SERVICE_TERM = "이용약관"
+        const val PERSONAL_TERM = "개인정보처리방침"
+        const val VERSION = "앱버전"
+        const val LOGOUT = "로그아웃"
+        const val UNREGISTER = "회원탈퇴"
     }
 
     object Toast {

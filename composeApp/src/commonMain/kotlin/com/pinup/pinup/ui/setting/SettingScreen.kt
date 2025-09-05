@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.LocalPlatformContext
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
@@ -25,6 +27,7 @@ import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import com.pinup.pinup.util.Const
 import org.jetbrains.compose.resources.painterResource
@@ -52,7 +55,9 @@ fun SettingScreen(
             .fillMaxSize()
     ) {
         TitleBar(
-            title = "설정",
+            modifier = Modifier
+                .padding(start = 20.dp),
+            title = Texts.Word.SETTING,
             onLeftButtonClick = {
                 onBackPressed()
             }
@@ -62,55 +67,72 @@ fun SettingScreen(
 
         Column(
             modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 30.dp)
+                .padding(vertical = 24.dp)
         ) {
             Text(
-                text = "계정 설정",
-                style = Typography.H5,
-                color = Colors.Neutral400
+                modifier = Modifier
+                    .padding(horizontal = 20.dp),
+                text = Texts.Setting.PROFILE_SETTING_TITLE,
+                style = Typography.B3.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray400
             )
 
             MenuBar(
-                text = "프로필 편집",
+                text = Texts.Setting.PROFILE_SETTING,
                 onClick = {
                     onProfileModifyClick()
                 }
             )
-            PHorizontalDivider()
+
             MenuBar(
-                text = "계정 정보",
+                text = Texts.Setting.PROFILE_INFO,
                 content = {
                     Column(
                         horizontalAlignment = Alignment.End
                     ) {
                         Text(
                             text = "SNS 로그인(${snsType?.value})",
-                            style = Typography.H6,
-                            color = Colors.Neutral400
+                            style = Typography.L1.copy(
+                                fontWeight = FontWeight.Medium
+                            ),
+                            color = Colors.Gray400
                         )
 
                         Text(
                             modifier = Modifier
                                 .padding(top = 2.dp),
                             text = email,
-                            style = Typography.H6,
-                            color = Colors.Neutral400
+                            style = Typography.L1.copy(
+                                fontWeight = FontWeight.Medium
+                            ),
+                            color = Colors.Gray400
                         )
                     }
                 },
                 onClick = {}
             )
-            PHorizontalDivider()
+
+            MenuBar(
+                text = Texts.Setting.CHANGE_PASSWORD,
+                onClick = {
+                    //onProfileModifyClick()
+                }
+            )
+
+            Spacer(modifier = Modifier.height(28.dp))
 
             Text(
-                modifier = Modifier
-                    .padding(top = 28.dp),
-                text = "고객센터",
-                style = Typography.H5,
-                color = Colors.Neutral400
+                text = Texts.Setting.CS_TITLE,
+                style = Typography.B3.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray400
             )
+
             MenuBar(
-                text = "문의하기",
+                text = Texts.Setting.QA,
                 onClick = {
                     openBrowser(
                         context = context,
@@ -118,61 +140,64 @@ fun SettingScreen(
                     )
                 }
             )
-            PHorizontalDivider()
+
             MenuBar(
-                text = "건의하기",
+                text = Texts.Setting.SUGGEST,
                 onClick = {
                     openBrowser(
-                        url = Const.Url.CONTACT_US_URL,
-                        context = context
+                        context = context,
+                        url = Const.Url.CONTACT_US_URL
                     )
                 }
             )
-            PHorizontalDivider()
+
             MenuBar(
-                text = "이용약관",
+                text = Texts.Setting.SERVICE_TERM,
                 onClick = {}
             )
-            PHorizontalDivider()
+
             MenuBar(
-                text = "개인정보 처리방침",
+                text = Texts.Setting.PERSONAL_TERM,
                 onClick = {}
             )
-            PHorizontalDivider()
+
+            Spacer(modifier = Modifier.height(28.dp))
 
             Text(
-                modifier = Modifier
-                    .padding(top = 28.dp),
-                text = "기타",
-                style = Typography.H5,
-                color = Colors.Neutral400
+                text = Texts.Word.ETC,
+                style = Typography.B3.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray400
             )
+
             MenuBar(
-                text = "앱버전",
+                text = Texts.Setting.VERSION,
                 content = {
                     Text(
-                        text = "V ${1.0}",
-                        style = Typography.H6,
-                        color = Colors.Neutral400
+                        text = "v.1.0",
+                        style = Typography.L1.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        color = Colors.Gray400
                     )
                 },
                 onClick = {
 
                 }
             )
-            PHorizontalDivider()
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 20.dp)
-                    .clickableWithNoRipple {
-                        isShowLogoutDialog.value = true
-                    },
-                text = "로그아웃",
-                style = Typography.H4,
-                color = Colors.Neutral800
+
+            MenuBar(
+                text = Texts.Setting.LOGOUT,
+                onClick = {
+                    isShowLogoutDialog.value = true
+                }
             )
-            PHorizontalDivider()
+
+            MenuBar(
+                text = Texts.Setting.UNREGISTER,
+                onClick = {}
+            )
         }
     }
 
@@ -201,6 +226,7 @@ private fun MenuBar(
 ) {
     Row(
         modifier = Modifier
+            .padding(horizontal = 20.dp)
             .fillMaxWidth()
             .clickableSingleWithNoRipple {
                 onClick()
@@ -211,8 +237,10 @@ private fun MenuBar(
             modifier = Modifier
                 .padding(vertical = 20.dp),
             text = text,
-            style = Typography.H4,
-            color = Colors.Neutral800
+            style = Typography.B2.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            color = Colors.Gray800
         )
 
         Spacer(Modifier.weight(1f))
@@ -221,10 +249,13 @@ private fun MenuBar(
             Image(
                 painter = painterResource(Res.drawable.ic_chevron_right),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(Colors.Neutral300)
+                colorFilter = ColorFilter.tint(Colors.Gray300)
             )
         } else {
             content()
         }
     }
+
+
+    PHorizontalDivider()
 }
