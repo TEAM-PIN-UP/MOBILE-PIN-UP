@@ -33,18 +33,18 @@ class MyViewModel (
         val photoReviews = getPhotoReviewsUseCase(
             page = photoReviewPagination.pageNum,
             size = Pagination.DEFAULT_PAGE_SIZE
-        ).getSuccessOrNull() ?: return@launch
+        ).getSuccessOrNull()
         val textReviews = getTextReviewsUseCase(
             page = photoReviewPagination.pageNum,
             size = Pagination.DEFAULT_PAGE_SIZE
-        ).getSuccessOrNull() ?: return@launch
-        photoReviewPagination.totalPage = photoReviews.nextCursor
-        textReviewPagination.totalPage = textReviews.nextCursor
+        ).getSuccessOrNull()
+        photoReviewPagination.totalPage = photoReviews?.nextCursor
+        textReviewPagination.totalPage = textReviews?.nextCursor
         updateState {
             copy(
                 member = memberInfo,
-                photoReviews = photoReviews.reviews,
-                textReviews = textReviews.reviews
+                photoReviews = photoReviews?.reviews ?: emptyList(),
+                textReviews = textReviews?.reviews ?: emptyList()
             )
         }
     }
@@ -73,23 +73,6 @@ class MyViewModel (
                 updateState {
                     copy(
                         photoReviews = photoReviews + it.reviews,
-                    )
-                }
-            }
-        )
-    }
-
-    fun getTextReviews() = viewModelScope.launch {
-        if (textReviewPagination.isLast) return@launch
-        resultResponse(
-            response = getTextReviewsUseCase(
-                page = photoReviewPagination.nextPage(),
-                size = Pagination.DEFAULT_PAGE_SIZE
-            ),
-            successCallback = {
-                updateState {
-                    copy(
-                        textReviews = textReviews + it.reviews,
                     )
                 }
             }

@@ -6,16 +6,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.ui.theme.Colors
 
 
 @Composable
-fun PHorizontalDivider(modifier: Modifier = Modifier) {
+fun PHorizontalDivider(
+    modifier: Modifier = Modifier,
+    color: Color = Colors.Gray100
+) {
     Divider(
         modifier = modifier,
         thickness = 1.dp,
-        color = Colors.Neutral100
+        color = color
     )
 }
 

@@ -1,31 +1,254 @@
 package com.pinup.pinup.ui.profilesetting
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import com.pinup.pinup.extentions.clickableSingleWithNoRipple
+import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.PHorizontalDivider
-import com.pinup.pinup.ui.component.TitleBar
+import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
+import com.pinup.pinup.ui.theme.Typography
+import com.preat.peekaboo.image.picker.SelectionMode
+import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.ic_back
+import pinup.composeapp.generated.resources.ic_profile_select
+import pinup.composeapp.generated.resources.ic_profile_setting_image
 
 @Composable
 fun ProfileSettingScreen(
     onBackPressed: () -> Unit,
+    onClickModifyProfile: () -> Unit = {},
+    onUpdateProfileImage: (ByteArray) -> Unit,
+    profileImage: String = "",
+    profileImageByte: ByteArray? = null,
+    nickName: String = "",
+    onNickNameChange: (String) -> Unit = {},
+    bio: String = "",
+    onBioChange: (String) -> Unit = {},
 ) {
+    val scope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
+    val keyboard = LocalSoftwareKeyboardController.current
+    val singleImagePicker = rememberImagePickerLauncher(
+        selectionMode = SelectionMode.Single,
+        scope = scope,
+        onResult = { byteArrays ->
+            byteArrays.firstOrNull()?.let {
+                onUpdateProfileImage(it)
+            }
+        }
+    )
+
     Column(
         modifier = Modifier
             .background(Colors.White)
             .fillMaxSize()
-    ) {
-        TitleBar(
-            title = "프로필 편집",
-            onLeftButtonClick = {
-                onBackPressed()
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    focusManager.clearFocus()
+                    keyboard?.hide()
+                })
             }
-        )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .statusBarsPadding()
+                .padding(horizontal = 20.dp)
+                .height(56.dp),
+        ) {
+            Image(
+                modifier = Modifier
+                    .clickableWithNoRipple {
+                        onBackPressed()
+                    }
+                    .align(Alignment.CenterStart),
+                painter = painterResource(Res.drawable.ic_back),
+                contentDescription = null
+            )
+
+            Text(
+                modifier = Modifier
+                    .align(Alignment.Center),
+                text =  Texts.Setting.PROFILE_SETTING,
+                style = Typography.H3,
+                color = Colors.Neutral800
+            )
+
+            Text(
+                modifier = Modifier
+                    .clickableWithNoRipple {
+                        onClickModifyProfile()
+                    }
+                    .align(Alignment.CenterEnd),
+                text = Texts.Word.COMPLETE,
+                color = Colors.Main,
+                style = Typography.B2.copy(
+                    fontWeight = FontWeight.Medium
+                )
+            )
+        }
 
         PHorizontalDivider()
 
+        Spacer(modifier = Modifier.height(42.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            if (profileImage.isEmpty() && profileImageByte == null) {
+                Image(
+                    modifier = Modifier
+                        .clickableSingleWithNoRipple {
+                            singleImagePicker.launch()
+                        },
+                    painter = painterResource(Res.drawable.ic_profile_select),
+                    contentDescription = null,
+                )
+            } else {
+                AsyncImage(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .size(84.dp)
+                        .clickableSingleWithNoRipple {
+                            singleImagePicker.launch()
+                        },
+                    model = profileImageByte ?: profileImage,
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                )
+
+                Image(
+                    modifier = Modifier
+                        .clickableSingleWithNoRipple {
+                            singleImagePicker.launch()
+                        },
+                    painter = painterResource(Res.drawable.ic_profile_setting_image),
+                    contentDescription = null,
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(34.dp))
+
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+        ) {
+            Column {
+                Text(
+                    text = Texts.Word.NICKNAME,
+                    color = Colors.Gray800,
+                    style = Typography.B1.copy(
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(36.dp))
+
+                Text(
+                    text = Texts.Word.INTRO,
+                    color = Colors.Gray800,
+                    style = Typography.B1.copy(
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.width(20.dp))
+
+            Column {
+                RoundedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = nickName,
+                    onValueChange = {
+                        onNickNameChange(it)
+                    },
+                    cornerRounded = 0,
+                    textStyle = Typography.B1.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    contentPadding = PaddingValues(0.dp),
+                    fixedBorderColor = Colors.Transparency
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                PHorizontalDivider(
+                    color = if (nickName.isEmpty()) Colors.Gray100 else Colors.Gray800
+                )
+
+                Spacer(modifier = Modifier.height(26.dp))
+
+                RoundedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = bio,
+                    onValueChange = {
+                        onBioChange(it)
+                    },
+                    cornerRounded = 0,
+                    singleLine = false,
+                    textStyle = Typography.B1.copy(
+                        fontWeight = FontWeight.Medium
+                    ),
+                    contentPadding = PaddingValues(0.dp),
+                    fixedBorderColor = Colors.Transparency,
+                    placeholder = Texts.Setting.HINT_BIO_CHANGE
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                PHorizontalDivider(
+                    color = if (bio.isEmpty()) Colors.Gray100 else Colors.Gray800
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 20.dp),
+            text = Texts.Setting.HINT_NICKNAME_CHANGE,
+            color = Colors.Gray400,
+            style = Typography.L1.copy(
+                fontWeight = FontWeight.Medium
+            )
+        )
     }
 }

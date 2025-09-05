@@ -36,6 +36,9 @@ object Texts {
         const val CLOSE = "닫기"
         const val SETTING = "설정"
         const val ETC = "기타"
+        const val COMPLETE = "완료"
+        const val NICKNAME = "닉네임"
+        const val INTRO = "소개"
     }
 
     object Onboarding {
@@ -198,6 +201,8 @@ object Texts {
         const val VERSION = "앱버전"
         const val LOGOUT = "로그아웃"
         const val UNREGISTER = "회원탈퇴"
+        const val HINT_BIO_CHANGE = "60자 이내로 나를 소개해 보세요."
+        const val HINT_NICKNAME_CHANGE = "*닉네임은 30일마다 변경 가능해요."
     }
 
     object Toast {

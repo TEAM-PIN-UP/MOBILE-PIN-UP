@@ -42,6 +42,7 @@ import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.FeedView
 import com.pinup.pinup.ui.component.PHorizontalDivider
@@ -81,7 +82,6 @@ fun MyScreen(
         ModalBottomSheetValue.Hidden
     )
     var clickedReviewId by remember { mutableStateOf(0) }
-
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),

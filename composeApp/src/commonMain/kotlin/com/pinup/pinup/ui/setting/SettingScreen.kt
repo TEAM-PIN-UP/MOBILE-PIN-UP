@@ -124,6 +124,8 @@ fun SettingScreen(
             Spacer(modifier = Modifier.height(28.dp))
 
             Text(
+                modifier = Modifier
+                    .padding(start = 20.dp),
                 text = Texts.Setting.CS_TITLE,
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.SemiBold
@@ -164,6 +166,8 @@ fun SettingScreen(
             Spacer(modifier = Modifier.height(28.dp))
 
             Text(
+                modifier = Modifier
+                    .padding(start = 20.dp),
                 text = Texts.Word.ETC,
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.SemiBold
