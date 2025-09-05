@@ -26,7 +26,7 @@ class PToastState internal constructor() {
 }
 
 @Composable
-fun rememberSimpleToastState() = remember { PToastState() }
+fun rememberToastState() = remember { PToastState() }
 
 @Composable
 fun PToastHost(

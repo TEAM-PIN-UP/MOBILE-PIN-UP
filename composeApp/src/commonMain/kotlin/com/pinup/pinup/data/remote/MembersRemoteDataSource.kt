@@ -1,5 +1,6 @@
 package com.pinup.pinup.data.remote
 
+import com.pinup.pinup.data.request.ProfileEditRequest
 import com.pinup.pinup.data.response.GetMemberInfoResponse
 import com.pinup.pinup.data.response.GetReviewsResponse
 import com.pinup.pinup.data.response.SearchUserResponse
@@ -11,4 +12,5 @@ interface MembersRemoteDataSource {
     suspend fun getMemberInfo(memberId: Int?): PResult<GetMemberInfoResponse>
     suspend fun getTextReviews(memberId: Int?, page: Int, size: Int): PResult<GetReviewsResponse>
     suspend fun getPhotoReviews(memberId: Int?, page: Int, size: Int): PResult<GetReviewsResponse>
+    suspend fun editProfile(request: ProfileEditRequest): PResult<Unit>
 }

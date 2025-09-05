@@ -1,5 +1,6 @@
 package com.pinup.pinup.domain.repository
 
+import com.pinup.pinup.data.request.ProfileEditRequest
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.PagingReview
@@ -22,4 +23,5 @@ interface MembersRepository {
     suspend fun getRecentSearchList(): StateFlow<List<String>>
     suspend fun deleteRecentSearch(index: Int)
     suspend fun saveRecentSearch(search: String)
+    suspend fun editProfile(request: ProfileEditRequest): PResult<Unit>
 }

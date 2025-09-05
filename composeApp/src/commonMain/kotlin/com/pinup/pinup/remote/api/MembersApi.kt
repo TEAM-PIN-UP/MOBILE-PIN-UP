@@ -1,5 +1,6 @@
 package com.pinup.pinup.remote.api
 
+import com.pinup.pinup.data.request.ProfileEditRequest
 import com.pinup.pinup.data.request.signUp.EmailSignUpRequest
 import com.pinup.pinup.data.request.signUp.SocialSignUpRequest
 import com.pinup.pinup.data.response.GetMemberInfoResponse
@@ -12,6 +13,7 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Multipart
 import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import io.ktor.client.HttpClient
@@ -68,4 +70,9 @@ interface MembersApi {
     suspend fun emailSignUp(
         @Body request: EmailSignUpRequest
     ): PResult<PResponse<LoginResponse>>
+
+    @PUT(ApiPath.Members.MEMBERS)
+    suspend fun editProfile(
+        @Body request: ProfileEditRequest
+    ): PResult<PResponse<Unit>>
 }

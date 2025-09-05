@@ -10,7 +10,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.main.compose.MainDestination
-import com.pinup.pinup.ui.pinlogDetail.PinlogUiEvent
 import com.pinup.pinup.ui.theme.Texts
 import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
 import dev.icerock.moko.geo.compose.LocationTrackerAccuracy
@@ -19,7 +18,7 @@ import dev.icerock.moko.geo.compose.rememberLocationTrackerFactory
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
-import rememberSimpleToastState
+import rememberToastState
 
 @Composable
 fun MapRoute(
@@ -32,7 +31,7 @@ fun MapRoute(
     )
     val mapViewModel: MapViewModel = koinViewModel(parameters = { parametersOf(locationTrackerFactory.createLocationTracker()) })
     val mapUiState = mapViewModel.uiState.collectAsStateWithLifecycle()
-    val toast = rememberSimpleToastState()
+    val toast = rememberToastState()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
     var clickedPinlog by remember { mutableStateOf(0) }
 

@@ -132,6 +132,7 @@ fun ProfileSettingScreen(
             if (profileImage.isEmpty() && profileImageByte == null) {
                 Image(
                     modifier = Modifier
+                        .size(84.dp)
                         .clickableSingleWithNoRipple {
                             singleImagePicker.launch()
                         },
@@ -139,27 +140,30 @@ fun ProfileSettingScreen(
                     contentDescription = null,
                 )
             } else {
-                AsyncImage(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .size(84.dp)
-                        .clickableSingleWithNoRipple {
-                            singleImagePicker.launch()
-                        },
-                    model = profileImageByte ?: profileImage,
-                    contentScale = ContentScale.Crop,
-                    contentDescription = null,
-                )
+                Box {
+                    AsyncImage(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(84.dp)
+                            .clickableSingleWithNoRipple {
+                                singleImagePicker.launch()
+                            },
+                        model = profileImageByte ?: profileImage,
+                        contentScale = ContentScale.Crop,
+                        contentDescription = null,
+                    )
 
-                Image(
-                    modifier = Modifier
-                        .clickableSingleWithNoRipple {
-                            singleImagePicker.launch()
-                        },
-                    painter = painterResource(Res.drawable.ic_profile_setting_image),
-                    contentDescription = null,
-                )
-            }
+                    Image(
+                        modifier = Modifier
+                            .size(84.dp)
+                            .clickableSingleWithNoRipple {
+                                singleImagePicker.launch()
+                            },
+                        painter = painterResource(Res.drawable.ic_profile_setting_image),
+                        contentDescription = null,
+                    )
+                }
+                }
         }
 
         Spacer(modifier = Modifier.height(34.dp))

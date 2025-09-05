@@ -16,6 +16,7 @@ val useCaseModule = module {
     single<DeleteRequestPinBuddyUseCase> { DeleteRequestPinBuddyUseCase(get()) }
     single<EditCommentUseCase> { EditCommentUseCase(get()) }
     single<EditPinlogUseCase> { EditPinlogUseCase(get()) }
+    single<EditProfileUseCase> { EditProfileUseCase(get()) }
     single<GetBookmarksUseCase> { GetBookmarksUseCase(get()) }
     single<GetDetailPlaceUseCase> { GetDetailPlaceUseCase(get()) }
     single<GetFeedUseCase> { GetFeedUseCase(get()) }

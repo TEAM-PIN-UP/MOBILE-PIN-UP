@@ -2,6 +2,7 @@ package com.pinup.pinup.data.impl
 
 import com.pinup.pinup.data.local.MembersLocalDataSource
 import com.pinup.pinup.data.remote.MembersRemoteDataSource
+import com.pinup.pinup.data.request.ProfileEditRequest
 import com.pinup.pinup.data.response.GetMemberInfoResponse.Companion.toModel
 import com.pinup.pinup.data.response.GetReviewsResponse.Companion.toModel
 import com.pinup.pinup.data.response.SearchUserResponse.Companion.toModel
@@ -91,5 +92,9 @@ class MembersRepositoryImpl (
 
     override suspend fun saveRecentSearch(search: String) {
         membersLocalDataSource.saveRecentSearch(search)
+    }
+
+    override suspend fun editProfile(request: ProfileEditRequest): PResult<Unit> {
+        return membersRemoteDataSource.editProfile(request)
     }
 }

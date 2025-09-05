@@ -195,7 +195,7 @@ class SignUpViewModel (
 
     private fun checkNickName(nickname: String) = viewModelScope.launch {
         handleSuccessCheckNickName(false)
-        //resultResponse(checkNickNameUseCase(nickname), ::handleSuccessCheckNickName)
+        resultResponse(checkNickNameUseCase(nickname), ::handleSuccessCheckNickName)
     }
 
     private fun handleSuccessCheckNickName(isNicknameUsed: Boolean) {

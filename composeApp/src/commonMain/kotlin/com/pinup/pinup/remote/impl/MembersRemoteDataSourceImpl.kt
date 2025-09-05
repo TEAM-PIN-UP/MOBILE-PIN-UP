@@ -1,6 +1,7 @@
 package com.pinup.pinup.remote.impl
 
 import com.pinup.pinup.data.remote.MembersRemoteDataSource
+import com.pinup.pinup.data.request.ProfileEditRequest
 import com.pinup.pinup.data.response.GetMemberInfoResponse
 import com.pinup.pinup.data.response.GetReviewsResponse
 import com.pinup.pinup.data.response.SearchUserResponse
@@ -45,5 +46,9 @@ class MembersRemoteDataSourceImpl (
         return memberId?.let {
             membersApi.getPhotoReviews(it, page, size).mapSuccessData()
         } ?: membersApi.getPhotoReviews(page, size).mapSuccessData()
+    }
+
+    override suspend fun editProfile(request: ProfileEditRequest): PResult<Unit> {
+        return membersApi.editProfile(request).mapSuccessData()
     }
 }

@@ -12,7 +12,7 @@ import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.theme.Texts
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
-import rememberSimpleToastState
+import rememberToastState
 
 @Composable
 fun PinlogDetailRoute(
@@ -20,7 +20,7 @@ fun PinlogDetailRoute(
     onBackPressed: () -> Unit = {},
     onClickEdit: (Int) -> Unit = {},
 ) {
-    val toast = rememberSimpleToastState()
+    val toast = rememberToastState()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
     val isShowDeleteCommentDialog = remember { mutableStateOf(false) }

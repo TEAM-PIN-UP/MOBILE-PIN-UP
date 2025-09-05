@@ -8,7 +8,7 @@ import com.pinup.pinup.ui.theme.Texts
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
-import rememberSimpleToastState
+import rememberToastState
 
 @Composable
 fun PinBuddyRoute(
@@ -18,7 +18,7 @@ fun PinBuddyRoute(
     pinBuddyViewModel: PinBuddyViewModel = koinViewModel()
 ) {
     val uiState = pinBuddyViewModel.uiState.collectAsStateWithLifecycle()
-    val toast = rememberSimpleToastState()
+    val toast = rememberToastState()
 
     LaunchedEffect(Unit) {
         pinBuddyViewModel.uiEvent.collectLatest {
