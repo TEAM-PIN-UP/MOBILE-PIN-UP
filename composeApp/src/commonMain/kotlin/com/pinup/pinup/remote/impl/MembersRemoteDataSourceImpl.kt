@@ -51,4 +51,8 @@ class MembersRemoteDataSourceImpl (
     override suspend fun editProfile(request: ProfileEditRequest): PResult<Unit> {
         return membersApi.editProfile(request).mapSuccessData()
     }
+
+    override suspend fun unregister(): PResult<Unit> {
+        return membersApi.unregister().mapSuccessData()
+    }
 }

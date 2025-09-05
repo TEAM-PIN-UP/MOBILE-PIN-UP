@@ -52,4 +52,5 @@ val useCaseModule = module {
     single<SearchUserUseCase> { SearchUserUseCase(get()) }
     single<SocialSignUpUseCase> { SocialSignUpUseCase(get(), get(), get()) }
     single<EmailSignUpUseCase> { EmailSignUpUseCase(get(), get(), get()) }
+    single<UnRegisterUseCase> { UnRegisterUseCase(get()) }
 }

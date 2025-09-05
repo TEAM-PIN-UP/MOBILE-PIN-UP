@@ -97,4 +97,8 @@ class MembersRepositoryImpl (
     override suspend fun editProfile(request: ProfileEditRequest): PResult<Unit> {
         return membersRemoteDataSource.editProfile(request)
     }
+
+    override suspend fun unregister(): PResult<Unit> {
+        return membersRemoteDataSource.unregister()
+    }
 }

@@ -10,6 +10,7 @@ import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.data.response.SearchUserResponse
 import com.pinup.pinup.domain.model.PResult
 import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Multipart
 import de.jensklingenberg.ktorfit.http.POST
@@ -75,4 +76,7 @@ interface MembersApi {
     suspend fun editProfile(
         @Body request: ProfileEditRequest
     ): PResult<PResponse<Unit>>
+
+    @DELETE(ApiPath.Members.MEMBERS)
+    suspend fun unregister(): PResult<PResponse<Unit>>
 }

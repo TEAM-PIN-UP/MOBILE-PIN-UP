@@ -13,4 +13,5 @@ interface MembersRemoteDataSource {
     suspend fun getTextReviews(memberId: Int?, page: Int, size: Int): PResult<GetReviewsResponse>
     suspend fun getPhotoReviews(memberId: Int?, page: Int, size: Int): PResult<GetReviewsResponse>
     suspend fun editProfile(request: ProfileEditRequest): PResult<Unit>
+    suspend fun unregister(): PResult<Unit>
 }

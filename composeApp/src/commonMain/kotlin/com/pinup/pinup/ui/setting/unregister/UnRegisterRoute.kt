@@ -1,4 +1,4 @@
-package com.pinup.pinup.ui.setting
+package com.pinup.pinup.ui.setting.unregister
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -7,28 +7,24 @@ import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun SettingRoute(
-    viewModel: SettingViewModel = koinViewModel(),
+fun UnRegisterRoute(
+    viewModel: UnRegisterViewModel = koinViewModel(),
     onBackPressed: () -> Unit,
-    onMoveLoginScreen: () -> Unit,
-    onMoveProfileModify: () -> Unit,
-    onMoveUnRegister: () -> Unit = {}
+    onMoveCompleteUnRegister: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
             when (it) {
-                SettingUiEvent.MoveLogin -> onMoveLoginScreen()
+                UnRegisterUiEvent.MoveOnBoarding -> onMoveCompleteUnRegister()
             }
         }
     }
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    SettingScreen(
-        email = uiState.value.email,
-        snsType = uiState.value.snsType,
+    UnRegisterScreen(
+        isCheck = uiState.value.isCheck,
+        onClickCheck = viewModel::onClickCheck,
         onBackPressed = onBackPressed,
-        onLogoutClick = viewModel::logout,
-        onProfileModifyClick = onMoveProfileModify,
-        onMoveUnRegister = onMoveUnRegister
+        onUnRegisterClick = viewModel::unregister
     )
 }

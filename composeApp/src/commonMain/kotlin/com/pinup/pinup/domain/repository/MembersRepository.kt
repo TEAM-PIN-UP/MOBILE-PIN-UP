@@ -24,4 +24,5 @@ interface MembersRepository {
     suspend fun deleteRecentSearch(index: Int)
     suspend fun saveRecentSearch(search: String)
     suspend fun editProfile(request: ProfileEditRequest): PResult<Unit>
+    suspend fun unregister(): PResult<Unit>
 }

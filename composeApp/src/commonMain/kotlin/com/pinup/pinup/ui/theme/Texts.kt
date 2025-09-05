@@ -40,6 +40,7 @@ object Texts {
         const val COMPLETE = "완료"
         const val NICKNAME = "닉네임"
         const val INTRO = "소개"
+        const val UNREGISTER = "탈퇴하기"
     }
 
     object Onboarding {
@@ -206,6 +207,12 @@ object Texts {
         const val HINT_NICKNAME_CHANGE = "*닉네임은 30일마다 변경 가능해요."
         const val LOGOUT_DIALOG_TITLE = "로그아웃 하시겠어요?"
         const val LOGOUT_DIALOG_DESCRIPTION = "아쉬워요\uD83D\uDE25\n언제든 다시 놀러오세요!"
+        const val UNREGISTER_TITLE = "정말 핀업과\n함께하지 않으실건가요?"
+        const val UNREGISTER_DESCRIPTION = "회원탈퇴시 삭제된 정보는 복구가 불가능합니다."
+        const val UNREGISTER_CHECK_COMMENT = "안내사항을 모두 확인하였으며, 이에 동의합니다."
+
+        const val UNREGISTER_DIALOG_TITLE = "정말 탈퇴하시겠습니까?"
+        const val UNREGISTER_DIALOG_DESCRIPTION = "회원 탈퇴시, 이전까지 사용하셨던\n서비스 기록들을 더 이상\n사용하실 수 없습니다."
     }
 
     object Toast {

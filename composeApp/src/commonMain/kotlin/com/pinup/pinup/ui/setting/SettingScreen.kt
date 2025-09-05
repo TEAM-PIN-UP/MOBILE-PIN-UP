@@ -42,6 +42,7 @@ fun SettingScreen(
     onBackPressed: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
     onProfileModifyClick: () -> Unit = {},
+    onMoveUnRegister: () -> Unit = {}
 ) {
     val context = LocalPlatformContext.current
 //    val packageInfo = remember {
@@ -200,7 +201,9 @@ fun SettingScreen(
 
             MenuBar(
                 text = Texts.Setting.UNREGISTER,
-                onClick = {}
+                onClick = {
+                    onMoveUnRegister()
+                }
             )
         }
     }
