@@ -13,6 +13,7 @@ object Texts {
         const val WORD_LOGIN = "로그인"
         const val NEXT = "다음"
         const val SKIP = "건너뛰기"
+        const val DO_GO = "계속하기"
         const val EMAIL = "이메일"
         const val CONFIRM = "확인"
         const val DO_CONFiRM = "확인하기"
@@ -203,6 +204,8 @@ object Texts {
         const val UNREGISTER = "회원탈퇴"
         const val HINT_BIO_CHANGE = "60자 이내로 나를 소개해 보세요."
         const val HINT_NICKNAME_CHANGE = "*닉네임은 30일마다 변경 가능해요."
+        const val LOGOUT_DIALOG_TITLE = "로그아웃 하시겠어요?"
+        const val LOGOUT_DIALOG_DESCRIPTION = "아쉬워요\uD83D\uDE25\n언제든 다시 놀러오세요!"
     }
 
     object Toast {

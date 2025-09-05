@@ -207,10 +207,10 @@ fun SettingScreen(
 
     if (isShowLogoutDialog.value) {
         PDialog(
-            titleText = "로그아웃 하시겠어요?",
-            descriptionText = "아쉬워요 \uD83D\uDE25\n언제든 다시 놀러오세요!",
-            leftButtonText = "취소",
-            rightButtonText = "로그아웃",
+            titleText = Texts.Setting.LOGOUT_DIALOG_TITLE,
+            descriptionText = Texts.Setting.LOGOUT_DIALOG_DESCRIPTION,
+            leftButtonText = Texts.Word.DO_RETURN,
+            rightButtonText = Texts.Word.DO_GO,
             onLeftButtonClick = {
                 isShowLogoutDialog.value = false
             },
