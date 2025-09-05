@@ -303,6 +303,13 @@ fun PinUpApp(
                                     inclusive = true
                                 }
                             }
+                        },
+                        onMoveLoginOnboardingScreen = {
+                            navHostController.navigate(PinUpAppDestination.Onboarding) {
+                                popUpTo(navHostController.graph.id) {
+                                    inclusive = true
+                                }
+                            }
                         }
                     )
                 }

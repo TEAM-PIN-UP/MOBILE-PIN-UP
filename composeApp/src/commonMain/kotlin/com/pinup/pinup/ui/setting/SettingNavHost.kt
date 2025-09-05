@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.ui.profilesetting.ProfileSettingRoute
+import com.pinup.pinup.ui.setting.complete.UnRegisterCompleteScreen
 import com.pinup.pinup.ui.setting.unregister.UnRegisterRoute
 import kotlinx.serialization.Serializable
 
@@ -16,6 +17,7 @@ import kotlinx.serialization.Serializable
 fun SettingNavHost(
     onBackPressed: () -> Unit,
     onMoveLoginScreen: () -> Unit,
+    onMoveLoginOnboardingScreen: () -> Unit,
 ) {
     val navHostController = rememberNavController()
     NavHost(
@@ -58,7 +60,19 @@ fun SettingNavHost(
                     navHostController.popBackStack()
                 },
                 onMoveCompleteUnRegister = {
+                    navHostController.navigate(SettingDestination.Complete) {
+                        popUpTo(navHostController.graph.id) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
 
+        composable<SettingDestination.Complete> {
+            UnRegisterCompleteScreen(
+                onMoveOnboarding = {
+                    onMoveLoginOnboardingScreen
                 }
             )
         }
@@ -72,4 +86,6 @@ sealed interface SettingDestination {
     data object ProfileSetting : SettingDestination
     @Serializable
     data object UnRegister : SettingDestination
+    @Serializable
+    data object Complete : SettingDestination
 }

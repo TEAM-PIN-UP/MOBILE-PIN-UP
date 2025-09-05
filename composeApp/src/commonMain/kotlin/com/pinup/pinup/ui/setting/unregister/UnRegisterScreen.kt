@@ -113,6 +113,8 @@ fun UnRegisterScreen(
                 },
                 isEnable = isCheck
             )
+
+            Spacer(modifier = Modifier.height(42.dp))
         }
     }
 

@@ -21,6 +21,7 @@ fun UnRegisterRoute(
     }
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+
     UnRegisterScreen(
         isCheck = uiState.value.isCheck,
         onClickCheck = viewModel::onClickCheck,

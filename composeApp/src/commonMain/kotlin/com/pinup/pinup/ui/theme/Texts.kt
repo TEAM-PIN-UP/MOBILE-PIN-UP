@@ -213,6 +213,7 @@ object Texts {
 
         const val UNREGISTER_DIALOG_TITLE = "정말 탈퇴하시겠습니까?"
         const val UNREGISTER_DIALOG_DESCRIPTION = "회원 탈퇴시, 이전까지 사용하셨던\n서비스 기록들을 더 이상\n사용하실 수 없습니다."
+        const val UNREGISTER_COMPLETE = "그동안 핀업을 이용해주셔서\n감사합니다 :) \n다음에 또 만나요!"
     }
 
     object Toast {

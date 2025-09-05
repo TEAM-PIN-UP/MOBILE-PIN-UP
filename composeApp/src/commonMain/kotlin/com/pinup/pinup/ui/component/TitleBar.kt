@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
@@ -46,8 +47,10 @@ fun TitleBar(
             modifier = Modifier
                 .align(Alignment.Center),
             text = title,
-            style = Typography.H3,
-            color = Colors.Neutral800
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            color = Colors.Gray800
         )
 
         rightIcon?.let {
