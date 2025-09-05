@@ -37,6 +37,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.serializer
 import org.koin.dsl.module
+import kotlin.reflect.typeOf
 
 val httpClientModule = module {
     single {
@@ -159,8 +160,19 @@ class PResultConverterFactory(
                             val bodyText = result.response.bodyAsText()
                             kLog(bodyText)
                             if (result.response.status.value == 200) {
-                                val deserializer = json.serializersModule.serializer(typeData.typeArgs.first().typeInfo.kotlinType!!)
-                                PResult.Success(json.decodeFromString(deserializer, bodyText))
+                                if (typeData.typeArgs.first().typeInfo.kotlinType!! == typeOf<PResponse<Unit>>()) {
+                                    PResult.Success(
+                                        PResponse(
+                                            status = 200,
+                                            code = "",
+                                            message = "",
+                                            data = Unit
+                                        )
+                                    )
+                                } else {
+                                    val deserializer = json.serializersModule.serializer(typeData.typeArgs.first().typeInfo.kotlinType!!)
+                                    PResult.Success(json.decodeFromString(deserializer, bodyText))
+                                }
                             } else {
                                 if (result.response.status.value == 403) {
                                     PResult.Fail(
