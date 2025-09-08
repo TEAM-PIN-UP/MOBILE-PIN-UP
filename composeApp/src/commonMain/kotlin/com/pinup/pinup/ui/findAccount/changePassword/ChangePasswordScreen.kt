@@ -85,7 +85,7 @@ fun ChangePasswordScreen(
             color = Colors.Neutral700
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(3.dp))
 
         RoundedTextField(
             modifier = Modifier,
@@ -105,7 +105,17 @@ fun ChangePasswordScreen(
             ErrorText(Texts.SignupPassword.INVALID)
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(15.dp))
+
+        Text(
+            text = Texts.FindPassword.PASSWORD_AGAIN_HINT,
+            style = Typography.B1.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            color = Colors.Neutral700
+        )
+
+        Spacer(modifier = Modifier.height(3.dp))
 
         Box{
             RoundedTextField(
@@ -114,7 +124,6 @@ fun ChangePasswordScreen(
                 onValueChange = {
                     onPasswordAgainChanged(it)
                 },
-                placeholder = Texts.FindPassword.PASSWORD_AGAIN_HINT,
                 visualTransformation = if(isShowPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 cornerRounded = 100,
                 isError = !isPasswordMatched

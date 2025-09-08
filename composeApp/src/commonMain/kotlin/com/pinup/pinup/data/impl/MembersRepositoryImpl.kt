@@ -3,6 +3,7 @@ package com.pinup.pinup.data.impl
 import com.pinup.pinup.data.local.MembersLocalDataSource
 import com.pinup.pinup.data.remote.MembersRemoteDataSource
 import com.pinup.pinup.data.request.ProfileEditRequest
+import com.pinup.pinup.data.response.CheckNickNameResponse.Companion.toModel
 import com.pinup.pinup.data.response.GetMemberInfoResponse.Companion.toModel
 import com.pinup.pinup.data.response.GetReviewsResponse.Companion.toModel
 import com.pinup.pinup.data.response.SearchUserResponse.Companion.toModel
@@ -21,7 +22,9 @@ class MembersRepositoryImpl (
     private val membersLocalDataSource: MembersLocalDataSource
 ): MembersRepository {
     override suspend fun checkNickName(nickname: String): PResult<Boolean> {
-        return membersRemoteDataSource.checkNickName(nickname)
+        return membersRemoteDataSource.checkNickName(nickname).map {
+            it.toModel()
+        }
     }
 
     override suspend fun saveToken(tokenInfo: TokenInfo): PResult<Unit> {

@@ -11,4 +11,5 @@ data class SocialSignUpRequest(
     val socialId: String,
     val loginType: SNSType,
     val termsOfMarketing: String,
+    val profileImageUrl: String,
 )

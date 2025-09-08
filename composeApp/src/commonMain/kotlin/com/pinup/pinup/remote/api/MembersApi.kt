@@ -3,6 +3,7 @@ package com.pinup.pinup.remote.api
 import com.pinup.pinup.data.request.ProfileEditRequest
 import com.pinup.pinup.data.request.signUp.EmailSignUpRequest
 import com.pinup.pinup.data.request.signUp.SocialSignUpRequest
+import com.pinup.pinup.data.response.CheckNickNameResponse
 import com.pinup.pinup.data.response.GetMemberInfoResponse
 import com.pinup.pinup.data.response.GetReviewsResponse
 import com.pinup.pinup.data.response.LoginResponse
@@ -25,7 +26,7 @@ import io.ktor.http.parameters
 
 interface MembersApi {
     @GET("api/members/nickname/check")
-    suspend fun checkNickName(@Query("nickname") nickname: String): PResult<PResponse<Boolean>>
+    suspend fun checkNickName(@Query("nickname") nickname: String): PResult<PResponse<CheckNickNameResponse>>
 
     @GET("api/members/search")
     suspend fun searchUser(@Query("nickname") nickname: String): PResult<PResponse<List<SearchUserResponse>>>

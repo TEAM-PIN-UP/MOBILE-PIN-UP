@@ -11,4 +11,5 @@ data class EmailSignUpRequest(
     val nickname: String,
     val loginType: SNSType,
     val termsOfMarketing: String,
+    val profileImageUrl: String
 )

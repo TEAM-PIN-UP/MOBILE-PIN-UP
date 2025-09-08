@@ -2,6 +2,7 @@ package com.pinup.pinup.remote.impl
 
 import com.pinup.pinup.data.remote.MembersRemoteDataSource
 import com.pinup.pinup.data.request.ProfileEditRequest
+import com.pinup.pinup.data.response.CheckNickNameResponse
 import com.pinup.pinup.data.response.GetMemberInfoResponse
 import com.pinup.pinup.data.response.GetReviewsResponse
 import com.pinup.pinup.data.response.SearchUserResponse
@@ -14,7 +15,7 @@ class MembersRemoteDataSourceImpl (
     private val membersApi: MembersApi
 ): MembersRemoteDataSource {
 
-    override suspend fun checkNickName(nickname: String): PResult<Boolean> {
+    override suspend fun checkNickName(nickname: String): PResult<CheckNickNameResponse> {
         return membersApi.checkNickName(nickname).mapSuccessData()
     }
 

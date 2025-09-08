@@ -241,15 +241,24 @@ class SignUpViewModel (
         updateState { copy( termsOfServiceState = termsOfServiceState) }
     }
 
-    fun signUp() {
-        if (uiState.value.snsType == SNSType.PINUP) {
-            emailSignUp()
+    fun signUp() = viewModelScope.launch {
+        if(uiState.value.profileUrl.isEmpty()) {
+            return@launch
         } else {
-            socialSignUp()
+            resultResponse(
+                response = uploadImageUploadUseCase(ImageUploadType.PROFILES, uiState.value.profileUrl),
+                successCallback = {
+                    if (uiState.value.snsType == SNSType.PINUP) {
+                        emailSignUp(it)
+                    } else {
+                        socialSignUp(it)
+                    }
+                }
+            )
         }
     }
 
-    private fun socialSignUp() = viewModelScope.launch {
+    private fun socialSignUp(profile: String) = viewModelScope.launch {
         val request = SignUpInfo(
             email = uiState.value.emailState.email,
             socialId = uiState.value.socialId,
@@ -257,14 +266,15 @@ class SignUpViewModel (
             name = uiState.value.name,
             loginType = uiState.value.snsType,
             termsOfMarketing = uiState.value.termsOfServiceState.isMarketingAgreeAgree,
+            profileImageUrl = profile
         )
         resultResponse(
             response = socialSignUpUseCase(request),
-            successCallback = { uploadProfileImage() }
+            successCallback = { emitEvent(SignUpUiEvent.MoveMain) }
         )
     }
 
-    private fun emailSignUp() = viewModelScope.launch {
+    private fun emailSignUp(profile: String) = viewModelScope.launch {
         val request = SignUpInfo(
             email = uiState.value.emailState.email,
             nickname = uiState.value.nicknameState.nickname,
@@ -272,20 +282,10 @@ class SignUpViewModel (
             name = uiState.value.nicknameState.nickname,
             loginType = uiState.value.snsType,
             termsOfMarketing = uiState.value.termsOfServiceState.isMarketingAgreeAgree,
+            profileImageUrl = profile
         )
         resultResponse(
             response = emailSignUpUseCase(request),
-            successCallback = { uploadProfileImage() }
-        )
-    }
-
-    private fun uploadProfileImage() = viewModelScope.launch {
-        if(uiState.value.profileUrl.isEmpty()) {
-            emitEvent(SignUpUiEvent.MoveMain)
-            return@launch
-        }
-        resultResponse(
-            response = uploadImageUploadUseCase(ImageUploadType.PROFILES, uiState.value.profileUrl),
             successCallback = { emitEvent(SignUpUiEvent.MoveMain) }
         )
     }

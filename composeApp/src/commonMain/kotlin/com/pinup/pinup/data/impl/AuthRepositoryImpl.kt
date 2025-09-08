@@ -42,7 +42,8 @@ class AuthRepositoryImpl (
                 email = signUpInfo.email,
                 socialId = signUpInfo.socialId,
                 loginType = signUpInfo.loginType,
-                termsOfMarketing = signUpInfo.termsOfMarketing.toYnString()
+                termsOfMarketing = signUpInfo.termsOfMarketing.toYnString(),
+                profileImageUrl = signUpInfo.profileImageUrl
             )
         )
     }
@@ -55,7 +56,8 @@ class AuthRepositoryImpl (
                 password = signUpInfo.password,
                 nickname = signUpInfo.nickname,
                 loginType = signUpInfo.loginType,
-                termsOfMarketing = signUpInfo.termsOfMarketing.toYnString()
+                termsOfMarketing = signUpInfo.termsOfMarketing.toYnString(),
+                profileImageUrl = signUpInfo.profileImageUrl
             )
         )
     }

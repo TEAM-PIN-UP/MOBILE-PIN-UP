@@ -14,18 +14,18 @@ fun FindPasswordEmailRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     if (uiState.isSentPassword) {
+        SentPasswordScreen(
+            email = uiState.email,
+            onBackPressed = viewModel::onClickBack,
+            onClickLogin = onMoveLogin
+        )
+    } else {
         FindPasswordEmailScreen(
             email = uiState.email,
             isEmailValid = uiState.isEmailValid,
             onEmailChanged = viewModel::updateEmail,
             onClickSendPassword = viewModel::onClickSendPassword,
             onBackPressed = onBackPressed
-        )
-    } else {
-        SentPasswordScreen(
-            email = uiState.email,
-            onBackPressed = viewModel::onClickBack,
-            onClickLogin = onMoveLogin
         )
     }
 }
