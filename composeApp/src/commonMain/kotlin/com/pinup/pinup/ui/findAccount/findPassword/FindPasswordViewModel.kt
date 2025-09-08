@@ -3,11 +3,15 @@ package com.pinup.pinup.ui.findAccount.findPassword
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
 import androidx.lifecycle.viewModelScope
+import com.pinup.pinup.data.request.SendVerifyCodeRequest
+import com.pinup.pinup.domain.usecase.PostTemporaryPasswordUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.util.Const
 import kotlinx.coroutines.launch
 
-class FindPasswordViewModel: BaseViewModel<ChangePasswordUiState, UiEvent>(
+class FindPasswordViewModel(
+    private val postTemporaryPasswordUseCase: PostTemporaryPasswordUseCase
+): BaseViewModel<ChangePasswordUiState, UiEvent>(
     ChangePasswordUiState()
 ) {
     fun updateEmail(email: String) = viewModelScope.launch {
@@ -23,7 +27,21 @@ class FindPasswordViewModel: BaseViewModel<ChangePasswordUiState, UiEvent>(
 
     fun onClickSendPassword() = viewModelScope.launch {
         if (isValidEmail()) {
-
+            val request = SendVerifyCodeRequest(
+                email = uiState.value.emailState.email
+            )
+            resultResponse(
+                response = postTemporaryPasswordUseCase(request),
+                successCallback = {
+                    updateState {
+                        copy(
+                            emailState = emailState.copy(
+                                isSentPassword = true
+                            )
+                        )
+                    }
+                }
+            )
         }
     }
 
@@ -79,7 +97,7 @@ class FindPasswordViewModel: BaseViewModel<ChangePasswordUiState, UiEvent>(
     fun onClickBack() {
         updateState {
             copy(
-                emailState.copy(
+                emailState = emailState.copy(
                     isSentPassword = false
                 )
             )

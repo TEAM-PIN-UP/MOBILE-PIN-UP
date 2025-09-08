@@ -37,6 +37,7 @@ val useCaseModule = module {
     single<PostImageUploadUseCase> { PostImageUploadUseCase(get()) }
     single<PostReviewLikeChangeUseCase> { PostReviewLikeChangeUseCase(get()) }
     single<PostSendVerifyCodeUseCase> { PostSendVerifyCodeUseCase(get()) }
+    single<PostTemporaryPasswordUseCase> { PostTemporaryPasswordUseCase(get()) }
     single<PostSeveralImagesUploadUseCase> { PostSeveralImagesUploadUseCase(get()) }
     single<SocialLoginUseCase> { SocialLoginUseCase(get(), get(), get()) }
     single<EmailLoginUseCase> { EmailLoginUseCase(get(), get(), get()) }

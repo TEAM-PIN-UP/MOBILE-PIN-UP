@@ -13,4 +13,6 @@ interface EmailApi {
 
     @POST(ApiPath.MailPath.SEND_CODE)
     suspend fun sendVerifyCode(@Body request: SendVerifyCodeRequest): PResult<PResponse<Unit>>
+    @POST(ApiPath.MailPath.SEND_PASSWORD)
+    suspend fun sendTemporaryPassword(@Body request: SendVerifyCodeRequest): PResult<PResponse<Unit>>
 }

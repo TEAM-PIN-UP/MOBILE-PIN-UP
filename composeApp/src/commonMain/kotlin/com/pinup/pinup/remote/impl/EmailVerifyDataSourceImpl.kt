@@ -17,4 +17,8 @@ class EmailVerifyDataSourceImpl(
     override suspend fun sendVerifyCode(request: SendVerifyCodeRequest): PResult<Unit> {
         return emailApi.sendVerifyCode(request).mapSuccessData()
     }
+
+    override suspend fun sendTemporaryPassword(request: SendVerifyCodeRequest): PResult<Unit> {
+        return emailApi.sendTemporaryPassword(request).mapSuccessData()
+    }
 }

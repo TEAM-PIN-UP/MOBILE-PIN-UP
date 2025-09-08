@@ -21,6 +21,7 @@ object ApiPath {
         private const val EMAIL = "api/mail"
         const val VERIFY_CODE = "$EMAIL/verify-code"
         const val SEND_CODE = "$EMAIL/send-code"
+        const val SEND_PASSWORD = "$EMAIL/send-password"
     }
 
     object ImagePath {
