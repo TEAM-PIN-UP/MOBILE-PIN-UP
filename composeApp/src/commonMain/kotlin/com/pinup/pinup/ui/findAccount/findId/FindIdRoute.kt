@@ -19,6 +19,7 @@ fun FindIdRoute(
         verificationCode = uiState.verificationCode,
         isEmailValid = uiState.isEmailValid,
         emailVerifyType = uiState.emailVerifyType,
+        isVerifyClicked = uiState.isVerifyClicked,
         onClickSendCode = viewModel::onClickVerify,
         onClickVerify = viewModel::verifyEmail,
         onEmailChanged = viewModel::updateEmail,

@@ -35,6 +35,7 @@ fun FindIdScreen(
     email: String = "",
     verificationCode: String = "",
     isEmailValid: Boolean = false,
+    isVerifyClicked: Boolean = false,
     isEmailFindClicked: Boolean = true,
     onClickSendCode: () -> Unit = {},
     onClickVerify: () -> Unit = {},
@@ -155,10 +156,10 @@ fun FindIdScreen(
                     RoundedBox(
                         modifier = Modifier
                             .clickableSingleWithNoRipple {
-                                onClickSendCode()
+                                if (isEmailValid && !isVerifyClicked) onClickSendCode()
                             },
                         cornerRounded = 100,
-                        backgroundColor = if (isEmailValid) Colors.Gray800 else Colors.Gray300,
+                        backgroundColor = if (isEmailValid && !isVerifyClicked) Colors.Gray800 else Colors.Gray300,
                     ) {
                         Text(
                             modifier = Modifier

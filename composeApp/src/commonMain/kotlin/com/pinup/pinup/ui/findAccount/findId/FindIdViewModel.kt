@@ -11,6 +11,7 @@ import com.pinup.pinup.domain.usecase.PostTemporaryPasswordUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.signup.EmailVerifyType
 import com.pinup.pinup.util.Const
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class FindIdViewModel(
@@ -46,6 +47,7 @@ class FindIdViewModel(
 
     fun onClickVerify() = viewModelScope.launch {
         if (isValidEmail()) {
+            delayVerifyButton()
             val request = SendVerifyCodeRequest(
                 email = uiState.value.email
             )
@@ -55,6 +57,21 @@ class FindIdViewModel(
             )
         }
     }
+
+    private fun delayVerifyButton() = viewModelScope.launch {
+        updateState {
+            copy(
+                isVerifyClicked = true
+            )
+        }
+        delay(5000)
+        updateState {
+            copy(
+                isVerifyClicked = false
+            )
+        }
+    }
+
     fun updateEmail(email: String) {
         updateState {
             copy(
@@ -98,6 +115,7 @@ data class FindIdUiState(
     val email: String = "",
     val verificationCode: String = "",
     val isEmailValid: Boolean = true,
+    val isVerifyClicked: Boolean = false,
     val emailVerifyType: EmailVerifyType = EmailVerifyType.NONE,
     val nickName: String = "",
     val isFindByEmail: Boolean = true
