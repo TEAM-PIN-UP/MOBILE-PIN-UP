@@ -82,6 +82,12 @@ object Texts {
         const val DO_LOGIN = "로그인하기"
     }
 
+    object FindId {
+        const val FIND_ID = "아이디 찾기"
+        const val FIND_ID_BY_EMAIL = "이메일 주소 찾기"
+        const val FIND_ID_BY_NICKNAME = "닉네임으로 찾기"
+    }
+
     object SignupEmail {
         const val TITLE = "로그인에 사용할\n이메일을 입력해주세요."
         const val HINT = "이메일 주소를 입력해주세요."

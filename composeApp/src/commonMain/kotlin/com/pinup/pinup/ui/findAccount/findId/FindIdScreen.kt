@@ -1,0 +1,238 @@
+package com.pinup.pinup.ui.findAccount.findId
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.pinup.pinup.extentions.clickableSingleWithNoRipple
+import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.ui.component.ErrorText
+import com.pinup.pinup.ui.component.PButton
+import com.pinup.pinup.ui.component.RoundedBox
+import com.pinup.pinup.ui.component.RoundedTextField
+import com.pinup.pinup.ui.component.TitleBar
+import com.pinup.pinup.ui.signup.EmailVerifyType
+import com.pinup.pinup.ui.theme.Colors
+import com.pinup.pinup.ui.theme.Texts
+import com.pinup.pinup.ui.theme.Typography
+
+@Composable
+fun FindIdScreen(
+    email: String = "",
+    verificationCode: String = "",
+    isEmailValid: Boolean = false,
+    isEmailFindClicked: Boolean = true,
+    onClickSendCode: () -> Unit = {},
+    onClickVerify: () -> Unit = {},
+    onClickConfirm: () -> Unit,
+    emailVerifyType: EmailVerifyType = EmailVerifyType.NONE,
+    onEmailChanged: (String) -> Unit = {},
+    onCodeChanged: (String) -> Unit = {},
+    onClickTabChanged: (Boolean) -> Unit = {},
+    onBackPressed: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Colors.White)
+            .padding(horizontal = 20.dp),
+    ) {
+        TitleBar(
+            onLeftButtonClick = onBackPressed
+        )
+
+        Spacer(modifier = Modifier.height(44.dp))
+
+        Text(
+            text = Texts.FindId.FIND_ID,
+            style = Typography.D2.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = Colors.Gray800
+        )
+
+        Spacer(modifier = Modifier.height(25.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            RoundedBox(
+                modifier = Modifier
+                    .weight(1f),
+                backgroundColor = if (isEmailFindClicked) Colors.Gray800 else Colors.White,
+                cornerColor = if (isEmailFindClicked) Colors.Transparency else Colors.Gray300,
+                cornerRounded = 999,
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .clickableWithNoRipple {
+                            onClickTabChanged(true)
+                        },
+                    text = Texts.FindId.FIND_ID_BY_EMAIL,
+                    color = if (isEmailFindClicked) Colors.White else Colors.Gray300,
+                    style = Typography.L2.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            Spacer(modifier = Modifier.width(15.dp))
+
+            RoundedBox(
+                modifier = Modifier
+                    .weight(1f),
+                cornerRounded = 999,
+                backgroundColor = if (isEmailFindClicked) Colors.White else Colors.Gray800,
+                cornerColor = if (isEmailFindClicked) Colors.Gray300 else Colors.Transparency,
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .clickableWithNoRipple {
+                            onClickTabChanged(false)
+                        },
+                    text = Texts.FindId.FIND_ID_BY_NICKNAME,
+                    color = if (isEmailFindClicked) Colors.Gray300 else Colors.White,
+                    style = Typography.L2.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        if (isEmailFindClicked) {
+            Text(
+                text = Texts.Word.EMAIL,
+                style = Typography.B1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray700
+            )
+
+            Spacer(modifier = Modifier.height(3.dp))
+
+            Box {
+                RoundedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = email,
+                    onValueChange = onEmailChanged,
+                    placeholder = Texts.SignupEmail.HINT,
+                    cornerRounded = 100,
+                    backgroundColor = Colors.White,
+                    isError = !isEmailValid,
+                )
+
+                Row(
+                    modifier = Modifier
+                        .padding(top = 11.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RoundedBox(
+                        modifier = Modifier
+                            .clickableSingleWithNoRipple {
+                                onClickSendCode()
+                            },
+                        cornerRounded = 100,
+                        backgroundColor = if (isEmailValid) Colors.Gray800 else Colors.Gray300,
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
+                                .align(Alignment.Center),
+                            text = Texts.Word.VERIFY,
+                            style = Typography.L3.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = Colors.White
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(19.dp))
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            if (isEmailValid) {
+                ErrorText(Texts.SignupEmail.INVALID)
+
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            Box {
+                RoundedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = verificationCode,
+                    onValueChange = onCodeChanged,
+                    placeholder = Texts.SignupEmail.CODE_HINT,
+                    cornerRounded = 100,
+                    backgroundColor = Colors.White,
+                    isError = emailVerifyType == EmailVerifyType.NOT_VERIFIED,
+                )
+
+                Row(
+                    modifier = Modifier
+                        .padding(top = 11.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RoundedBox(
+                        modifier = Modifier
+                            .clickableSingleWithNoRipple {
+                                onClickVerify()
+                            },
+                        cornerRounded = 100,
+                        backgroundColor = if (verificationCode.isNotEmpty()) Colors.Gray800 else Colors.Gray300,
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
+                                .align(Alignment.Center),
+                            text = Texts.Word.CONFIRM,
+                            style = Typography.L3.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = Colors.White
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(19.dp))
+                }
+
+                if (emailVerifyType == EmailVerifyType.NOT_VERIFIED) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    ErrorText(Texts.SignupEmail.CODE_INVALID)
+                }
+            }
+        } else {
+
+        }
+    }
+}

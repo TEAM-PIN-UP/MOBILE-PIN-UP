@@ -18,6 +18,7 @@ import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
 import com.pinup.pinup.ui.component.LogoutDialog
 import com.pinup.pinup.ui.findAccount.changePassword.ChangePasswordRoute
+import com.pinup.pinup.ui.findAccount.findId.FindIdRoute
 import com.pinup.pinup.ui.findAccount.findPassword.FindPasswordEmailRoute
 import com.pinup.pinup.ui.login.compose.LoginRoute
 import com.pinup.pinup.ui.login.model.SNSType
@@ -50,11 +51,11 @@ fun PinUpApp(
     val startDestination = when (uiState.value.isLogin) {
         true -> {
             // TODO 원래는 메인
-            PinUpAppDestination.ChangePassword
+            PinUpAppDestination.FindId
         }
         false -> {
             // TODO 원래는 onboarding
-            PinUpAppDestination.ChangePassword
+            PinUpAppDestination.FindId
         }
         else -> {
             return
@@ -141,6 +142,9 @@ fun PinUpApp(
                         },
                         onMoveFindPassword = {
                             navHostController.navigate(PinUpAppDestination.FindPasswordEmail)
+                        },
+                        onMoveFindId = {
+                            navHostController.navigate(PinUpAppDestination.FindId)
                         }
                     )
                 }
@@ -157,6 +161,31 @@ fun PinUpApp(
                     }
                 ){
                     FindPasswordEmailRoute(
+                        onMoveLogin = {
+                            navHostController.navigate(PinUpAppDestination.Login) {
+                                popUpTo(navHostController.graph.id) {
+                                    inclusive = true
+                                }
+                            }
+                        },
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
+                    )
+                }
+
+                composable<PinUpAppDestination.FindId>(
+                    enterTransition = {
+                        slideInHorizontally(initialOffsetX = { it })
+                    },
+                    popEnterTransition = {
+                        fadeIn(animationSpec = tween(200))
+                    },
+                    popExitTransition = {
+                        slideOutHorizontally(targetOffsetX = { it })
+                    }
+                ){
+                    FindIdRoute(
                         onMoveLogin = {
                             navHostController.navigate(PinUpAppDestination.Login) {
                                 popUpTo(navHostController.graph.id) {
@@ -370,6 +399,8 @@ sealed interface PinUpAppDestination {
     data object Login : PinUpAppDestination
     @Serializable
     data object FindPasswordEmail : PinUpAppDestination
+    @Serializable
+    data object FindId : PinUpAppDestination
     @Serializable
     data object ChangePassword : PinUpAppDestination
     @Serializable

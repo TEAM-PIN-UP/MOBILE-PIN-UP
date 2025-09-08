@@ -139,7 +139,10 @@ fun LoginScreen(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                modifier = Modifier,
+                modifier = Modifier
+                    .clickableSingleWithNoRipple {
+                        onCLickFindEmail()
+                    },
                 text = Texts.Login.LOGIN_ID_FIND,
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
