@@ -9,7 +9,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun FindPasswordEmailRoute(
-    onMoveChangePassword: () -> Unit,
+    onMoveLogin: () -> Unit,
     onBackPressed: () -> Unit,
     viewModel: FindPasswordViewModel = koinViewModel()
 ) {
@@ -22,13 +22,18 @@ fun FindPasswordEmailRoute(
         }
     }
 
-    FindPasswordEmailScreen(
-        onMovePassword = onMoveChangePassword,
-        emailState = uiState.emailState,
-        onEmailChanged = viewModel::updateEmail,
-        onCodeChanged = viewModel::updateVerificationCode,
-        onClickSendCode = viewModel::onClickSendCode,
-        onClickVerify = viewModel::onClickVerify,
-        onBackPressed = onBackPressed
-    )
+    if (uiState.emailState.isSentPassword) {
+        FindPasswordEmailScreen(
+            emailState = uiState.emailState,
+            onEmailChanged = viewModel::updateEmail,
+            onClickSendPassword = viewModel::onClickSendPassword,
+            onBackPressed = onBackPressed
+        )
+    } else {
+        SentPasswordScreen(
+            email = uiState.emailState.email,
+            onBackPressed = viewModel::onClickBack,
+            onClickLogin = onMoveLogin
+        )
+    }
 }

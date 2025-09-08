@@ -52,10 +52,12 @@ fun PinUpApp(
     val uiState = startAppViewModel.uiState.collectAsStateWithLifecycle()
     val startDestination = when (uiState.value.isLogin) {
         true -> {
-            PinUpAppDestination.Main
+            // TODO 원래는 메인
+            PinUpAppDestination.FindPasswordEmail
         }
         false -> {
-            PinUpAppDestination.Onboarding
+            // TODO 원래는 onboarding
+            PinUpAppDestination.FindPasswordEmail
         }
         else -> {
             return
@@ -158,12 +160,12 @@ fun PinUpApp(
                     }
                 ){
                     FindPasswordEmailRoute(
-                        onMoveChangePassword = {
-                            navHostController.navigate(PinUpAppDestination.ChangePassword)
+                        onMoveLogin = {
+                            navHostController.navigate(PinUpAppDestination.Login)
                         },
                         onBackPressed = {
                             navHostController.popBackStack()
-                        }
+                        },
                     )
                 }
 

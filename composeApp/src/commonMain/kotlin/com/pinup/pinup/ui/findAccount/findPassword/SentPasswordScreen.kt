@@ -11,21 +11,19 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.pinup.pinup.ui.component.ErrorText
 import com.pinup.pinup.ui.component.PButton
-import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 
 @Composable
-fun FindPasswordEmailScreen(
-    onClickSendPassword: () -> Unit,
-    emailState: ChangePasswordEmailState = ChangePasswordEmailState(),
-    onEmailChanged: (String) -> Unit = {},
+fun SentPasswordScreen(
+    email: String = "",
     onBackPressed: () -> Unit,
+    onClickLogin: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -37,64 +35,48 @@ fun FindPasswordEmailScreen(
             onLeftButtonClick = onBackPressed
         )
 
-        Spacer(modifier = Modifier.height(49.dp))
+        Spacer(modifier = Modifier.height(44.dp))
 
         Text(
-            text = Texts.FindPassword.FIND_PASSWORD,
+            text = Texts.FindPassword.SENT_PASSWORD_TITLE,
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
             color = Colors.Gray800
         )
 
-        Spacer(modifier = Modifier.height(13.dp))
+        Spacer(modifier = Modifier.height(18.dp))
 
         Text(
-            text = Texts.FindPassword.FIND_PASSWORD,
+            text = Texts.FindPassword.SENT_PASSWORD_HINT,
             style = Typography.B2.copy(
                 fontWeight = FontWeight.SemiBold
             ),
             color = Colors.Gray400
         )
 
-        Spacer(modifier = Modifier.height(38.dp))
+        Spacer(modifier = Modifier.height(161.dp))
 
         Text(
-            text = Texts.Word.EMAIL,
-            style = Typography.B1.copy(
-                fontWeight = FontWeight.SemiBold
-            ),
-            color = Colors.Gray700
-        )
-
-        Spacer(modifier = Modifier.height(3.dp))
-
-        RoundedTextField(
             modifier = Modifier
                 .fillMaxWidth(),
-            text = emailState.email,
-            onValueChange = onEmailChanged,
-            placeholder = Texts.SignupEmail.HINT,
-            cornerRounded = 100,
-            backgroundColor = Colors.White,
-            isError = !emailState.isEmailValid,
+            text = email,
+            style = Typography.D2.copy(
+                fontWeight = FontWeight.Bold
+            ),
+            color = Colors.Main,
+            textAlign = TextAlign.Center
         )
-
-        if (!emailState.isEmailValid) {
-            Spacer(modifier = Modifier.height(8.dp))
-            ErrorText(Texts.SignupEmail.INVALID)
-        }
 
         Spacer(modifier = Modifier.weight(1f))
 
         PButton(
             modifier = Modifier
                 .padding(bottom = 28.dp),
-            text = Texts.FindPassword.SEND_PASSWORD,
+            text = Texts.FindPassword.DO_LOGIN,
             onClick = {
-                onClickSendPassword()
+                onClickLogin()
             },
-            isEnable = emailState.isEmailValid
         )
 
         Spacer(modifier = Modifier.height(53.dp))

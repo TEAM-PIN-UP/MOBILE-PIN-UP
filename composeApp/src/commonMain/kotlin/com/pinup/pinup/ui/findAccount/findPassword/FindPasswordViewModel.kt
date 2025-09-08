@@ -4,17 +4,12 @@ import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.ui.base.BaseViewModel
-import com.pinup.pinup.ui.signup.EmailVerifyType
 import com.pinup.pinup.util.Const
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class FindPasswordViewModel: BaseViewModel<ChangePasswordUiState, UiEvent>(
     ChangePasswordUiState()
 ) {
-    companion object {
-        const val RETRY_VERIFICATION_TIME = 5000
-    }
     fun updateEmail(email: String) = viewModelScope.launch {
         updateState {
             copy(
@@ -26,46 +21,9 @@ class FindPasswordViewModel: BaseViewModel<ChangePasswordUiState, UiEvent>(
         }
     }
 
-    fun updateVerificationCode(code: String) = viewModelScope.launch {
-        //TODO 최대 글자 도달시 확인 api 로직 구현 현재는 6자리 시 통과 가능
-        updateState {
-            copy(
-                emailState = uiState.value.emailState.copy(
-                    verificationCode = code,
-                    emailVerifyType = if(code.length == 6) EmailVerifyType.VERIFIED else EmailVerifyType.NOT_VERIFIED
-                )
-            )
-        }
-    }
-
-    fun onClickSendCode() = viewModelScope.launch {
+    fun onClickSendPassword() = viewModelScope.launch {
         if (isValidEmail()) {
-            retryVerifyCount()
-            //TODO: 이메일 인증 로직 구현
-        }
-    }
 
-    fun onClickVerify() {
-        //TODO: 이메일 인증 로직 구현
-    }
-
-    fun retryVerifyCount() {
-        viewModelScope.launch {
-            updateState {
-                copy(
-                    emailState = uiState.value.emailState.copy(
-                        isClicked = true
-                    )
-                )
-            }
-            delay(RETRY_VERIFICATION_TIME.toLong())
-            updateState {
-                copy(
-                    emailState = uiState.value.emailState.copy(
-                        isClicked = false
-                    )
-                )
-            }
         }
     }
 
@@ -118,8 +76,14 @@ class FindPasswordViewModel: BaseViewModel<ChangePasswordUiState, UiEvent>(
         }
     }
 
-    fun changePassword() {
-        //TODO 서버 비밀번호 변경 로직
+    fun onClickBack() {
+        updateState {
+            copy(
+                emailState.copy(
+                    isSentPassword = false
+                )
+            )
+        }
     }
 }
 
@@ -130,13 +94,9 @@ data class ChangePasswordUiState(
 
 data class ChangePasswordEmailState(
     val email: String = "",
-    val verificationCode: String = "",
     val isEmailValid: Boolean = true,
-    val emailVerifyType: EmailVerifyType = EmailVerifyType.NONE,
-    val isClicked: Boolean = false,
-) {
-    val isPassValidation = isEmailValid && emailVerifyType == EmailVerifyType.VERIFIED
-}
+    val isSentPassword: Boolean = false,
+)
 
 data class ChangePasswordState(
     val password: String = "",

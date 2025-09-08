@@ -72,7 +72,13 @@ object Texts {
     object FindPassword {
         const val PASSWORD_HINT = "비밀번호는 8~20자, 특수문자 포함 필수입니다."
         const val CHANGE_PASSWORD = "비밀번호 변경하기"
+        const val SEND_PASSWORD = "비밀번호 발송"
         const val PASSWORD_AGAIN_HINT = "비밀번호 확인"
+        const val FIND_PASSWORD = "비밀번호 찾기"
+        const val FIND_PASSWORD_HINT = "입력한 주소로 임시 비밀번호가 전송됩니다."
+        const val SENT_PASSWORD_TITLE = "이메일이 전송되었습니다!"
+        const val SENT_PASSWORD_HINT = "이메일로 전송 받은 임시 비밀번호로 로그인 해주세요."
+        const val DO_LOGIN = "로그인하기"
     }
 
     object SignupEmail {
