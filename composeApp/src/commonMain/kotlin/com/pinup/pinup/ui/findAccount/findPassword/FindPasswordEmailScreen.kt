@@ -22,8 +22,9 @@ import com.pinup.pinup.ui.theme.Typography
 
 @Composable
 fun FindPasswordEmailScreen(
+    email: String = "",
+    isEmailValid: Boolean = false,
     onClickSendPassword: () -> Unit,
-    emailState: ChangePasswordEmailState = ChangePasswordEmailState(),
     onEmailChanged: (String) -> Unit = {},
     onBackPressed: () -> Unit,
 ) {
@@ -72,15 +73,15 @@ fun FindPasswordEmailScreen(
         RoundedTextField(
             modifier = Modifier
                 .fillMaxWidth(),
-            text = emailState.email,
+            text = email,
             onValueChange = onEmailChanged,
             placeholder = Texts.SignupEmail.HINT,
             cornerRounded = 100,
             backgroundColor = Colors.White,
-            isError = !emailState.isEmailValid,
+            isError = isEmailValid,
         )
 
-        if (!emailState.isEmailValid) {
+        if (isEmailValid) {
             Spacer(modifier = Modifier.height(8.dp))
             ErrorText(Texts.SignupEmail.INVALID)
         }
@@ -94,7 +95,7 @@ fun FindPasswordEmailScreen(
             onClick = {
                 onClickSendPassword()
             },
-            isEnable = emailState.isEmailValid
+            isEnable = isEmailValid
         )
 
         Spacer(modifier = Modifier.height(53.dp))

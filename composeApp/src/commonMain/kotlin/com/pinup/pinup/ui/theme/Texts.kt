@@ -72,6 +72,7 @@ object Texts {
     object FindPassword {
         const val PASSWORD_HINT = "비밀번호는 8~20자, 특수문자 포함 필수입니다."
         const val CHANGE_PASSWORD = "비밀번호 변경하기"
+        const val CHANGE_PASSWORD_HINT = "임시 비밀번호로 로그인 시, 비밀번호 변경이 필요합니다."
         const val SEND_PASSWORD = "비밀번호 발송"
         const val PASSWORD_AGAIN_HINT = "비밀번호 확인"
         const val FIND_PASSWORD = "비밀번호 찾기"

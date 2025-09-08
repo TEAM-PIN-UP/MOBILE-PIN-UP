@@ -13,13 +13,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.pinup.pinup.event.DetailPlaceEventBus
 import com.pinup.pinup.extentions.jsonToArg
 import com.pinup.pinup.platform.ContextFactory
-import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
 import com.pinup.pinup.ui.component.LogoutDialog
-import com.pinup.pinup.ui.findAccount.findPassword.ChangePasswordRoute
+import com.pinup.pinup.ui.findAccount.changePassword.ChangePasswordRoute
 import com.pinup.pinup.ui.findAccount.findPassword.FindPasswordEmailRoute
 import com.pinup.pinup.ui.login.compose.LoginRoute
 import com.pinup.pinup.ui.login.model.SNSType
@@ -34,7 +32,6 @@ import com.pinup.pinup.ui.setting.SettingNavHost
 import com.pinup.pinup.ui.signup.compose.SignUpRoute
 import com.pinup.pinup.ui.userprofile.UserProfileRoute
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -161,7 +158,11 @@ fun PinUpApp(
                 ){
                     FindPasswordEmailRoute(
                         onMoveLogin = {
-                            navHostController.navigate(PinUpAppDestination.Login)
+                            navHostController.navigate(PinUpAppDestination.Login) {
+                                popUpTo(navHostController.graph.id) {
+                                    inclusive = true
+                                }
+                            }
                         },
                         onBackPressed = {
                             navHostController.popBackStack()
@@ -182,7 +183,11 @@ fun PinUpApp(
                 ){
                     ChangePasswordRoute(
                         onMoveLogin = {
-                            navHostController.navigate(PinUpAppDestination.Login)
+                            navHostController.navigate(PinUpAppDestination.Login) {
+                                popUpTo(navHostController.graph.id) {
+                                    inclusive = true
+                                }
+                            }
                         },
                         onBackPressed = {
                             navHostController.popBackStack()

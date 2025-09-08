@@ -1,4 +1,4 @@
-package com.pinup.pinup.ui.findAccount.findPassword
+package com.pinup.pinup.ui.findAccount.changePassword
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,7 +34,11 @@ import pinup.composeapp.generated.resources.ic_password_show_enable
 
 @Composable
 fun ChangePasswordScreen(
-    passwordState: ChangePasswordState,
+    password: String = "",
+    passwordAgain: String = "",
+    isPasswordValid: Boolean = true,
+    isShowPassword: Boolean = false,
+    isPasswordMatched: Boolean = true,
     onPasswordChanged: (String) -> Unit,
     onPasswordAgainChanged: (String) -> Unit,
     onClickShowPassword : () -> Unit,
@@ -61,7 +65,17 @@ fun ChangePasswordScreen(
             color = Colors.Black
         )
 
-        Spacer(modifier = Modifier.height(69.dp))
+        Spacer(modifier = Modifier.height(18.dp))
+
+        Text(
+            text = Texts.FindPassword.CHANGE_PASSWORD_HINT,
+            style = Typography.B2.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            color = Colors.Gray400
+        )
+
+        Spacer(modifier = Modifier.height(38.dp))
 
         Text(
             text = Texts.Word.WORD_PASSWORD,
@@ -75,17 +89,17 @@ fun ChangePasswordScreen(
 
         RoundedTextField(
             modifier = Modifier,
-            text = passwordState.password,
+            text = password,
             onValueChange = {
                 onPasswordChanged(it)
             },
             cornerRounded = 100,
             placeholder = Texts.FindPassword.PASSWORD_HINT,
             textStyle = Typography.B3,
-            isError = !passwordState.isPasswordValid,
+            isError = !isPasswordValid,
         )
 
-        if(!passwordState.isPasswordValid){
+        if(!isPasswordValid){
             Spacer(modifier = Modifier.height(8.dp))
 
             ErrorText(Texts.SignupPassword.INVALID)
@@ -96,14 +110,14 @@ fun ChangePasswordScreen(
         Box{
             RoundedTextField(
                 modifier = Modifier,
-                text = passwordState.passwordAgain,
+                text = passwordAgain,
                 onValueChange = {
                     onPasswordAgainChanged(it)
                 },
                 placeholder = Texts.FindPassword.PASSWORD_AGAIN_HINT,
-                visualTransformation = if(passwordState.isShowPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if(isShowPassword) VisualTransformation.None else PasswordVisualTransformation(),
                 cornerRounded = 100,
-                isError = !passwordState.isPasswordMatched
+                isError = !isPasswordMatched
             )
 
             Row(
@@ -117,7 +131,7 @@ fun ChangePasswordScreen(
                     modifier = Modifier.clickableSingleWithNoRipple {
                         onClickShowPassword()
                     },
-                    painter = painterResource(if(passwordState.isShowPassword) Res.drawable.ic_password_show_enable else Res.drawable.ic_password_show_enable),
+                    painter = painterResource(if(isShowPassword) Res.drawable.ic_password_show_enable else Res.drawable.ic_password_show_enable),
                     contentDescription = null,
                 )
 
@@ -126,7 +140,7 @@ fun ChangePasswordScreen(
 
         }
 
-        if(!passwordState.isPasswordMatched){
+        if(!isPasswordMatched){
             Spacer(modifier = Modifier.height(8.dp))
 
             ErrorText(Texts.SignupPassword.NOT_MATCH)
@@ -136,7 +150,7 @@ fun ChangePasswordScreen(
 
         PButton(
             text = Texts.FindPassword.CHANGE_PASSWORD,
-            isEnable = passwordState.isPassValidation,
+            isEnable = isPasswordValid,
             onClick = {
                 onClickConfirm()
             }

@@ -11,16 +11,14 @@ import kotlinx.coroutines.launch
 
 class FindPasswordViewModel(
     private val postTemporaryPasswordUseCase: PostTemporaryPasswordUseCase
-): BaseViewModel<ChangePasswordUiState, UiEvent>(
-    ChangePasswordUiState()
+): BaseViewModel<FindPasswordUiState, UiEvent>(
+    FindPasswordUiState()
 ) {
     fun updateEmail(email: String) = viewModelScope.launch {
         updateState {
             copy(
-                emailState = uiState.value.emailState.copy(
-                    email = email,
-                    isEmailValid = true
-                )
+                email = email,
+                isEmailValid = true
             )
         }
     }
@@ -28,16 +26,14 @@ class FindPasswordViewModel(
     fun onClickSendPassword() = viewModelScope.launch {
         if (isValidEmail()) {
             val request = SendVerifyCodeRequest(
-                email = uiState.value.emailState.email
+                email = uiState.value.email
             )
             resultResponse(
                 response = postTemporaryPasswordUseCase(request),
                 successCallback = {
                     updateState {
                         copy(
-                            emailState = emailState.copy(
-                                isSentPassword = true
-                            )
+                            isSentPassword = true
                         )
                     }
                 }
@@ -50,78 +46,26 @@ class FindPasswordViewModel(
             pattern = Const.PRegex.EMAIL_REGEX,
             option = RegexOption.IGNORE_CASE
         )
-        val isValid = uiState.value.emailState.email.isNotBlank() && uiState.value.emailState.email.matches(regex)
+        val isValid = uiState.value.email.isNotBlank() && uiState.value.email.matches(regex)
         updateState {
             copy(
-                emailState = emailState.copy(
-                    isEmailValid = isValid,
-                )
+                isEmailValid = isValid
             )
         }
         return isValid
     }
 
-    fun updatePassword(password: String) = viewModelScope.launch {
-        val regex = Regex(Const.PRegex.PASSWORD_REGEX)
-        updateState {
-            copy(
-                passwordState = passwordState.copy(
-                    password = password,
-                    isPasswordValid = password.isNotBlank() && password.matches(regex)
-                )
-            )
-        }
-    }
-
-    fun updatePasswordAgain(password: String) = viewModelScope.launch {
-        updateState {
-            copy(
-                passwordState = uiState.value.passwordState.copy(
-                    passwordAgain = password,
-                    isPasswordMatched = password == passwordState.password
-                )
-            )
-        }
-    }
-
-    fun onClickShowPassword() = viewModelScope.launch {
-        updateState {
-            copy(
-                passwordState = uiState.value.passwordState.copy(
-                    isShowPassword = !uiState.value.passwordState.isShowPassword,
-                )
-            )
-        }
-    }
-
     fun onClickBack() {
         updateState {
             copy(
-                emailState = emailState.copy(
-                    isSentPassword = false
-                )
+                isSentPassword = false
             )
         }
     }
 }
 
-data class ChangePasswordUiState(
-    val emailState: ChangePasswordEmailState = ChangePasswordEmailState(),
-    val passwordState: ChangePasswordState = ChangePasswordState()
-) : UiState
-
-data class ChangePasswordEmailState(
+data class FindPasswordUiState(
     val email: String = "",
     val isEmailValid: Boolean = true,
     val isSentPassword: Boolean = false,
-)
-
-data class ChangePasswordState(
-    val password: String = "",
-    val passwordAgain : String = "",
-    val isPasswordValid: Boolean = true,
-    val isPasswordMatched: Boolean = true,
-    val isShowPassword: Boolean = false,
-) {
-    val isPassValidation = isPasswordValid && isPasswordMatched && password.isNotEmpty() && passwordAgain.isNotEmpty()
-}
+) : UiState
