@@ -226,6 +226,7 @@ fun FeedSearchScreen(
                     items(reviewList){
                         FeedView(
                             item = it,
+                            searchKeyWord = query,
                             onClickMenu = {
                                 clickedReviewId = it
                                 scope.launch { sheetState.show() }

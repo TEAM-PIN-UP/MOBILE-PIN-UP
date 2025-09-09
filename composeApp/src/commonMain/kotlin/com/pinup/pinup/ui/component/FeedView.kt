@@ -27,6 +27,7 @@ import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
+import com.pinup.pinup.ui.theme.Texts.buildHighlightedText
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
@@ -41,6 +42,7 @@ import pinup.composeapp.generated.resources.ic_menu_dot
 @Composable
 fun FeedView(
     item: Review,
+    searchKeyWord: String = "",
     onClickMenu: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
@@ -145,7 +147,7 @@ fun FeedView(
         }
 
         Text(
-            text = item.content,
+            text = buildHighlightedText(item.content, keyword = searchKeyWord, Colors.Main),
             style = Typography.B3.copy(
                 fontWeight = FontWeight.Medium
             ),

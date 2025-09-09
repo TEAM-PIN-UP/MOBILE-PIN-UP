@@ -1,11 +1,36 @@
 package com.pinup.pinup.ui.theme
 
 
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 
 object Texts {
+    fun buildHighlightedText(
+        text: String,
+        keyword: String?,
+        color: Color,
+        ignoreCase: Boolean = true
+    ): AnnotatedString {
+        if (keyword.isNullOrBlank()) return AnnotatedString(text)
+
+        val builder = AnnotatedString.Builder(text)
+        val pattern = Regex(Regex.escape(keyword), if (ignoreCase) setOf(RegexOption.IGNORE_CASE) else emptySet())
+
+        pattern.findAll(text).forEach { match ->
+            builder.addStyle(
+                SpanStyle(
+                    color = color,
+                ),
+                start = match.range.first,
+                end = match.range.last + 1
+            )
+        }
+        return builder.toAnnotatedString()
+    }
+
     object Word {
         const val WORD_START = "시작하기"
         const val WORD_ID = "아이디"
