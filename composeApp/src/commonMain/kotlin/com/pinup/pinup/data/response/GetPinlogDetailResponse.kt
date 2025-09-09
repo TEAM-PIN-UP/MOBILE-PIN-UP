@@ -27,12 +27,14 @@ data class GetPinlogDetailResponse(
     val commentCount: Int = 0,
     val comments: List<CommentResponse> = emptyList(),
     val isScrapByUser: Boolean = false,
+    val writerName: String ="",
 ) {
     companion object {
         fun GetPinlogDetailResponse.toModel(): PinlogDetail {
             return PinlogDetail(
                 id = id,
                 placeName = placeName,
+                writerName = writerName,
                 kakaoPlaceId = kakaoPlaceId,
                 content = content,
                 createdAt = createdAt,
