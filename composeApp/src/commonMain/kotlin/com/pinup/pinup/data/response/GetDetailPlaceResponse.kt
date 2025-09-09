@@ -33,6 +33,7 @@ data class GetDetailPlaceResponse(
 data class MapPlaceResponse(
     val kakaoPlaceId: String,
     val name: String,
+    val address: String,
     val averageStarRating: Double,
     val reviewCount: Int,
     val distance: String?,
@@ -57,6 +58,7 @@ data class MapPlaceResponse(
                 reviewCount = reviewCount,
                 reviewImageUrls = reviewImageUrls,
                 reviewerProfileImageUrls = reviewerProfileImageUrls,
+                roadAddress = address
             )
         }
     }
