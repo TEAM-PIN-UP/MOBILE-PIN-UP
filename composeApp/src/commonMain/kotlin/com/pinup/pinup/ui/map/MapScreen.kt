@@ -92,6 +92,7 @@ fun MapScreen(
     clearPinchList: () -> Unit = {},
     position: Position = Position.INVALID,
     cameraPosition: Position? = null,
+    profileImage: String = "",
     onCameraStateChange: (CameraState) -> Unit = { },
     onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
@@ -425,7 +426,7 @@ fun MapScreen(
                     ){
                         BottomBar(
                             selectedMenu = MainDestination.Map,
-                            profileImage = "",
+                            profileImage = profileImage,
                             onBottomMenuClick = onClickBottomNav
                         )
                     }
