@@ -212,7 +212,7 @@ fun FindIdScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                if (isEmailValid) {
+                if (!isEmailValid) {
                     ErrorText(Texts.SignupEmail.INVALID)
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -284,13 +284,13 @@ fun FindIdScreen(
                     },
                     cornerRounded = 100,
                     placeholder = Texts.SignupNickname.NICKNAME_HINT,
-                    isError = !isNicknameUsed,
+                    isError = !isNicknameUsed && nickname.isNotEmpty(),
                     tailIcon = if(!isNicknameUsed) null else painterResource(Res.drawable.ic_check_circle_black)
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                if (!isNicknameUsed) {
+                if (!isNicknameUsed && nickname.isNotEmpty()) {
                     ErrorText(
                         text = Texts.FindId.NOT_EXIST_NICKNAME
                     )

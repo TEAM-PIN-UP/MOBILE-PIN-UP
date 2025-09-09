@@ -30,8 +30,8 @@ fun FindIdRoute(
     }
 
     if (uiState.isShowInfoPage) {
-        SuccessFindIdScreen(
-        )
+//        SuccessFindIdScreen(
+//        )
     } else {
         FindIdScreen(
             email = uiState.email,
