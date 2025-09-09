@@ -7,6 +7,7 @@ import com.pinup.pinup.data.request.pinlog.AddReviewRequest
 import com.pinup.pinup.data.request.review.CommentRequest
 import com.pinup.pinup.data.response.GetPinlogDetailResponse.Companion.toModel
 import com.pinup.pinup.data.response.GetReviewsResponse.Companion.toModel
+import com.pinup.pinup.data.response.RegisterReviewResponse.Companion.toModel
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.PagingReview
 import com.pinup.pinup.domain.model.PinlogDetail
@@ -25,7 +26,9 @@ class ReviewsRepositoryImpl (
     ): PResult<Int> {
         return reviewsRemoteDataSource.registerReviews(
             request
-        ).mapSuccessData()
+        ).mapSuccessData().map {
+            it.toModel()
+        }
     }
 
     override suspend fun getReviews(request: Int, size: Int): PResult<PagingReview> {

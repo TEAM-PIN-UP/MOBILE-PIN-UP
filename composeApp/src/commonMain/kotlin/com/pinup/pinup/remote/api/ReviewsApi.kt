@@ -7,6 +7,7 @@ import com.pinup.pinup.data.request.review.CommentRequest
 import com.pinup.pinup.data.response.GetPinlogDetailResponse
 import com.pinup.pinup.data.response.GetReviewsResponse
 import com.pinup.pinup.data.response.PResponse
+import com.pinup.pinup.data.response.RegisterReviewResponse
 import com.pinup.pinup.domain.model.PResult
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
@@ -28,7 +29,7 @@ interface ReviewsApi {
     @POST(ApiPath.PinLog.PINLOG)
     suspend fun registerReviews(
         @Body request: AddReviewRequest
-    ): PResult<PResponse<Int>>
+    ): PResult<PResponse<RegisterReviewResponse>>
 
     @GET(ApiPath.PinLog.PINLOG)
     suspend fun getReviews(

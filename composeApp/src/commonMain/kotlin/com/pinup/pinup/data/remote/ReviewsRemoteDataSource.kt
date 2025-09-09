@@ -6,13 +6,14 @@ import com.pinup.pinup.data.request.review.CommentRequest
 import com.pinup.pinup.data.response.GetPinlogDetailResponse
 import com.pinup.pinup.data.response.GetReviewsResponse
 import com.pinup.pinup.data.response.PResponse
+import com.pinup.pinup.data.response.RegisterReviewResponse
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.PagingReview
 
 interface ReviewsRemoteDataSource {
     suspend fun registerReviews(
         request: AddReviewRequest
-    ): PResult<PResponse<Int>>
+    ): PResult<PResponse<RegisterReviewResponse>>
     suspend fun getReviews(request: Int, size: Int): PResult<PResponse<GetReviewsResponse>>
     suspend fun deleteReview(request: Int): PResult<PResponse<Unit>>
     suspend fun addReviewLike(request: Int): PResult<PResponse<Unit>>
