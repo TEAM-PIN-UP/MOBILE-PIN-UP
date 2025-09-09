@@ -296,6 +296,20 @@ fun FindIdScreen(
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            PButton(
+                modifier = Modifier
+                    .padding(bottom = 28.dp),
+                text = Texts.Word.CONFIRM,
+                onClick = {
+                    onClickConfirm()
+                },
+                isEnable = emailVerifyType == EmailVerifyType.VERIFIED || isNicknameUsed
+            )
+
+            Spacer(modifier = Modifier.height(53.dp))
         }
     }
 }

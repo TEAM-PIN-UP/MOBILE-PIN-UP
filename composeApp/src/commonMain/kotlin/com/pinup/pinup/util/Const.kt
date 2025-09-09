@@ -13,5 +13,16 @@ object Const {
     object PRegex {
         const val EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
         const val PASSWORD_REGEX = "^(?=.*[^A-Za-z0-9]).{8,}$"
+
+        fun maskEmail(email: String, keep: Int = 1, maskChar: Char = '*'): String {
+            val match = Regex(EMAIL_REGEX).matchEntire(email) ?: return email
+            val (local, domain) = match.destructured
+
+            val shown = local.take(keep.coerceAtLeast(0))
+            val maskedCount = (local.length - keep).coerceAtLeast(0)
+            val maskedLocal = shown + maskChar.toString().repeat(maskedCount)
+
+            return "$maskedLocal@$domain"
+        }
     }
 }

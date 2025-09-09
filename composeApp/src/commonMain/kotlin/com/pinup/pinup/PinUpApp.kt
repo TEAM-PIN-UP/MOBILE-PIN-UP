@@ -51,11 +51,11 @@ fun PinUpApp(
     val startDestination = when (uiState.value.isLogin) {
         true -> {
             // TODO 원래는 메인
-            PinUpAppDestination.FindId
+            PinUpAppDestination.Main
         }
         false -> {
             // TODO 원래는 onboarding
-            PinUpAppDestination.FindId
+            PinUpAppDestination.Onboarding
         }
         else -> {
             return

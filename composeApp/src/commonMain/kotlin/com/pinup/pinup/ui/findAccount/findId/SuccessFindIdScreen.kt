@@ -9,21 +9,28 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.PButton
+import com.pinup.pinup.ui.component.ProfileImageView
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
+import com.pinup.pinup.util.Const
 
 @Composable
 fun SuccessFindIdScreen(
+    profileUrl: String = "",
+    nickName: String = "",
     email: String = "",
-    onBackPressed: () -> Unit,
-    onClickLogin: () -> Unit,
+    onBackPressed: () -> Unit = {},
+    onClickLogin: () -> Unit = {},
+    onClickFindPassword: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -38,47 +45,70 @@ fun SuccessFindIdScreen(
         Spacer(modifier = Modifier.height(44.dp))
 
         Text(
-            text = Texts.FindPassword.SENT_PASSWORD_TITLE,
+            text = Texts.FindId.getNickNameTitle(nickName),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
-            color = Colors.Gray800
         )
 
-        Spacer(modifier = Modifier.height(18.dp))
+        Spacer(modifier = Modifier.height(81.dp))
 
-        Text(
-            text = Texts.FindPassword.SENT_PASSWORD_HINT,
-            style = Typography.B2.copy(
-                fontWeight = FontWeight.SemiBold
-            ),
-            color = Colors.Gray400
-        )
-
-        Spacer(modifier = Modifier.height(161.dp))
-
-        Text(
+        Column(
             modifier = Modifier
                 .fillMaxWidth(),
-            text = email,
-            style = Typography.D2.copy(
-                fontWeight = FontWeight.Bold
-            ),
-            color = Colors.Main,
-            textAlign = TextAlign.Center
-        )
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            ProfileImageView(
+                imgUrl = profileUrl,
+                size = 100.dp
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = nickName,
+                style = Typography.B1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Black
+            )
+
+            Spacer(modifier = Modifier.height(28.dp))
+
+            Text(
+                text = Const.PRegex.maskEmail(email),
+                style = Typography.D2.copy(
+                    fontWeight = FontWeight.Bold
+                ),
+                color = Colors.Main
+            )
+        }
 
         Spacer(modifier = Modifier.weight(1f))
 
         PButton(
             modifier = Modifier
-                .padding(bottom = 28.dp),
+                .padding(horizontal = 20.dp),
             text = Texts.FindPassword.DO_LOGIN,
             onClick = {
                 onClickLogin()
-            },
+            }
         )
 
-        Spacer(modifier = Modifier.height(53.dp))
+        Spacer(Modifier.height(16.dp))
+
+        Text(
+            modifier = Modifier
+                .clickableWithNoRipple {
+                    onClickFindPassword()
+                },
+            text = Texts.FindPassword.CHANGE_PASSWORD,
+            style = Typography.B2.copy(
+                fontWeight = FontWeight.Medium
+            ),
+            color = Colors.Gray600
+        )
+
+        Spacer(Modifier.height(42.dp))
     }
 }

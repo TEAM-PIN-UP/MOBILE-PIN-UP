@@ -30,8 +30,14 @@ fun FindIdRoute(
     }
 
     if (uiState.isShowInfoPage) {
-//        SuccessFindIdScreen(
-//        )
+        SuccessFindIdScreen(
+            email = uiState.findEmail,
+            profileUrl = uiState.findProfileUrl,
+            nickName = uiState.findNickName,
+            onClickLogin = onMoveLogin,
+            onClickFindPassword = onMoveFindPassword,
+            onBackPressed = viewModel::onBackPressed
+        )
     } else {
         FindIdScreen(
             email = uiState.email,

@@ -89,6 +89,17 @@ object Texts {
         const val FIND_ID_BY_NICKNAME = "닉네임으로 찾기"
         const val FIND_ID_RESULT = "해당 이메일로 가입된 계정이 있습니다.\n비밀번호를 변경하고 싶으신가요?"
         const val NOT_EXIST_NICKNAME = "존재하지 않는 닉네임입니다."
+        fun getNickNameTitle(nickName : String) = buildAnnotatedString {
+            withStyle(style = SpanStyle(color = Colors.Gray800)) {
+                append("안녕하세요\n")
+            }
+            withStyle(style = SpanStyle(color = Colors.Main)) {
+                append(nickName)
+            }
+            withStyle(style = SpanStyle(color = Colors.Gray800)) {
+                append("님!")
+            }
+        }
     }
 
     object SignupEmail {
