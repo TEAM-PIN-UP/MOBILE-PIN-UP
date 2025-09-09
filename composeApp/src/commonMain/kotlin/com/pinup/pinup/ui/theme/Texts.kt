@@ -86,6 +86,7 @@ object Texts {
         const val FIND_ID = "아이디 찾기"
         const val FIND_ID_BY_EMAIL = "이메일 주소 찾기"
         const val FIND_ID_BY_NICKNAME = "닉네임으로 찾기"
+        const val FIND_ID_RESULT = "해당 이메일로 가입된 계정이 있습니다.\n비밀번호를 변경하고 싶으신가요?"
     }
 
     object SignupEmail {

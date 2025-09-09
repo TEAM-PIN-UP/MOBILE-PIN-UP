@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class FindIdViewModel(
     private val sendVerifyCodeUseCase: PostSendVerifyCodeUseCase,
     private val emailVerifyUseCase: PostEmailVerifyUseCase
-): BaseViewModel<FindIdUiState, UiEvent>(
+): BaseViewModel<FindIdUiState, FindIdUiEvent>(
     FindIdUiState()
 ) {
 
@@ -29,6 +29,7 @@ class FindIdViewModel(
         resultResponse(
             response = emailVerifyUseCase(request),
             successCallback = {
+                findIdByEmail()
                 handleEmailVerify(EmailVerifyType.VERIFIED)
             },
             errorCallback = {
@@ -109,6 +110,28 @@ class FindIdViewModel(
         }
         return isValid
     }
+
+    private fun findIdByEmail() {
+        //TODO 만약 성공한다면
+        emitEvent(FindIdUiEvent.ShowInfoBottomSheet)
+    }
+
+    private fun findIdByNickName() {
+        //TODO 만약 성공한다면
+        updateState {
+            copy(
+                isShowInfoPage = true
+            )
+        }
+    }
+
+    fun onBackPressed() {
+        updateState {
+            copy(
+                isShowInfoPage = false
+            )
+        }
+    }
 }
 
 data class FindIdUiState(
@@ -118,5 +141,13 @@ data class FindIdUiState(
     val isVerifyClicked: Boolean = false,
     val emailVerifyType: EmailVerifyType = EmailVerifyType.NONE,
     val nickName: String = "",
-    val isFindByEmail: Boolean = true
+    val isFindByEmail: Boolean = true,
+    val isShowInfoPage: Boolean = false,
+    val findEmail: String = "",
+    val findNickName: String = "",
+    val findProfileUrl: String = "",
 ) : UiState
+
+sealed interface FindIdUiEvent: UiEvent {
+    data object ShowInfoBottomSheet: FindIdUiEvent
+}

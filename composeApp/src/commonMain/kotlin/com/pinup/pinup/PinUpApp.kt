@@ -193,6 +193,9 @@ fun PinUpApp(
                                 }
                             }
                         },
+                        onMoveFindPassword = {
+                            navHostController.navigate(PinUpAppDestination.FindPasswordEmail)
+                        },
                         onBackPressed = {
                             navHostController.popBackStack()
                         },
