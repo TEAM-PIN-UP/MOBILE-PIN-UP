@@ -38,6 +38,9 @@ import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.ic_check_circle_black
 
 @Composable
 fun FindIdScreen(
@@ -48,14 +51,17 @@ fun FindIdScreen(
     isEmailFindClicked: Boolean = true,
     findProfileUrl: String = "",
     findNickName: String = "",
+    emailVerifyType: EmailVerifyType = EmailVerifyType.NONE,
+    nickname: String = "",
+    isNicknameUsed: Boolean = false,
     sheetState: ModalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
     onClickSendCode: () -> Unit = {},
     onClickVerify: () -> Unit = {},
     onClickConfirm: () -> Unit,
     onClickLogin: () -> Unit = {},
     onClickFindPassword: () -> Unit = {},
-    emailVerifyType: EmailVerifyType = EmailVerifyType.NONE,
     onEmailChanged: (String) -> Unit = {},
+    onNickNameChanged: (String) -> Unit = {},
     onCodeChanged: (String) -> Unit = {},
     onClickTabChanged: (Boolean) -> Unit = {},
     onBackPressed: () -> Unit,
@@ -260,7 +266,35 @@ fun FindIdScreen(
                     }
                 }
             } else {
+                Text(
+                    text = Texts.FindId.INPUT_NICKNAME,
+                    style = Typography.B1.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = Colors.Gray700
+                )
 
+                Spacer(modifier = Modifier.height(3.dp))
+
+                RoundedTextField(
+                    modifier = Modifier,
+                    text = nickname,
+                    onValueChange = {
+                        onNickNameChanged(it)
+                    },
+                    cornerRounded = 100,
+                    placeholder = Texts.SignupNickname.NICKNAME_HINT,
+                    isError = !isNicknameUsed,
+                    tailIcon = if(!isNicknameUsed) null else painterResource(Res.drawable.ic_check_circle_black)
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+                if (!isNicknameUsed) {
+                    ErrorText(
+                        text = Texts.FindId.NOT_EXIST_NICKNAME
+                    )
+                }
             }
         }
     }

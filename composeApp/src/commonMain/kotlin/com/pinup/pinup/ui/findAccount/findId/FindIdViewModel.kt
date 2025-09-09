@@ -5,6 +5,7 @@ import com.pinup.pinup.ui.base.UiState
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.data.request.EmailVerifyRequest
 import com.pinup.pinup.data.request.SendVerifyCodeRequest
+import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
 import com.pinup.pinup.domain.usecase.PostEmailVerifyUseCase
 import com.pinup.pinup.domain.usecase.PostSendVerifyCodeUseCase
 import com.pinup.pinup.domain.usecase.PostTemporaryPasswordUseCase
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class FindIdViewModel(
     private val sendVerifyCodeUseCase: PostSendVerifyCodeUseCase,
-    private val emailVerifyUseCase: PostEmailVerifyUseCase
+    private val emailVerifyUseCase: PostEmailVerifyUseCase,
+    private val checkNickNameUseCase: CheckNickNameUseCase
 ): BaseViewModel<FindIdUiState, FindIdUiEvent>(
     FindIdUiState()
 ) {
@@ -81,6 +83,15 @@ class FindIdViewModel(
         }
     }
 
+    fun updateNickName(nickName: String) {
+        updateState {
+            copy(
+                nickName = nickName
+            )
+        }
+        checkNickName(nickName)
+    }
+
     fun updateVerificationCode(code: String) {
         updateState {
             copy(
@@ -132,6 +143,22 @@ class FindIdViewModel(
             )
         }
     }
+
+    private fun checkNickName(nickname: String) = viewModelScope.launch {
+        handleSuccessCheckNickName(false)
+        resultResponse(
+            response = checkNickNameUseCase(nickname),
+            successCallback = ::handleSuccessCheckNickName
+        )
+    }
+
+    private fun handleSuccessCheckNickName(isNicknameUsed: Boolean) {
+        updateState {
+            copy(
+                isNicknameUsed = isNicknameUsed
+            )
+        }
+    }
 }
 
 data class FindIdUiState(
@@ -141,6 +168,7 @@ data class FindIdUiState(
     val isVerifyClicked: Boolean = false,
     val emailVerifyType: EmailVerifyType = EmailVerifyType.NONE,
     val nickName: String = "",
+    val isNicknameUsed: Boolean = false,
     val isFindByEmail: Boolean = true,
     val isShowInfoPage: Boolean = false,
     val findEmail: String = "",

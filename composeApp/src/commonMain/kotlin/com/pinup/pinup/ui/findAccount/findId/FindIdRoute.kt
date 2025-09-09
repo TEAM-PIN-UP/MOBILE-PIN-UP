@@ -29,24 +29,32 @@ fun FindIdRoute(
         }
     }
 
-    FindIdScreen(
-        email = uiState.email,
-        verificationCode = uiState.verificationCode,
-        isEmailValid = uiState.isEmailValid,
-        emailVerifyType = uiState.emailVerifyType,
-        isVerifyClicked = uiState.isVerifyClicked,
-        sheetState = sheetState,
-        findProfileUrl = uiState.findProfileUrl,
-        findNickName = uiState.findNickName,
-        onClickSendCode = viewModel::onClickVerify,
-        onClickVerify = viewModel::verifyEmail,
-        onEmailChanged = viewModel::updateEmail,
-        onCodeChanged = viewModel::updateVerificationCode,
-        onBackPressed = onBackPressed,
-        onClickTabChanged = viewModel::updateTabState,
-        isEmailFindClicked = uiState.isFindByEmail,
-        onClickLogin = onMoveLogin,
-        onClickFindPassword = onMoveFindPassword,
-        onClickConfirm = {},
-    )
+    if (uiState.isShowInfoPage) {
+        SuccessFindIdScreen(
+        )
+    } else {
+        FindIdScreen(
+            email = uiState.email,
+            verificationCode = uiState.verificationCode,
+            isEmailValid = uiState.isEmailValid,
+            emailVerifyType = uiState.emailVerifyType,
+            isVerifyClicked = uiState.isVerifyClicked,
+            sheetState = sheetState,
+            findProfileUrl = uiState.findProfileUrl,
+            findNickName = uiState.findNickName,
+            isEmailFindClicked = uiState.isFindByEmail,
+            nickname = uiState.nickName,
+            isNicknameUsed = uiState.isNicknameUsed,
+            onClickSendCode = viewModel::onClickVerify,
+            onClickVerify = viewModel::verifyEmail,
+            onEmailChanged = viewModel::updateEmail,
+            onNickNameChanged = viewModel::updateNickName,
+            onCodeChanged = viewModel::updateVerificationCode,
+            onBackPressed = onBackPressed,
+            onClickTabChanged = viewModel::updateTabState,
+            onClickLogin = onMoveLogin,
+            onClickFindPassword = onMoveFindPassword,
+            onClickConfirm = {},
+        )
+    }
 }

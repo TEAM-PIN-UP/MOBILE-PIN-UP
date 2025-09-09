@@ -20,7 +20,7 @@ import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 
 @Composable
-fun SentPasswordScreen(
+fun SuccessFindIdScreen(
     email: String = "",
     onBackPressed: () -> Unit,
     onClickLogin: () -> Unit,
