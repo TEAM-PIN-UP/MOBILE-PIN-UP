@@ -33,7 +33,7 @@ class FeedViewModel(
 
     fun getFeedList(id: Int = uiState.value.pagingReview.nextCursor) = viewModelScope.launch {
         resultResponse(
-            response = getFeedUseCase(id, memberId = null, keyword = null),
+            response = getFeedUseCase(id, memberId = null, keyword = uiState.value.searchText.ifEmpty { null }),
             successCallback = {
                 updateState {
                     copy(
@@ -103,7 +103,7 @@ class FeedViewModel(
     }
 
     fun onClickSearch() {
-        //TODO 피드 검색
+        getFeedList(id = 0)
         saveRecentSearch()
     }
 

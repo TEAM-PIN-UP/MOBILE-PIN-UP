@@ -26,6 +26,7 @@ fun FeedRoute(
             onClickDeleteRecentSearch = viewModel::deleteRecentSearch,
             onClickBack = viewModel::updateSearchMode,
             onClickBottomNav = onClickBottomNav,
+            getMoreFeed = viewModel::getFeedList,
             onClickEdit = {
                 onClickEdit(it)
             },

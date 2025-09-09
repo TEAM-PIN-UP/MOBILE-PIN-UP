@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Review
+import com.pinup.pinup.extentions.ScrollToEndCallback
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.BottomBar
@@ -65,6 +66,7 @@ fun FeedSearchScreen(
     onValueChange: (String) -> Unit,
     onClickBack: () -> Unit = {},
     onClickSearch: () -> Unit = {},
+    getMoreFeed: () -> Unit = {},
     onClickBottomNav: (MainDestination) -> Unit,
     onClickDeleteRecentSearch: (Int) -> Unit = {},
     onClickEdit: (Int) -> Unit = {},
@@ -80,6 +82,10 @@ fun FeedSearchScreen(
     var clickedReviewId by remember { mutableStateOf(0) }
     val scrollState = rememberLazyListState()
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    ScrollToEndCallback(scrollState) {
+        getMoreFeed()
+    }
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
