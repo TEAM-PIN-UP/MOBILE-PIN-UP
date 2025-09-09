@@ -24,6 +24,8 @@ interface ReviewsApi {
         const val PATH_COMMENT_ID = "commentId"
         const val QUERY_CURSOR_ID = "cursor"
         const val QUERY_SIZE = "size"
+        const val QUERY_MEMBER_ID = "searchMemberId"
+        const val QUERY_KEYWORD = "keyword"
     }
 
     @POST(ApiPath.PinLog.PINLOG)
@@ -35,6 +37,8 @@ interface ReviewsApi {
     suspend fun getReviews(
         @Query(QUERY_CURSOR_ID) cursor: Int,
         @Query(QUERY_SIZE) size: Int,
+        @Query(QUERY_MEMBER_ID) searchMemberId: Int? = null,
+        @Query(QUERY_KEYWORD) keyword: String? = null,
     ): PResult<PResponse<GetReviewsResponse>>
 
     @DELETE(ApiPath.PinLog.LIKE)

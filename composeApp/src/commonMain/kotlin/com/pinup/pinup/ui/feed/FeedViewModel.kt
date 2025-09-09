@@ -32,19 +32,19 @@ class FeedViewModel(
     }
 
     fun getFeedList(id: Int = uiState.value.pagingReview.nextCursor) = viewModelScope.launch {
-//        resultResponse(
-//            response = getFeedUseCase(id),
-//            successCallback = {
-//                updateState {
-//                    copy(
-//                        prevCursor = id,
-//                        pagingReview = it.copy(
-//                            reviews = pagingReview.reviews + it.reviews
-//                        ),
-//                    )
-//                }
-//            }
-//        )
+        resultResponse(
+            response = getFeedUseCase(id, memberId = null, keyword = null),
+            successCallback = {
+                updateState {
+                    copy(
+                        prevCursor = id,
+                        pagingReview = it.copy(
+                            reviews = pagingReview.reviews + it.reviews
+                        ),
+                    )
+                }
+            }
+        )
     }
 
     fun deleteReview(id: Int) = viewModelScope.launch {
@@ -67,7 +67,7 @@ class FeedViewModel(
 
     private fun handleSuccessLikeChanged(id: Int) = viewModelScope.launch {
         resultResponse(
-            response = getFeedUseCase(id, 1),
+            response = getFeedUseCase(id, 1, null, null),
             successCallback = { result ->
                 updateState {
                     copy(

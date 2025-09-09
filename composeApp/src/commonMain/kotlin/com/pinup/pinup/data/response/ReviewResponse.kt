@@ -17,6 +17,7 @@ data class ReviewResponse(
     val isLikedByUser: Boolean,
     val commentCount: Int,
     val isScrapByUser: Boolean,
+    val writerName: String,
 ) {
     companion object {
         fun ReviewResponse.toModel(): Review {
@@ -32,7 +33,8 @@ data class ReviewResponse(
                 likeCount = likeCount,
                 isLikedByUser = isLikedByUser,
                 commentCount = commentCount,
-                isScrapByUser = isScrapByUser
+                isScrapByUser = isScrapByUser,
+                writerName = writerName
             )
         }
     }
