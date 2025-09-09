@@ -68,9 +68,7 @@ fun WriteReviewNavHost(
             composable<WriteReviewDestination.SearchPlace> {
                 SearchPlaceRoute(
                     onPlaceClick = writeReviewViewModel::selectPlace,
-                    onBackPressed = {
-                        navHostController.popBackStack()
-                    },
+                    onBackPressed = onBackPressed,
                 )
             }
 

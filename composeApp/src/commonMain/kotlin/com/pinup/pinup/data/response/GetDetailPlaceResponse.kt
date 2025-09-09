@@ -80,7 +80,11 @@ data class PlaceReviewResponse(
     val visitedDate: String,
     val writerName: String,
     val writerProfileImageUrl: String? = "",
-    val writerTotalReviewCount: Int
+    val writerTotalReviewCount: Int,
+    val like: Boolean = false,
+    val likeCount: Int = 0,
+    val commentCount: Int = 0,
+    val own: Boolean = false,
 ) {
     companion object {
         fun PlaceReviewResponse.toModel(): PlaceReview {
@@ -93,6 +97,10 @@ data class PlaceReviewResponse(
                 writerName = this.writerName,
                 writerProfileImageUrl = this.writerProfileImageUrl,
                 writerTotalReviewCount = this.writerTotalReviewCount,
+                isLikeByUser = like,
+                likeCount = likeCount,
+                commentCount = commentCount,
+                isOwn = own
             )
         }
     }

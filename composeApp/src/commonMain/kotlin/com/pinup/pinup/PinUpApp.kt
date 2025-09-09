@@ -50,11 +50,9 @@ fun PinUpApp(
     val uiState = startAppViewModel.uiState.collectAsStateWithLifecycle()
     val startDestination = when (uiState.value.isLogin) {
         true -> {
-            // TODO 원래는 메인
             PinUpAppDestination.Main
         }
         false -> {
-            // TODO 원래는 onboarding
             PinUpAppDestination.Onboarding
         }
         else -> {
