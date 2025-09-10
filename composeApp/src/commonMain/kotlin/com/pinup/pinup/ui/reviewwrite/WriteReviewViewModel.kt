@@ -46,15 +46,38 @@ class WriteReviewViewModel (
         }
 
         if (placeId != null) {
-            getDetailPlace(placeId)
+            getSelectPlaceDetail(placeId)
         }
+    }
+
+    private fun getSelectPlaceDetail(id: String) = viewModelScope.launch {
+        resultResponse(
+            response = getDetailPlaceUseCase(id, null, null),
+            successCallback = {
+                selectPlace(
+                    Place(
+                        name = it.mapPlace.name,
+                        address = it.mapPlace.roadAddress,
+                        averageStarRating = it.mapPlace.averageStarRating,
+                        categoryCode = "",
+                        description = "",
+                        kakaoPlaceId = id,
+                        latitude = it.mapPlace.longitude,
+                        longitude = it.mapPlace.latitude,
+                        placeCategory = it.mapPlace.placeCategory.name,
+                        reviewCount = it.mapPlace.reviewCount,
+                        roadAddress = it.mapPlace.roadAddress
+                    )
+                )
+            }
+        )
     }
 
     private fun getDetailPlace(id: String) = viewModelScope.launch {
         resultResponse(
             response = getDetailPlaceUseCase(id, null, null),
             successCallback = {
-                selectPlace(
+                updatePlace(
                     Place(
                         name = it.mapPlace.name,
                         address = it.mapPlace.roadAddress,
@@ -91,6 +114,14 @@ class WriteReviewViewModel (
         updateState {
             copy(
                 content = inputText
+            )
+        }
+    }
+
+    fun updatePlace(place: Place) {
+        updateState {
+            copy(
+                selectedPlace = place
             )
         }
     }

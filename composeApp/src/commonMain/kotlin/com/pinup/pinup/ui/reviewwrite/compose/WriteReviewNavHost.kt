@@ -13,8 +13,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.ui.component.PDialog
-import com.pinup.pinup.ui.component.PHorizontalDivider
-import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.reviewwrite.WriteReviewUiEvent
 import com.pinup.pinup.ui.reviewwrite.WriteReviewViewModel
 import com.pinup.pinup.ui.reviewwrite.searchplace.SearchPlaceRoute
@@ -107,7 +105,7 @@ fun WriteReviewNavHost(
                         onRatingSelected = writeReviewViewModel::updateRating,
                         onRegisterClick = writeReviewViewModel::uploadPinLog,
                         onBackPressed = {
-                            navHostController.popBackStack()
+                            if (writeReviewViewModel.reviewId != 0) onBackPressed() else navHostController.popBackStack()
                         }
                     )
                 }

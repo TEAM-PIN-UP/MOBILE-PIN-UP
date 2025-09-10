@@ -6,7 +6,7 @@ data class PinlogDetail(
     val writerName: String = "",
     val kakaoPlaceId: String = "",
     val content: String = "",
-    val createdAt: List<String> = emptyList(),
+    val createdAt: List<Int> = emptyList(),
     val visitedDate: String = "",
     val starRating: Double = 0.0,
     val authorReviewCount: Int = 0,

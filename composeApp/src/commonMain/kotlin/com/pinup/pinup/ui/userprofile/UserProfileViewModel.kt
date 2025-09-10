@@ -35,9 +35,7 @@ class UserProfileViewModel (
     private val getPhotoReviewsUseCase: GetPhotoReviewsUseCase,
     private val getTextReviewsUseCase: GetTextReviewsUseCase,
     private val requestPinBuddyUseCase: RequestPinBuddyUseCase,
-    private val rejectPinBuddyUseCase: RejectPinBuddyUseCase,
     private val deleteRequestPinBuddyUseCase: DeleteRequestPinBuddyUseCase,
-    private val acceptPinBuddyUseCase: AcceptPinBuddyUseCase,
     private val deletePinBuddyUseCase: DeletePinBuddyUseCase,
     private val postReviewLikeChangeUseCase : PostReviewLikeChangeUseCase
 ) : BaseViewModel<UserProfileUiState, UiEvent>(UserProfileUiState()) {

@@ -465,8 +465,13 @@ private fun RowScope.AlreadyPinBuddyButton(
 @Composable
 private fun LockReviewScreen() {
     Column(
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier
+            .background(color = Colors.White)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(150.dp))
+
         Image(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally),
