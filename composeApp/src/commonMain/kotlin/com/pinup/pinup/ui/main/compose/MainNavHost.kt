@@ -132,7 +132,7 @@ fun MainNavHost(
                     },
                     onClickEdit = onClickEdit,
                     onClickPinLog = {
-                        navHostController.navigate(MainDestination.Upload)
+                        onMoveWriteReview(0)
                     },
                     onClickDetail = onMovePinlogDetail
                 )
