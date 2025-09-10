@@ -205,7 +205,6 @@ class MapViewModel (
     }
 
     fun getDetailPlace(kakaoPlaceId: String) = viewModelScope.launch {
-        if (uiState.value.placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId == kakaoPlaceId) return@launch
         resultResponse(
             response = getDetailPlaceUseCase(
                 kakaoPlaceId = kakaoPlaceId,
@@ -367,6 +366,8 @@ class MapViewModel (
         resultResponse(
             response = postReviewLikeChangeUseCase(id, isLike),
             successCallback = {
+                hLog("하이?")
+                hLog(uiState.value.placeDetailUiState.detailPlace.toString())
                 uiState.value.placeDetailUiState.detailPlace?.mapPlace?.let {
                     getDetailPlace(it.kakaoPlaceId)
                 }
