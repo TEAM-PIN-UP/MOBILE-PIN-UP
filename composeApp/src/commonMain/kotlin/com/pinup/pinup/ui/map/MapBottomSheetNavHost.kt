@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.domain.model.Category
+import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.platform.hLog
@@ -34,6 +35,7 @@ fun MapBottomSheetNavHost(
     onClickMenu: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onMovePinlogDetail: (Int) -> Unit = {},
+    onMoveWriteReview: (ReviewedPlace) -> Unit = {},
 ) {
     val pinchRoute = MapBottomSheetDestination.Pinch::class.qualifiedName
     val detailRoute = MapBottomSheetDestination.Detail::class.qualifiedName
@@ -95,6 +97,7 @@ fun MapBottomSheetNavHost(
             MapBottomSheetDetailScreen(
                 detailPlace = placeDetailUiState.detailPlace,
                 isExpanded = isScrollable,
+                onMoveWriteReview = onMoveWriteReview,
                 onBackPressed = {
                     onClearDetailPlace()
                     navHostController.popBackStack()

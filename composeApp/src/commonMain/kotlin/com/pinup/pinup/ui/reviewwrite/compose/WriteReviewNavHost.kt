@@ -63,7 +63,14 @@ fun WriteReviewNavHost(
     ) {
         NavHost(
             navController = navHostController,
-            startDestination = if(writeReviewViewModel.reviewId == 0) WriteReviewDestination.SearchPlace else WriteReviewDestination.WriteReview
+            startDestination =
+                if(writeReviewViewModel.reviewId == 0 && writeReviewViewModel.detailPlace == null) {
+                    WriteReviewDestination.SearchPlace
+                } else if (writeReviewViewModel.detailPlace != null) {
+                    WriteReviewDestination.SelectDate
+                } else {
+                    WriteReviewDestination.WriteReview
+                }
         ) {
             composable<WriteReviewDestination.SearchPlace> {
                 SearchPlaceRoute(

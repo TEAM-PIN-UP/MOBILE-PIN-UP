@@ -159,7 +159,7 @@ class PResultConverterFactory(
                         is KtorfitResult.Success -> {
                             val bodyText = result.response.bodyAsText()
                             kLog(bodyText)
-                            if (result.response.status.value == 200) {
+                            if (result.response.status.value == 200 || result.response.status.value == 201) {
                                 if (typeData.typeArgs.first().typeInfo.kotlinType!! == typeOf<PResponse<Unit>>()) {
                                     PResult.Success(
                                         PResponse(

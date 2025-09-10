@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import com.pinup.pinup.domain.model.CameraState
+import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.ReviewedPlace
@@ -112,6 +113,7 @@ fun MapScreen(
     onClickDelete: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onMovePinlogDetail: (Int) -> Unit = {},
+    onMoveWriteReview: (ReviewedPlace) -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -416,7 +418,8 @@ fun MapScreen(
                             } },
                             onFocusChange = onFocusChange,
                             onClickLike = onClickLike,
-                            onMovePinlogDetail = onMovePinlogDetail
+                            onMovePinlogDetail = onMovePinlogDetail,
+                            onMoveWriteReview = onMoveWriteReview
                         )
                     }
 

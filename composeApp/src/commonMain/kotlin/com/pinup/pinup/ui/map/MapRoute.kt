@@ -7,7 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.Position
+import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Texts
@@ -25,6 +27,7 @@ fun MapRoute(
     onBottomMenuClick: (MainDestination) -> Unit,
     onClickEdit: (Int) -> Unit = {},
     onMovePinlogDetail: (Int) -> Unit = {},
+    onMoveWriteReview: (ReviewedPlace) -> Unit = {},
 ) {
     val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
         accuracy = LocationTrackerAccuracy.Best
@@ -96,6 +99,7 @@ fun MapRoute(
             isShowDeleteDialog.value = true
         },
         onMovePinlogDetail = onMovePinlogDetail,
-        onClickLike = mapViewModel::likeChanged
+        onClickLike = mapViewModel::likeChanged,
+        onMoveWriteReview = onMoveWriteReview
     )
 }

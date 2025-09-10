@@ -13,6 +13,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pinup.pinup.domain.model.DetailPlace
+import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.extentions.jsonToArg
 import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
@@ -267,6 +269,9 @@ fun PinUpApp(
                         },
                         onClickEdit = {
                             navHostController.navigate(PinUpAppDestination.WriteReview(it))
+                        },
+                        onMoveNewWriteReview = {
+                            navHostController.navigate(PinUpAppDestination.WriteReview(-1, it))
                         }
                     )
                 }
@@ -381,6 +386,7 @@ sealed interface PinUpAppDestination {
     @Serializable
     data class WriteReview(
         val reviewId: Int,
+        val detailPlace: ReviewedPlace? = null
     ) : PinUpAppDestination
     @Serializable
     data class PinlogDetail(

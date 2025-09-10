@@ -15,7 +15,7 @@ data class GetPinlogDetailResponse(
     val placeName: String = "",
     val kakaoPlaceId: String = "",
     val content: String = "",
-    val createdAt: String = "",
+    val createdAt: List<String> = emptyList(),
     val visitedDate: String = "",
     val starRating: Double = 0.0,
     val authorReviewCount: Int = 0,

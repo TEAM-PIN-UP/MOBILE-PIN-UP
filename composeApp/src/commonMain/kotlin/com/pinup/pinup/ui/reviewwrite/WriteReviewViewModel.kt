@@ -7,6 +7,7 @@ import com.pinup.pinup.data.request.ReviewRequest
 import com.pinup.pinup.data.request.pinlog.AddReviewRequest
 import com.pinup.pinup.domain.model.ImageUploadType
 import com.pinup.pinup.domain.model.Place
+import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.domain.usecase.EditPinlogUseCase
 import com.pinup.pinup.domain.usecase.GetDetailPlaceUseCase
 import com.pinup.pinup.domain.usecase.GetPinlogDetailUseCase
@@ -30,16 +31,22 @@ class WriteReviewViewModel (
 
     companion object {
         private const val REVIEW_ID = "reviewId"
+        private const val DETAIL_PLACE = "detailPlace"
 
     }
 
     val reviewId = savedStateHandle.get<Int>(REVIEW_ID) ?: 0
+    val detailPlace = savedStateHandle.get<ReviewedPlace>(DETAIL_PLACE)
 
     var writeReviewId: Int? = null
 
     init {
         if (reviewId != 0) {
             getPinlogDetail()
+        }
+
+        if (detailPlace != null) {
+            updatePlace(detailPlace)
         }
     }
 
@@ -89,6 +96,27 @@ class WriteReviewViewModel (
     }
 
 
+    private fun updatePlace(reviewedPlace: ReviewedPlace) {
+        val place = Place(
+            address = reviewedPlace.roadAddress,
+            averageStarRating = reviewedPlace.averageStarRating,
+            placeCategory = reviewedPlace.placeCategory.name,
+            categoryCode = "",
+            description = "",
+            kakaoPlaceId = reviewedPlace.kakaoPlaceId,
+            latitude = reviewedPlace.latitude,
+            longitude = reviewedPlace.longitude,
+            name = reviewedPlace.name,
+            reviewCount = reviewedPlace.reviewCount,
+            roadAddress = reviewedPlace.roadAddress
+        )
+
+        updateState {
+            copy(
+                selectedPlace = place
+            )
+        }
+    }
     fun selectPlace(place: Place) = viewModelScope.launch {
         updateState {
             copy(

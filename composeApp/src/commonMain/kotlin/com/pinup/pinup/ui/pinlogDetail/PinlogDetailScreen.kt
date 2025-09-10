@@ -308,7 +308,7 @@ fun PinlogDetailScreen(
                                 Spacer(modifier = Modifier.weight(1f))
 
                                 Text(
-                                    text = "$pinlogDetail.createdDate 작성",
+                                    text = "${pinlogDetail.createdAt[0]}.${pinlogDetail.createdAt[1]}.${pinlogDetail.createdAt[2]} 작성",
                                     style = Typography.L2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),

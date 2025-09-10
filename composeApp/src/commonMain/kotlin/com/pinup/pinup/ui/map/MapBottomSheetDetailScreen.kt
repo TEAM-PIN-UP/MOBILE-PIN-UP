@@ -34,6 +34,7 @@ import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.DetailPlace
+import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.PHorizontalDivider
@@ -52,7 +53,7 @@ import pinup.composeapp.generated.resources.*
 fun MapBottomSheetDetailScreen(
     detailPlace: DetailPlace?,
     isExpanded: Boolean,
-    onMoveWriteReview: () -> Unit = {},
+    onMoveWriteReview: (ReviewedPlace) -> Unit = {},
     onBackPressed: () -> Unit = {},
     onClearDetailPlace: () -> Unit = {},
     onUpdateBookmark: (String, Boolean) -> Unit = { _, _ -> },
@@ -145,7 +146,7 @@ fun MapBottomSheetDetailScreen(
                 RoundedBox(
                     modifier = Modifier
                         .clickableSingleWithNoRipple {
-                            onMoveWriteReview()
+                            onMoveWriteReview(detailPlace.mapPlace)
                         },
                     backgroundColor = Colors.Neutral50,
                     cornerRounded = 100
