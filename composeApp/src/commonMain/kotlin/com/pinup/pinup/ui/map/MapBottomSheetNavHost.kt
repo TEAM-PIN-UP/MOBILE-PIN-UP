@@ -41,8 +41,10 @@ fun MapBottomSheetNavHost(
     val detailRoute = MapBottomSheetDestination.Detail::class.qualifiedName
 
     LaunchedEffect(placeDetailUiState.detailPlace) {
+        hLog("하이요~" + placeDetailUiState.detailPlace.toString())
+        val current = navHostController.currentBackStackEntry?.destination?.route
+        hLog("하이요~2$current")
         if (placeDetailUiState.detailPlace != null) {
-            val current = navHostController.currentBackStackEntry?.destination?.route
             if (current != detailRoute) {
                 navHostController.navigate(MapBottomSheetDestination.Detail) {
                     launchSingleTop = true
@@ -75,7 +77,7 @@ fun MapBottomSheetNavHost(
 
     NavHost(
         navController = navHostController,
-        startDestination = MapBottomSheetDestination.Search,
+        startDestination = if (placeDetailUiState.detailPlace != null) MapBottomSheetDestination.Detail else MapBottomSheetDestination.Search,
     ) {
         composable<MapBottomSheetDestination.Search> {
             MapBottomSheetSearchScreen(
