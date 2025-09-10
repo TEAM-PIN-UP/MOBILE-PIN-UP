@@ -13,7 +13,7 @@ fun UserProfileRoute(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     UserProfileScreen(
         member = uiState.value.member,
-        photoReviews = uiState.value.photoReviews,
+        photoReviews = uiState.value.pagingReview.reviews,
         onRequestCancel = viewModel::deleteRequestPinBuddy,
         onRemovePinBuddy = viewModel::deletePinBuddy,
         onRequestPinBuddy = viewModel::requestPinBuddy,

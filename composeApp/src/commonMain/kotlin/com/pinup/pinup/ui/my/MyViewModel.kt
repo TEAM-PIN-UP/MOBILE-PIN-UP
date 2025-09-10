@@ -81,7 +81,7 @@ class MyViewModel (
 
     private fun handleSuccessLikeChanged(id: Int) = viewModelScope.launch {
         resultResponse(
-            response = getFeedUseCase(id, 1, null, null),
+            response = getFeedUseCase(id, 1, memberId = uiState.value.member.profile.memberId, null),
             successCallback = { result ->
                 updateState {
                     copy(
