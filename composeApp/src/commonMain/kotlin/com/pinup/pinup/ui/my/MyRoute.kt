@@ -47,7 +47,7 @@ fun MyRoute(
 
     MyScreen(
         member = uiState.value.member,
-        reviews = uiState.value.photoReviews,
+        reviews = uiState.value.pagingReview.reviews,
         onAddPinBuddyClick = onAddPinBuddyClick,
         onMovePinBuddy = onMovePinBuddy,
         onSettingClick = onMoveSetting,
