@@ -53,7 +53,7 @@ import pinup.composeapp.generated.resources.*
 fun MapBottomSheetDetailScreen(
     detailPlace: DetailPlace?,
     isExpanded: Boolean,
-    onMoveWriteReview: (ReviewedPlace) -> Unit = {},
+    onMoveWriteReview: (String) -> Unit = {},
     onBackPressed: () -> Unit = {},
     onClearDetailPlace: () -> Unit = {},
     onUpdateBookmark: (String, Boolean) -> Unit = { _, _ -> },
@@ -146,7 +146,7 @@ fun MapBottomSheetDetailScreen(
                 RoundedBox(
                     modifier = Modifier
                         .clickableSingleWithNoRipple {
-                            onMoveWriteReview(detailPlace.mapPlace)
+                            onMoveWriteReview(detailPlace.mapPlace.kakaoPlaceId)
                         },
                     backgroundColor = Colors.Neutral50,
                     cornerRounded = 100

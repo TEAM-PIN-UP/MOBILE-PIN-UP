@@ -31,12 +31,12 @@ class WriteReviewViewModel (
 
     companion object {
         private const val REVIEW_ID = "reviewId"
-        private const val DETAIL_PLACE = "detailPlace"
+        private const val PLACE_ID = "placeId"
 
     }
 
     val reviewId = savedStateHandle.get<Int>(REVIEW_ID) ?: 0
-    val detailPlace = savedStateHandle.get<ReviewedPlace>(DETAIL_PLACE)
+    val placeId = savedStateHandle.get<String>(PLACE_ID)
 
     var writeReviewId: Int? = null
 
@@ -45,8 +45,8 @@ class WriteReviewViewModel (
             getPinlogDetail()
         }
 
-        if (detailPlace != null) {
-            updatePlace(detailPlace)
+        if (placeId != null) {
+            getDetailPlace(placeId)
         }
     }
 
@@ -62,9 +62,9 @@ class WriteReviewViewModel (
                         categoryCode = "",
                         description = "",
                         kakaoPlaceId = id,
-                        latitude = 0.0,
-                        longitude = 0.0,
-                        placeCategory = "",
+                        latitude = it.mapPlace.longitude,
+                        longitude = it.mapPlace.latitude,
+                        placeCategory = it.mapPlace.placeCategory.name,
                         reviewCount = it.mapPlace.reviewCount,
                         roadAddress = it.mapPlace.roadAddress
                     )
@@ -95,28 +95,6 @@ class WriteReviewViewModel (
         }
     }
 
-
-    private fun updatePlace(reviewedPlace: ReviewedPlace) {
-        val place = Place(
-            address = reviewedPlace.roadAddress,
-            averageStarRating = reviewedPlace.averageStarRating,
-            placeCategory = reviewedPlace.placeCategory.name,
-            categoryCode = "",
-            description = "",
-            kakaoPlaceId = reviewedPlace.kakaoPlaceId,
-            latitude = reviewedPlace.latitude,
-            longitude = reviewedPlace.longitude,
-            name = reviewedPlace.name,
-            reviewCount = reviewedPlace.reviewCount,
-            roadAddress = reviewedPlace.roadAddress
-        )
-
-        updateState {
-            copy(
-                selectedPlace = place
-            )
-        }
-    }
     fun selectPlace(place: Place) = viewModelScope.launch {
         updateState {
             copy(

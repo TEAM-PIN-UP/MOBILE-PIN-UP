@@ -253,7 +253,7 @@ fun PinUpApp(
                 composable<PinUpAppDestination.Main> {
                     MainNavHost(
                         onMoveWriteReview = {
-                            navHostController.navigate(PinUpAppDestination.WriteReview(it))
+                            navHostController.navigate(PinUpAppDestination.WriteReview(it, null))
                         },
                         onMovePinlogDetail = {
                             navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
@@ -268,10 +268,10 @@ fun PinUpApp(
                             navHostController.navigate(PinUpAppDestination.Setting)
                         },
                         onClickEdit = {
-                            navHostController.navigate(PinUpAppDestination.WriteReview(it))
+                            navHostController.navigate(PinUpAppDestination.WriteReview(it, null))
                         },
                         onMoveNewWriteReview = {
-                            navHostController.navigate(PinUpAppDestination.WriteReview(-1, it))
+                            navHostController.navigate(PinUpAppDestination.WriteReview(0, it))
                         }
                     )
                 }
@@ -293,7 +293,7 @@ fun PinUpApp(
                             navHostController.popBackStack()
                         },
                         onClickEdit = {
-                            navHostController.navigate(PinUpAppDestination.WriteReview(it))
+                            navHostController.navigate(PinUpAppDestination.WriteReview(it, null))
                         }
                     )
                 }
@@ -385,8 +385,8 @@ sealed interface PinUpAppDestination {
     }
     @Serializable
     data class WriteReview(
-        val reviewId: Int,
-        val detailPlace: ReviewedPlace? = null
+        val reviewId: Int?,
+        val placeId: String?
     ) : PinUpAppDestination
     @Serializable
     data class PinlogDetail(

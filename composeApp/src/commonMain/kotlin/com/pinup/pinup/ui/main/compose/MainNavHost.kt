@@ -31,7 +31,7 @@ fun MainNavHost(
     navHostController: NavHostController = rememberNavController(),
     mainViewModel: MainViewModel = koinViewModel(),
     onMoveWriteReview: (Int) -> Unit,
-    onMoveNewWriteReview: (ReviewedPlace) -> Unit,
+    onMoveNewWriteReview: (String) -> Unit,
     onMovePinlogDetail: (Int) -> Unit,
     onMoveAddPinBuddy: () -> Unit,
     onMovePinBuddy: () -> Unit,

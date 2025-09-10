@@ -27,7 +27,7 @@ fun MapRoute(
     onBottomMenuClick: (MainDestination) -> Unit,
     onClickEdit: (Int) -> Unit = {},
     onMovePinlogDetail: (Int) -> Unit = {},
-    onMoveWriteReview: (ReviewedPlace) -> Unit = {},
+    onMoveWriteReview: (String) -> Unit = {},
 ) {
     val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
         accuracy = LocationTrackerAccuracy.Best
