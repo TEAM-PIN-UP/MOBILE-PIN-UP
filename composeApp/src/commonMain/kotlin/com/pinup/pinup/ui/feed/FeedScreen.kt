@@ -87,7 +87,6 @@ fun FeedScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
                 .background(
                     color = Colors.White
                 )
@@ -95,6 +94,7 @@ fun FeedScreen(
 
             Row(
                 modifier = Modifier
+                    .statusBarsPadding()
                     .padding(horizontal = 20.dp, vertical = 15.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
