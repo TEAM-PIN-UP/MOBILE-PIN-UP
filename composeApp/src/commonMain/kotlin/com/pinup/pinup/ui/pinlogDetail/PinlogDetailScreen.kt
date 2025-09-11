@@ -62,6 +62,7 @@ import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Texts.PinLog.COMMENT_REPLY_HINT
 import com.pinup.pinup.ui.theme.Typography
+import com.pinup.pinup.util.toShortDateXd
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -190,7 +191,7 @@ fun PinlogDetailScreen(
                                 Spacer(modifier = Modifier.height(6.dp))
 
                                 Text(
-                                    text = "$pinlogDetail.visitDate 방문",
+                                    text = "${toShortDateXd(pinlogDetail.visitedDate)} 방문",
                                     style = Typography.L2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),

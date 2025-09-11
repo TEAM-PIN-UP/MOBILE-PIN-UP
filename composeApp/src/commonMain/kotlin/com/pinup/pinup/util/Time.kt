@@ -1,6 +1,7 @@
 package com.pinup.pinup.util
 
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -19,4 +20,12 @@ enum class TimeFormat {
 
 enum class TimePeriod {
     AM, PM
+}
+
+fun toShortDateXd(iso: String): String {
+    if (iso.isEmpty()) return ""
+    val d = LocalDate.parse(iso.trim())
+    return "${(d.year % 100).toString().padStart(2,'0')}." +
+            "${d.monthNumber.toString().padStart(2,'0')}." +
+            d.dayOfMonth.toString().padStart(2,'0')
 }

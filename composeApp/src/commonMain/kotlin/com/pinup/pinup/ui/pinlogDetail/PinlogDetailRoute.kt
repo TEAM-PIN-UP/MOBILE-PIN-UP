@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.theme.Texts
 import kotlinx.coroutines.flow.collectLatest
@@ -20,6 +21,7 @@ fun PinlogDetailRoute(
     onBackPressed: () -> Unit = {},
     onClickEdit: (Int) -> Unit = {},
 ) {
+    hLog("하이요")
     val toast = rememberToastState()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isShowDeleteDialog = remember { mutableStateOf(false) }

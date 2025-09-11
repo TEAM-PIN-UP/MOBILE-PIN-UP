@@ -147,6 +147,7 @@ fun AddPinBuddyScreen(
                             modifier = Modifier
                                 .clickableWithNoRipple {
                                     onValueChange(text)
+                                    onSearch()
                                 },
                             text = text,
                             color = Colors.Gray700,

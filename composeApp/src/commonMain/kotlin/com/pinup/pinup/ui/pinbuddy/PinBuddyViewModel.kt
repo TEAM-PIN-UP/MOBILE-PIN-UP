@@ -32,7 +32,7 @@ class PinBuddyViewModel (
     private val receivePinBuddyPagination = Pagination()
 
     init {
-       // initPinBuddies()
+        initPinBuddies()
     }
 
     private fun initPinBuddies() = viewModelScope.launch {

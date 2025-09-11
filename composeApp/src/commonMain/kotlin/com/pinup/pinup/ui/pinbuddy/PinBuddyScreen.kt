@@ -61,7 +61,7 @@ fun PinBuddyScreen(
 ) {
     val isShowCompleteDialog = remember { mutableStateOf<Pair<Boolean, Int?>>(false to null) }
     val pages = remember { listOf(Texts.Word.PIN_BUDDY, Texts.PROFILE.RECEIVE_REQUEST , Texts.PROFILE.SENT_REQUEST) }
-    val listSize = remember { listOf(pinBuddies.size, receivePinBuddyRequests.size, sentPinBuddyRequests.size) }
+    val listSize = listOf(pinBuddies.size, receivePinBuddyRequests.size, sentPinBuddyRequests.size)
     val pagerState = rememberPagerState{ pages.size }
 
     Column(
@@ -136,7 +136,8 @@ fun PinBuddyScreen(
 
         HorizontalPager(
             state = pagerState,
-            userScrollEnabled = false
+            userScrollEnabled = false,
+            verticalAlignment = Alignment.Top
         ) {
             when (it) {
                 0 -> {
