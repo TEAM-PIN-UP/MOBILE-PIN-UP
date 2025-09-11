@@ -103,6 +103,7 @@ class PinlogDetailViewModel(
             resultResponse(
                 response = uploadCommentUseCase(reviewId, request),
                 successCallback = {
+                    updateMyComment("")
                     getPinlogDetail()
                 }
             )

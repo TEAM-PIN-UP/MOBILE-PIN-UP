@@ -18,6 +18,7 @@ import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
+import com.pinup.pinup.util.relativeOrDate
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -52,7 +53,7 @@ fun CommentView(
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
-                    text = comment.createdAt,
+                    text = relativeOrDate(comment.createdAt),
                     style = Typography.L2.copy(
                         fontWeight = FontWeight.Medium
                     ),
@@ -118,7 +119,7 @@ fun CommentView(
                                 Spacer(modifier = Modifier.width(4.dp))
 
                                 Text(
-                                    text = it.createdAt,
+                                    text = relativeOrDate(it.createdAt),
                                     style = Typography.L2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),

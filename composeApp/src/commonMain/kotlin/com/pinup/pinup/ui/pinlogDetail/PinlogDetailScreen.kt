@@ -225,7 +225,7 @@ fun PinlogDetailScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             ProfileImageView(
-                                imgUrl = userInfo.profileUrl,
+                                imgUrl = pinlogDetail.writerProfileImageUrl,
                                 size = 36.dp,
                             )
 
