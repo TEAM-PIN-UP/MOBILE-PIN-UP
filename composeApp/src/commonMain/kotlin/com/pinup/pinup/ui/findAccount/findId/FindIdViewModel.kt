@@ -5,7 +5,11 @@ import com.pinup.pinup.ui.base.UiState
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.data.request.EmailVerifyRequest
 import com.pinup.pinup.data.request.SendVerifyCodeRequest
+import com.pinup.pinup.data.request.findId.FindByEmailRequest
+import com.pinup.pinup.data.request.findId.FindByNickNameRequest
 import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
+import com.pinup.pinup.domain.usecase.GetFindIdByEmailUseCase
+import com.pinup.pinup.domain.usecase.GetFindIdByNicknameUseCase
 import com.pinup.pinup.domain.usecase.PostEmailVerifyUseCase
 import com.pinup.pinup.domain.usecase.PostSendVerifyCodeUseCase
 import com.pinup.pinup.domain.usecase.PostTemporaryPasswordUseCase
@@ -18,7 +22,9 @@ import kotlinx.coroutines.launch
 class FindIdViewModel(
     private val sendVerifyCodeUseCase: PostSendVerifyCodeUseCase,
     private val emailVerifyUseCase: PostEmailVerifyUseCase,
-    private val checkNickNameUseCase: CheckNickNameUseCase
+    private val checkNickNameUseCase: CheckNickNameUseCase,
+    private val getFindIdByEmailUseCase: GetFindIdByEmailUseCase,
+    private val getFindIdByNicknameUseCase: GetFindIdByNicknameUseCase
 ): BaseViewModel<FindIdUiState, FindIdUiEvent>(
     FindIdUiState()
 ) {
@@ -122,17 +128,45 @@ class FindIdViewModel(
         return isValid
     }
 
-    private fun findIdByEmail() {
-        //TODO 만약 성공한다면
-        emitEvent(FindIdUiEvent.ShowInfoBottomSheet)
+    private fun findIdByEmail() = viewModelScope.launch {
+        val request = FindByEmailRequest(uiState.value.email)
+        resultResponse(
+            response = getFindIdByEmailUseCase(request),
+            successCallback = {
+                updateState {
+                    copy(
+                        findEmail = it.email,
+                        findNickName = it.nickname,
+                        findProfileUrl = it.profileUrl
+                    )
+                }
+                emitEvent(FindIdUiEvent.ShowInfoBottomSheet)
+            }
+        )
     }
 
-    private fun findIdByNickName() {
-        //TODO 만약 성공한다면
-        updateState {
-            copy(
-                isShowInfoPage = true
-            )
+    private fun findIdByNickName() = viewModelScope.launch {
+        val request = FindByNickNameRequest(uiState.value.email)
+        resultResponse(
+            response = getFindIdByNicknameUseCase(request),
+            successCallback = {
+                updateState {
+                    copy(
+                        findEmail = it.email,
+                        findNickName = it.nickname,
+                        findProfileUrl = it.profileUrl,
+                        isShowInfoPage = true
+                    )
+                }
+            }
+        )
+    }
+
+    fun onConfirmButtonClick() {
+        if (uiState.value.isFindByEmail) {
+            // TODO ??
+        } else {
+            findIdByNickName()
         }
     }
 

@@ -60,7 +60,7 @@ fun FindIdRoute(
             onClickTabChanged = viewModel::updateTabState,
             onClickLogin = onMoveLogin,
             onClickFindPassword = onMoveFindPassword,
-            onClickConfirm = {},
+            onClickConfirm = viewModel::onConfirmButtonClick,
         )
     }
 }
