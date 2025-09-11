@@ -26,7 +26,6 @@ class FeedViewModel(
 ) : BaseViewModel<FeedUiState, UiEvent>(FeedUiState()) {
 
     init {
-        getFeedList()
         getMyProfile()
         getRecentSearchList()
     }

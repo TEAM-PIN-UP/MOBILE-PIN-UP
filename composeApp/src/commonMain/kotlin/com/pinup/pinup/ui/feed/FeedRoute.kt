@@ -1,6 +1,7 @@
 package com.pinup.pinup.ui.feed
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.pinup.ui.feed.search.FeedSearchScreen
@@ -15,6 +16,11 @@ fun FeedRoute(
     onClickDetail: (Int) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.getFeedList()
+    }
+
     if (uiState.searchMode) {
         FeedSearchScreen(
             query = uiState.searchText,
