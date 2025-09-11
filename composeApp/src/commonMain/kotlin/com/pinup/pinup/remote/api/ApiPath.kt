@@ -15,6 +15,8 @@ object ApiPath {
         const val MEMBERS = "api/members"
         const val SOCIAL_SIGN_UP = "$MEMBERS/social-sign-up"
         const val EMAIL_SIGN_UP = "$MEMBERS/sign-up"
+        const val FIND_ID_BY_NICKNAME = "$MEMBERS/find-id-by-nickname"
+        const val FIND_ID_BY_EMAIL = "$MEMBERS/find-id-by-email"
     }
 
     object MailPath {

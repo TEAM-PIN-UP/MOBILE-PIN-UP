@@ -1,9 +1,12 @@
 package com.pinup.pinup.remote.api
 
 import com.pinup.pinup.data.request.ProfileEditRequest
+import com.pinup.pinup.data.request.findId.FindByEmailRequest
+import com.pinup.pinup.data.request.findId.FindByNickNameRequest
 import com.pinup.pinup.data.request.signUp.EmailSignUpRequest
 import com.pinup.pinup.data.request.signUp.SocialSignUpRequest
 import com.pinup.pinup.data.response.CheckNickNameResponse
+import com.pinup.pinup.data.response.FindIdResponse
 import com.pinup.pinup.data.response.GetMemberInfoResponse
 import com.pinup.pinup.data.response.GetReviewsResponse
 import com.pinup.pinup.data.response.LoginResponse
@@ -80,4 +83,14 @@ interface MembersApi {
 
     @DELETE(ApiPath.Members.MEMBERS)
     suspend fun unregister(): PResult<PResponse<Unit>>
+
+    @GET(ApiPath.Members.FIND_ID_BY_NICKNAME)
+    suspend fun getFindIdByNickname(
+        @Body request: FindByNickNameRequest
+    ): PResult<PResponse<FindIdResponse>>
+
+    @GET(ApiPath.Members.FIND_ID_BY_EMAIL)
+    suspend fun getFindIdByEmail(
+        @Body request: FindByEmailRequest
+    ): PResult<PResponse<FindIdResponse>>
 }

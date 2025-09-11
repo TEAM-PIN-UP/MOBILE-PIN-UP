@@ -2,11 +2,15 @@ package com.pinup.pinup.remote.impl
 
 import com.pinup.pinup.data.remote.MembersRemoteDataSource
 import com.pinup.pinup.data.request.ProfileEditRequest
+import com.pinup.pinup.data.request.findId.FindByEmailRequest
+import com.pinup.pinup.data.request.findId.FindByNickNameRequest
 import com.pinup.pinup.data.response.CheckNickNameResponse
+import com.pinup.pinup.data.response.FindIdResponse
 import com.pinup.pinup.data.response.GetMemberInfoResponse
 import com.pinup.pinup.data.response.GetReviewsResponse
 import com.pinup.pinup.data.response.SearchUserResponse
 import com.pinup.pinup.domain.model.PResult
+import com.pinup.pinup.domain.model.UserInfo
 import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.remote.api.MembersApi
 
@@ -55,5 +59,13 @@ class MembersRemoteDataSourceImpl (
 
     override suspend fun unregister(): PResult<Unit> {
         return membersApi.unregister().mapSuccessData()
+    }
+
+    override suspend fun findIdByEmail(request: FindByEmailRequest): PResult<FindIdResponse> {
+        return membersApi.getFindIdByEmail(request).mapSuccessData()
+    }
+
+    override suspend fun findIdByNickName(request: FindByNickNameRequest): PResult<FindIdResponse> {
+        return membersApi.getFindIdByNickname(request).mapSuccessData()
     }
 }
