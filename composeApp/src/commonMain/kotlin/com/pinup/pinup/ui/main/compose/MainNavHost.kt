@@ -20,6 +20,7 @@ import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.ui.bookmark.BookmarkRoute
 import com.pinup.pinup.ui.component.BottomBar
+import com.pinup.pinup.ui.component.NotDevelopScreen
 import com.pinup.pinup.ui.feed.FeedRoute
 import com.pinup.pinup.ui.main.MainViewModel
 import com.pinup.pinup.ui.map.MapRoute
@@ -109,7 +110,11 @@ fun MainNavHost(
             }
 
             composable<MainDestination.Article> {
-
+                NotDevelopScreen(
+                    onBackPressed = {
+                        navHostController.popBackStack()
+                    }
+                )
             }
 
             composable<MainDestination.My> {
