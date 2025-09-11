@@ -91,7 +91,6 @@ fun FeedScreen(
                     color = Colors.White
                 )
         ) {
-
             Row(
                 modifier = Modifier
                     .statusBarsPadding()
@@ -120,24 +119,41 @@ fun FeedScreen(
 
             PHorizontalDivider()
 
-            LazyColumn(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .background(Colors.Gray50),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                state = scrollState
-            ) {
-                items(reviewList){
-                    FeedView(
-                        item = it,
-                        onClickMenu = {
-                            clickedReviewId = it
-                            scope.launch { sheetState.show() }
-                        },
-                        onClickLike = onClickLike,
-                        onClickDetail = onClickDetail,
-                        onClickScrap = {},
+            if (reviewList.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = Texts.FEED.EMPTY_FEED,
+                        color = Colors.Gray400,
+                        style = Typography.B1.copy(
+                            fontWeight = FontWeight.SemiBold
+                        )
                     )
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                        .background(Colors.Gray50),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    state = scrollState
+                ) {
+                    items(reviewList){
+                        FeedView(
+                            item = it,
+                            onClickMenu = {
+                                clickedReviewId = it
+                                scope.launch { sheetState.show() }
+                            },
+                            onClickLike = onClickLike,
+                            onClickDetail = onClickDetail,
+                            onClickScrap = {},
+                        )
+                    }
                 }
             }
         }

@@ -216,6 +216,7 @@ object Texts {
 
     object FEED {
         const val RECENT_SEARCH = "최근 검색어"
+        const val EMPTY_FEED = "아직 핀버디들의 핀로그가 없어요!"
     }
 
     object PROFILE {
