@@ -124,6 +124,7 @@ class MapViewModel (
     }
 
     fun getPlaces() = viewModelScope.launch {
+        hLog("아야 나 클릭 ${uiState.value.cameraState}")
         if (uiState.value.cameraState != null) {
             updateCameraPosition(uiState.value.cameraState!!.position)
             val latLngBounds = uiState.value.cameraState!!.contentBounds
