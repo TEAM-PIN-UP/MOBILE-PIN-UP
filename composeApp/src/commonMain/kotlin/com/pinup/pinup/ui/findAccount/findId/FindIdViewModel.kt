@@ -146,7 +146,7 @@ class FindIdViewModel(
     }
 
     private fun findIdByNickName() = viewModelScope.launch {
-        val request = FindByNickNameRequest(uiState.value.email)
+        val request = FindByNickNameRequest(uiState.value.nickName)
         resultResponse(
             response = getFindIdByNicknameUseCase(request),
             successCallback = {
