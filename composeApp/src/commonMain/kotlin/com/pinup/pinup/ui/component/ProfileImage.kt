@@ -48,7 +48,7 @@ fun ReviewedProfileImageView(
             cornerColor = Colors.White
         ) {
             Image(
-                painter = painterResource(Res.drawable.ic_kakao),
+                painter = painterResource(Res.drawable.ic_profile_default),
                 contentDescription = "default profile image"
             )
         }
@@ -83,7 +83,7 @@ fun ProfileImageView(
             cornerColor = cornerColor,
         ) {
             Image(
-                painter = painterResource(Res.drawable.ic_kakao),
+                painter = painterResource(Res.drawable.ic_profile_default),
                 contentDescription = "default profile image"
             )
         }
