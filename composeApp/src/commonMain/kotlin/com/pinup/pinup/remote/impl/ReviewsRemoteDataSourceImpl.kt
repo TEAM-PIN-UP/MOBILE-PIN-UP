@@ -24,7 +24,7 @@ class ReviewsRemoteDataSourceImpl (
         )
     }
 
-    override suspend fun getReviews(request: Int, size: Int, memberId: Int?, keyword: String?): PResult<PResponse<GetReviewsResponse>> {
+    override suspend fun getReviews(request: Int?, size: Int, memberId: Int?, keyword: String?): PResult<PResponse<GetReviewsResponse>> {
         return reviewsApi.getReviews(
             cursor = request,
             size = size,

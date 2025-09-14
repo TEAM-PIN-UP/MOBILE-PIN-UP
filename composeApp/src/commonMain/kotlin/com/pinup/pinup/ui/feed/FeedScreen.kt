@@ -4,9 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -137,11 +139,16 @@ fun FeedScreen(
             } else {
                 LazyColumn(
                     modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .background(Colors.Gray50),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    state = scrollState
+                        .background(Colors.White),
+                    state = scrollState,
                 ) {
+                    item {
+                        Spacer(
+                            modifier = Modifier
+                                .height(16.dp)
+                        )
+                    }
+
                     items(reviewList){
                         FeedView(
                             item = it,
@@ -153,6 +160,14 @@ fun FeedScreen(
                             onClickDetail = onClickDetail,
                             onClickScrap = {},
                         )
+
+                        PHorizontalDivider(modifier = Modifier.height(10.dp))
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }

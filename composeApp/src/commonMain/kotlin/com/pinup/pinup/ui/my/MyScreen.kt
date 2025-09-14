@@ -463,9 +463,8 @@ fun MyPinLogList(
     } else {
         LazyColumn(
             modifier = Modifier
-                .padding(horizontal = 20.dp)
                 .padding(top = 16.dp)
-                .background(Colors.Gray50),
+                .background(Colors.White),
             verticalArrangement = Arrangement.spacedBy(10.dp),
             state = scrollState
         ) {
@@ -477,6 +476,8 @@ fun MyPinLogList(
                     onClickDetail = onClickDetail,
                     onClickScrap = {},
                 )
+
+                PHorizontalDivider()
             }
         }
     }

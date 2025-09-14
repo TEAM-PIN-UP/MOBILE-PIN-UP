@@ -31,7 +31,7 @@ class ReviewsRepositoryImpl (
         }
     }
 
-    override suspend fun getReviews(request: Int, size: Int, memberId: Int?, keyword: String?): PResult<PagingReview> {
+    override suspend fun getReviews(request: Int?, size: Int, memberId: Int?, keyword: String?): PResult<PagingReview> {
         return reviewsRemoteDataSource.getReviews(
             request, size, memberId, keyword
         ).mapSuccessData().map {

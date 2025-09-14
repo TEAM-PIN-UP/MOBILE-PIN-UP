@@ -72,3 +72,33 @@ fun relativeOrDate(
         else           -> "${sec / DAY}일$suffix"
     }
 }
+
+fun relativeOrDate(
+    input: List<Int>,
+    now: Instant = Clock.System.now(),
+    tz: TimeZone = TimeZone.currentSystemDefault()
+): String {
+    if (input.isEmpty()) return ""
+    val ldt = LocalDateTime(input[0], input[1], input[2], input[3], input[4], input[5], input[6])
+    val at  = ldt.toInstant(tz)
+
+    val isFuture = at > now
+    val sec = abs((if (isFuture) at - now else now - at).inWholeSeconds)
+
+    val DAY = 24L * 60 * 60
+    if (sec >= 7L * DAY) {
+        val date = ldt.date
+        val yy = (date.year % 100).toString().padStart(2, '0')
+        val mm = date.monthNumber.toString().padStart(2, '0')
+        val dd = date.dayOfMonth.toString().padStart(2, '0')
+        return "$yy.$mm.$dd"
+    }
+
+    val suffix = "전"
+    return when {
+        sec < 60L   -> "방금 $suffix"
+        sec < 3600L -> "${sec / 60}분$suffix"
+        sec < DAY   -> "${sec / 3600}시간$suffix"
+        else        -> "${sec / DAY}일$suffix"
+    }
+}

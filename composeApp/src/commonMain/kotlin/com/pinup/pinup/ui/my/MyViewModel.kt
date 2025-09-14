@@ -39,7 +39,7 @@ class MyViewModel (
         }
     }
 
-    fun getFeedList(id: Int = uiState.value.pagingReview.nextCursor, memberId : Int) = viewModelScope.launch {
+    fun getFeedList(id: Int? = uiState.value.pagingReview.nextCursor, memberId : Int) = viewModelScope.launch {
         resultResponse(
             response = getFeedUseCase(id, memberId = memberId, keyword = null),
             successCallback = {
@@ -119,5 +119,5 @@ data class MyUiState(
         friendRequestId = null
     ),
     val pagingReview: PagingReview = PagingReview(),
-    val prevCursor: Int = 0,
+    val prevCursor: Int? = null,
 ) : UiState

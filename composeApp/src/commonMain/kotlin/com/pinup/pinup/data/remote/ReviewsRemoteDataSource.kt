@@ -14,7 +14,7 @@ interface ReviewsRemoteDataSource {
     suspend fun registerReviews(
         request: AddReviewRequest
     ): PResult<PResponse<RegisterReviewResponse>>
-    suspend fun getReviews(request: Int, size: Int, memberId: Int?, keyword: String?): PResult<PResponse<GetReviewsResponse>>
+    suspend fun getReviews(request: Int?, size: Int, memberId: Int?, keyword: String?): PResult<PResponse<GetReviewsResponse>>
     suspend fun deleteReview(request: Int): PResult<PResponse<Unit>>
     suspend fun addReviewLike(request: Int): PResult<PResponse<Unit>>
     suspend fun deleteReviewLike(request: Int): PResult<PResponse<Unit>>

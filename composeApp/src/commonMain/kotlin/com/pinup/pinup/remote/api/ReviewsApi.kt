@@ -35,7 +35,7 @@ interface ReviewsApi {
 
     @GET(ApiPath.PinLog.PINLOG)
     suspend fun getReviews(
-        @Query(QUERY_CURSOR_ID) cursor: Int,
+        @Query(QUERY_CURSOR_ID) cursor: Int? = null,
         @Query(QUERY_SIZE) size: Int,
         @Query(QUERY_MEMBER_ID) searchMemberId: Int? = null,
         @Query(QUERY_KEYWORD) keyword: String? = null,

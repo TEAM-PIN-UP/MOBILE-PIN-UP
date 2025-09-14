@@ -30,13 +30,14 @@ class FeedViewModel(
         getRecentSearchList()
     }
 
-    fun getFeedList(id: Int = uiState.value.pagingReview.nextCursor) = viewModelScope.launch {
+    fun getFeedList() = viewModelScope.launch {
+        if (!uiState.value.pagingReview.hasNext) return@launch
         resultResponse(
-            response = getFeedUseCase(id, memberId = null, keyword = uiState.value.searchText.ifEmpty { null }),
+            response = getFeedUseCase(uiState.value.pagingReview.nextCursor, memberId = null, keyword = uiState.value.searchText.ifEmpty { null }),
             successCallback = {
                 updateState {
                     copy(
-                        prevCursor = id,
+                        prevCursor = uiState.value.pagingReview.nextCursor,
                         pagingReview = it.copy(
                             reviews = pagingReview.reviews + it.reviews
                         ),
@@ -50,7 +51,7 @@ class FeedViewModel(
         resultResponse(
             response = deletePinlogUseCase(id),
             successCallback = {
-                getFeedList(0)
+                getFeedList()
             }
         )
     }
@@ -102,7 +103,7 @@ class FeedViewModel(
     }
 
     fun onClickSearch() {
-        getFeedList(id = 0)
+        getFeedList()
         saveRecentSearch()
     }
 
@@ -139,7 +140,7 @@ class FeedViewModel(
 
 data class FeedUiState(
     val pagingReview: PagingReview = PagingReview(),
-    val prevCursor: Int = 0,
+    val prevCursor: Int? = null,
     val searchMode: Boolean = false,
     val searchText: String = "",
     val profileUrl: String = "",

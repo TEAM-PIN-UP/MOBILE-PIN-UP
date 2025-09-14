@@ -17,7 +17,7 @@ data class GetReviewsResponse(
                     it.toModel()
                 },
                 hasNext = hasNext,
-                nextCursor = nextCursor ?: -1
+                nextCursor = nextCursor ?: 0
             )
         }
     }

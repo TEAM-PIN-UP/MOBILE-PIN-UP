@@ -1,6 +1,7 @@
 package com.pinup.pinup.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +30,7 @@ import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Texts.buildHighlightedText
 import com.pinup.pinup.ui.theme.Typography
+import com.pinup.pinup.util.relativeOrDate
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_bookmark_off
@@ -52,7 +54,9 @@ fun FeedView(
 
     Column(
         modifier = Modifier
+            .background(Colors.White)
             .padding(bottom = 20.dp)
+            .padding(horizontal = 20.dp)
     ) {
         Row(
             modifier = Modifier
@@ -81,7 +85,7 @@ fun FeedView(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = item.createdAt,
+                    text = relativeOrDate(item.createdAt),
                     style = Typography.L2.copy(
                         fontWeight = FontWeight.Medium
                     ),

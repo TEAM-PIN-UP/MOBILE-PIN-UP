@@ -5,7 +5,7 @@ data class Review(
     val writerName: String = "",
     val placeName: String,
     val content: String,
-    val createdAt: String,
+    val createdAt: List<Int>,
     val starRating: Double,
     val writerProfileImageUrl: String,
     val reviewImageUrls: List<String>?,

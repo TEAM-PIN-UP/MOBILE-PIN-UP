@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.feed.search.FeedSearchScreen
 import com.pinup.pinup.ui.main.compose.MainDestination
 import org.koin.compose.viewmodel.koinViewModel
@@ -18,6 +19,7 @@ fun FeedRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        hLog("??")
         viewModel.getFeedList()
     }
 
