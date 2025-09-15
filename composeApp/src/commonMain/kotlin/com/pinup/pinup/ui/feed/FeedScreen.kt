@@ -3,6 +3,7 @@ package com.pinup.pinup.ui.feed
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -27,6 +28,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Review
@@ -64,6 +67,9 @@ fun FeedScreen(
     )
     var clickedReviewId by remember { mutableStateOf(0) }
     val scrollState = rememberLazyListState()
+
+    val density = LocalDensity.current
+    var bottomBarHeight by remember { mutableStateOf(0.dp) }
 
     ScrollToEndCallback(scrollState) {
         getMoreFeed()
@@ -139,6 +145,7 @@ fun FeedScreen(
             } else {
                 LazyColumn(
                     modifier = Modifier
+                        .padding(bottom = bottomBarHeight)
                         .background(Colors.White),
                     state = scrollState,
                 ) {
@@ -165,10 +172,6 @@ fun FeedScreen(
 
                         Spacer(modifier = Modifier.height(16.dp))
                     }
-
-                    item {
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
                 }
             }
         }
@@ -178,11 +181,18 @@ fun FeedScreen(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Bottom
         ){
-            BottomBar(
-                selectedMenu = MainDestination.Feed,
-                profileImage = profile,
-                onBottomMenuClick = onClickBottomNav
-            )
+            Box(
+                modifier = Modifier
+                    .onGloballyPositioned { coords ->
+                        bottomBarHeight = with(density) { coords.size.height.toDp() }
+                    }
+            ) {
+                BottomBar(
+                    selectedMenu = MainDestination.Feed,
+                    profileImage = profile,
+                    onBottomMenuClick = onClickBottomNav
+                )
+            }
         }
     }
 }

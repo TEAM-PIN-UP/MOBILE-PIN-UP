@@ -34,9 +34,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.Review
@@ -45,6 +48,7 @@ import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.FeedView
+import com.pinup.pinup.ui.component.NotDevelopScreen
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.PVerticalDivider
 import com.pinup.pinup.ui.component.PinlogMenuBottomSheet
@@ -82,6 +86,8 @@ fun MyScreen(
         ModalBottomSheetValue.Hidden
     )
     var clickedReviewId by remember { mutableStateOf(0) }
+    val density = LocalDensity.current
+    var bottomBarHeight by remember { mutableStateOf(0.dp) }
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -416,6 +422,7 @@ fun MyScreen(
             ) {
                 if (it == 0) {
                     MyPinLogList(
+                        bottomBarHeight = bottomBarHeight,
                         reviewList = reviews,
                         onClickMenu = {
                             clickedReviewId = it
@@ -426,30 +433,38 @@ fun MyScreen(
                         onClickDetail = onClickDetail
                     )
                 } else {
-                    MyPinLogList(
-                        reviewList = reviews
-                    )
+                    NotDevelopScreen {
+
+                    }
                 }
             }
         }
-    }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Bottom
-    ){
-        BottomBar(
-            selectedMenu = MainDestination.My,
-            profileImage = member.profile.profilePictureUrl ?: "",
-            onBottomMenuClick = onClickBottomNav
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom
+        ){
+            Box(
+                modifier = Modifier
+                    .onGloballyPositioned { coords ->
+                        bottomBarHeight = with(density) { coords.size.height.toDp() }
+                    }
+            ) {
+                BottomBar(
+                    selectedMenu = MainDestination.My,
+                    profileImage = member.profile.profilePictureUrl ?: "",
+                    onBottomMenuClick = onClickBottomNav
+                )
+            }
+        }
     }
 }
 
 @Composable
 fun MyPinLogList(
     reviewList: List<Review>,
+    bottomBarHeight: Dp = 0.dp,
     onClickMenu: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
@@ -463,7 +478,7 @@ fun MyPinLogList(
     } else {
         LazyColumn(
             modifier = Modifier
-                .padding(top = 16.dp)
+                .padding(top = 16.dp, bottom = bottomBarHeight)
                 .background(Colors.White),
             verticalArrangement = Arrangement.spacedBy(10.dp),
             state = scrollState
