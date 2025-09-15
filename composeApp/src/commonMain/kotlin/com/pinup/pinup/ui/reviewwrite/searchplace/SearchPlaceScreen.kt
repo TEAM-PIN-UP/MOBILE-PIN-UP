@@ -127,7 +127,7 @@ fun SearchPlaceScreen(
 
                 LazyColumn(
                     modifier = Modifier
-                        .padding(top = 20.dp),
+                        .padding(vertical = 20.dp),
                     verticalArrangement = Arrangement.spacedBy(30.dp)
                 ) {
                     items(places) {
