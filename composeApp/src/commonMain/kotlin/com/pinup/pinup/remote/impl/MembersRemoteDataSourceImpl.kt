@@ -2,8 +2,6 @@ package com.pinup.pinup.remote.impl
 
 import com.pinup.pinup.data.remote.MembersRemoteDataSource
 import com.pinup.pinup.data.request.ProfileEditRequest
-import com.pinup.pinup.data.request.findId.FindByEmailRequest
-import com.pinup.pinup.data.request.findId.FindByNickNameRequest
 import com.pinup.pinup.data.response.CheckNickNameResponse
 import com.pinup.pinup.data.response.FindIdResponse
 import com.pinup.pinup.data.response.GetMemberInfoResponse
@@ -61,11 +59,11 @@ class MembersRemoteDataSourceImpl (
         return membersApi.unregister().mapSuccessData()
     }
 
-    override suspend fun findIdByEmail(request: FindByEmailRequest): PResult<FindIdResponse> {
+    override suspend fun findIdByEmail(request: String): PResult<FindIdResponse> {
         return membersApi.getFindIdByEmail(request).mapSuccessData()
     }
 
-    override suspend fun findIdByNickName(request: FindByNickNameRequest): PResult<FindIdResponse> {
+    override suspend fun findIdByNickName(request: String): PResult<FindIdResponse> {
         return membersApi.getFindIdByNickname(request).mapSuccessData()
     }
 }

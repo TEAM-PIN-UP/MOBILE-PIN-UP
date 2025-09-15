@@ -1,8 +1,6 @@
 package com.pinup.pinup.domain.repository
 
 import com.pinup.pinup.data.request.ProfileEditRequest
-import com.pinup.pinup.data.request.findId.FindByEmailRequest
-import com.pinup.pinup.data.request.findId.FindByNickNameRequest
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.PagingReview
@@ -27,6 +25,6 @@ interface MembersRepository {
     suspend fun saveRecentSearch(search: String)
     suspend fun editProfile(request: ProfileEditRequest): PResult<Unit>
     suspend fun unregister(): PResult<Unit>
-    suspend fun findIdByEmail(request: FindByEmailRequest): PResult<UserInfo>
-    suspend fun findIdByNickName(request: FindByNickNameRequest): PResult<UserInfo>
+    suspend fun findIdByEmail(request: String): PResult<UserInfo>
+    suspend fun findIdByNickName(request: String): PResult<UserInfo>
 }

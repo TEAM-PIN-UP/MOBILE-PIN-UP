@@ -52,7 +52,6 @@ fun FindIdRoute(
             nickname = uiState.nickName,
             isNicknameUsed = uiState.isNicknameUsed,
             onClickSendCode = viewModel::onClickVerify,
-            onClickVerify = viewModel::verifyEmail,
             onEmailChanged = viewModel::updateEmail,
             onNickNameChanged = viewModel::updateNickName,
             onCodeChanged = viewModel::updateVerificationCode,

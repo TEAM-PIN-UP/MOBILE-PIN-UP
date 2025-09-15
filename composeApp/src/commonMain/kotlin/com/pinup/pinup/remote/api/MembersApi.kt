@@ -1,8 +1,6 @@
 package com.pinup.pinup.remote.api
 
 import com.pinup.pinup.data.request.ProfileEditRequest
-import com.pinup.pinup.data.request.findId.FindByEmailRequest
-import com.pinup.pinup.data.request.findId.FindByNickNameRequest
 import com.pinup.pinup.data.request.signUp.EmailSignUpRequest
 import com.pinup.pinup.data.request.signUp.SocialSignUpRequest
 import com.pinup.pinup.data.response.CheckNickNameResponse
@@ -80,11 +78,11 @@ interface MembersApi {
 
     @GET(ApiPath.Members.FIND_ID_BY_NICKNAME)
     suspend fun getFindIdByNickname(
-        @Body request: FindByNickNameRequest
+        @Query("nickname") nickname: String
     ): PResult<PResponse<FindIdResponse>>
 
     @GET(ApiPath.Members.FIND_ID_BY_EMAIL)
     suspend fun getFindIdByEmail(
-        @Body request: FindByEmailRequest
+        @Query("email") email: String
     ): PResult<PResponse<FindIdResponse>>
 }

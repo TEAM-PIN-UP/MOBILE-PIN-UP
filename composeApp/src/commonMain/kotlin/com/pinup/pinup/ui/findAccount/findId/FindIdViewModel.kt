@@ -5,8 +5,6 @@ import com.pinup.pinup.ui.base.UiState
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.data.request.EmailVerifyRequest
 import com.pinup.pinup.data.request.SendVerifyCodeRequest
-import com.pinup.pinup.data.request.findId.FindByEmailRequest
-import com.pinup.pinup.data.request.findId.FindByNickNameRequest
 import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
 import com.pinup.pinup.domain.usecase.GetFindIdByEmailUseCase
 import com.pinup.pinup.domain.usecase.GetFindIdByNicknameUseCase
@@ -129,9 +127,8 @@ class FindIdViewModel(
     }
 
     private fun findIdByEmail() = viewModelScope.launch {
-        val request = FindByEmailRequest(uiState.value.email)
         resultResponse(
-            response = getFindIdByEmailUseCase(request),
+            response = getFindIdByEmailUseCase(uiState.value.email),
             successCallback = {
                 updateState {
                     copy(
@@ -146,9 +143,8 @@ class FindIdViewModel(
     }
 
     private fun findIdByNickName() = viewModelScope.launch {
-        val request = FindByNickNameRequest(uiState.value.nickName)
         resultResponse(
-            response = getFindIdByNicknameUseCase(request),
+            response = getFindIdByNicknameUseCase(uiState.value.nickName),
             successCallback = {
                 updateState {
                     copy(
@@ -164,7 +160,7 @@ class FindIdViewModel(
 
     fun onConfirmButtonClick() {
         if (uiState.value.isFindByEmail) {
-            // TODO ??
+            verifyEmail()
         } else {
             findIdByNickName()
         }

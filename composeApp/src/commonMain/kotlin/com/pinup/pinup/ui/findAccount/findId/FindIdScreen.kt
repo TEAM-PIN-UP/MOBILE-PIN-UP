@@ -56,7 +56,6 @@ fun FindIdScreen(
     isNicknameUsed: Boolean = false,
     sheetState: ModalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
     onClickSendCode: () -> Unit = {},
-    onClickVerify: () -> Unit = {},
     onClickConfirm: () -> Unit,
     onClickLogin: () -> Unit = {},
     onClickFindPassword: () -> Unit = {},
@@ -230,36 +229,6 @@ fun FindIdScreen(
                         isError = emailVerifyType == EmailVerifyType.NOT_VERIFIED,
                     )
 
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 11.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RoundedBox(
-                            modifier = Modifier
-                                .clickableSingleWithNoRipple {
-                                    onClickVerify()
-                                },
-                            cornerRounded = 100,
-                            backgroundColor = if (verificationCode.isNotEmpty()) Colors.Gray800 else Colors.Gray300,
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .padding(horizontal = 12.dp, vertical = 6.dp)
-                                    .align(Alignment.Center),
-                                text = Texts.Word.CONFIRM,
-                                style = Typography.L3.copy(
-                                    fontWeight = FontWeight.SemiBold
-                                ),
-                                color = Colors.White
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(19.dp))
-                    }
-
                     if (emailVerifyType == EmailVerifyType.NOT_VERIFIED) {
                         Spacer(modifier = Modifier.height(8.dp))
                         ErrorText(Texts.SignupEmail.CODE_INVALID)
@@ -306,7 +275,7 @@ fun FindIdScreen(
                 onClick = {
                     onClickConfirm()
                 },
-                isEnable = emailVerifyType == EmailVerifyType.VERIFIED || isNicknameUsed
+                isEnable = verificationCode.length == 6 || isNicknameUsed
             )
 
             Spacer(modifier = Modifier.height(53.dp))

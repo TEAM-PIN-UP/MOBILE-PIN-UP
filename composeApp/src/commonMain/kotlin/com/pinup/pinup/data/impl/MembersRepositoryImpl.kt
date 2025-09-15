@@ -3,8 +3,6 @@ package com.pinup.pinup.data.impl
 import com.pinup.pinup.data.local.MembersLocalDataSource
 import com.pinup.pinup.data.remote.MembersRemoteDataSource
 import com.pinup.pinup.data.request.ProfileEditRequest
-import com.pinup.pinup.data.request.findId.FindByEmailRequest
-import com.pinup.pinup.data.request.findId.FindByNickNameRequest
 import com.pinup.pinup.data.response.CheckNickNameResponse.Companion.toModel
 import com.pinup.pinup.data.response.FindIdResponse.Companion.toModel
 import com.pinup.pinup.data.response.GetMemberInfoResponse.Companion.toModel
@@ -108,13 +106,13 @@ class MembersRepositoryImpl (
         return membersRemoteDataSource.unregister()
     }
 
-    override suspend fun findIdByEmail(request: FindByEmailRequest): PResult<UserInfo> {
+    override suspend fun findIdByEmail(request: String): PResult<UserInfo> {
         return membersRemoteDataSource.findIdByEmail(request).map {
             it.toModel()
         }
     }
 
-    override suspend fun findIdByNickName(request: FindByNickNameRequest): PResult<UserInfo> {
+    override suspend fun findIdByNickName(request: String): PResult<UserInfo> {
         return membersRemoteDataSource.findIdByNickName(request).map {
             it.toModel()
         }
