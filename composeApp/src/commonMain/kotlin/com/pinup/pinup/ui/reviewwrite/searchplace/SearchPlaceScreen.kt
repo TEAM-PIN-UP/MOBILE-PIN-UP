@@ -133,7 +133,7 @@ fun SearchPlaceScreen(
                     items(places) {
                         SearchedPlaceCard(
                             name = it.name,
-                            category = Category.of(it.categoryCode),
+                            category = Category.of(it.placeCategory),
                             address = it.address,
                             reviewCount = it.reviewCount,
                             onClick = {
