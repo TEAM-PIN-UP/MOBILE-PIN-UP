@@ -79,8 +79,10 @@ fun MyScreen(
     onClickDetail: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
 ) {
-    var index by remember { mutableStateOf(0) }
-    val pagerState = rememberPagerState { 2 }
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = { 2 }
+    )
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
@@ -358,8 +360,7 @@ fun MyScreen(
                         .weight(1f)
                         .clickableWithNoRipple {
                             scope.launch {
-                                index = 0
-                                pagerState.animateScrollToPage(index)
+                                pagerState.animateScrollToPage(0)
                             }
                         }
                 ) {
@@ -368,8 +369,8 @@ fun MyScreen(
                             .align(Alignment.CenterHorizontally)
                             .padding(top = 12.dp, bottom = 11.dp),
                         text = Texts.Word.PINLOG,
-                        style = if (index == 0) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(fontWeight = FontWeight.Medium),
-                        color = if (index == 0) Colors.Gray800 else Colors.Gray300,
+                        style = if (pagerState.currentPage == 0) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(fontWeight = FontWeight.Medium),
+                        color = if (pagerState.currentPage == 0) Colors.Gray800 else Colors.Gray300,
                         textAlign = TextAlign.Center
                     )
 
@@ -378,7 +379,7 @@ fun MyScreen(
                             .height(1.dp)
                             .fillMaxWidth()
                             .background(
-                                color = if (index == 0) Colors.Gray800 else Colors.Transparency
+                                color = if (pagerState.currentPage == 0) Colors.Gray800 else Colors.Transparency
                             )
                     )
                 }
@@ -388,8 +389,7 @@ fun MyScreen(
                         .weight(1f)
                         .clickableWithNoRipple {
                             scope.launch {
-                                index = 1
-                                pagerState.animateScrollToPage(index)
+                                pagerState.animateScrollToPage(1)
                             }
                         }
                 ) {
@@ -398,8 +398,8 @@ fun MyScreen(
                             .align(Alignment.CenterHorizontally)
                             .padding(top = 12.dp, bottom = 11.dp),
                         text = Texts.Word.SCRAP,
-                        style = if (index == 1) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(fontWeight = FontWeight.Medium),
-                        color = if (index == 1) Colors.Gray800 else Colors.Gray300,
+                        style = if (pagerState.currentPage == 1) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(fontWeight = FontWeight.Medium),
+                        color = if (pagerState.currentPage == 1) Colors.Gray800 else Colors.Gray300,
                         textAlign = TextAlign.Center
                     )
 
@@ -408,7 +408,7 @@ fun MyScreen(
                             .height(1.dp)
                             .fillMaxWidth()
                             .background(
-                                color = if (index == 1) Colors.Gray800 else Colors.Transparency
+                                color = if (pagerState.currentPage == 1) Colors.Gray800 else Colors.Transparency
                             )
                     )
                 }
@@ -433,9 +433,9 @@ fun MyScreen(
                         onClickDetail = onClickDetail
                     )
                 } else {
-                    NotDevelopScreen {
-
-                    }
+                    NotDevelopScreen(
+                        hasBackButton = false
+                    )
                 }
             }
         }

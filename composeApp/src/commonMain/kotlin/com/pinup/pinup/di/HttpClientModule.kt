@@ -115,14 +115,14 @@ fun getKtorfit(): Ktorfit {
                 }
             )
         }
-//        install(Logging) {
-//            logger = object : Logger {
-//                override fun log(message: String) {
-//                    hLog(message)
-//                }
-//            }
-//            level = LogLevel.ALL
-//        }
+        install(Logging) {
+            logger = object : Logger {
+                override fun log(message: String) {
+                    hLog(message)
+                }
+            }
+            level = LogLevel.HEADERS
+        }
         defaultRequest {
             contentType(ContentType.Application.Json.withCharset(Charsets.UTF_8))
         }
@@ -131,7 +131,7 @@ fun getKtorfit(): Ktorfit {
         ignoreUnknownKeys = true
     }
     return Ktorfit.Builder()
-        .baseUrl("https://api.kwonyonghyun.p-e.kr/")
+        .baseUrl("http://43.200.161.96:8080/")
         .httpClient(client)
         .converterFactories(PResultConverterFactory(json))
         .build()
@@ -180,6 +180,14 @@ class PResultConverterFactory(
                                             status = 403,
                                             code = "",
                                             message = "엑세스 토큰 필요"
+                                        )
+                                    )
+                                } else if (result.response.status.value == 401) {
+                                    PResult.Fail(
+                                        FailState(
+                                            status = 401,
+                                            code = "",
+                                            message = "엑세스 토큰 만료 갱신 요청 필요"
                                         )
                                     )
                                 } else {
