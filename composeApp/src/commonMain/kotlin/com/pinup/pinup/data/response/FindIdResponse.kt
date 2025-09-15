@@ -7,14 +7,14 @@ import kotlinx.serialization.Serializable
 data class FindIdResponse(
     val email: String = "",
     val nickname: String = "",
-    val profileUrl: String? = "",
+    val profileImageUrl: String? = "",
 ) {
     companion object {
         fun FindIdResponse.toModel(): UserInfo {
             return UserInfo(
                 email = email,
                 nickname = nickname,
-                profileUrl = profileUrl ?: ""
+                profileUrl = profileImageUrl ?: ""
             )
         }
     }

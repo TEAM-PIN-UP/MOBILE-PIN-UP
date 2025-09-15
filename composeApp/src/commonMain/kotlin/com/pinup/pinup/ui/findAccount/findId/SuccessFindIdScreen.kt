@@ -99,6 +99,7 @@ fun SuccessFindIdScreen(
 
         Text(
             modifier = Modifier
+                .fillMaxWidth()
                 .clickableWithNoRipple {
                     onClickFindPassword()
                 },
@@ -106,7 +107,8 @@ fun SuccessFindIdScreen(
             style = Typography.B2.copy(
                 fontWeight = FontWeight.Medium
             ),
-            color = Colors.Gray600
+            color = Colors.Gray600,
+            textAlign = TextAlign.Center
         )
 
         Spacer(Modifier.height(42.dp))

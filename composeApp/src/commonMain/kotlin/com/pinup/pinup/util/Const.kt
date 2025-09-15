@@ -15,14 +15,19 @@ object Const {
         const val PASSWORD_REGEX = "^(?=.*[^A-Za-z0-9]).{8,}$"
 
         fun maskEmail(email: String, keep: Int = 1, maskChar: Char = '*'): String {
-            val match = Regex(EMAIL_REGEX).matchEntire(email) ?: return email
-            val (local, domain) = match.destructured
+            if (!Regex(EMAIL_REGEX).matches(email)) return email
 
-            val shown = local.take(keep.coerceAtLeast(0))
-            val maskedCount = (local.length - keep).coerceAtLeast(0)
-            val maskedLocal = shown + maskChar.toString().repeat(maskedCount)
+            val at = email.indexOf('@')
+            if (at <= 0 || at == email.lastIndex) return email
+
+            val local = email.substring(0, at)
+            val domain = email.substring(at + 1)
+
+            val k = keep.coerceIn(0, local.length)
+            val maskedLocal = local.take(k) + maskChar.toString().repeat(local.length - k)
 
             return "$maskedLocal@$domain"
         }
+
     }
 }
