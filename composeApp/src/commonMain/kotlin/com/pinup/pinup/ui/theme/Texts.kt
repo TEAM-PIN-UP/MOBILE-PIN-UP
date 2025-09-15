@@ -243,6 +243,10 @@ object Texts {
         const val WRITE_FIRST_PINLOG = "첫 핀로그 작성하기"
     }
 
+    object Article {
+        const val TITLE = "핀업 아티클"
+    }
+
     object Setting {
         const val PROFILE_SETTING_TITLE = "계정 설정"
         const val PROFILE_SETTING = "프로필 편집"

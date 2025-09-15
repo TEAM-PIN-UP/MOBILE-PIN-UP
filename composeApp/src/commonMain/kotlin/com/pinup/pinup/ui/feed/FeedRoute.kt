@@ -19,7 +19,6 @@ fun FeedRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        hLog("??")
         viewModel.getFeedList()
     }
 

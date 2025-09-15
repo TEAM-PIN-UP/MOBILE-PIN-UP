@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.PinUpAppDestination
 import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.ReviewedPlace
+import com.pinup.pinup.ui.article.ArticleRoute
 import com.pinup.pinup.ui.bookmark.BookmarkRoute
 import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.NotDevelopScreen
@@ -115,6 +116,21 @@ fun MainNavHost(
                         navHostController.popBackStack()
                     }
                 )
+//                ArticleRoute(
+//                    onClickBottomNav = {
+//                        if (MainDestination.Upload == it) {
+//                            onMoveWriteReview(0)
+//                        } else {
+//                            navHostController.navigate(it) {
+//                                launchSingleTop = true
+//                                restoreState = true
+//                                popUpTo(navHostController.graph.startDestinationId) {
+//                                    saveState = true
+//                                }
+//                            }
+//                        }
+//                    },
+//                )
             }
 
             composable<MainDestination.My> {
