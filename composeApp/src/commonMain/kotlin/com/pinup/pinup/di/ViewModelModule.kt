@@ -7,6 +7,7 @@ import com.pinup.pinup.ui.login.LoginViewModel
 import com.pinup.pinup.ui.signup.SignUpViewModel
 import com.pinup.pinup.ui.setting.SettingViewModel
 import com.pinup.pinup.ui.reviewwrite.WriteReviewViewModel
+import com.pinup.pinup.ui.reviewwrite.successWriteReview.WriteReviewDetailViewModel
 import com.pinup.pinup.ui.pinbuddy.PinBuddyViewModel
 import com.pinup.pinup.ui.my.MyViewModel
 import com.pinup.pinup.ui.map.MapViewModel
@@ -37,6 +38,7 @@ val viewModelModule = module {
     viewModelOf(::ProfileSettingViewModel)
     viewModelOf(::WriteReviewViewModel)
     viewModelOf(::PinlogDetailViewModel)
+    viewModelOf(::WriteReviewDetailViewModel)
     viewModelOf(::SearchPlaceViewModel)
     viewModelOf(::PinBuddyViewModel)
     viewModelOf(::MyViewModel)

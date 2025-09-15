@@ -20,8 +20,8 @@ fun PinlogDetailRoute(
     viewModel: PinlogDetailViewModel = koinViewModel(),
     onBackPressed: () -> Unit = {},
     onClickEdit: (Int) -> Unit = {},
+    onClickPlaceDetail: (String) -> Unit = {},
 ) {
-    hLog("하이요")
     val toast = rememberToastState()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
@@ -79,6 +79,7 @@ fun PinlogDetailRoute(
         query = uiState.myComment,
         replyId = uiState.clickedReplyId,
         onValueChange = viewModel::updateMyComment,
+        onClickPlaceDetail = onClickPlaceDetail,
         onClickEdit = {
             onClickEdit(viewModel.reviewId)
         },

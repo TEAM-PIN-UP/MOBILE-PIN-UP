@@ -125,7 +125,9 @@ fun WriteReviewNavHost(
             },
             onRightButtonClick = {
                 isShowCompleteDialog.value = false
-                writeReviewViewModel.writeReviewId?.let(onMoveDetailPlace)
+                writeReviewViewModel.writeReviewId?.let{
+                    onMoveDetailPlace(it)
+                }
             },
         )
     }

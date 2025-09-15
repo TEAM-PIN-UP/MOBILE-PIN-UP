@@ -148,6 +148,7 @@ fun PinlogDetailScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .background(Colors.White)
                     .pointerInput(Unit) {
                         detectTapGestures(onTap = {
                             focusManager.clearFocus(force = true)

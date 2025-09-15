@@ -13,8 +13,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.pinup.pinup.domain.model.DetailPlace
-import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.extentions.jsonToArg
 import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
@@ -31,6 +29,7 @@ import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpRoute
 import com.pinup.pinup.ui.pinbuddy.PinBuddyRoute
 import com.pinup.pinup.ui.pinlogDetail.PinlogDetailRoute
 import com.pinup.pinup.ui.reviewwrite.compose.WriteReviewNavHost
+import com.pinup.pinup.ui.reviewwrite.successWriteReview.WriteReviewDetailRoute
 import com.pinup.pinup.ui.setting.SettingNavHost
 import com.pinup.pinup.ui.signup.compose.SignUpRoute
 import com.pinup.pinup.ui.userprofile.UserProfileRoute
@@ -282,8 +281,17 @@ fun PinUpApp(
                             navHostController.popBackStack()
                         },
                         onMoveDetailPlace = {
-                            navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
+                            navHostController.popBackStack()
+                            navHostController.navigate(PinUpAppDestination.WriteReviewDetail(it))
                         }
+                    )
+                }
+
+                composable<PinUpAppDestination.WriteReviewDetail> {
+                    WriteReviewDetailRoute(
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
                     )
                 }
 
@@ -387,6 +395,10 @@ sealed interface PinUpAppDestination {
     data class WriteReview(
         val reviewId: Int?,
         val placeId: String?
+    ) : PinUpAppDestination
+    @Serializable
+    data class WriteReviewDetail(
+        val reviewId: Int,
     ) : PinUpAppDestination
     @Serializable
     data class PinlogDetail(
