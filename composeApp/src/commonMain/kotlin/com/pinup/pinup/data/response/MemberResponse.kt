@@ -13,7 +13,7 @@ data class MemberResponse(
     val profilePictureUrl: String?,
     val termsOfMarketing: String,
     val averageStarRating: Double,
-    val pinBuddyCount: Int,
+    val pinBuddyCount: Int? = 0,
     val reviewCount: Int,
 ) {
     companion object {
@@ -27,7 +27,7 @@ data class MemberResponse(
                 profilePictureUrl = profilePictureUrl,
                 termsOfMarketing = termsOfMarketing,
                 averageStarRating = averageStarRating,
-                pinBuddyCount = pinBuddyCount,
+                pinBuddyCount = pinBuddyCount ?: 0,
                 reviewCount = reviewCount,
             )
         }

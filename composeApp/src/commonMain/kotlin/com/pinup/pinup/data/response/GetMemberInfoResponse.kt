@@ -9,12 +9,15 @@ import kotlinx.serialization.Serializable
 data class GetMemberInfoResponse(
     val memberResponse: MemberResponse,
     val relationType: String,
-    val friendRequestId: Int?
+    val friendRequestId: Int?,
+    val pinBuddyCount: Int?
 ) {
     companion object {
         fun GetMemberInfoResponse.toModel() : Member {
             return Member(
-                profile = memberResponse.toModel(),
+                profile = memberResponse.copy(
+                    pinBuddyCount = pinBuddyCount
+                ).toModel(),
                 relationType = RelationType.of(relationType),
                 friendRequestId = friendRequestId
             )

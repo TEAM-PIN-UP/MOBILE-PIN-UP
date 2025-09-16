@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -507,9 +508,8 @@ fun UserPinlogList(
     } else {
         LazyColumn(
             modifier = Modifier
-                .padding(horizontal = 20.dp)
                 .padding(top = 16.dp)
-                .background(Colors.Gray50),
+                .background(Colors.White),
             verticalArrangement = Arrangement.spacedBy(10.dp),
             state = scrollState
         ) {
@@ -520,6 +520,8 @@ fun UserPinlogList(
                     onClickDetail = onClickDetail,
                     onClickScrap = {},
                 )
+
+                PHorizontalDivider()
             }
         }
     }
