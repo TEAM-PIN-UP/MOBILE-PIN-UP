@@ -68,7 +68,7 @@ val httpClientModule = module {
                         val refreshToken = runBlocking { membersLocalDataSource.getRefreshToken() }
                         val authApi: AuthApi = getKtorfit().createAuthApi()
                         val response =
-                            authApi.refreshToken(refreshToken).mapSuccessData().getSuccessOrNull()
+                            authApi.refreshToken("Bearer $refreshToken").mapSuccessData().getSuccessOrNull()
                         if (response != null) {
                             membersLocalDataSource.saveToken(
                                 TokenInfo(

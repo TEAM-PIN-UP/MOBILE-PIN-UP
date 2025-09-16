@@ -13,7 +13,7 @@ import io.ktor.client.request.forms.MultiPartFormDataContent
 
 interface AuthApi {
     @POST(ApiPath.Auth.REFRESH)
-    suspend fun refreshToken(@Header("Refresh") token: String): PResult<PResponse<LoginResponse>>
+    suspend fun refreshToken(@Header("Authorization") token: String): PResult<PResponse<LoginResponse>>
 
     @POST(ApiPath.Auth.SOCIAL_LOGIN)
     suspend fun socialLogin(@Body request: LoginRequest): PResult<PResponse<LoginResponse>>
