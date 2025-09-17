@@ -41,9 +41,7 @@ fun MapBottomSheetNavHost(
     val detailRoute = MapBottomSheetDestination.Detail::class.qualifiedName
 
     LaunchedEffect(placeDetailUiState.detailPlace) {
-        hLog("하이요~" + placeDetailUiState.detailPlace.toString())
         val current = navHostController.currentBackStackEntry?.destination?.route
-        hLog("하이요~2$current")
         if (placeDetailUiState.detailPlace != null) {
             if (current != detailRoute) {
                 navHostController.navigate(MapBottomSheetDestination.Detail) {
@@ -54,7 +52,6 @@ fun MapBottomSheetNavHost(
     }
 
     LaunchedEffect(isShowPinch) {
-        hLog("하이 $isShowPinch")
         val current = navHostController.currentBackStackEntry?.destination?.route
         if (isShowPinch) {
             if (current != pinchRoute) {

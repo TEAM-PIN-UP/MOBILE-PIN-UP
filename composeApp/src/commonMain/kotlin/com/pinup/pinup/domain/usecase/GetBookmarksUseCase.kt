@@ -17,8 +17,6 @@ class GetBookmarksUseCase (
         currentLatitude: String,
         currentLongitude: String
     ): PResult<List<BookmarkedPlace>> {
-        hLog("여기 ?")
-
        return bookmarksRepository.getBookmarks(
            category = category,
            sort = sort,

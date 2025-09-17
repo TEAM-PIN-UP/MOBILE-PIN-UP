@@ -75,9 +75,9 @@ actual fun PlatformNaverMap(
                 latitude = cameraPositionState.position.target.latitude,
                 longitude = cameraPositionState.position.target.longitude
             )
-            hLog("카메라 이동됨 >>> 현재 카메라: $nowCameraPosition")
-            hLog("카메라 이동됨 >>> 바뀐 카메라: $cameraPosition")
-            hLog("카메라 이동됨 >>> 결과: ${if (it == nowCameraPosition) "같음, 취소 됨" else "다름, 이동 됨"}")
+//            hLog("카메라 이동됨 >>> 현재 카메라: $nowCameraPosition")
+//            hLog("카메라 이동됨 >>> 바뀐 카메라: $cameraPosition")
+//            hLog("카메라 이동됨 >>> 결과: ${if (it == nowCameraPosition) "같음, 취소 됨" else "다름, 이동 됨"}")
             if (it == nowCameraPosition) return@let
             scope.launch {
                 cameraPositionState.animate(
@@ -88,7 +88,7 @@ actual fun PlatformNaverMap(
     }
 
     LaunchedEffect(cameraPositionState.isMoving, cameraPositionState.contentBounds) {
-        hLog("MapScreen: ${cameraPositionState.cameraUpdateReason}")
+        //hLog("MapScreen: ${cameraPositionState.cameraUpdateReason}")
         cameraPositionState.contentBounds?.let {
             onCameraStateChange(
                 CameraState(

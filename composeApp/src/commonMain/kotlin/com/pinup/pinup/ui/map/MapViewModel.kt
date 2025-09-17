@@ -52,12 +52,12 @@ class MapViewModel (
     }
 
     private fun initCollectLocation() = viewModelScope.launch {
-        hLog("위치 수집 시작")
+        //hLog("위치 수집 시작")
         locationTracker.getLocationsFlow()
             .distinctUntilChanged()
             .collectLatest {
                 val myLocation = Position(it.latitude, it.longitude)
-                hLog("myLocation >>> ${myLocation}")
+               // hLog("myLocation >>> ${myLocation}")
                 if (uiState.value.currentPosition == null || uiState.value.isFocusLocation) {
                     updateCameraPosition(myLocation)
                 }
@@ -124,7 +124,6 @@ class MapViewModel (
     }
 
     fun getPlaces() = viewModelScope.launch {
-        hLog("아야 나 클릭 ${uiState.value.cameraState}")
         if (uiState.value.cameraState != null) {
             updateCameraPosition(uiState.value.cameraState!!.position)
             val latLngBounds = uiState.value.cameraState!!.contentBounds
@@ -297,7 +296,6 @@ class MapViewModel (
 
     fun collectPosition() = viewModelScope.launch {
         if (uiState.value.currentPosition == null) {
-            hLog("위치 트랙킹 시작")
             locationTracker.startTracking()
         }
     }
@@ -367,7 +365,6 @@ class MapViewModel (
         resultResponse(
             response = postReviewLikeChangeUseCase(id, isLike),
             successCallback = {
-                hLog("하이?")
                 hLog(uiState.value.placeDetailUiState.detailPlace.toString())
                 uiState.value.placeDetailUiState.detailPlace?.mapPlace?.let {
                     getDetailPlace(it.kakaoPlaceId)

@@ -22,7 +22,7 @@ class MembersLocalDataSourceImpl (
     private val cachedUserInfo: MutableStateFlow<UserInfo> = MutableStateFlow(UserInfo())
 
     override suspend fun getUserInfo(): StateFlow<UserInfo> {
-        hLog("cachedUserInfo >> ${cachedUserInfo.value}")
+        //hLog("cachedUserInfo >> ${cachedUserInfo.value}")
         return cachedUserInfo.asStateFlow()
     }
 
@@ -35,7 +35,7 @@ class MembersLocalDataSourceImpl (
     }
 
     override suspend fun saveUserInfo(userInfo: UserInfo) {
-        hLog("saveUserInfo >> ${userInfo}")
+        //hLog("saveUserInfo >> ${userInfo}")
         cachedUserInfo.value = userInfo
     }
 
