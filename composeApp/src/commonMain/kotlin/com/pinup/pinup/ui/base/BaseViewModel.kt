@@ -26,9 +26,7 @@ abstract class BaseViewModel<STATE: UiState, EVENT : UiEvent>(
     protected fun updateState(
         state: STATE.() -> STATE
     ) {
-        viewModelScope.launch {
-            _uiState.update { it.state() }
-        }
+        _uiState.update { it.state() }
     }
 
     protected fun emitEvent(event: EVENT) {

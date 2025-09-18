@@ -8,6 +8,7 @@ import com.pinup.pinup.domain.model.LocationBound
 import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
+import com.pinup.pinup.domain.model.Position.Companion.near
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.domain.usecase.AddBookmarkUseCase
@@ -124,7 +125,7 @@ class MapViewModel (
             )
         }
 
-        if (initPlace) {
+        if (uiState.value.currentPosition?.near(cameraState.position, 10.0) == true && initPlace) {
             getPlaces()
             initPlace = false
         }
