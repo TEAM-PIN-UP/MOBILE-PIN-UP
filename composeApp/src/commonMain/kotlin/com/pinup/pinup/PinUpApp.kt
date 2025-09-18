@@ -72,10 +72,7 @@ fun PinUpApp(
     }
 
     MaterialTheme {
-        Box(
-            modifier = Modifier
-                .navigationBarsPadding()
-        ) {
+        Box{
             NavHost(
                 startDestination = startDestination,
                 navController = navHostController

@@ -96,28 +96,45 @@ fun ArticleScreen(
 
         PHorizontalDivider()
 
-        LazyColumn(
-            modifier = Modifier
-                .padding(bottom = bottomBarHeight)
-                .background(Colors.White),
-            state = scrollState,
-        ) {
-            item {
-                Spacer(
-                    modifier = Modifier
-                        .height(24.dp)
+        if (articleList.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = Texts.FEED.EMPTY_FEED,
+                    color = Colors.Gray400,
+                    style = Typography.B1.copy(
+                        fontWeight = FontWeight.SemiBold
+                    )
                 )
             }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(bottom = bottomBarHeight)
+                    .background(Colors.White),
+                state = scrollState,
+            ) {
+                item {
+                    Spacer(
+                        modifier = Modifier
+                            .height(24.dp)
+                    )
+                }
 
-            items(articleList) {
-                ArticleView(
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp),
-                    item = it,
-                    onClickItem = onClickDetail,
-                )
+                items(articleList) {
+                    ArticleView(
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp),
+                        item = it,
+                        onClickItem = onClickDetail,
+                    )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
         }
     }

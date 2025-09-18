@@ -111,26 +111,21 @@ fun MainNavHost(
             }
 
             composable<MainDestination.Article> {
-                NotDevelopScreen(
-                    onBackPressed = {
-                        navHostController.popBackStack()
-                    }
+                ArticleRoute(
+                    onClickBottomNav = {
+                        if (MainDestination.Upload == it) {
+                            onMoveWriteReview(0)
+                        } else {
+                            navHostController.navigate(it) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
+                        }
+                    },
                 )
-//                ArticleRoute(
-//                    onClickBottomNav = {
-//                        if (MainDestination.Upload == it) {
-//                            onMoveWriteReview(0)
-//                        } else {
-//                            navHostController.navigate(it) {
-//                                launchSingleTop = true
-//                                restoreState = true
-//                                popUpTo(navHostController.graph.startDestinationId) {
-//                                    saveState = true
-//                                }
-//                            }
-//                        }
-//                    },
-//                )
             }
 
             composable<MainDestination.My> {
