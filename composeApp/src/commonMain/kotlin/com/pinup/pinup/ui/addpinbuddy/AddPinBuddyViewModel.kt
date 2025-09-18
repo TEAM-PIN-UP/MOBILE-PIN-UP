@@ -47,6 +47,7 @@ class AddPinBuddyViewModel (
     }
 
     fun search() = viewModelScope.launch {
+        if (uiState.value.query.isEmpty()) return@launch
         saveRecentSearch()
         resultResponse(
             response = searchUserUseCase(uiState.value.query),

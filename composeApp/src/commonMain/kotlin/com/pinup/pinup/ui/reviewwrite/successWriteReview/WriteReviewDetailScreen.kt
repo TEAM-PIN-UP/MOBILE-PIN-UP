@@ -285,7 +285,7 @@ fun PinlogDetailScreen(
         PButton(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
-            text = Texts.FindPassword.CHANGE_PASSWORD,
+            text = Texts.Word.CONFIRM,
             onClick = {
                 onBackPressed()
             }
