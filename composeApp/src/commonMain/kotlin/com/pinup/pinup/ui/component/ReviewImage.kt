@@ -1,7 +1,10 @@
 package com.pinup.pinup.ui.component
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 
@@ -52,8 +55,10 @@ fun ReviewImage(
     ) {
         if (imgUrl.isNotEmpty()) {
             AsyncImage(
+                modifier = Modifier.fillMaxSize(),
                 model = imgUrl,
                 contentScale = ContentScale.Crop,
+                alignment = Alignment.Center,
                 contentDescription = "default profile image"
             )
         }

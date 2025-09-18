@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -49,8 +50,8 @@ fun ReviewedPlaceCard(
     ) {
         LazyRow(
             modifier = Modifier
-                .padding(top = 20.dp)
-                .padding(start = 20.dp),
+                .padding(top = 20.dp),
+            contentPadding = PaddingValues(horizontal = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(reviewImageUrls) {

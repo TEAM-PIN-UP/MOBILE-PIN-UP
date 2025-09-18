@@ -31,11 +31,7 @@ class PinBuddyViewModel (
     private val sentPinBuddyPagination = Pagination()
     private val receivePinBuddyPagination = Pagination()
 
-    init {
-        initPinBuddies()
-    }
-
-    private fun initPinBuddies() = viewModelScope.launch {
+    fun initPinBuddies() = viewModelScope.launch {
         val pinBuddies = getPinBuddiesUseCase(pinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE).getSuccessOrNull() ?: return@launch
         val sentPinBuddyRequests = getSentPinBuddyRequestsUseCase(sentPinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE).getSuccessOrNull() ?: return@launch
         val receivePinBuddyRequests = getReceivePinBuddyRequestsUseCase(receivePinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE).getSuccessOrNull() ?: return@launch

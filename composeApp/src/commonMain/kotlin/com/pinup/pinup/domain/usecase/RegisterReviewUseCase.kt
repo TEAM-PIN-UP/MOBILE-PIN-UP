@@ -5,6 +5,7 @@ import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.WriteReview
 import com.pinup.pinup.domain.repository.ReviewsRepository
+import com.pinup.pinup.platform.hLog
 
 
 class RegisterReviewUseCase (
@@ -13,6 +14,7 @@ class RegisterReviewUseCase (
     suspend operator fun invoke(
         request: AddReviewRequest,
     ): PResult<Int> {
+        hLog(request.toString())
         return reviewsRepository.registerReviews(request)
     }
 }

@@ -39,6 +39,10 @@ fun PinBuddyRoute(
         }
     }
 
+    LaunchedEffect(Unit) {
+        pinBuddyViewModel.initPinBuddies()
+    }
+
     PToastHost(state = toast)
 
     PinBuddyScreen(

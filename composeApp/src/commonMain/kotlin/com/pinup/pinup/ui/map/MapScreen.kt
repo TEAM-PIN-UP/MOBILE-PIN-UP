@@ -220,7 +220,7 @@ fun MapScreen(
     LifecycleResumeEffect(Unit) {
         scope.launch {
             isPermissionGranted.value = permissionsController.isPermissionGranted(Permission.LOCATION)
-            hLog("권한 수정하고 앱으로 돌아옴 >>> ${isPermissionGranted.value}")
+
             if (isPermissionGranted.value) {
                 onUpdatePosition()
             }

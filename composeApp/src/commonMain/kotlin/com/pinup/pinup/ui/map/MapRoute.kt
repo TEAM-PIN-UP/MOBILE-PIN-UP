@@ -10,6 +10,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.ReviewedPlace
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Texts

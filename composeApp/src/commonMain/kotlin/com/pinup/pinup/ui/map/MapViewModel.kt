@@ -45,6 +45,9 @@ class MapViewModel (
     private val postReviewLikeChangeUseCase: PostReviewLikeChangeUseCase,
     val locationTracker: LocationTracker
 ) : BaseViewModel<MapUiState, MapUiEvent>(MapUiState()) {
+
+    private var initPlace: Boolean = false
+
     init {
         initDetailPlaceEventBus()
         initCollectLocation()
@@ -52,12 +55,10 @@ class MapViewModel (
     }
 
     private fun initCollectLocation() = viewModelScope.launch {
-        //hLog("위치 수집 시작")
         locationTracker.getLocationsFlow()
             .distinctUntilChanged()
             .collectLatest {
                 val myLocation = Position(it.latitude, it.longitude)
-               // hLog("myLocation >>> ${myLocation}")
                 if (uiState.value.currentPosition == null || uiState.value.isFocusLocation) {
                     updateCameraPosition(myLocation)
                 }
@@ -74,7 +75,8 @@ class MapViewModel (
             }
     }
 
-    private fun updatePosition(position: Position) = viewModelScope.launch {
+    private fun updatePosition(position: Position) {
+        initPlace = true
         updateState {
             copy(
                 currentPosition = position
@@ -82,7 +84,7 @@ class MapViewModel (
         }
     }
 
-    fun updateShowPinch() = viewModelScope.launch {
+    fun updateShowPinch() {
         clearDetailPlace()
         updateState {
             copy(
@@ -94,7 +96,7 @@ class MapViewModel (
         }
     }
 
-    fun updateFocusLocation(value: Boolean) = viewModelScope.launch {
+    fun updateFocusLocation(value: Boolean) {
         updateState {
             copy(
                 isFocusLocation = value
@@ -106,7 +108,7 @@ class MapViewModel (
         }
     }
 
-    private fun updateCameraPosition(position: Position?) = viewModelScope.launch {
+    private fun updateCameraPosition(position: Position?) {
         updateState {
             copy(
                 cameraPosition = position
@@ -121,11 +123,16 @@ class MapViewModel (
                 isCameraMoving = cameraState.isMoving
             )
         }
+
+        if (initPlace) {
+            getPlaces()
+            initPlace = false
+        }
     }
 
     fun getPlaces() = viewModelScope.launch {
         if (uiState.value.cameraState != null) {
-            updateCameraPosition(uiState.value.cameraState!!.position)
+            //updateCameraPosition(uiState.value.cameraState!!.position)
             val latLngBounds = uiState.value.cameraState!!.contentBounds
             val request = uiState.value.locationBound.copy(
                 neLatitude = latLngBounds.northEast.latitude.toString(),
