@@ -5,4 +5,5 @@ data class ArticlePlace (
     val image: String = "",
     val title: String = "",
     val createdAt: String = "",
+    val description: String = "",
 )

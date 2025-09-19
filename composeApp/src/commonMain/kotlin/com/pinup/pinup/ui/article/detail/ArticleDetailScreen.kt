@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -18,6 +19,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -40,6 +44,7 @@ import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.ArticleView
 import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.PHorizontalDivider
+import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Colors
@@ -53,11 +58,13 @@ import pinup.composeapp.generated.resources.ic_search
 @Composable
 fun ArticleDetailScreen(
     detail: ArticleDetail,
+    articleList: List<ArticlePlace>,
     onClickPlaceDetail: (String) -> Unit = {},
     onClickScrap: (String) -> Unit = {},
     onClickBack: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
+    val pagerState = rememberPagerState(pageCount = { articleList.size })
 
     Column(
         modifier = Modifier
@@ -226,7 +233,76 @@ fun ArticleDetailScreen(
             }
 
             item {
-                //TODO 에디터 다른 코스 View
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Colors.Gray800)
+                ) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .alpha(0.3f)
+                            .fillMaxSize(),
+                        model = articleList[pagerState.currentPage].image,
+                        contentScale = ContentScale.Crop,
+                        contentDescription = null
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .padding(vertical = 20.dp)
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .padding(start = 20.dp),
+                            text = Texts.Article.RECOMMEND_ARTICLE,
+                            color = Colors.Gray100,
+                            style = Typography.D2.copy(
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+
+                        Spacer(modifier = Modifier.height(18.dp))
+
+                        HorizontalPager(
+                            state = pagerState,
+                            contentPadding = PaddingValues(horizontal = 20.dp)
+                        ) { page ->
+                            Column {
+                                AsyncImage(
+                                    modifier = Modifier
+                                        .height(300.dp)
+                                        .width(225.dp),
+                                    model = articleList[page].image,
+                                    contentScale = ContentScale.Crop,
+                                    contentDescription = null
+                                )
+
+                                Spacer(modifier = Modifier.height(12.dp))
+
+                                Text(
+                                    text = articleList[page].title,
+                                    color = Colors.Gray200,
+                                    style = Typography.T1.copy(
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                )
+
+                                Spacer(modifier = Modifier.height(4.dp))
+
+                                Text(
+                                    text = articleList[page].description,
+                                    color = Colors.Gray200,
+                                    style = Typography.B2.copy(
+                                        fontWeight = FontWeight.Normal
+                                    )
+                                )
+                            }
+                        }
+
+
+
+                    }
+                }
             }
         }
     }

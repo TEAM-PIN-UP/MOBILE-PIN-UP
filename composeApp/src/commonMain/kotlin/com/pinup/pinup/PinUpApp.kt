@@ -18,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.extentions.jsonToArg
 import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
+import com.pinup.pinup.ui.article.detail.ArticleDetailRoute
 import com.pinup.pinup.ui.component.LogoutDialog
 import com.pinup.pinup.ui.findAccount.changePassword.ChangePasswordRoute
 import com.pinup.pinup.ui.findAccount.findId.FindIdRoute
@@ -273,7 +274,21 @@ fun PinUpApp(
                         },
                         onMoveNewWriteReview = {
                             navHostController.navigate(PinUpAppDestination.WriteReview(0, it))
+                        },
+                        onClickArticleDetail = {
+                            navHostController.navigate(PinUpAppDestination.ArticleDetail(it))
                         }
+                    )
+                }
+
+                composable<PinUpAppDestination.ArticleDetail> {
+                    ArticleDetailRoute(
+                        onClickBack = {
+                            navHostController.popBackStack()
+                        },
+                        onClickPlaceDetail = {
+
+                        },
                     )
                 }
 
@@ -405,6 +420,10 @@ sealed interface PinUpAppDestination {
     @Serializable
     data class PinlogDetail(
         val reviewId: Int,
+    ) : PinUpAppDestination
+    @Serializable
+    data class ArticleDetail(
+        val articleId: Int,
     ) : PinUpAppDestination
     @Serializable
     data object AddPinBuddy : PinUpAppDestination

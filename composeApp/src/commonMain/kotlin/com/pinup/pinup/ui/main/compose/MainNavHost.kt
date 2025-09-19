@@ -39,6 +39,7 @@ fun MainNavHost(
     onMovePinBuddy: () -> Unit,
     onMoveSetting: () -> Unit,
     onClickEdit: (Int) -> Unit = {},
+    onClickArticleDetail: (Int) -> Unit = {},
 ) {
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
     val selectedMenuBar = remember { mutableStateOf<MainDestination>(MainDestination.Map) }
@@ -125,6 +126,7 @@ fun MainNavHost(
                             }
                         }
                     },
+                    onClickDetail = onClickArticleDetail
                 )
             }
 

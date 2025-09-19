@@ -245,6 +245,7 @@ object Texts {
 
     object Article {
         const val TITLE = "핀업 아티클"
+        const val RECOMMEND_ARTICLE = "핀업 에디터가 찾아낸\n또 다른 코스를 만나보세요."
     }
 
     object Setting {

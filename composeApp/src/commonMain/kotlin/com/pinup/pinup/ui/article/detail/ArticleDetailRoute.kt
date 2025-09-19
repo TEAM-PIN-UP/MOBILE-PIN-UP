@@ -10,20 +10,17 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ArticleDetailRoute(
-    viewModel: ArticleViewModel = koinViewModel(),
+    viewModel: ArticleDetailViewModel = koinViewModel(),
     onClickPlaceDetail: (String) -> Unit = {},
-    onclickBack: () -> Unit = {},
+    onClickBack: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.getArticleList()
-    }
-
     ArticleDetailScreen(
-        detail = ArticleDetail(),
+        detail = uiState.articleDetail,
+        articleList = uiState.articleList,
         onClickPlaceDetail = onClickPlaceDetail,
         onClickScrap = {},
-        onClickBack = onclickBack
+        onClickBack = onClickBack
     )
 }
