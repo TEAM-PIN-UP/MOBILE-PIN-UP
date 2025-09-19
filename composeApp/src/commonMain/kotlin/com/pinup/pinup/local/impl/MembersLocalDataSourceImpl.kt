@@ -3,6 +3,7 @@ package com.pinup.pinup.local.impl
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.pinup.pinup.data.local.MembersLocalDataSource
@@ -22,8 +23,13 @@ class MembersLocalDataSourceImpl (
     private val cachedUserInfo: MutableStateFlow<UserInfo> = MutableStateFlow(UserInfo())
 
     override suspend fun getUserInfo(): StateFlow<UserInfo> {
-        //hLog("cachedUserInfo >> ${cachedUserInfo.value}")
         return cachedUserInfo.asStateFlow()
+    }
+
+    override suspend fun getIsUsedApp(): Boolean {
+        return dataStore.data.map {
+            it[booleanPreferencesKey(KEY_USED_FLAG)] ?: false
+        }.first()
     }
 
     override suspend fun logout() {
@@ -35,7 +41,6 @@ class MembersLocalDataSourceImpl (
     }
 
     override suspend fun saveUserInfo(userInfo: UserInfo) {
-        //hLog("saveUserInfo >> ${userInfo}")
         cachedUserInfo.value = userInfo
     }
 
@@ -43,6 +48,7 @@ class MembersLocalDataSourceImpl (
         dataStore.edit {
             it[stringPreferencesKey(KEY_ACCESS_TOKEN)] = tokenInfo.accessToken
             it[stringPreferencesKey(KEY_REFRESH_TOKEN)] = tokenInfo.refreshToken
+            it[booleanPreferencesKey(KEY_USED_FLAG)] = true
         }
 
         return PResult.Success(Unit)
@@ -129,7 +135,7 @@ class MembersLocalDataSourceImpl (
     companion object {
         private const val KEY_ACCESS_TOKEN = "key_pinup_access_token"
         private const val KEY_REFRESH_TOKEN = "key_pinup_refresh_token"
-        private const val KEY_USER_INFO = "key_pinup_user_info"
+        private const val KEY_USED_FLAG = "key_pinup_used_flag"
         private const val KEY_PREFIX = "recent_search_pin_buddy"
         private const val MAX_RECENT = 10
     }

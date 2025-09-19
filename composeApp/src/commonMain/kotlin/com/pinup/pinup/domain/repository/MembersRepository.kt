@@ -13,6 +13,7 @@ interface MembersRepository {
     suspend fun checkNickName(nickname: String): PResult<Boolean>
     suspend fun saveToken(tokenInfo: TokenInfo): PResult<Unit>
     suspend fun getUserInfo(): StateFlow<UserInfo>
+    suspend fun getIsUsedApp(): Boolean
     suspend fun getAccessToken(): String
     suspend fun clearUserData()
     suspend fun saveUserInfo(userInfo: UserInfo)

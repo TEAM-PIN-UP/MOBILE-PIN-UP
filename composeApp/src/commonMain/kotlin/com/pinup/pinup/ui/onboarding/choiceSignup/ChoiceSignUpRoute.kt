@@ -13,12 +13,13 @@ fun ChoiceSignUpRoute(
     contextFactory: ContextFactory,
     onMoveLogin : () -> Unit,
     onMoveSignUp: (SNSUserInfo) -> Unit,
+    onMoveMain: () -> Unit,
     viewModel: ChoiceSignUpViewModel = koinViewModel(parameters = { parametersOf(contextFactory) })
 ) {
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
             when(it) {
-                ChoiceSignUpUiEvent.MoveMain -> onMoveLogin() // TODO Main 구현되면 수정할 예정
+                ChoiceSignUpUiEvent.MoveMain -> onMoveMain()
                 is ChoiceSignUpUiEvent.MoveSignUp -> onMoveSignUp(it.snsLoginInfo)
                 ChoiceSignUpUiEvent.MoveEmailLogin -> onMoveLogin()
             }

@@ -36,6 +36,10 @@ class MembersRepositoryImpl (
         return membersLocalDataSource.getUserInfo()
     }
 
+    override suspend fun getIsUsedApp(): Boolean {
+        return membersLocalDataSource.getIsUsedApp()
+    }
+
     override suspend fun getAccessToken(): String {
         return membersLocalDataSource.getAccessToken()
     }

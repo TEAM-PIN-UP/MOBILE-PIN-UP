@@ -11,7 +11,7 @@ class IsLoginUseCase(
     private val saveUserInfoUseCase: SaveUserInfoUseCase
 ) {
     suspend operator fun invoke(): Pair<Boolean, Boolean> {
-        val isLogin = membersRepository.getAccessToken().isNotEmpty()
+        val isLogin = membersRepository.getIsUsedApp()
         val result = getMemberInfoUseCase().getSuccessOrNull()
         if (result != null) {
             saveUserInfoUseCase(

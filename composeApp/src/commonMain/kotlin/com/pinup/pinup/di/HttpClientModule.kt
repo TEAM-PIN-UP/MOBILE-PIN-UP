@@ -76,10 +76,11 @@ val httpClientModule = module {
                                     refreshToken = response.refreshToken
                                 )
                             )
+                            BearerTokens(response?.accessToken!!, response.refreshToken)
                         } else {
                             LogoutEventBus.sendEvent()
+                            return@refreshTokens null
                         }
-                        BearerTokens(response?.accessToken!!, response.refreshToken)
                     }
                 }
             }

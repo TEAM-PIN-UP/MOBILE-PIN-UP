@@ -11,6 +11,7 @@ interface MembersLocalDataSource {
     suspend fun getAccessToken(): String
     suspend fun getRefreshToken(): String
     suspend fun getUserInfo(): StateFlow<UserInfo>
+    suspend fun getIsUsedApp(): Boolean
     suspend fun logout()
     suspend fun deleteRecentSearch(index: Int)
     suspend fun getRecentSearch(): StateFlow<List<String>>

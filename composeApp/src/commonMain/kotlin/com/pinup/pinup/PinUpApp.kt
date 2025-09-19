@@ -110,6 +110,9 @@ fun PinUpApp(
                         onMoveSignUp = { snsUserInfo ->
                             val snsUserInfoString = Json.encodeToString(snsUserInfo)
                             navHostController.navigate(PinUpAppDestination.SignUp(snsUserInfoString))
+                        },
+                        onMoveMain = {
+                            navHostController.navigate(PinUpAppDestination.Main)
                         }
                     )
                 }
