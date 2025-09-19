@@ -14,5 +14,6 @@ data class Place(
     val name: String,
     val placeCategory: String,
     val reviewCount: Int,
-    val roadAddress: String
+    val roadAddress: String,
+    val image: String = "",
 )

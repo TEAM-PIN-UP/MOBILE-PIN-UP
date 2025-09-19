@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.pinup.pinup.domain.model.ArticlePlace
+import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 
@@ -24,6 +25,9 @@ fun ArticleView(
 ){
     Column (
         modifier = modifier
+            .clickableWithNoRipple {
+                onClickItem(item.id)
+            }
     ) {
         RoundedBox {
             AsyncImage(
