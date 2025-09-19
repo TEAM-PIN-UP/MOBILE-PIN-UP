@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class StartAppViewModel(
-    private val isLoginUseCase: IsLoginUseCase,
     private val logoutUseCase: LogoutUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(StartAppUiState())
@@ -24,24 +23,15 @@ class StartAppViewModel(
         get() = _uiState.asStateFlow()
 
     init {
-        getIsLogin()
         initLogoutEventBus()
     }
 
-    private fun getIsLogin() = viewModelScope.launch {
-        _uiState.update {
-            it.copy(
-                isLogin = isLoginUseCase()
-            )
-        }
-    }
 
     @OptIn(FlowPreview::class)
     private fun initLogoutEventBus() = viewModelScope.launch {
         LogoutEventBus.logoutEvent
             .debounce(300)
             .collectLatest { message ->
-                hLog("logout")
                 logoutUseCase()
                 _uiState.update {
                     it.copy(

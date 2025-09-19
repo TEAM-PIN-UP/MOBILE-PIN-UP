@@ -52,17 +52,6 @@ fun PinUpApp(
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     val uiState = startAppViewModel.uiState.collectAsStateWithLifecycle()
-    val startDestination = when (uiState.value.isLogin) {
-        true -> {
-            PinUpAppDestination.Main
-        }
-        false -> {
-            PinUpAppDestination.Onboarding
-        }
-        else -> {
-            return
-        }
-    }
 
     fun moveMain() {
         navHostController.navigate(PinUpAppDestination.Main) {
@@ -75,7 +64,7 @@ fun PinUpApp(
     MaterialTheme {
         Box{
             NavHost(
-                startDestination = startDestination,
+                startDestination = PinUpAppDestination.Onboarding,
                 navController = navHostController
             ) {
                 composable<PinUpAppDestination.Onboarding>(
@@ -95,6 +84,9 @@ fun PinUpApp(
                         },
                         onMoveLogin = {
                             navHostController.navigate(PinUpAppDestination.Login)
+                        },
+                        onMoveMain = {
+                            navHostController.navigate(PinUpAppDestination.Main)
                         }
                     )
                 }

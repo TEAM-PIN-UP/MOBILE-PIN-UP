@@ -24,13 +24,11 @@ import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_onboarding_logo
 
 @Composable
-fun OnboardingScreen(
-    onClickStart: () -> Unit = {}
-) {
+fun OnboardingScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Colors.Neutral800),
+            .background(Colors.Gray800),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -50,31 +48,5 @@ fun OnboardingScreen(
             text = Texts.Onboarding.ONBOARDING_TEXT,
             style = Typography.H1
         )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        RoundedBox(
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .fillMaxWidth()
-                .clickableSingleWithNoRipple {
-                    onClickStart()
-                },
-            cornerRounded = 999,
-            backgroundColor = Colors.Gray50,
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(vertical = 15.dp)
-                    .align(Alignment.Center),
-                text = Texts.Word.WORD_START,
-                style = Typography.H4,
-                color = Colors.Gray800
-            )
-        }
-
-        Spacer(modifier = Modifier.height(42.dp))
-
-
     }
 }

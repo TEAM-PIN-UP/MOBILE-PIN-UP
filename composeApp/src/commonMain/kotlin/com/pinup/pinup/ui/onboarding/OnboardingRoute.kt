@@ -8,6 +8,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun OnboardingRoute(
     onMoveSignUpOnboarding: () -> Unit,
     onMoveLogin: () -> Unit,
+    onMoveMain: () -> Unit,
     viewModel: OnboardingViewModel = koinViewModel()
 ) {
     LaunchedEffect(Unit) {
@@ -15,10 +16,10 @@ fun OnboardingRoute(
             when(it) {
                 OnboardingUiEvent.MoveSignUpOnboarding -> onMoveSignUpOnboarding()
                 OnboardingUiEvent.MoveLogin -> onMoveLogin()
+                OnboardingUiEvent.MoveMain -> onMoveMain()
             }
         }
     }
-    OnboardingScreen(
-        onClickStart = viewModel::onClickStart
-    )
+
+    OnboardingScreen()
 }

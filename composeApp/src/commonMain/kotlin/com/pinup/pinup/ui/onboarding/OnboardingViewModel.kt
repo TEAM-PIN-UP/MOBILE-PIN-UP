@@ -5,19 +5,24 @@ import com.pinup.pinup.domain.usecase.IsLoginUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel (
     private val isLoginUseCase: IsLoginUseCase,
 ) : BaseViewModel<UiState, OnboardingUiEvent>(UiState.Default) {
 
-    fun onClickStart() = viewModelScope.launch {
-        val isLogin = isLoginUseCase()
-        if (isLogin) {
-            emitEvent(OnboardingUiEvent.MoveLogin)
+    init {
+        onClickStart()
+    }
+
+    private fun onClickStart() = viewModelScope.launch {
+        delay(2000)
+        val (isMember, isLogin) = isLoginUseCase()
+        if (isMember) {
+            emitEvent(if(isLogin) OnboardingUiEvent.MoveMain else OnboardingUiEvent.MoveLogin)
         } else {
-            emitEvent(OnboardingUiEvent.MoveLogin)
-            //emitEvent(OnboardingUiEvent.MoveSignUpOnboarding)
+            emitEvent(OnboardingUiEvent.MoveSignUpOnboarding)
         }
     }
 }
@@ -25,4 +30,5 @@ class OnboardingViewModel (
 sealed interface OnboardingUiEvent : UiEvent{
     data object MoveSignUpOnboarding : OnboardingUiEvent
     data object MoveLogin : OnboardingUiEvent
+    data object MoveMain : OnboardingUiEvent
 }
