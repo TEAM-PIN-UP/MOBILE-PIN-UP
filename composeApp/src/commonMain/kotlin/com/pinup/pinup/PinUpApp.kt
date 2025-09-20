@@ -12,9 +12,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import com.pinup.pinup.extentions.jsonToArg
 import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
@@ -78,15 +80,20 @@ fun PinUpApp(
                         slideOutHorizontally(targetOffsetX = { it })
                     }
                 ){
+                    val navOptions = navOptions {
+                        popUpTo<PinUpAppDestination.Onboarding> {
+                            inclusive = true
+                        }
+                    }
                     OnboardingRoute(
                         onMoveSignUpOnboarding = {
-                            navHostController.navigate(PinUpAppDestination.ChoiceSignUp)
+                            navHostController.navigate(PinUpAppDestination.ChoiceSignUp, navOptions)
                         },
                         onMoveLogin = {
-                            navHostController.navigate(PinUpAppDestination.Login)
+                            navHostController.navigate(PinUpAppDestination.Login, navOptions)
                         },
                         onMoveMain = {
-                            navHostController.navigate(PinUpAppDestination.Main)
+                            navHostController.navigate(PinUpAppDestination.Main, navOptions)
                         }
                     )
                 }
