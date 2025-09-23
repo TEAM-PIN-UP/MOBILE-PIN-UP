@@ -139,7 +139,10 @@ fun FeedView(
                 AsyncImage(
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .clickableWithNoRipple {
+                            onClickDetail(item.id)
+                        },
                     model = item.reviewImageUrls[0],
                     contentScale = ContentScale.Crop,
                     contentDescription = null
@@ -150,6 +153,10 @@ fun FeedView(
         }
 
         Text(
+            modifier = Modifier
+                .clickableWithNoRipple {
+                    onClickDetail(item.id)
+                },
             text = buildHighlightedText(item.content, keyword = searchKeyWord, Colors.Main),
             style = Typography.B3.copy(
                 fontWeight = FontWeight.Medium
