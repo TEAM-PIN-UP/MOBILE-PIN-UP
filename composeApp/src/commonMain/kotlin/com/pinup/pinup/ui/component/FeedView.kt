@@ -48,7 +48,6 @@ fun FeedView(
     onClickMenu: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
-    onClickScrap: (Int) -> Unit = {},
 ) {
     var isOverflow by remember { mutableStateOf(false) }
 
@@ -223,19 +222,6 @@ fun FeedView(
                 ),
                 color = Colors.Gray800,
             )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Image(
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickableWithNoRipple {
-                        onClickScrap(item.id)
-                    },
-                painter = painterResource(if (item.isScrapByUser) Res.drawable.ic_bookmark_on else Res.drawable.ic_bookmark_off),
-                contentDescription = null
-            )
         }
     }
-
 }

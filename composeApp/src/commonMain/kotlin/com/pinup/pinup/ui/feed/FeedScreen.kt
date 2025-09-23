@@ -165,7 +165,6 @@ fun FeedScreen(
                             },
                             onClickLike = onClickLike,
                             onClickDetail = onClickDetail,
-                            onClickScrap = {},
                         )
 
                         PHorizontalDivider(modifier = Modifier.height(10.dp))
