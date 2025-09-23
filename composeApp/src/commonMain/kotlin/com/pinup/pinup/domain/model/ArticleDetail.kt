@@ -1,6 +1,6 @@
 package com.pinup.pinup.domain.model
 
-data class ArticleDetail(
+data class  ArticleDetail(
     val id: Int = 0,
     val title: String = "",
     val description: String = "",
@@ -9,5 +9,4 @@ data class ArticleDetail(
     val image: List<String> = emptyList(),
     val content: String = "",
     val place: List<Place> = emptyList(),
-
 )

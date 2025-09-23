@@ -46,6 +46,7 @@ import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.platform.hLog
+import com.pinup.pinup.platform.kakaoShare
 import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.FeedView
 import com.pinup.pinup.ui.component.NotDevelopScreen
@@ -287,7 +288,10 @@ fun MyScreen(
                 Row {
                     RoundedBox(
                         modifier = Modifier
-                            .weight(1f),
+                            .weight(1f)
+                            .clickableWithNoRipple {
+                                kakaoShare()
+                            },
                         cornerRounded = 8,
                         backgroundColor = Colors.Gray100,
                     ) {
