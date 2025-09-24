@@ -14,6 +14,8 @@ import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPhotoReviewsUseCase
 import com.pinup.pinup.domain.usecase.GetTextReviewsUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
+import com.pinup.pinup.platform.ContextFactory
+import com.pinup.pinup.platform.kakaoShare
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
@@ -23,6 +25,7 @@ import kotlin.text.ifEmpty
 
 
 class MyViewModel (
+    private val contextFactory: ContextFactory,
     private val deletePinlogUseCase: DeletePinlogUseCase,
     private val getMemberInfoUseCase: GetMemberInfoUseCase,
     private val getFeedUseCase: GetFeedUseCase,
@@ -98,6 +101,10 @@ class MyViewModel (
                 }
             }
         )
+    }
+
+    fun shareMyProfile(){
+        kakaoShare(contextFactory.getActivity())
     }
 }
 

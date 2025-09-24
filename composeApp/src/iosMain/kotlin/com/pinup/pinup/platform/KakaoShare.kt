@@ -1,5 +1,7 @@
 package com.pinup.pinup.platform
 
-actual fun kakaoShare(){
+actual fun kakaoShare(
+    context: Any
+){
 
 }

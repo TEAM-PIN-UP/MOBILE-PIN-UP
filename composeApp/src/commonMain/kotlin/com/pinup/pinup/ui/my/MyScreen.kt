@@ -79,6 +79,7 @@ fun MyScreen(
     onClickPinLog: () -> Unit = {},
     onClickDetail: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
+    onClickShare: () -> Unit = {},
 ) {
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -290,7 +291,7 @@ fun MyScreen(
                         modifier = Modifier
                             .weight(1f)
                             .clickableWithNoRipple {
-                                kakaoShare()
+                                onClickShare()
                             },
                         cornerRounded = 8,
                         backgroundColor = Colors.Gray100,
@@ -493,7 +494,6 @@ fun MyPinLogList(
                     onClickMenu = onClickMenu,
                     onClickLike = onClickLike,
                     onClickDetail = onClickDetail,
-                    onClickScrap = {},
                 )
 
                 PHorizontalDivider()

@@ -18,6 +18,8 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <data android:host="kakaolink"
+                    android:scheme="{KAKAO_LOGIN_KEY}" />
             </intent-filter>
         </activity>
 

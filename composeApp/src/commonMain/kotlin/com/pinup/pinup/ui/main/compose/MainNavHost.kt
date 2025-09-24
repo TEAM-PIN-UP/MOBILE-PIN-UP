@@ -18,6 +18,8 @@ import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.PinUpAppDestination
 import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.ReviewedPlace
+import com.pinup.pinup.platform.ContextFactory
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.article.ArticleRoute
 import com.pinup.pinup.ui.bookmark.BookmarkRoute
 import com.pinup.pinup.ui.component.BottomBar
@@ -32,6 +34,7 @@ import kotlinx.serialization.Serializable
 fun MainNavHost(
     navHostController: NavHostController = rememberNavController(),
     mainViewModel: MainViewModel = koinViewModel(),
+    contextFactory: ContextFactory,
     onMoveWriteReview: (Int) -> Unit,
     onMoveNewWriteReview: (String) -> Unit,
     onMovePinlogDetail: (Int) -> Unit,
@@ -40,6 +43,7 @@ fun MainNavHost(
     onMoveSetting: () -> Unit,
     onClickEdit: (Int) -> Unit = {},
     onClickArticleDetail: (Int) -> Unit = {},
+    userId: Int = -1
 ) {
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
     val selectedMenuBar = remember { mutableStateOf<MainDestination>(MainDestination.Map) }
@@ -55,6 +59,11 @@ fun MainNavHost(
             selectedMenuBar.value = MainDestination.My
         }
     }
+
+    LaunchedEffect(userId) {
+        hLog("여기는 메인 $userId")
+    }
+
     Column {
         NavHost(
             modifier = Modifier
@@ -132,6 +141,7 @@ fun MainNavHost(
 
             composable<MainDestination.My> {
                 MyRoute(
+                    contextFactory = contextFactory,
                     onAddPinBuddyClick = onMoveAddPinBuddy,
                     onMovePinBuddy = onMovePinBuddy,
                     onMoveSetting = onMoveSetting,

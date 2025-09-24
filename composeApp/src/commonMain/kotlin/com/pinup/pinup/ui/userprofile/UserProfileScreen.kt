@@ -518,7 +518,6 @@ fun UserPinlogList(
                     item = it,
                     onClickLike = onClickLike,
                     onClickDetail = onClickDetail,
-                    onClickScrap = {},
                 )
 
                 PHorizontalDivider()

@@ -51,7 +51,8 @@ fun PinUpApp(
     contextFactory: ContextFactory,
     navHostController: NavHostController = rememberNavController(),
     startAppViewModel: StartAppViewModel = koinViewModel(),
-    scope: CoroutineScope = rememberCoroutineScope()
+    scope: CoroutineScope = rememberCoroutineScope(),
+    userId: Int = -1
 ) {
     val uiState = startAppViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -256,6 +257,7 @@ fun PinUpApp(
 
                 composable<PinUpAppDestination.Main> {
                     MainNavHost(
+                        contextFactory = contextFactory,
                         onMoveWriteReview = {
                             navHostController.navigate(PinUpAppDestination.WriteReview(it, null))
                         },

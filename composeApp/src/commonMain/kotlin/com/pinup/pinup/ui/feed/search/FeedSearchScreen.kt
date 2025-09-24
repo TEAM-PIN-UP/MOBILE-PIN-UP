@@ -233,7 +233,6 @@ fun FeedSearchScreen(
                             },
                             onClickLike = onClickLike,
                             onClickDetail = onClickDetail,
-                            onClickScrap = {},
                         )
 
                         PHorizontalDivider()
