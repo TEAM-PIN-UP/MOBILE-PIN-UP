@@ -220,6 +220,7 @@ object Texts {
     }
 
     object PROFILE {
+        const val PROFILE_MY = "my"
         const val AVERAGE_STAR_RATING = "평균 별점"
         const val SHARE_PROFILE = "프로필 공유"
         const val ADD_PIN_BUDDY = "핀버디 추가"
@@ -241,6 +242,8 @@ object Texts {
         const val REMOVE_PIN_BUDDY_DIALOG_DESCRIPTION = "삭제한 핀버디에게 언제든지\n다시 핀버디를 신청할 수 있습니다."
         const val ROCK_PROFILE = "작성된 핀로그가 궁금하다면\n핀버디를 신청해 주세요!"
         const val WRITE_FIRST_PINLOG = "첫 핀로그 작성하기"
+        const val EMPTY_SCRAP = "저장된 장소가 없어요!\n핀로그를 살펴보며 장소를 살펴보아요."
+        const val GO_PINLOG = "핀로그 보러가기"
     }
 
     object Article {

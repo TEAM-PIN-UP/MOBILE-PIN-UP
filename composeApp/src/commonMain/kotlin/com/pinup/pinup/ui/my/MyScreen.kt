@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -41,8 +44,10 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.Review
+import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.platform.hLog
@@ -397,7 +402,7 @@ fun MyScreen(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(top = 12.dp, bottom = 11.dp),
-                        text = Texts.Word.SCRAP,
+                        text = Texts.PROFILE.PROFILE_MY,
                         style = if (pagerState.currentPage == 1) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(fontWeight = FontWeight.Medium),
                         color = if (pagerState.currentPage == 1) Colors.Gray800 else Colors.Gray300,
                         textAlign = TextAlign.Center
@@ -433,8 +438,9 @@ fun MyScreen(
                         onClickDetail = onClickDetail
                     )
                 } else {
-                    NotDevelopScreen(
-                        hasBackButton = false
+                    MyScrapList(
+                        scrapList = emptyList(),
+                        bottomBarHeight = bottomBarHeight,
                     )
                 }
             }
@@ -545,6 +551,166 @@ private fun ReviewEmptyScreen(
                 painter = painterResource(Res.drawable.ic_right_arrow),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(Colors.Gray600)
+            )
+        }
+    }
+}
+
+@Composable
+fun MyScrapList(
+    scrapList: List<ReviewedPlace>,
+    bottomBarHeight: Dp = 0.dp,
+    onClickGoFeed: () -> Unit = {},
+    onClickGoCreatePinch: () -> Unit = {},
+    onClickPlaceDetail: (String) -> Unit = {},
+    onClickMoreScrap: () -> Unit = {},
+) {
+    val scrollState = rememberLazyListState()
+
+    Spacer(modifier = Modifier.height(19.dp))
+
+    LazyColumn(
+        modifier = Modifier
+            .padding(horizontal = 20.dp)
+            .padding(bottom = bottomBarHeight)
+            .background(Colors.White),
+        state = scrollState
+    ) {
+        item {
+            Row(
+                modifier = Modifier
+                    .background(
+                        color = Colors.Gray100,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .padding(horizontal = 8.dp, vertical = 6.dp)
+            ) {
+                Text(
+                    text = Texts.Word.SCRAP,
+                    color = Colors.Gray500,
+                    style = Typography.L1.copy(
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
+
+                Spacer(modifier = Modifier.width(5.dp))
+
+                Image(
+                    modifier = Modifier
+                        .size(width = 3.dp, height = 6.dp),
+                    painter = painterResource(Res.drawable.ic_right_arrow),
+                    colorFilter = ColorFilter.tint(Colors.Gray400),
+                    contentDescription = null
+                )
+
+                if (scrapList.isEmpty()) {
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    RoundedBox(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp, bottom = 15.dp),
+                        cornerColor = Colors.Gray200,
+                        cornerRounded = 12,
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = Texts.PROFILE.EMPTY_SCRAP,
+                                style = Typography.L2.copy(
+                                    fontWeight = FontWeight.SemiBold
+                                ),
+                                color = Colors.Gray400
+                            )
+
+                            Spacer(modifier = Modifier.height(11.dp))
+
+                            RoundedBox(
+                                modifier = Modifier
+                                    .background(Colors.Main99)
+                                    .padding(horizontal = 19.dp, vertical = 4.dp),
+                                cornerRounded = 5
+                            ) {
+                                Text(
+                                    text = Texts.PROFILE.GO_PINLOG,
+                                    style = Typography.L3.copy(
+                                        fontWeight = FontWeight.Medium
+                                    ),
+                                    color = Colors.Main
+                                )
+                            }
+                        }
+                    }
+                } else {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    ) {
+                        if (scrapList.size >= 3) {
+                            scrapList.take(3).forEach { scrap ->
+                                ScrapItemView(
+                                    modifier = Modifier
+                                        .clickableWithNoRipple {
+                                            onClickPlaceDetail(scrap.kakaoPlaceId)
+                                        }
+                                        .weight(1f),
+                                    image = scrap.reviewImageUrls[0],
+                                    title = scrap.name
+                                )
+                            }
+                        } else {
+                            scrapList.forEach { scrap ->
+                                ScrapItemView(
+                                    modifier = Modifier
+                                        .clickableWithNoRipple {
+                                            onClickPlaceDetail(scrap.kakaoPlaceId)
+                                        }
+                                        .width(105.dp),
+                                    image = scrap.reviewImageUrls[0],
+                                    title = scrap.name
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ScrapItemView(
+    modifier: Modifier = Modifier,
+    image: String = "",
+    title: String = "",
+){
+    Column(
+        modifier = modifier
+    ){
+        RoundedBox(
+            modifier = Modifier
+                .fillMaxWidth(),
+        ) {
+            AsyncImage(
+                modifier = Modifier
+                    .aspectRatio(105f/90f)
+                    .fillMaxWidth(),
+                model = image,
+                contentScale = ContentScale.Crop,
+                contentDescription = null
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = title,
+                color = Colors.Gray500,
+                style = Typography.L2.copy(
+                    fontWeight = FontWeight.Medium
+                )
             )
         }
     }
