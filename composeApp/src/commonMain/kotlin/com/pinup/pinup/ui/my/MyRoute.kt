@@ -5,14 +5,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Texts
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun MyRoute(
-    myViewModel: MyViewModel = koinViewModel(),
+    contextFactory: ContextFactory,
+    myViewModel: MyViewModel = koinViewModel(parameters = { parametersOf(contextFactory) }),
     onAddPinBuddyClick: () -> Unit,
     onMovePinBuddy: () -> Unit,
     onMoveSetting: () -> Unit,
@@ -60,6 +63,7 @@ fun MyRoute(
         },
         onClickPinLog = onClickPinLog,
         onClickLike = myViewModel::likeChanged,
-        onClickDetail = onClickDetail
+        onClickDetail = onClickDetail,
+        onClickShare = myViewModel::shareMyProfile
     )
 }

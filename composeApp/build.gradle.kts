@@ -153,6 +153,7 @@ android {
             "KAKAO_APP_KEY",
             getApiKey("kakao.app.key")
         )
+        manifestPlaceholders["KAKAO_LOGIN_KEY"] = getApiKey("kakao.login.key")
         manifestPlaceholders["NATIVE_APP_KEY"] = getApiKey("kakao.app.key")
         manifestPlaceholders["NAVER_MAP_CLIENT_ID"] = getApiKey("naver.map.client.id")
     }

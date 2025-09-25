@@ -1,23 +1,17 @@
 package com.pinup.pinup.ui.main
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.pinup.pinup.ui.base.BaseViewModel
+import com.pinup.pinup.ui.base.UiEvent
+import com.pinup.pinup.ui.base.UiState
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
 class MainViewModel (
     private val getMyProfileUseCase: GetMyProfileUseCase
-): ViewModel() {
-    private val _uiState = MutableStateFlow(MainUiState())
-    val uiState: StateFlow<MainUiState>
-        get() = _uiState.asStateFlow()
-
+): BaseViewModel<MainUiState, UiEvent>(MainUiState()) {
     init {
         getProfileImage()
     }
@@ -25,8 +19,9 @@ class MainViewModel (
     private fun getProfileImage() = viewModelScope.launch {
         getMyProfileUseCase()
             .collectLatest { profile ->
-                _uiState.update {
-                    it.copy(
+                updateState {
+                    copy(
+                        myId = profile.memberId,
                         profileImage = profile.profileUrl
                     )
                 }
@@ -35,5 +30,6 @@ class MainViewModel (
 }
 
 data class MainUiState(
+    val myId: Int = -1,
     val profileImage: String = ""
-)
+): UiState

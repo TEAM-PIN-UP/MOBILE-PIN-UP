@@ -281,4 +281,10 @@ object Texts {
         const val REFUSE_PIN_BUDDY = "핀버디 신청을 거절했어요"
         const val CANCEL_PIN_BUDDY_REQEUST = "핀버디 신청을 취소했어요"
     }
+
+    object Kakao {
+        const val PROFILE_SHARE_TITLE = "프로필 공유 제목"
+        const val PROFILE_SHARE_CONTENT = "프로필 공유 내용"
+        const val PROFILE_SHARE_BUTTON = "버튼 이름"
+    }
 }

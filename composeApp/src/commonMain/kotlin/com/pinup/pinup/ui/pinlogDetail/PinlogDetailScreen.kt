@@ -409,15 +409,6 @@ fun PinlogDetailScreen(
                                     ),
                                     color = Colors.Gray800,
                                 )
-
-                                Spacer(modifier = Modifier.weight(1f))
-
-                                Image(
-                                    modifier = Modifier
-                                        .size(24.dp),
-                                    painter = painterResource(if (pinlogDetail.isScrapByUser) Res.drawable.ic_bookmark_on else Res.drawable.ic_bookmark_off),
-                                    contentDescription = null
-                                )
                             }
                         }
                     }

@@ -5,8 +5,10 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -18,6 +20,8 @@ import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.PinUpAppDestination
 import com.pinup.pinup.domain.model.DetailPlace
 import com.pinup.pinup.domain.model.ReviewedPlace
+import com.pinup.pinup.platform.ContextFactory
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.article.ArticleRoute
 import com.pinup.pinup.ui.bookmark.BookmarkRoute
 import com.pinup.pinup.ui.component.BottomBar
@@ -32,17 +36,21 @@ import kotlinx.serialization.Serializable
 fun MainNavHost(
     navHostController: NavHostController = rememberNavController(),
     mainViewModel: MainViewModel = koinViewModel(),
+    contextFactory: ContextFactory,
     onMoveWriteReview: (Int) -> Unit,
     onMoveNewWriteReview: (String) -> Unit,
     onMovePinlogDetail: (Int) -> Unit,
     onMoveAddPinBuddy: () -> Unit,
     onMovePinBuddy: () -> Unit,
+    onMoveUserProfile: (Int) -> Unit,
     onMoveSetting: () -> Unit,
     onClickEdit: (Int) -> Unit = {},
     onClickArticleDetail: (Int) -> Unit = {},
+    userId: Int = -1
 ) {
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
     val selectedMenuBar = remember { mutableStateOf<MainDestination>(MainDestination.Map) }
+    val userArgId = rememberSaveable { mutableIntStateOf(userId) }
     val currentDestination = navHostController.currentBackStackEntryAsState().value?.destination
     LaunchedEffect(currentDestination) {
         if (MainDestination.Map::class.qualifiedName == currentDestination?.route) {
@@ -55,6 +63,25 @@ fun MainNavHost(
             selectedMenuBar.value = MainDestination.My
         }
     }
+
+    if (userArgId.intValue != -1) {
+        LaunchedEffect(userArgId.intValue) {
+            hLog("여기는 메인 ${userArgId.intValue}")
+            if (userArgId.intValue == uiState.value.myId) {
+                navHostController.navigate(MainDestination.My) {
+                    launchSingleTop = true
+                    restoreState = true
+                    popUpTo(navHostController.graph.startDestinationId) {
+                        saveState = true
+                    }
+                }
+            } else {
+                onMoveUserProfile(userArgId.intValue)
+            }
+            userArgId.intValue = -1
+        }
+    }
+
     Column {
         NavHost(
             modifier = Modifier
@@ -132,6 +159,7 @@ fun MainNavHost(
 
             composable<MainDestination.My> {
                 MyRoute(
+                    contextFactory = contextFactory,
                     onAddPinBuddyClick = onMoveAddPinBuddy,
                     onMovePinBuddy = onMovePinBuddy,
                     onMoveSetting = onMoveSetting,

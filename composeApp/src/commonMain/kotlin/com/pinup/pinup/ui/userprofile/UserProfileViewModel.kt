@@ -13,6 +13,8 @@ import com.pinup.pinup.domain.usecase.GetFeedUseCase
 import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.domain.usecase.RequestPinBuddyUseCase
+import com.pinup.pinup.platform.ContextFactory
+import com.pinup.pinup.platform.kakaoShare
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
@@ -21,6 +23,7 @@ import kotlinx.coroutines.launch
 
 class UserProfileViewModel (
     savedStateHandle: SavedStateHandle,
+    private val contextFactory: ContextFactory,
     private val getMemberInfoUseCase: GetMemberInfoUseCase,
     private val requestPinBuddyUseCase: RequestPinBuddyUseCase,
     private val getFeedUseCase: GetFeedUseCase,
@@ -127,6 +130,13 @@ class UserProfileViewModel (
                     )
                 }
             }
+        )
+    }
+
+    fun shareMyProfile(){
+        kakaoShare(
+            context = contextFactory.getActivity(),
+            memberId = uiState.value.member.profile.memberId
         )
     }
 

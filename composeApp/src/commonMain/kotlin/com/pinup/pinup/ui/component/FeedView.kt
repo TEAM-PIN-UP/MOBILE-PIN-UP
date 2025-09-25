@@ -48,7 +48,6 @@ fun FeedView(
     onClickMenu: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
-    onClickScrap: (Int) -> Unit = {},
 ) {
     var isOverflow by remember { mutableStateOf(false) }
 
@@ -140,7 +139,10 @@ fun FeedView(
                 AsyncImage(
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .clickableWithNoRipple {
+                            onClickDetail(item.id)
+                        },
                     model = item.reviewImageUrls[0],
                     contentScale = ContentScale.Crop,
                     contentDescription = null
@@ -151,6 +153,10 @@ fun FeedView(
         }
 
         Text(
+            modifier = Modifier
+                .clickableWithNoRipple {
+                    onClickDetail(item.id)
+                },
             text = buildHighlightedText(item.content, keyword = searchKeyWord, Colors.Main),
             style = Typography.B3.copy(
                 fontWeight = FontWeight.Medium
@@ -223,19 +229,6 @@ fun FeedView(
                 ),
                 color = Colors.Gray800,
             )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Image(
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickableWithNoRipple {
-                        onClickScrap(item.id)
-                    },
-                painter = painterResource(if (item.isScrapByUser) Res.drawable.ic_bookmark_on else Res.drawable.ic_bookmark_off),
-                contentDescription = null
-            )
         }
     }
-
 }

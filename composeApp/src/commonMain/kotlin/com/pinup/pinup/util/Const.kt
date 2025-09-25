@@ -28,6 +28,9 @@ object Const {
 
             return "$maskedLocal@$domain"
         }
+    }
 
+    object ShareKey {
+        const val KAKAO_USER_ID = "userId"
     }
 }
