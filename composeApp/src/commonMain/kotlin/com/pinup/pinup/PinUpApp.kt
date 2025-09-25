@@ -51,7 +51,8 @@ fun PinUpApp(
     contextFactory: ContextFactory,
     navHostController: NavHostController = rememberNavController(),
     startAppViewModel: StartAppViewModel = koinViewModel(),
-    scope: CoroutineScope = rememberCoroutineScope()
+    scope: CoroutineScope = rememberCoroutineScope(),
+    userId: Int = -1
 ) {
     val uiState = startAppViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -256,6 +257,8 @@ fun PinUpApp(
 
                 composable<PinUpAppDestination.Main> {
                     MainNavHost(
+                        contextFactory = contextFactory,
+                        userId = userId,
                         onMoveWriteReview = {
                             navHostController.navigate(PinUpAppDestination.WriteReview(it, null))
                         },
@@ -279,6 +282,9 @@ fun PinUpApp(
                         },
                         onClickArticleDetail = {
                             navHostController.navigate(PinUpAppDestination.ArticleDetail(it))
+                        },
+                        onMoveUserProfile = {
+                            navHostController.navigate(PinUpAppDestination.UserProfile(it))
                         }
                     )
                 }
@@ -338,6 +344,7 @@ fun PinUpApp(
 
                 composable<PinUpAppDestination.UserProfile> {
                     UserProfileRoute(
+                        contextFactory = contextFactory,
                         onBackPressed = {
                             navHostController.popBackStack()
                         },
