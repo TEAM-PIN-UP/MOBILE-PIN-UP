@@ -56,6 +56,7 @@ object Texts {
         const val DO_REPLY_COMMENT = "답글달기"
         const val SEE_MORE = "자세히 보기"
         const val PIN_BUDDY = "핀버디"
+        const val PINCH = "핀츠"
         const val SCRAP = "스크랩"
         const val ACCEPT = "수락"
         const val REFUSE = "거절"
@@ -220,7 +221,7 @@ object Texts {
     }
 
     object PROFILE {
-        const val PROFILE_MY = "my"
+        const val PROFILE_MY = "MY"
         const val AVERAGE_STAR_RATING = "평균 별점"
         const val SHARE_PROFILE = "프로필 공유"
         const val ADD_PIN_BUDDY = "핀버디 추가"
@@ -244,6 +245,8 @@ object Texts {
         const val WRITE_FIRST_PINLOG = "첫 핀로그 작성하기"
         const val EMPTY_SCRAP = "저장된 장소가 없어요!\n핀로그를 살펴보며 장소를 살펴보아요."
         const val GO_PINLOG = "핀로그 보러가기"
+        const val EMPTY_PINCH = "조이님 만의 코스로 핀츠를 만들어보아요."
+        const val GO_PINCH_CREATE = "핀츠 만들러 가기"
     }
 
     object Article {

@@ -45,7 +45,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Member
+import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
@@ -57,9 +59,11 @@ import com.pinup.pinup.ui.component.FeedView
 import com.pinup.pinup.ui.component.NotDevelopScreen
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.PVerticalDivider
+import com.pinup.pinup.ui.component.PinchItemView
 import com.pinup.pinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.pinup.ui.component.ProfileImageView
 import com.pinup.pinup.ui.component.RoundedBox
+import com.pinup.pinup.ui.component.ScrapItemView
 import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
@@ -68,6 +72,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
+import kotlin.Boolean
+import kotlin.Double
+import kotlin.String
 
 @Composable
 fun MyScreen(
@@ -83,7 +90,7 @@ fun MyScreen(
     onClickDelete: (Int) -> Unit = {},
     onClickPinLog: () -> Unit = {},
     onClickDetail: (Int) -> Unit = {},
-    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
+    onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
     onClickShare: () -> Unit = {},
 ) {
     val pagerState = rememberPagerState(
@@ -379,7 +386,9 @@ fun MyScreen(
                             .align(Alignment.CenterHorizontally)
                             .padding(top = 12.dp, bottom = 11.dp),
                         text = Texts.Word.PINLOG,
-                        style = if (pagerState.currentPage == 0) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(fontWeight = FontWeight.Medium),
+                        style = if (pagerState.currentPage == 0) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
                         color = if (pagerState.currentPage == 0) Colors.Gray800 else Colors.Gray300,
                         textAlign = TextAlign.Center
                     )
@@ -408,7 +417,9 @@ fun MyScreen(
                             .align(Alignment.CenterHorizontally)
                             .padding(top = 12.dp, bottom = 11.dp),
                         text = Texts.PROFILE.PROFILE_MY,
-                        style = if (pagerState.currentPage == 1) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(fontWeight = FontWeight.Medium),
+                        style = if (pagerState.currentPage == 1) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
                         color = if (pagerState.currentPage == 1) Colors.Gray800 else Colors.Gray300,
                         textAlign = TextAlign.Center
                     )
@@ -445,6 +456,7 @@ fun MyScreen(
                 } else {
                     MyScrapList(
                         scrapList = emptyList(),
+                        pinchListItem = emptyList(),
                         bottomBarHeight = bottomBarHeight,
                     )
                 }
@@ -455,7 +467,7 @@ fun MyScreen(
             modifier = Modifier
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Bottom
-        ){
+        ) {
             Box(
                 modifier = Modifier
                     .onGloballyPositioned { coords ->
@@ -477,7 +489,7 @@ fun MyPinLogList(
     reviewList: List<Review>,
     bottomBarHeight: Dp = 0.dp,
     onClickMenu: (Int) -> Unit = {},
-    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
+    onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
     onClickDetail: (Int) -> Unit = {},
     onClickPinLog: () -> Unit = {},
 ) {
@@ -494,7 +506,7 @@ fun MyPinLogList(
             verticalArrangement = Arrangement.spacedBy(10.dp),
             state = scrollState
         ) {
-            items(reviewList){
+            items(reviewList) {
                 FeedView(
                     item = it,
                     onClickMenu = onClickMenu,
@@ -563,6 +575,7 @@ private fun ReviewEmptyScreen(
 @Composable
 fun MyScrapList(
     scrapList: List<ReviewedPlace>,
+    pinchListItem: List<PinchListItem>,
     bottomBarHeight: Dp = 0.dp,
     onClickGoFeed: () -> Unit = {},
     onClickGoCreatePinch: () -> Unit = {},
@@ -570,8 +583,6 @@ fun MyScrapList(
     onClickMoreScrap: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
-
-    Spacer(modifier = Modifier.height(19.dp))
 
     LazyColumn(
         modifier = Modifier
@@ -581,13 +592,16 @@ fun MyScrapList(
         state = scrollState
     ) {
         item {
+            Spacer(modifier = Modifier.height(19.dp))
+
             Row(
                 modifier = Modifier
                     .background(
                         color = Colors.Gray100,
                         shape = RoundedCornerShape(8.dp)
                     )
-                    .padding(horizontal = 8.dp, vertical = 6.dp)
+                    .padding(horizontal = 8.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = Texts.Word.SCRAP,
@@ -601,121 +615,182 @@ fun MyScrapList(
 
                 Image(
                     modifier = Modifier
-                        .size(width = 3.dp, height = 6.dp),
-                    painter = painterResource(Res.drawable.ic_right_arrow),
+                        .height(6.dp),
+                    painter = painterResource(Res.drawable.ic_right_arrow_gray_400),
                     colorFilter = ColorFilter.tint(Colors.Gray400),
+                    contentScale = ContentScale.Crop,
                     contentDescription = null
                 )
+            }
 
-                if (scrapList.isEmpty()) {
-                    Spacer(modifier = Modifier.height(20.dp))
+            if (scrapList.isEmpty()) {
+                Spacer(modifier = Modifier.height(20.dp))
 
-                    RoundedBox(
+                RoundedBox(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    cornerColor = Colors.Gray200,
+                    cornerRounded = 12,
+                ) {
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp, bottom = 15.dp),
-                        cornerColor = Colors.Gray200,
-                        cornerRounded = 12,
+                            .padding(top = 16.dp, bottom = 15.dp)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                        Text(
+                            text = Texts.PROFILE.EMPTY_SCRAP,
+                            style = Typography.L2.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = Colors.Gray400,
+                            textAlign = TextAlign.Center
+                        )
+
+                        Spacer(modifier = Modifier.height(11.dp))
+
+                        RoundedBox(
+                            backgroundColor = Colors.Main99,
+                            cornerRounded = 5
                         ) {
                             Text(
-                                text = Texts.PROFILE.EMPTY_SCRAP,
-                                style = Typography.L2.copy(
-                                    fontWeight = FontWeight.SemiBold
-                                ),
-                                color = Colors.Gray400
-                            )
-
-                            Spacer(modifier = Modifier.height(11.dp))
-
-                            RoundedBox(
                                 modifier = Modifier
-                                    .background(Colors.Main99)
-                                    .padding(horizontal = 19.dp, vertical = 4.dp),
-                                cornerRounded = 5
-                            ) {
-                                Text(
-                                    text = Texts.PROFILE.GO_PINLOG,
-                                    style = Typography.L3.copy(
-                                        fontWeight = FontWeight.Medium
-                                    ),
-                                    color = Colors.Main
-                                )
-                            }
-                        }
-                    }
-                } else {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        if (scrapList.size >= 3) {
-                            scrapList.take(3).forEach { scrap ->
-                                ScrapItemView(
-                                    modifier = Modifier
-                                        .clickableWithNoRipple {
-                                            onClickPlaceDetail(scrap.kakaoPlaceId)
-                                        }
-                                        .weight(1f),
-                                    image = scrap.reviewImageUrls[0],
-                                    title = scrap.name
-                                )
-                            }
-                        } else {
-                            scrapList.forEach { scrap ->
-                                ScrapItemView(
-                                    modifier = Modifier
-                                        .clickableWithNoRipple {
-                                            onClickPlaceDetail(scrap.kakaoPlaceId)
-                                        }
-                                        .width(105.dp),
-                                    image = scrap.reviewImageUrls[0],
-                                    title = scrap.name
-                                )
-                            }
+                                    .padding(horizontal = 19.dp, vertical = 4.dp)
+                                    .background(color = Colors.Main99),
+                                text = Texts.PROFILE.GO_PINLOG,
+                                style = Typography.L3.copy(
+                                    fontWeight = FontWeight.Medium
+                                ),
+                                color = Colors.Main
+                            )
                         }
                     }
                 }
+            } else {
+                Spacer(modifier = Modifier.height(15.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    if (scrapList.size >= 3) {
+                        scrapList.take(3).forEach { scrap ->
+                            ScrapItemView(
+                                modifier = Modifier
+                                    .clickableWithNoRipple {
+                                        onClickPlaceDetail(scrap.kakaoPlaceId)
+                                    }
+                                    .weight(1f),
+                                image = scrap.reviewImageUrls[0],
+                                title = scrap.name
+                            )
+
+                            Spacer(modifier = Modifier.width(10.dp))
+                        }
+                    } else {
+                        scrapList.forEach { scrap ->
+                            ScrapItemView(
+                                modifier = Modifier
+                                    .clickableWithNoRipple {
+                                        onClickPlaceDetail(scrap.kakaoPlaceId)
+                                    }
+                                    .width(105.dp),
+                                image = scrap.reviewImageUrls[0],
+                                title = scrap.name
+                            )
+
+                            Spacer(modifier = Modifier.width(10.dp))
+                        }
+                    }
+                }
+
             }
         }
-    }
-}
 
-@Composable
-fun ScrapItemView(
-    modifier: Modifier = Modifier,
-    image: String = "",
-    title: String = "",
-){
-    Column(
-        modifier = modifier
-    ){
-        RoundedBox(
-            modifier = Modifier
-                .fillMaxWidth(),
-        ) {
-            AsyncImage(
+        item {
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Row(
                 modifier = Modifier
-                    .aspectRatio(105f/90f)
-                    .fillMaxWidth(),
-                model = image,
-                contentScale = ContentScale.Crop,
-                contentDescription = null
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = title,
-                color = Colors.Gray500,
-                style = Typography.L2.copy(
-                    fontWeight = FontWeight.Medium
+                    .background(
+                        color = Colors.Gray100,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .padding(horizontal = 8.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = Texts.Word.PINCH,
+                    color = Colors.Gray500,
+                    style = Typography.L1.copy(
+                        fontWeight = FontWeight.SemiBold
+                    )
                 )
-            )
+
+                Spacer(modifier = Modifier.width(5.dp))
+
+                Image(
+                    modifier = Modifier
+                        .height(6.dp),
+                    painter = painterResource(Res.drawable.ic_right_arrow_gray_400),
+                    colorFilter = ColorFilter.tint(Colors.Gray400),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null
+                )
+            }
+
+            if (pinchListItem.isEmpty()) {
+                Spacer(modifier = Modifier.height(20.dp))
+
+                RoundedBox(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    cornerColor = Colors.Gray200,
+                    cornerRounded = 12,
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(top = 24.dp, bottom = 23.dp)
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = Texts.PROFILE.EMPTY_PINCH,
+                            style = Typography.L2.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = Colors.Gray400,
+                            textAlign = TextAlign.Center
+                        )
+
+                        Spacer(modifier = Modifier.height(11.dp))
+
+                        RoundedBox(
+                            backgroundColor = Colors.Main99,
+                            cornerRounded = 5
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(horizontal = 18.dp, vertical = 4.dp)
+                                    .background(color = Colors.Main99),
+                                text = Texts.PROFILE.GO_PINCH_CREATE,
+                                style = Typography.L3.copy(
+                                    fontWeight = FontWeight.Medium
+                                ),
+                                color = Colors.Main
+                            )
+                        }
+                    }
+                }
+            } else {
+                Spacer(modifier = Modifier.height(15.dp))
+
+                this@LazyColumn.items(pinchListItem) {
+                    PinchItemView(it)
+
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+            }
         }
     }
 }
