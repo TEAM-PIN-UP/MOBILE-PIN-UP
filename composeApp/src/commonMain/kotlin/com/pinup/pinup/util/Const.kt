@@ -32,5 +32,6 @@ object Const {
 
     object ShareKey {
         const val KAKAO_USER_ID = "userId"
+        const val WEB_LINK = "https://www.youtube.com/watch?v=yWP--1gsr20&list=RDyWP--1gsr20&start_radio=1"
     }
 }

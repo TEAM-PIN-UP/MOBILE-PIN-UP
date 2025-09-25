@@ -60,6 +60,8 @@ private fun getFeed(memberId: Int): FeedTemplate {
                     Texts.Kakao.PROFILE_SHARE_BUTTON,
                     Link(
                         androidExecutionParams = mapOf(Const.ShareKey.KAKAO_USER_ID to memberId.toString()),
+                        mobileWebUrl = Const.ShareKey.WEB_LINK,
+                        webUrl = Const.ShareKey.WEB_LINK
                     ),
                 ),
             ),
