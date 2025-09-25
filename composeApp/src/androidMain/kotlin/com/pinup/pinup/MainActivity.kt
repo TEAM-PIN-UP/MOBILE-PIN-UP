@@ -11,12 +11,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.platform.hLog
+import com.pinup.pinup.util.Const
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val contextFactory = ContextFactory(this)
+        val data: Uri? = intent?.data
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(
                 Color.Transparent.toArgb(), Color.Transparent.toArgb()
@@ -25,29 +27,12 @@ class MainActivity : ComponentActivity() {
                 Color.Transparent.toArgb(), Color.Transparent.toArgb()
             )
         )
-        val data: Uri? = intent?.data
-        data?.let {
-            val userId = it.getQueryParameter("key")
-            hLog("userId1 = $userId")
-        }
+
         setContent {
             PinUpApp(
-                userId = data?.getQueryParameter("key")?.toInt() ?: -1,
+                userId = data?.getQueryParameter(Const.ShareKey.KAKAO_USER_ID)?.toInt() ?: -1,
                 contextFactory = contextFactory
             )
-        }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        handleDeepLink(intent)
-    }
-
-    private fun handleDeepLink(intent: Intent?) {
-        val data: Uri? = intent?.data
-        data?.let {
-            val userId = it.getQueryParameter("key")
-            hLog("userId2 = $userId")
         }
     }
 }

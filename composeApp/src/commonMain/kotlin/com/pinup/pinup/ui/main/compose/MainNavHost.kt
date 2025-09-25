@@ -5,8 +5,10 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,6 +42,7 @@ fun MainNavHost(
     onMovePinlogDetail: (Int) -> Unit,
     onMoveAddPinBuddy: () -> Unit,
     onMovePinBuddy: () -> Unit,
+    onMoveUserProfile: (Int) -> Unit,
     onMoveSetting: () -> Unit,
     onClickEdit: (Int) -> Unit = {},
     onClickArticleDetail: (Int) -> Unit = {},
@@ -47,6 +50,7 @@ fun MainNavHost(
 ) {
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
     val selectedMenuBar = remember { mutableStateOf<MainDestination>(MainDestination.Map) }
+    val userArgId = rememberSaveable { mutableIntStateOf(userId) }
     val currentDestination = navHostController.currentBackStackEntryAsState().value?.destination
     LaunchedEffect(currentDestination) {
         if (MainDestination.Map::class.qualifiedName == currentDestination?.route) {
@@ -60,8 +64,22 @@ fun MainNavHost(
         }
     }
 
-    LaunchedEffect(userId) {
-        hLog("여기는 메인 $userId")
+    if (userArgId.intValue != -1) {
+        LaunchedEffect(userArgId.intValue) {
+            hLog("여기는 메인 ${userArgId.intValue}")
+            if (userArgId.intValue == uiState.value.myId) {
+                navHostController.navigate(MainDestination.My) {
+                    launchSingleTop = true
+                    restoreState = true
+                    popUpTo(navHostController.graph.startDestinationId) {
+                        saveState = true
+                    }
+                }
+            } else {
+                onMoveUserProfile(userArgId.intValue)
+            }
+            userArgId.intValue = -1
+        }
     }
 
     Column {

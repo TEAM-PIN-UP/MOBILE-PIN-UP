@@ -1,5 +1,6 @@
 package com.pinup.pinup.platform
 
 expect fun kakaoShare(
-    context: Any
+    context: Any,
+    memberId: Int
 )

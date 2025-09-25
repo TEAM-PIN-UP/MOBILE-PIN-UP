@@ -1,7 +1,8 @@
 package com.pinup.pinup.platform
 
 actual fun kakaoShare(
-    context: Any
+    context: Any,
+    memberId: Int
 ){
 
 }

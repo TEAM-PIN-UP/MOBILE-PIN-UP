@@ -41,6 +41,7 @@ import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.RelationType
 import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
+import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.FeedView
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.component.PHorizontalDivider
@@ -68,6 +69,7 @@ fun UserProfileScreen(
     onRemovePinBuddy: () -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
+    onClickShare: () -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     val pages = remember { listOf("포토 리뷰","텍스트 리뷰") }
@@ -269,7 +271,10 @@ fun UserProfileScreen(
                 Row {
                     RoundedBox(
                         modifier = Modifier
-                            .weight(1f),
+                            .weight(1f)
+                            .clickableWithNoRipple {
+                                onClickShare()
+                            },
                         cornerRounded = 8,
                         backgroundColor = Colors.Gray100,
                     ) {

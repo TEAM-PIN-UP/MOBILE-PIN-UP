@@ -5,29 +5,34 @@ import android.content.Context
 import com.kakao.sdk.common.util.KakaoCustomTabsClient
 import com.kakao.sdk.share.ShareClient
 import com.kakao.sdk.share.WebSharerClient
+import com.kakao.sdk.template.model.Button
+import com.kakao.sdk.template.model.Content
+import com.kakao.sdk.template.model.FeedTemplate
+import com.kakao.sdk.template.model.Link
+import com.pinup.pinup.ui.theme.Texts
+import com.pinup.pinup.util.Const
 
 actual fun kakaoShare(
-    context: Any
+    context: Any,
+    memberId: Int
 ) {
-    val templateId = 124510.toLong()
-    // 카카오톡 설치여부 확인
+    val feedTemplate = getFeed(memberId)
     if (ShareClient.instance.isKakaoTalkSharingAvailable(context as Context)) {
-        ShareClient.instance.shareCustom(context, templateId) { sharingResult, error ->
+        ShareClient.instance.shareDefault(context, feedTemplate) { sharingResult, error ->
             if (error != null) {
                 hLog("카카오톡 공유 실패" + error)
-            }
-            else if (sharingResult != null) {
+            } else if (sharingResult != null) {
                 hLog("카카오톡 공유 성공${sharingResult.intent}")
                 context.startActivity(sharingResult.intent)
             }
         }
     } else {
         // 카카오톡 미설치: 웹 공유 사용 권장
-        val sharerUrl = WebSharerClient.instance.makeCustomUrl(templateId)
+        val sharerUrl = WebSharerClient.instance.makeDefaultUrl(feedTemplate)
         // 1. CustomTabsServiceConnection 지원 브라우저 열기
         try {
             KakaoCustomTabsClient.openWithDefault(context, sharerUrl)
-        } catch(e: UnsupportedOperationException) {
+        } catch (e: UnsupportedOperationException) {
             hLog("CustomTabsServiceConnection 지원 브라우저가 없음")
         }
 
@@ -38,4 +43,25 @@ actual fun kakaoShare(
             hLog("디바이스에 설치된 인터넷 브라우저가 없음")
         }
     }
+}
+
+private fun getFeed(memberId: Int): FeedTemplate {
+    return FeedTemplate(
+        content =
+            Content(
+                title = Texts.Kakao.PROFILE_SHARE_TITLE,
+                description = Texts.Kakao.PROFILE_SHARE_CONTENT,
+                imageUrl = "https://lh3.googleusercontent.com/d/1ui1iK7vFLd1wj8KuiCgXMQo3YFGMd4w-",
+                link = Link(),
+            ),
+        buttons =
+            listOf(
+                Button(
+                    Texts.Kakao.PROFILE_SHARE_BUTTON,
+                    Link(
+                        androidExecutionParams = mapOf(Const.ShareKey.KAKAO_USER_ID to memberId.toString()),
+                    ),
+                ),
+            ),
+    )
 }

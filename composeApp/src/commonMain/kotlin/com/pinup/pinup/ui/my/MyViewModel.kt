@@ -15,6 +15,7 @@ import com.pinup.pinup.domain.usecase.GetPhotoReviewsUseCase
 import com.pinup.pinup.domain.usecase.GetTextReviewsUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.platform.ContextFactory
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.platform.kakaoShare
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
@@ -104,7 +105,10 @@ class MyViewModel (
     }
 
     fun shareMyProfile(){
-        kakaoShare(contextFactory.getActivity())
+        kakaoShare(
+            context = contextFactory.getActivity(),
+            memberId = uiState.value.member.profile.memberId
+        )
     }
 }
 
