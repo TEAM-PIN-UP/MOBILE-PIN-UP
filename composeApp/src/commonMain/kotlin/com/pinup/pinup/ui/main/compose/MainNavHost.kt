@@ -47,6 +47,7 @@ fun MainNavHost(
     onMoveSetting: () -> Unit,
     onClickEdit: (Int) -> Unit = {},
     onClickArticleDetail: (Int) -> Unit = {},
+    onMovePlaceDetail: (String) -> Unit = {},
     userId: Int = -1
 ) {
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
@@ -189,18 +190,17 @@ fun MainNavHost(
                                 saveState = true
                             }
                         }
-                    }
+                    },
+                    onMovePlaceDetail = onMovePlaceDetail
                 )
             }
 
             composable<PinUpAppDestination.Scrap> {
                 ScrapRoute(
                     onClickBottomNav = {
-                        hLog("하이 $it")
                         if (MainDestination.Upload == it) {
                             onMoveWriteReview(0)
                         } else {
-                            hLog("하이 $it")
                             navHostController.navigate(it) {
                                 launchSingleTop = true
                                 restoreState = true
@@ -210,6 +210,7 @@ fun MainNavHost(
                             }
                         }
                     },
+                    onMovePlaceDetail = onMovePlaceDetail
                 )
             }
         }

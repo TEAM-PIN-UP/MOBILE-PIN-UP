@@ -29,11 +29,11 @@ import com.pinup.pinup.ui.login.compose.LoginRoute
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.login.model.SNSUserInfo
 import com.pinup.pinup.ui.main.compose.MainNavHost
-import com.pinup.pinup.ui.my.scrap.ScrapRoute
 import com.pinup.pinup.ui.onboarding.OnboardingRoute
 import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpRoute
 import com.pinup.pinup.ui.pinbuddy.PinBuddyRoute
 import com.pinup.pinup.ui.pinlogDetail.PinlogDetailRoute
+import com.pinup.pinup.ui.placeDetail.PlaceDetailRoute
 import com.pinup.pinup.ui.reviewwrite.compose.WriteReviewNavHost
 import com.pinup.pinup.ui.reviewwrite.successWriteReview.WriteReviewDetailRoute
 import com.pinup.pinup.ui.setting.SettingNavHost
@@ -287,6 +287,9 @@ fun PinUpApp(
                         onMoveUserProfile = {
                             navHostController.navigate(PinUpAppDestination.UserProfile(it))
                         },
+                        onMovePlaceDetail = {
+                            navHostController.navigate(PinUpAppDestination.PlaceDetail(it))
+                        }
                     )
                 }
 
@@ -390,6 +393,23 @@ fun PinUpApp(
                         }
                     )
                 }
+
+                composable<PinUpAppDestination.PlaceDetail> {
+                    PlaceDetailRoute(
+                        onClickBack = {
+                            navHostController.popBackStack()
+                        },
+                        onClickEdit = {
+                            navHostController.navigate(PinUpAppDestination.WriteReview(it, null))
+                        },
+                        onMovePinlogDetail = {
+                            navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
+                        },
+                        onMoveWriteReview = {
+                            navHostController.navigate(PinUpAppDestination.WriteReview(0, it))
+                        },
+                    )
+                }
             }
 
             LogoutDialog(
@@ -460,4 +480,8 @@ sealed interface PinUpAppDestination {
 
     @Serializable
     data object Scrap : PinUpAppDestination
+    @Serializable
+    data class PlaceDetail(
+        val kakaoPlaceId: String
+    ) : PinUpAppDestination
 }

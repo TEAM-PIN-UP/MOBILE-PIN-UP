@@ -26,6 +26,7 @@ import com.pinup.pinup.ui.my.scrap.ScrapViewModel
 import com.pinup.pinup.ui.onboarding.OnboardingViewModel
 import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpViewModel
 import com.pinup.pinup.ui.pinlogDetail.PinlogDetailViewModel
+import com.pinup.pinup.ui.placeDetail.PlaceDetailViewModel
 import com.pinup.pinup.ui.profilesetting.ProfileSettingViewModel
 
 val viewModelModule = module {
@@ -54,4 +55,5 @@ val viewModelModule = module {
     viewModelOf(::AddPinBuddyViewModel)
     viewModelOf(::StartAppViewModel)
     viewModelOf(::ScrapViewModel)
+    viewModelOf(::PlaceDetailViewModel)
 }

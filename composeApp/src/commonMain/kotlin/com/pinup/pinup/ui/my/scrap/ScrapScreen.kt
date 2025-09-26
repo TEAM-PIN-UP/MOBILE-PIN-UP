@@ -69,6 +69,7 @@ fun ScrapScreen(
     onChipClick: (ChipState) -> Unit = {},
     onSelectSortTypeClick: () -> Unit = {},
     onClickBottomNav: (MainDestination) -> Unit,
+    onMovePlaceDetail: (String) -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -188,7 +189,10 @@ fun ScrapScreen(
                 contentPadding = PaddingValues(bottom = bottomBarHeight)
             ) {
                 items(scrapList) { it ->
-                    ScrapDetailItemView(it)
+                    ScrapDetailItemView(
+                        place = it,
+                        onMovePlaceDetail = onMovePlaceDetail
+                    )
                 }
             }
         }

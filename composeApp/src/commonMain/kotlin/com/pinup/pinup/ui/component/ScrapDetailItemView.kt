@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.ReviewedPlace
+import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
@@ -28,7 +29,8 @@ import pinup.composeapp.generated.resources.ic_plus
 
 @Composable
 fun ScrapDetailItemView(
-    place: ReviewedPlace
+    place: ReviewedPlace,
+    onMovePlaceDetail: (String) -> Unit = {},
 ) {
     val icon = when (place.placeCategory) {
         Category.RESTAURANT -> Res.drawable.ic_food
@@ -37,6 +39,10 @@ fun ScrapDetailItemView(
     }
     Column {
         RoundedBox(
+            modifier = Modifier
+                .clickableWithNoRipple {
+                    onMovePlaceDetail(place.kakaoPlaceId)
+                },
             cornerRounded = 12
         ) {
             AsyncImage(

@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,11 +38,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.PinchListItem
@@ -52,11 +48,8 @@ import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
-import com.pinup.pinup.platform.hLog
-import com.pinup.pinup.platform.kakaoShare
 import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.FeedView
-import com.pinup.pinup.ui.component.NotDevelopScreen
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.PVerticalDivider
 import com.pinup.pinup.ui.component.PinchItemView
@@ -93,6 +86,7 @@ fun MyScreen(
     onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
     onClickShare: () -> Unit = {},
     onClickMoreScrap: () -> Unit = {},
+    onMovePlaceDetail: (String) -> Unit = {},
 ) {
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -459,7 +453,8 @@ fun MyScreen(
                         scrapList = emptyList(),
                         pinchListItem = emptyList(),
                         bottomBarHeight = bottomBarHeight,
-                        onClickMoreScrap = onClickMoreScrap
+                        onClickMoreScrap = onClickMoreScrap,
+                        onClickPlaceDetail = onMovePlaceDetail
                     )
                 }
             }

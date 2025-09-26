@@ -5,7 +5,7 @@ import kotlinx.serialization.json.int
 import kotlinx.serialization.json.jsonPrimitive
 
 data class RatingGraph(
-    val ratingArray: List<Int>
+    val ratingArray: List<Int> = emptyList()
 ) {
     companion object {
         fun toModel(jsonObject: JsonObject): RatingGraph {
