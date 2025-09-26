@@ -92,6 +92,7 @@ fun MyScreen(
     onClickDetail: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
     onClickShare: () -> Unit = {},
+    onClickMoreScrap: () -> Unit = {},
 ) {
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -458,6 +459,7 @@ fun MyScreen(
                         scrapList = emptyList(),
                         pinchListItem = emptyList(),
                         bottomBarHeight = bottomBarHeight,
+                        onClickMoreScrap = onClickMoreScrap
                     )
                 }
             }
@@ -596,6 +598,9 @@ fun MyScrapList(
 
             Row(
                 modifier = Modifier
+                    .clickableWithNoRipple {
+                        onClickMoreScrap()
+                    }
                     .background(
                         color = Colors.Gray100,
                         shape = RoundedCornerShape(8.dp)
@@ -681,8 +686,7 @@ fun MyScrapList(
                                         onClickPlaceDetail(scrap.kakaoPlaceId)
                                     }
                                     .weight(1f),
-                                image = scrap.reviewImageUrls[0],
-                                title = scrap.name
+                                place = scrap
                             )
 
                             Spacer(modifier = Modifier.width(10.dp))
@@ -695,8 +699,7 @@ fun MyScrapList(
                                         onClickPlaceDetail(scrap.kakaoPlaceId)
                                     }
                                     .width(105.dp),
-                                image = scrap.reviewImageUrls[0],
-                                title = scrap.name
+                                place = scrap
                             )
 
                             Spacer(modifier = Modifier.width(10.dp))

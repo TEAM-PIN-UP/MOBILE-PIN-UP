@@ -23,6 +23,7 @@ fun MyRoute(
     onClickEdit: (Int) -> Unit = {},
     onClickPinLog: () -> Unit = {},
     onClickDetail: (Int) -> Unit = {},
+    onClickMoreScrap: () -> Unit = {}
 ) {
     val uiState = myViewModel.uiState.collectAsStateWithLifecycle()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
@@ -64,6 +65,7 @@ fun MyRoute(
         onClickPinLog = onClickPinLog,
         onClickLike = myViewModel::likeChanged,
         onClickDetail = onClickDetail,
-        onClickShare = myViewModel::shareMyProfile
+        onClickShare = myViewModel::shareMyProfile,
+        onClickMoreScrap = onClickMoreScrap
     )
 }

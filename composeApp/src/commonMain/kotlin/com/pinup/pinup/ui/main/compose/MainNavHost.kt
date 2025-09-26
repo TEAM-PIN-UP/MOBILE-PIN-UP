@@ -30,6 +30,7 @@ import com.pinup.pinup.ui.feed.FeedRoute
 import com.pinup.pinup.ui.main.MainViewModel
 import com.pinup.pinup.ui.map.MapRoute
 import com.pinup.pinup.ui.my.MyRoute
+import com.pinup.pinup.ui.my.scrap.ScrapRoute
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -66,7 +67,6 @@ fun MainNavHost(
 
     if (userArgId.intValue != -1) {
         LaunchedEffect(userArgId.intValue) {
-            hLog("여기는 메인 ${userArgId.intValue}")
             if (userArgId.intValue == uiState.value.myId) {
                 navHostController.navigate(MainDestination.My) {
                     launchSingleTop = true
@@ -180,7 +180,36 @@ fun MainNavHost(
                     onClickPinLog = {
                         onMoveWriteReview(0)
                     },
-                    onClickDetail = onMovePinlogDetail
+                    onClickDetail = onMovePinlogDetail,
+                    onClickMoreScrap = {
+                        navHostController.navigate(PinUpAppDestination.Scrap) {
+                            launchSingleTop = true
+                            restoreState = true
+                            popUpTo(navHostController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                        }
+                    }
+                )
+            }
+
+            composable<PinUpAppDestination.Scrap> {
+                ScrapRoute(
+                    onClickBottomNav = {
+                        hLog("하이 $it")
+                        if (MainDestination.Upload == it) {
+                            onMoveWriteReview(0)
+                        } else {
+                            hLog("하이 $it")
+                            navHostController.navigate(it) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
+                        }
+                    },
                 )
             }
         }

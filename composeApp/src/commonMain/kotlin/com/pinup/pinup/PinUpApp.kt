@@ -29,6 +29,7 @@ import com.pinup.pinup.ui.login.compose.LoginRoute
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.login.model.SNSUserInfo
 import com.pinup.pinup.ui.main.compose.MainNavHost
+import com.pinup.pinup.ui.my.scrap.ScrapRoute
 import com.pinup.pinup.ui.onboarding.OnboardingRoute
 import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpRoute
 import com.pinup.pinup.ui.pinbuddy.PinBuddyRoute
@@ -285,7 +286,7 @@ fun PinUpApp(
                         },
                         onMoveUserProfile = {
                             navHostController.navigate(PinUpAppDestination.UserProfile(it))
-                        }
+                        },
                     )
                 }
 
@@ -456,4 +457,7 @@ sealed interface PinUpAppDestination {
     data class SignUp(
         val snsUserInfo: String
     ) : PinUpAppDestination
+
+    @Serializable
+    data object Scrap : PinUpAppDestination
 }
