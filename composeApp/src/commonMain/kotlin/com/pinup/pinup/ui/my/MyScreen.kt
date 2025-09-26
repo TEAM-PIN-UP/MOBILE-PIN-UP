@@ -41,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.PinchListItem
@@ -73,6 +74,7 @@ import kotlin.String
 fun MyScreen(
     member: Member,
     reviews: List<Review>,
+    scrapList: List<BookmarkedPlace>,
     onClickBottomNav: (MainDestination) -> Unit,
     modifier: Modifier = Modifier,
     onAlarmClick: () -> Unit = {},
@@ -450,7 +452,7 @@ fun MyScreen(
                     )
                 } else {
                     MyScrapList(
-                        scrapList = emptyList(),
+                        scrapList = scrapList,
                         pinchListItem = emptyList(),
                         bottomBarHeight = bottomBarHeight,
                         onClickMoreScrap = onClickMoreScrap,
@@ -571,7 +573,7 @@ private fun ReviewEmptyScreen(
 
 @Composable
 fun MyScrapList(
-    scrapList: List<ReviewedPlace>,
+    scrapList: List<BookmarkedPlace>,
     pinchListItem: List<PinchListItem>,
     bottomBarHeight: Dp = 0.dp,
     onClickGoFeed: () -> Unit = {},

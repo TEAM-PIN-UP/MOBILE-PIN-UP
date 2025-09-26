@@ -210,7 +210,8 @@ fun MainNavHost(
                             }
                         }
                     },
-                    onMovePlaceDetail = onMovePlaceDetail
+                    onMovePlaceDetail = onMovePlaceDetail,
+                    onSettingClick = onMoveSetting
                 )
             }
         }

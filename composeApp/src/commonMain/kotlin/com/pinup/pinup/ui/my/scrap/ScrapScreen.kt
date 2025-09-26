@@ -34,6 +34,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.pinup.pinup.domain.model.BookmarkedPlace
+import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
@@ -59,7 +61,7 @@ import pinup.composeapp.generated.resources.ic_setting
 
 @Composable
 fun ScrapScreen(
-    scrapList: List<ReviewedPlace>,
+    scrapList: List<BookmarkedPlace>,
     chipStates: PersistentList<ChipState>,
     sortType: SortType,
     profileUrl: String = "",
@@ -67,7 +69,6 @@ fun ScrapScreen(
     onAlarmClick: () -> Unit = {},
     onSettingClick: () -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
-    onSelectSortTypeClick: () -> Unit = {},
     onClickBottomNav: (MainDestination) -> Unit,
     onMovePlaceDetail: (String) -> Unit = {},
 ) {
@@ -159,7 +160,7 @@ fun ScrapScreen(
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .clickableWithNoRipple {
-                            onSelectSortTypeClick()
+                            scope.launch { sheetState.show() }
                         },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {

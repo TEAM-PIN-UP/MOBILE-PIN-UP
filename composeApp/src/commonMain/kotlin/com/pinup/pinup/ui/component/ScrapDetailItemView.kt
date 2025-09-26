@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
@@ -16,8 +15,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.Category
-import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
@@ -29,7 +28,7 @@ import pinup.composeapp.generated.resources.ic_plus
 
 @Composable
 fun ScrapDetailItemView(
-    place: ReviewedPlace,
+    place: BookmarkedPlace,
     onMovePlaceDetail: (String) -> Unit = {},
 ) {
     val icon = when (place.placeCategory) {
@@ -48,7 +47,7 @@ fun ScrapDetailItemView(
             AsyncImage(
                 modifier = Modifier
                     .aspectRatio(1f),
-                model = place.reviewImageUrls[0],
+                model = place.placeFirstReviewImageUrl,
                 contentScale = ContentScale.Crop,
                 contentDescription = null
             )
@@ -67,7 +66,7 @@ fun ScrapDetailItemView(
             Spacer(modifier = Modifier.width(4.dp))
 
             Text(
-                text = place.name,
+                text = place.placeName,
                 color = Colors.Gray900,
                 style = Typography.B2.copy(
                     fontWeight = FontWeight.SemiBold
@@ -78,7 +77,7 @@ fun ScrapDetailItemView(
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = place.roadAddress,
+            text = place.placeAddress,
             color = Colors.Gray400,
             style = Typography.L1.copy(
                 fontWeight = FontWeight.Medium

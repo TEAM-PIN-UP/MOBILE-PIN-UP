@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
@@ -20,7 +21,7 @@ import com.pinup.pinup.ui.theme.Typography
 @Composable
 fun ScrapItemView(
     modifier: Modifier = Modifier,
-    place: ReviewedPlace,
+    place: BookmarkedPlace,
 ) {
     Column(
         modifier = modifier,
@@ -33,7 +34,7 @@ fun ScrapItemView(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(105f / 90f),
-                model = place.reviewImageUrls[0],
+                model = place.placeFirstReviewImageUrl,
                 contentScale = ContentScale.Crop,
                 contentDescription = null
             )
@@ -44,7 +45,7 @@ fun ScrapItemView(
         Text(
             modifier = Modifier
                 .fillMaxWidth(),
-            text = place.name,
+            text = place.placeName,
             color = Colors.Gray500,
             style = Typography.L2.copy(
                 fontWeight = FontWeight.Medium

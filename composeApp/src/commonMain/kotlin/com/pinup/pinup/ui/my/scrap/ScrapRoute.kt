@@ -13,15 +13,20 @@ fun ScrapRoute(
     viewModel: ScrapViewModel = koinViewModel(),
     onClickBottomNav: (MainDestination) -> Unit,
     onMovePlaceDetail: (String) -> Unit = {},
+    onSettingClick: () -> Unit = {},
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     ScrapScreen(
-        scrapList = emptyList(),
+        scrapList = uiState.value.scrapList,
         chipStates = uiState.value.chipStates.toPersistentList(),
         sortType = uiState.value.sortType,
         profileUrl = uiState.value.profileUrl,
         onClickBottomNav = onClickBottomNav,
-        onMovePlaceDetail = onMovePlaceDetail
+        onMovePlaceDetail = onMovePlaceDetail,
+        onChipClick = viewModel::updateChipState,
+        onUpdateSortType = viewModel::updateSortType,
+        onAlarmClick = { /*TODO 알림 화면 이동 */ },
+        onSettingClick = onSettingClick,
     )
 }
