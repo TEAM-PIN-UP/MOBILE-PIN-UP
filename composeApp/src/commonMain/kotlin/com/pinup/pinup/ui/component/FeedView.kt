@@ -111,13 +111,14 @@ fun FeedView(
         ) {
             Row(
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     modifier = Modifier
                         .size(12.dp),
                     painter = painterResource(Res.drawable.ic_map_on),
-                    contentDescription = null
+                    contentDescription = null,
                 )
 
                 Spacer(modifier = Modifier.width(2.dp))
