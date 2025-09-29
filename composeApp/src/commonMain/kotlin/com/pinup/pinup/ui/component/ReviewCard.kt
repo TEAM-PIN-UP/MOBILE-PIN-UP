@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.PlaceReview
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
+import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 
@@ -113,7 +114,11 @@ fun ReviewCard(
                     items(placeReview.reviewImageUrls) {
                         ReviewImage(
                             imgUrl = it,
-                            modifier = Modifier.size(143.dp)
+                            modifier = Modifier
+                                .size(143.dp)
+                                .clickableWithNoRipple {
+                                    onMovePinlogDetail(placeReview.reviewId)
+                                }
                         )
                     }
                 }
@@ -122,7 +127,10 @@ fun ReviewCard(
 
                 Text(
                     modifier = Modifier
-                        .padding(end = horizontalPadding),
+                        .padding(end = horizontalPadding)
+                        .clickableWithNoRipple {
+                            onMovePinlogDetail(placeReview.reviewId)
+                        },
                     text = placeReview.content,
                     style = Typography.B3.copy(
                         fontWeight = FontWeight.Medium
