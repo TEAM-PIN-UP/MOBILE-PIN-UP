@@ -51,7 +51,13 @@ class FeedViewModel(
         resultResponse(
             response = deletePinlogUseCase(id),
             successCallback = {
-                getFeedList()
+                updateState {
+                    copy(
+                        pagingReview = uiState.value.pagingReview.copy (
+                            reviews = uiState.value.pagingReview.reviews.filter { it.id != id }
+                        ),
+                    )
+                }
             }
         )
     }
