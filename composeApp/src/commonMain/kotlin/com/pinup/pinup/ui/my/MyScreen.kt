@@ -89,6 +89,7 @@ fun MyScreen(
     onClickShare: () -> Unit = {},
     onClickMoreScrap: () -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
+    onMovePinchWrite: () -> Unit = {},
 ) {
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -456,7 +457,8 @@ fun MyScreen(
                         pinchListItem = emptyList(),
                         bottomBarHeight = bottomBarHeight,
                         onClickMoreScrap = onClickMoreScrap,
-                        onClickPlaceDetail = onMovePlaceDetail
+                        onClickPlaceDetail = onMovePlaceDetail,
+                        onClickGoCreatePinch = onMovePinchWrite
                     )
                 }
             }
@@ -716,7 +718,10 @@ fun MyScrapList(
                         color = Colors.Gray100,
                         shape = RoundedCornerShape(8.dp)
                     )
-                    .padding(horizontal = 8.dp, vertical = 6.dp),
+                    .padding(horizontal = 8.dp, vertical = 6.dp)
+                    .clickableWithNoRipple {
+                        onClickGoCreatePinch()
+                    },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -772,7 +777,10 @@ fun MyScrapList(
                             Text(
                                 modifier = Modifier
                                     .padding(horizontal = 18.dp, vertical = 4.dp)
-                                    .background(color = Colors.Main99),
+                                    .background(color = Colors.Main99)
+                                    .clickableWithNoRipple {
+                                        onClickGoCreatePinch()
+                                    },
                                 text = Texts.PROFILE.GO_PINCH_CREATE,
                                 style = Typography.L3.copy(
                                     fontWeight = FontWeight.Medium

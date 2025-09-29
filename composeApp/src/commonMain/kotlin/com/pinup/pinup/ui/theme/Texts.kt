@@ -280,6 +280,12 @@ object Texts {
         const val UNREGISTER_COMPLETE = "그동안 핀업을 이용해주셔서\n감사합니다 :) \n다음에 또 만나요!"
     }
 
+    object Pinch {
+        const val PINCH_WRITE = "핀츠작성"
+        const val TITLE_HINT = "제목을 입력하세요"
+        const val DESCRIPTION_HINT = "핀츠의 설명을 적어주세요(0/120)"
+    }
+
     object Toast {
         const val DELETE_PINLOG = "핀로그가 삭제되었어요."
         const val DELETE_PIN_BUDDY = "해당 핀버디가 삭제되었어요"

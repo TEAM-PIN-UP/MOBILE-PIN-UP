@@ -48,6 +48,7 @@ fun MainNavHost(
     onClickEdit: (Int) -> Unit = {},
     onClickArticleDetail: (Int) -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
+    onMovePinchWrite: () -> Unit = {},
     userId: Int = -1
 ) {
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
@@ -191,7 +192,8 @@ fun MainNavHost(
                             }
                         }
                     },
-                    onMovePlaceDetail = onMovePlaceDetail
+                    onMovePlaceDetail = onMovePlaceDetail,
+                    onMovePinchWrite = onMovePinchWrite
                 )
             }
 
