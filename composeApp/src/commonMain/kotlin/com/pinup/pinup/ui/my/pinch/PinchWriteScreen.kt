@@ -1,54 +1,98 @@
 package com.pinup.pinup.ui.my.pinch
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
+import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ExposedDropdownMenuBox
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
+import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.extentions.move
+import com.pinup.pinup.platform.hLog
+import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
+import com.pinup.pinup.util.dragModifier
+import com.pinup.pinup.util.rememberDragAndDropListState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.ic_map_off
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PinchWriteScreen(
     title: String = "",
     createdAt: String = "",
     description: String = "",
+    pinchList: MutableList<Place> = mutableListOf(
+        Place(name = "1번입니다."), Place(name = "2번입니다."), Place(name = "3번입니다."),Place(name = "4번입니다."),Place(name = "5번입니다."),
+    ),
+    searchedList: List<Place> = listOf( Place(name = "12"),  Place(name = "22")),
     onBackPressed: () -> Unit = {},
     onTitleChanged: (String) -> Unit = {},
     onDescriptionChanged: (String) -> Unit = {},
+    onNameChanged: (String) -> Unit = {},
 ) {
 
+    val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
+    val scope = rememberCoroutineScope()
+    val list = remember { mutableStateListOf<Place>().apply { addAll(pinchList) } }
+    var overscrollJob by remember { mutableStateOf<Job?>(null) }
+    val lazyListState = rememberLazyListState()
+    val dragAndDropListState =
+        rememberDragAndDropListState(lazyListState) { from, to ->
+            hLog("from: $from to: $to\n list : $list")
+            list.move(from, to)
+            hLog("result list : $list")
+        }
+
+    var expandedIndex by remember { mutableStateOf<Int?>(null) }
 
     Column(
         modifier = Modifier
@@ -56,11 +100,10 @@ fun PinchWriteScreen(
                 color = Colors.White
             )
             .statusBarsPadding()
-            .fillMaxWidth()
+            .fillMaxSize()
+            .padding(horizontal = 20.dp)
     ) {
         TitleBar(
-            modifier = Modifier
-                .padding(horizontal = 20.dp),
             title = Texts.Pinch.PINCH_WRITE,
             onLeftButtonClick = onBackPressed,
         )
@@ -68,7 +111,6 @@ fun PinchWriteScreen(
         Spacer(modifier = Modifier.height(19.dp))
 
         Row(
-            modifier = Modifier.padding(horizontal = 20.dp),
             verticalAlignment = Alignment.Bottom
         ) {
             Box {
@@ -89,7 +131,7 @@ fun PinchWriteScreen(
                 if (title.isEmpty()) {
                     Text(
                         modifier = Modifier
-                            .clickableWithNoRipple{
+                            .clickableWithNoRipple {
                                 focusRequester.requestFocus()
                                 keyboard?.show()
                             },
@@ -114,8 +156,6 @@ fun PinchWriteScreen(
         Spacer(modifier = Modifier.height(6.dp))
 
         RoundedTextField(
-            modifier = Modifier
-                .padding(horizontal = 20.dp),
             text = description,
             onValueChange = onDescriptionChanged,
             placeholder = Texts.Pinch.DESCRIPTION_HINT,
@@ -130,5 +170,155 @@ fun PinchWriteScreen(
             textColor = Colors.Black,
             contentPadding = PaddingValues(0.dp),
         )
+
+        Spacer(modifier = Modifier.height(18.dp))
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+                .background(color = Colors.Gray500)
+        )
+
+        Spacer(modifier = Modifier.height(35.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier
+                    .size(24.dp),
+                painter = painterResource(Res.drawable.ic_map_off),
+                contentScale = ContentScale.Crop,
+                contentDescription = null
+            )
+
+            Spacer(modifier = Modifier.width(9.dp))
+
+            Text(
+                text = "$title 장소목록",
+                style = Typography.T1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Black
+            )
+        }
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        LazyColumn(
+            state = dragAndDropListState.lazyListState,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                    detectDragGesturesAfterLongPress(
+                        onDrag = { change, offset ->
+                            change.consume()
+                            dragAndDropListState.onDrag(offset)
+
+                            if (overscrollJob?.isActive == true) return@detectDragGesturesAfterLongPress
+
+                            dragAndDropListState
+                                .checkOverscroll()
+                                .takeIf { it != 0f }
+                                ?.let {
+                                    overscrollJob = scope.launch {
+                                        dragAndDropListState.lazyListState.scrollBy(it)
+                                    }
+                                } ?: run { overscrollJob?.cancel() }
+                        },
+                        onDragStart = { offset ->
+                            dragAndDropListState.onDragStart(offset)
+                        },
+                        onDragEnd = {
+                            dragAndDropListState.onDragInterrupted()
+                            focusManager.clearFocus()
+                        },
+                        onDragCancel = { dragAndDropListState.onDragInterrupted() }
+                    )
+                },
+        ) {
+            itemsIndexed(
+                items = list,
+            ) { index, item ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    ExposedDropdownMenuBox(
+                        expanded = expandedIndex == index,
+                        onExpandedChange = {
+                            expandedIndex = if (expandedIndex == index) null else index
+                        },
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            Box(modifier = Modifier
+                                .weight(1f)
+                                .dragModifier(index, dragAndDropListState)
+                            ) {
+                                RoundedTextField(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    text = item.name,
+                                    onValueChange = onNameChanged,
+                                    placeholder = "${index}. 장소명",
+                                    placeholderStyle = Typography.B2.copy(
+                                        fontWeight = FontWeight.Medium
+                                    ),
+                                    textStyle = Typography.B2.copy(
+                                        fontWeight = FontWeight.Medium
+                                    ),
+                                    textColor = Colors.Gray800,
+                                    placeholderTextColor = Colors.Gray300,
+                                    cornerRounded = 8,
+                                    fixedBorderColor = Colors.Gray200,
+                                    contentPadding = PaddingValues(vertical = 24.dp, horizontal = 16.dp),
+                                    readOnly = dragAndDropListState.currentIndexOfDraggedItem != null
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(9.dp))
+
+                            RoundedBox(
+                                cornerRounded = 999,
+                                backgroundColor = Colors.Gray900,
+                            ) {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(vertical = 7.dp, horizontal = 17.dp),
+                                    text = Texts.Word.DELETE,
+                                    color = Colors.White,
+                                    style = Typography.L3.copy(
+                                        fontWeight = FontWeight.SemiBold
+                                    ),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
+
+                        ExposedDropdownMenu(
+                            expanded = expandedIndex == index && searchedList.isNotEmpty(),
+                            onDismissRequest = { if (expandedIndex == index) expandedIndex = null },
+                            modifier = Modifier.exposedDropdownSize()
+                        ) {
+                            searchedList.forEach { s ->
+                                DropdownMenuItem(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    onClick = { hLog(s.name) }
+                                ) {
+                                    Column {
+                                        Text(s.name)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
