@@ -17,8 +17,12 @@ fun PinchWriteRoute(
         title = uiState.value.title,
         description = uiState.value.description,
         createdAt = uiState.value.createdAt,
+        pinchList = uiState.value.pinchList,
+        searchedList = uiState.value.searchedList,
         onBackPressed = onBackPressed,
         onTitleChanged = viewModel::updateTitle,
-        onDescriptionChanged = viewModel::updateDescription
+        onDescriptionChanged = viewModel::updateDescription,
+        onNameChanged = viewModel::updatePinchName,
+        moveItem = viewModel::moveItem
     )
 }

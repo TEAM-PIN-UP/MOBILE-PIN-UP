@@ -46,7 +46,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.extentions.clickableWithNoRipple
-import com.pinup.pinup.extentions.move
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.RoundedTextField
@@ -68,28 +67,24 @@ fun PinchWriteScreen(
     title: String = "",
     createdAt: String = "",
     description: String = "",
-    pinchList: MutableList<Place> = mutableListOf(
-        Place(name = "1번입니다."), Place(name = "2번입니다."), Place(name = "3번입니다."),Place(name = "4번입니다."),Place(name = "5번입니다."),
-    ),
-    searchedList: List<Place> = listOf( Place(name = "12"),  Place(name = "22")),
+    pinchList: List<Place> = emptyList(),
+    searchedList: List<Place> = emptyList(),
     onBackPressed: () -> Unit = {},
     onTitleChanged: (String) -> Unit = {},
     onDescriptionChanged: (String) -> Unit = {},
-    onNameChanged: (String) -> Unit = {},
+    onNameChanged: (Int, String) -> Unit = {_, _ -> },
+    moveItem: (Int, Int) -> Unit = {_, _ -> }
 ) {
 
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
     val scope = rememberCoroutineScope()
-    val list = remember { mutableStateListOf<Place>().apply { addAll(pinchList) } }
     var overscrollJob by remember { mutableStateOf<Job?>(null) }
     val lazyListState = rememberLazyListState()
     val dragAndDropListState =
         rememberDragAndDropListState(lazyListState) { from, to ->
-            hLog("from: $from to: $to\n list : $list")
-            list.move(from, to)
-            hLog("result list : $list")
+            moveItem(from, to)
         }
 
     var expandedIndex by remember { mutableStateOf<Int?>(null) }
@@ -230,6 +225,7 @@ fun PinchWriteScreen(
                         },
                         onDragStart = { offset ->
                             dragAndDropListState.onDragStart(offset)
+                            focusManager.clearFocus()
                         },
                         onDragEnd = {
                             dragAndDropListState.onDragInterrupted()
@@ -240,7 +236,7 @@ fun PinchWriteScreen(
                 },
         ) {
             itemsIndexed(
-                items = list,
+                items = pinchList,
             ) { index, item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -264,8 +260,10 @@ fun PinchWriteScreen(
                                     modifier = Modifier
                                         .fillMaxWidth(),
                                     text = item.name,
-                                    onValueChange = onNameChanged,
-                                    placeholder = "${index}. 장소명",
+                                    onValueChange = {
+                                        onNameChanged(index, it)
+                                    },
+                                    placeholder = "${index + 1}. 장소명",
                                     placeholderStyle = Typography.B2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),
@@ -301,7 +299,7 @@ fun PinchWriteScreen(
                         }
 
                         ExposedDropdownMenu(
-                            expanded = expandedIndex == index && searchedList.isNotEmpty(),
+                            expanded = expandedIndex == index && searchedList.isNotEmpty() && pinchList[index].name.isNotEmpty(),
                             onDismissRequest = { if (expandedIndex == index) expandedIndex = null },
                             modifier = Modifier.exposedDropdownSize()
                         ) {
