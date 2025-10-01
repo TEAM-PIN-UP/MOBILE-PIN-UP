@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.platform.hLog
+import com.pinup.pinup.ui.component.IndexedRoundedTextField
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.TitleBar
@@ -256,13 +257,14 @@ fun PinchWriteScreen(
                                 .weight(1f)
                                 .dragModifier(index, dragAndDropListState)
                             ) {
-                                RoundedTextField(
+                                IndexedRoundedTextField(
                                     modifier = Modifier
                                         .fillMaxWidth(),
                                     text = item.name,
                                     onValueChange = {
                                         onNameChanged(index, it)
                                     },
+                                    index = index,
                                     placeholder = "${index + 1}. 장소명",
                                     placeholderStyle = Typography.B2.copy(
                                         fontWeight = FontWeight.Medium

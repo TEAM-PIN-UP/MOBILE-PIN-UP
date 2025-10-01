@@ -216,3 +216,146 @@ fun RoundedTextField(
         )
     }
 }
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun IndexedRoundedTextField(
+    modifier: Modifier = Modifier,
+    index: Int = 0,
+    textFieldHeight: Int = 47,
+    text: String = "",
+    placeholder: String = "",
+    onValueChange: (String) -> Unit,
+    textLimit: Int = Int.MAX_VALUE,
+    onFocusChange: (Boolean) -> Unit = {},
+    singleLine: Boolean = true,
+    readOnly: Boolean = false,
+    enabled: Boolean = true,
+    leadingIcon: Painter? = null,
+    isError: Boolean = false,
+    fixedBorderColor: Color? = null,
+    backgroundColor: Color = Color.White,
+    cornerRounded: Int = 8,
+    textStyle: TextStyle = Typography.B2.copy( fontWeight = FontWeight.Medium ),
+    placeholderStyle: TextStyle = Typography.B2.copy(fontWeight = FontWeight.Medium),
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    placeholderTextColor: Color = Colors.Gray300,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(
+        imeAction = ImeAction.Done,
+        keyboardType = KeyboardType.Text,
+    ),
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    focusRequester: FocusRequester = FocusRequester(),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 14.dp),
+    cursorColor: Color = Color.Black,
+    textColor: Color = Color.Black,
+) {
+    var isFocused by rememberSaveable { mutableStateOf(false) }
+    val textSelectionColors = TextSelectionColors(
+        handleColor = cursorColor,
+        backgroundColor = cursorColor.copy(alpha = 0.4f)
+    )
+    val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    var textFieldValue by remember { mutableStateOf(TextFieldValue(text)) }
+    if (textFieldValue.text != text) {
+        textFieldValue = TextFieldValue(text)
+    }
+
+    val textFieldColor = if (isError) {
+        Colors.Negative
+    } else if(text.isNotEmpty()){
+        Colors.Gray800
+    } else{
+        Colors.Gray300
+    }
+
+    Box(
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = fixedBorderColor ?: textFieldColor,
+                shape = RoundedCornerShape(cornerRounded.dp)
+            )
+            .focusRequester(focusRequester)
+            .onFocusChanged {
+                isFocused = it.isFocused
+                onFocusChange.invoke(it.isFocused)
+            }
+    ) {
+        BasicTextField(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .focusRequester(focusRequester),
+            value = textFieldValue,
+            onValueChange = {
+                if (it.text.length <= textLimit) {
+                    textFieldValue = it
+                    onValueChange.invoke(it.text)
+                }
+            },
+            cursorBrush = SolidColor(cursorColor),
+            enabled = enabled,
+            readOnly = readOnly,
+            textStyle = textStyle.copy(
+                color = textFieldColor
+            ),
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            singleLine = singleLine,
+            visualTransformation = visualTransformation,
+            interactionSource = interactionSource,
+            decorationBox = @Composable { innerTextField ->
+                TextFieldDefaults.TextFieldDecorationBox(
+                    value = textFieldValue.text,
+                    visualTransformation = visualTransformation,
+                    innerTextField = @Composable {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            if (text.isNotEmpty()) {
+                                Text(
+                                    text = "${index + 1}. ",
+                                    style = textStyle,
+                                    color = Colors.Gray500
+                                )
+                            }
+
+                            Box(Modifier.weight(1f)) {
+                                innerTextField()
+                            }
+                        }
+                    },
+                    placeholder = @Composable {
+                        Row {
+                            if (leadingIcon != null) {
+                                Spacer(modifier = Modifier.width(32.dp))
+                            }
+
+                            Text(
+                                text = placeholder,
+                                style = placeholderStyle,
+                                color = placeholderTextColor,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    },
+                    contentPadding = contentPadding,
+                    label = null,
+                    singleLine = true,
+                    enabled = enabled,
+                    shape = RoundedCornerShape(cornerRounded.dp),
+                    interactionSource = interactionSource,
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = backgroundColor,
+                        cursorColor = cursorColor,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                    )
+                )
+            }
+        )
+    }
+}
