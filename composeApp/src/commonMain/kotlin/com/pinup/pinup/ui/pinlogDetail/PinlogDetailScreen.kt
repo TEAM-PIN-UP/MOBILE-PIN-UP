@@ -482,9 +482,7 @@ fun PinlogDetailScreen(
                 Row(
                     modifier = Modifier
                         .navigationBarsPadding()
-                        .imePadding()
                         .background(Colors.White)
-                        .imePadding()
                         .padding(vertical = 8.dp, horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
