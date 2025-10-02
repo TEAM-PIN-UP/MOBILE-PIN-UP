@@ -245,7 +245,7 @@ object Texts {
         const val WRITE_FIRST_PINLOG = "첫 핀로그 작성하기"
         const val EMPTY_SCRAP = "저장된 장소가 없어요!\n핀로그를 살펴보며 장소를 살펴보아요."
         const val GO_PINLOG = "핀로그 보러가기"
-        const val EMPTY_PINCH = "조이님 만의 코스로 핀츠를 만들어보아요."
+        fun EMPTY_PINCH(name: String) = "${name}님 만의 코스로 핀츠를 만들어보아요."
         const val GO_PINCH_CREATE = "핀츠 만들러 가기"
     }
 
