@@ -1,14 +1,20 @@
 package com.pinup.pinup.ui.my.pinch
 
+import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.SortType
+import com.pinup.pinup.domain.usecase.SearchPlacesUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
 import com.pinup.pinup.ui.model.ChipState
+import com.pinup.pinup.util.currentDate
+import com.pinup.pinup.util.toShortDateXd
+import kotlinx.coroutines.launch
 
 class PinchWriteViewModel (
+    private val searchPlacesUseCase: SearchPlacesUseCase,
 ) : BaseViewModel<PinchWriteUiState, UiEvent>(PinchWriteUiState()) {
 
     fun updateTitle(title: String) {
@@ -27,13 +33,40 @@ class PinchWriteViewModel (
         }
     }
 
-    //TODO 검색한 장소 클릭하면 name 업데이트와 동시에 앞에 index 숫자 붙이기
     fun updatePinchName(index: Int, name: String) {
+        getSearchedPlaceList(name)
         updateState {
             copy(
                 pinchList = pinchList.mapIndexed { i, place ->
                     if (i == index) {
                         place.copy(name = name)
+                    } else {
+                        place
+                    }
+                }
+            )
+        }
+    }
+
+    private fun getSearchedPlaceList(search: String) = viewModelScope.launch {
+        resultResponse(
+            response = searchPlacesUseCase(search),
+            successCallback = { result ->
+                updateState {
+                    copy(
+                        searchedList = result.take(4)
+                    )
+                }
+            }
+        )
+    }
+
+    fun deletePinch(index: Int) {
+        updateState {
+            copy(
+                pinchList = pinchList.mapIndexed { i, place ->
+                    if (i == index) {
+                        Place()
                     } else {
                         place
                     }
@@ -51,12 +84,26 @@ class PinchWriteViewModel (
             copy(pinchList = new)
         }
     }
+
+    fun updatePlace(place: Place, index: Int) {
+        updateState {
+            copy(
+                pinchList = pinchList.mapIndexed { i, p ->
+                    if (i == index) {
+                        place
+                    } else {
+                        p
+                    }
+                }
+            )
+        }
+    }
 }
 
 data class PinchWriteUiState(
     val title: String = "",
     val description: String = "",
-    val createdAt: String = "25.09.09",
+    val createdAt: String = toShortDateXd(currentDate.toString()),
     val pinchList: List<Place> = List(5) { Place() },
     val searchedList: List<Place> = emptyList(),
     val scrapList: List<BookmarkedPlace> = emptyList(),

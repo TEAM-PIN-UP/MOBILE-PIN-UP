@@ -23,6 +23,8 @@ fun PinchWriteRoute(
         onTitleChanged = viewModel::updateTitle,
         onDescriptionChanged = viewModel::updateDescription,
         onNameChanged = viewModel::updatePinchName,
-        moveItem = viewModel::moveItem
+        moveItem = viewModel::moveItem,
+        onClickDelete = viewModel::deletePinch,
+        onPlaceClick = viewModel::updatePlace
     )
 }

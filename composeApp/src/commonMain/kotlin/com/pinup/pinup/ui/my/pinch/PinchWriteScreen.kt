@@ -28,7 +28,6 @@ import androidx.compose.material.ExposedDropdownMenuBox
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -39,15 +38,19 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.extentions.clickableWithNoRipple
-import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.IndexedRoundedTextField
+import com.pinup.pinup.ui.component.PButton
+import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.TitleBar
@@ -74,7 +77,9 @@ fun PinchWriteScreen(
     onTitleChanged: (String) -> Unit = {},
     onDescriptionChanged: (String) -> Unit = {},
     onNameChanged: (Int, String) -> Unit = {_, _ -> },
-    moveItem: (Int, Int) -> Unit = {_, _ -> }
+    onClickDelete: (Int) -> Unit = {},
+    moveItem: (Int, Int) -> Unit = {_, _ -> },
+    onPlaceClick: (Place, Int) -> Unit = {_, _ -> },
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -89,6 +94,9 @@ fun PinchWriteScreen(
         }
 
     var expandedIndex by remember { mutableStateOf<Int?>(null) }
+    var textFieldSize by remember { mutableStateOf(IntSize.Zero) }
+    var bottomBarHeight by remember { mutableStateOf(0.dp) }
+    val density = LocalDensity.current
 
     Column(
         modifier = Modifier
@@ -207,6 +215,7 @@ fun PinchWriteScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
                 .fillMaxSize()
+                .padding(bottom = bottomBarHeight)
                 .pointerInput(Unit) {
                     detectDragGesturesAfterLongPress(
                         onDrag = { change, offset ->
@@ -256,6 +265,9 @@ fun PinchWriteScreen(
                             Box(modifier = Modifier
                                 .weight(1f)
                                 .dragModifier(index, dragAndDropListState)
+                                .onGloballyPositioned { coordinates ->
+                                    textFieldSize = coordinates.size
+                                }
                             ) {
                                 IndexedRoundedTextField(
                                     modifier = Modifier
@@ -284,6 +296,10 @@ fun PinchWriteScreen(
                             Spacer(modifier = Modifier.width(9.dp))
 
                             RoundedBox(
+                                modifier = Modifier
+                                    .clickableWithNoRipple {
+                                        onClickDelete(index)
+                                    },
                                 cornerRounded = 999,
                                 backgroundColor = Colors.Gray900,
                             ) {
@@ -303,15 +319,34 @@ fun PinchWriteScreen(
                         ExposedDropdownMenu(
                             expanded = expandedIndex == index && searchedList.isNotEmpty() && pinchList[index].name.isNotEmpty(),
                             onDismissRequest = { if (expandedIndex == index) expandedIndex = null },
-                            modifier = Modifier.exposedDropdownSize()
+                            modifier = Modifier.width(with(LocalDensity.current) { textFieldSize.width.toDp() })
                         ) {
-                            searchedList.forEach { s ->
+                            searchedList.forEach { place ->
                                 DropdownMenuItem(
                                     modifier = Modifier.fillMaxWidth(),
-                                    onClick = { hLog(s.name) }
+                                    onClick = {
+                                        onPlaceClick(place, index)
+                                        expandedIndex = null
+                                    }
                                 ) {
                                     Column {
-                                        Text(s.name)
+                                        Text(
+                                            text = place.name,
+                                            color = Colors.Gray800,
+                                            style = Typography.L1.copy(
+                                                fontWeight = FontWeight.Medium
+                                            )
+                                        )
+                                        Spacer(modifier = Modifier.height(2.dp))
+                                        Text(
+                                            text = place.roadAddress,
+                                            color = Colors.Gray600,
+                                            style = Typography.L3.copy(
+                                                fontWeight = FontWeight.Medium
+                                            )
+                                        )
+                                        Spacer(modifier = Modifier.height(5.dp))
+                                        PHorizontalDivider()
                                     }
                                 }
                             }
@@ -319,6 +354,36 @@ fun PinchWriteScreen(
                     }
                 }
             }
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Bottom
+    ){
+        Column(
+            modifier = Modifier
+                .background(Colors.White)
+                .onGloballyPositioned { coords ->
+                    bottomBarHeight = with(density) { coords.size.height.toDp() }
+                }
+        ) {
+            PHorizontalDivider()
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            PButton(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp),
+                text = Texts.Pinch.CREATE_PINCH,
+                onClick = {
+                    //
+                },
+                isEnable = pinchList.size > 1
+            )
+
+            Spacer(modifier = Modifier.height(39.dp))
         }
     }
 }

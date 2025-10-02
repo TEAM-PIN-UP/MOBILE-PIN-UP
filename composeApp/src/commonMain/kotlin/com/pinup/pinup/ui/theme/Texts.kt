@@ -284,6 +284,7 @@ object Texts {
         const val PINCH_WRITE = "핀츠작성"
         const val TITLE_HINT = "제목을 입력하세요"
         const val DESCRIPTION_HINT = "핀츠의 설명을 적어주세요(0/120)"
+        const val CREATE_PINCH = "핀츠 등록하기"
     }
 
     object Toast {
