@@ -17,6 +17,7 @@ import com.pinup.pinup.domain.usecase.GetBookmarksUseCase
 import com.pinup.pinup.domain.usecase.GetFeedUseCase
 import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPhotoReviewsUseCase
+import com.pinup.pinup.domain.usecase.GetPinlogDetailUseCase
 import com.pinup.pinup.domain.usecase.GetTextReviewsUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.platform.ContextFactory
@@ -38,6 +39,7 @@ class MyViewModel (
     private val getFeedUseCase: GetFeedUseCase,
     private val postReviewLikeChangeUseCase: PostReviewLikeChangeUseCase,
     private val getBookmarksUseCase: GetBookmarksUseCase,
+    private val getPinlogDetailUseCase: GetPinlogDetailUseCase,
 ) : BaseViewModel<MyUiState, UiEvent>(MyUiState()) {
 
     fun initMyInfo() = viewModelScope.launch {
@@ -93,14 +95,17 @@ class MyViewModel (
 
     private fun handleSuccessLikeChanged(id: Int) = viewModelScope.launch {
         resultResponse(
-            response = getFeedUseCase(id, 1, memberId = uiState.value.member.profile.memberId, null),
+            response = getPinlogDetailUseCase(id),
             successCallback = { result ->
                 updateState {
                     copy(
                         pagingReview = pagingReview.copy(
                             reviews = pagingReview.reviews.map {
-                                if (it.id == result.reviews[0].id) {
-                                    result.reviews[0]
+                                if (it.id == id) {
+                                    it.copy(
+                                        isLikedByUser = result.isLikedByUser,
+                                        likeCount = result.likeCount
+                                    )
                                 } else {
                                     it
                                 }

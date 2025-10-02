@@ -29,6 +29,7 @@ fun MyRoute(
 ) {
     val uiState = myViewModel.uiState.collectAsStateWithLifecycle()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
+    val isClickedFeedId = remember { mutableStateOf(-1) }
 
     LifecycleResumeEffect(Unit) {
         myViewModel.initMyInfo()
@@ -45,8 +46,8 @@ fun MyRoute(
                 isShowDeleteDialog.value = false
             },
             onRightButtonClick = {
+                myViewModel.deleteReview(isClickedFeedId.value)
                 isShowDeleteDialog.value = false
-                myViewModel::deleteReview
             },
         )
     }
@@ -63,6 +64,7 @@ fun MyRoute(
             onClickEdit(it)
         },
         onClickDelete = {
+            isClickedFeedId.value = it
             isShowDeleteDialog.value = true
         },
         onClickPinLog = onClickPinLog,

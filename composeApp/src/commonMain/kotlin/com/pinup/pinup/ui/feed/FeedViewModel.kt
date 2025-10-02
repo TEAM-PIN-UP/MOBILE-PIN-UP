@@ -6,6 +6,7 @@ import com.pinup.pinup.domain.usecase.DeletePinlogUseCase
 import com.pinup.pinup.domain.usecase.DeleteRecentSearchUseCase
 import com.pinup.pinup.domain.usecase.GetFeedUseCase
 import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
+import com.pinup.pinup.domain.usecase.GetPinlogDetailUseCase
 import com.pinup.pinup.domain.usecase.GetRecentSearchUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.domain.usecase.SaveRecentSearchUseCase
@@ -22,7 +23,8 @@ class FeedViewModel(
     private val getMyProfileUseCase: GetMyProfileUseCase,
     private val getRecentSearchUseCase: GetRecentSearchUseCase,
     private val saveRecentSearchUseCase: SaveRecentSearchUseCase,
-    private val deleteRecentSearchUseCase: DeleteRecentSearchUseCase
+    private val deleteRecentSearchUseCase: DeleteRecentSearchUseCase,
+    private val getPinlogDetailUseCase: GetPinlogDetailUseCase,
 ) : BaseViewModel<FeedUiState, UiEvent>(FeedUiState()) {
 
     init {
@@ -73,14 +75,17 @@ class FeedViewModel(
 
     private fun handleSuccessLikeChanged(id: Int) = viewModelScope.launch {
         resultResponse(
-            response = getFeedUseCase(id, 1, null, null),
+            response = getPinlogDetailUseCase(id),
             successCallback = { result ->
                 updateState {
                     copy(
                         pagingReview = pagingReview.copy(
                             reviews = pagingReview.reviews.map {
-                                if (it.id == result.reviews[0].id) {
-                                    result.reviews[0]
+                                if (it.id == id) {
+                                    it.copy(
+                                        isLikedByUser = result.isLikedByUser,
+                                        likeCount = result.likeCount
+                                    )
                                 } else {
                                     it
                                 }
