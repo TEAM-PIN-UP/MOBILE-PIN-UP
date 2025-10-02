@@ -47,7 +47,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Place
+import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.platform.PinchNaverMap
 import com.pinup.pinup.ui.component.IndexedRoundedTextField
 import com.pinup.pinup.ui.component.PButton
 import com.pinup.pinup.ui.component.PHorizontalDivider
@@ -73,6 +75,8 @@ fun PinchWriteScreen(
     description: String = "",
     pinchList: List<Place> = emptyList(),
     searchedList: List<Place> = emptyList(),
+    position: Position = Position.INVALID,
+    cameraPosition: Position? = null,
     onBackPressed: () -> Unit = {},
     onTitleChanged: (String) -> Unit = {},
     onDescriptionChanged: (String) -> Unit = {},
@@ -177,11 +181,12 @@ fun PinchWriteScreen(
 
         Spacer(modifier = Modifier.height(18.dp))
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .background(color = Colors.Gray500)
+        PinchNaverMap(
+            modifier = Modifier,
+            position = position,
+            placeList = pinchList,
+            cameraPosition = cameraPosition,
+            onCameraStateChange = {}
         )
 
         Spacer(modifier = Modifier.height(35.dp))
