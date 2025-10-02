@@ -14,9 +14,10 @@ import com.pinup.pinup.util.Const
 
 actual fun kakaoShare(
     context: Any,
-    memberId: Int
+    memberId: Int,
+    memberName: String,
 ) {
-    val feedTemplate = getFeed(memberId)
+    val feedTemplate = getFeed(memberId, memberName)
     if (ShareClient.instance.isKakaoTalkSharingAvailable(context as Context)) {
         ShareClient.instance.shareDefault(context, feedTemplate) { sharingResult, error ->
             if (error != null) {
@@ -45,12 +46,12 @@ actual fun kakaoShare(
     }
 }
 
-private fun getFeed(memberId: Int): FeedTemplate {
+private fun getFeed(memberId: Int, memberName: String): FeedTemplate {
     return FeedTemplate(
         content =
             Content(
-                title = Texts.Kakao.PROFILE_SHARE_TITLE,
-                description = Texts.Kakao.PROFILE_SHARE_CONTENT,
+                title = Texts.Kakao.getProfileShareTitle(memberName),
+                description = Texts.Kakao.getProfileShareContent(memberName),
                 imageUrl = "https://lh3.googleusercontent.com/d/1ui1iK7vFLd1wj8KuiCgXMQo3YFGMd4w-",
                 link = Link(),
             ),

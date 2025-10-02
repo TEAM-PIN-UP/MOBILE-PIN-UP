@@ -136,7 +136,8 @@ class UserProfileViewModel (
     fun shareMyProfile(){
         kakaoShare(
             context = contextFactory.getActivity(),
-            memberId = uiState.value.member.profile.memberId
+            memberId = uiState.value.member.profile.memberId,
+            memberName = uiState.value.member.profile.name,
         )
     }
 
