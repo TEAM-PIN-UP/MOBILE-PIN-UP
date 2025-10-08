@@ -328,28 +328,28 @@ fun MapScreen(
                             end.linkTo(parent.end)
                         },
                 ) {
-//                    // TODO 만약 핀츠가 없다면 해당 컬럼 안보이게
-//                    Card(
-//                        modifier = Modifier
-//                            .clickableWithNoRipple {
-//                                onUpdateShowBookmarks()
-//                            },
-//                        shape = CircleShape,
-//                        backgroundColor = Colors.White,
-//                        elevation = 1.dp
-//                    ) {
-//                        Image(
-//                            modifier = Modifier
-//                                .padding(10.dp)
-//                                .size(20.dp),
-//                            painter = if (isShowPinch) {
-//                                painterResource(Res.drawable.ic_pinch_on)
-//                            } else {
-//                                painterResource(Res.drawable.ic_pinch_off)
-//                            },
-//                            contentDescription = "pinch filter"
-//                        )
-//                    }
+                    // TODO 만약 핀츠가 없다면 해당 컬럼 안보이게
+                    Card(
+                        modifier = Modifier
+                            .clickableWithNoRipple {
+                                onUpdateShowBookmarks()
+                            },
+                        shape = CircleShape,
+                        backgroundColor = Colors.White,
+                        elevation = 1.dp
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .size(20.dp),
+                            painter = if (isShowPinch) {
+                                painterResource(Res.drawable.ic_pinch_on)
+                            } else {
+                                painterResource(Res.drawable.ic_pinch_off)
+                            },
+                            contentDescription = "pinch filter"
+                        )
+                    }
 
                     Card(
                         modifier = Modifier
