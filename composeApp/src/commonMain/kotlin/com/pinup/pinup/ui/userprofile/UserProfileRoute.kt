@@ -11,6 +11,8 @@ fun UserProfileRoute(
     contextFactory: ContextFactory,
     onBackPressed: () -> Unit,
     onClickDetail: (Int) -> Unit = {},
+    onMovePinchWrite: () -> Unit = {},
+
     viewModel: UserProfileViewModel = koinViewModel(parameters = { parametersOf(contextFactory) })
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -22,6 +24,7 @@ fun UserProfileRoute(
         onRequestPinBuddy = viewModel::requestPinBuddy,
         onClickLike = viewModel::likeChanged,
         onClickDetail = onClickDetail,
+        onMovePinchWrite = onMovePinchWrite,
         onClickShare = viewModel::shareMyProfile
     )
 }

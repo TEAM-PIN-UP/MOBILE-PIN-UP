@@ -358,6 +358,9 @@ fun PinUpApp(
                         },
                         onClickDetail = { it ->
                             navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
+                        },
+                        onMovePinchWrite = {
+                            navHostController.navigate(PinUpAppDestination.PinchWrite)
                         }
                     )
                 }
