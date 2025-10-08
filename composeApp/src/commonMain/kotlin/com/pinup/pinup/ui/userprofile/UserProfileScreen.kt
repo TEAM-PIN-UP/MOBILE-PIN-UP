@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -19,8 +20,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -37,11 +36,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.RelationType
@@ -56,10 +53,6 @@ import com.pinup.pinup.ui.component.PinBuddyBottomSheet
 import com.pinup.pinup.ui.component.PinchItemView
 import com.pinup.pinup.ui.component.ProfileImageView
 import com.pinup.pinup.ui.component.RoundedBox
-import com.pinup.pinup.ui.component.ScrapItemView
-import com.pinup.pinup.ui.main.compose.MainDestination
-import com.pinup.pinup.ui.my.MyPinLogList
-import com.pinup.pinup.ui.my.MyScrapList
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
@@ -112,6 +105,7 @@ fun UserProfileScreen(
                     color = Colors.White
                 )
                 .statusBarsPadding()
+                .navigationBarsPadding()
                 .fillMaxWidth()
         ) {
             item {
@@ -353,9 +347,36 @@ fun UserProfileScreen(
                         onClickLike = onClickLike,
                     )
                 } else {
+                    //TODO 더미데이터 임시
                     this.UserPinchList(
                         member = member,
-                        pinchListItem = emptyList(),
+                        pinchListItem = listOf(
+                            PinchListItem(
+                                id = 1,
+                                title = "임시 루트명1",
+                                description = "임시 설명글1"
+                            ),
+                            PinchListItem(
+                                id = 2,
+                                title = "임시 루트명2",
+                                description = "임시 설명글2"
+                            ),
+                            PinchListItem(
+                                id = 3,
+                                title = "임시 루트명3",
+                                description = "임시 설명글3"
+                            ),
+                            PinchListItem(
+                                id = 4,
+                                title = "임시 루트명4",
+                                description = "임시 설명글4"
+                            ),
+                            PinchListItem(
+                                id = 5,
+                                title = "임시 루트명5",
+                                description = "임시 설명글5"
+                            )
+                        ),
                         onClickGoCreatePinch = onMovePinchWrite
                     )
                 }

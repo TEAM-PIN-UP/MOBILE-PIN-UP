@@ -25,6 +25,8 @@ fun PinchItemView(
     pinchListItem: PinchListItem,
 ) {
     RoundedBox(
+        modifier = Modifier
+            .padding(horizontal = 20.dp),
         cornerColor = Colors.Gray200,
         cornerRounded = 12
     ) {
