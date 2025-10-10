@@ -38,6 +38,7 @@ fun LoginRoute(
         onPasswordChanged = viewModel::onPasswordChange,
         onClickFindPassword = onMoveFindPassword,
         onCLickFindEmail = onMoveFindId,
+        onMoveSignUp = { onMoveSignUp(SNSUserInfo(snsType = SNSType.PINUP)) },
         id = uiState.id,
         password = uiState.password,
         isError = uiState.isError

@@ -41,6 +41,7 @@ fun LoginScreen(
     onSnsLoginClick: (SNSType) -> Unit = {},
     onClickFindPassword: () -> Unit = {},
     onCLickFindEmail: () -> Unit = {},
+    onMoveSignUp: () -> Unit = {},
     id : String = "",
     password : String = "",
     isError: Boolean = false,
@@ -150,7 +151,7 @@ fun LoginScreen(
                 color = Colors.Gray700
             )
 
-            Spacer(modifier = Modifier.width(27.dp))
+            Spacer(modifier = Modifier.width(23.dp))
 
             Text(
                 modifier = Modifier
@@ -158,6 +159,20 @@ fun LoginScreen(
                         onClickFindPassword()
                     },
                 text = Texts.FindPassword.CHANGE_PASSWORD,
+                style = Typography.B3.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Colors.Gray700
+            )
+
+            Spacer(modifier = Modifier.width(23.dp))
+
+            Text(
+                modifier = Modifier
+                    .clickableSingleWithNoRipple {
+                        onMoveSignUp()
+                    },
+                text = Texts.Word.SIGN_UP,
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),

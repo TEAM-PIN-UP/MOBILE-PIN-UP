@@ -36,20 +36,13 @@ class ChoiceSignUpViewModel (
     }
     fun doSNSLogin(snsType: SNSType) {
         if(snsType == SNSType.PINUP) {
-//            emitEvent(ChoiceSignUpUiEvent.MoveEmailLogin)
-//            return
-            //TODO 임시용, 제거 예정
             emitEvent(ChoiceSignUpUiEvent.MoveSignUp(
-                SNSUserInfo(
-                    socialId = "",
-                    snsType = snsType,
-                    email = "",
-                    name = "",
-                    nickname = "",
-                )
+                SNSUserInfo(snsType = snsType)
             ))
         }
-        snsLoginFactory.doLogin(snsType, contextFactory, loginResultListener)
+        else {
+            snsLoginFactory.doLogin(snsType, contextFactory, loginResultListener)
+        }
     }
 
     private fun login(snsLoginInfo: SNSUserInfo) {

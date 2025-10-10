@@ -67,6 +67,7 @@ object Texts {
         const val NICKNAME = "닉네임"
         const val INTRO = "소개"
         const val UNREGISTER = "탈퇴하기"
+        const val SIGN_UP = "회원가입"
     }
 
     object Onboarding {
