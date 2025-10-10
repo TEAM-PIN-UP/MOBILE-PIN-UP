@@ -96,8 +96,8 @@ fun MainNavHost(
             composable<MainDestination.Map> {
                 MapRoute(
                     onBottomMenuClick = {
-                        if (MainDestination.Upload == it) {
-                            onMoveWriteReview(0)
+                        if (it is MainDestination.Upload) {
+                            if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()
                         } else {
                             navHostController.navigate(it) {
                                 launchSingleTop = true
@@ -119,8 +119,8 @@ fun MainNavHost(
             composable<MainDestination.Feed> {
                 FeedRoute(
                     onClickBottomNav = {
-                        if (MainDestination.Upload == it) {
-                            onMoveWriteReview(0)
+                        if (it is MainDestination.Upload) {
+                            if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()
                         } else {
                             navHostController.navigate(it) {
                                 launchSingleTop = true
@@ -143,8 +143,8 @@ fun MainNavHost(
             composable<MainDestination.Article> {
                 ArticleRoute(
                     onClickBottomNav = {
-                        if (MainDestination.Upload == it) {
-                            onMoveWriteReview(0)
+                        if (it is MainDestination.Upload) {
+                            if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()
                         } else {
                             navHostController.navigate(it) {
                                 launchSingleTop = true
@@ -166,8 +166,8 @@ fun MainNavHost(
                     onMovePinBuddy = onMovePinBuddy,
                     onMoveSetting = onMoveSetting,
                     onClickBottomNav = {
-                        if (MainDestination.Upload == it) {
-                            onMoveWriteReview(0)
+                        if (it is MainDestination.Upload) {
+                            if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()
                         } else {
                             navHostController.navigate(it) {
                                 launchSingleTop = true
@@ -200,8 +200,8 @@ fun MainNavHost(
             composable<PinUpAppDestination.Scrap> {
                 ScrapRoute(
                     onClickBottomNav = {
-                        if (MainDestination.Upload == it) {
-                            onMoveWriteReview(0)
+                        if (it is MainDestination.Upload) {
+                            if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()
                         } else {
                             navHostController.navigate(it) {
                                 launchSingleTop = true
@@ -226,7 +226,9 @@ sealed interface MainDestination {
     @Serializable
     data object Feed : MainDestination
     @Serializable
-    data object Upload : MainDestination
+    data class Upload(
+        val isPinlogWrite: Boolean = false
+    ) : MainDestination
     @Serializable
     data object Article : MainDestination
     @Serializable

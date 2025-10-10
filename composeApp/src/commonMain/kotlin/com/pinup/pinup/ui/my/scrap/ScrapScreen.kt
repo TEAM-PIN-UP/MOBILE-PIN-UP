@@ -203,18 +203,13 @@ fun ScrapScreen(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Bottom
         ) {
-            Box(
-                modifier = Modifier
-                    .onGloballyPositioned { coords ->
-                        bottomBarHeight = with(density) { coords.size.height.toDp() }
-                    }
-            ) {
-                BottomBar(
-                    selectedMenu = MainDestination.My,
-                    profileImage = profileUrl,
-                    onBottomMenuClick = onClickBottomNav
-                )
-            }
+            BottomBar(
+                selectedMenu = MainDestination.My,
+                profileImage = profileUrl,
+                onBottomMenuClick = onClickBottomNav,
+                onSizeChanged = { bottomBarHeight = it }
+            )
+
         }
     }
 }

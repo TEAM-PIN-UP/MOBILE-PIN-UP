@@ -59,7 +59,7 @@ fun FeedScreen(
     onClickEdit: (Int) -> Unit = {},
     onClickDelete: (Int) -> Unit = {},
     onClickDetail: (Int) -> Unit = {},
-    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
+    onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -156,7 +156,7 @@ fun FeedScreen(
                         )
                     }
 
-                    items(reviewList){
+                    items(reviewList) {
                         FeedView(
                             item = it,
                             onClickMenu = {
@@ -179,19 +179,13 @@ fun FeedScreen(
             modifier = Modifier
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Bottom
-        ){
-            Box(
-                modifier = Modifier
-                    .onGloballyPositioned { coords ->
-                        bottomBarHeight = with(density) { coords.size.height.toDp() }
-                    }
-            ) {
-                BottomBar(
-                    selectedMenu = MainDestination.Feed,
-                    profileImage = profile,
-                    onBottomMenuClick = onClickBottomNav
-                )
-            }
+        ) {
+            BottomBar(
+                selectedMenu = MainDestination.Feed,
+                profileImage = profile,
+                onBottomMenuClick = onClickBottomNav,
+                onSizeChanged = { bottomBarHeight = it }
+            )
         }
     }
 }

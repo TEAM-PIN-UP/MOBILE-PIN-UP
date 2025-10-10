@@ -175,18 +175,12 @@ fun MyScreen(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Bottom
         ) {
-            Box(
-                modifier = Modifier
-                    .onGloballyPositioned { coords ->
-                        bottomBarHeight = with(density) { coords.size.height.toDp() }
-                    }
-            ) {
-                BottomBar(
-                    selectedMenu = MainDestination.My,
-                    profileImage = member.profile.profilePictureUrl ?: "",
-                    onBottomMenuClick = onClickBottomNav
-                )
-            }
+            BottomBar(
+                selectedMenu = MainDestination.My,
+                profileImage = member.profile.profilePictureUrl ?: "",
+                onBottomMenuClick = onClickBottomNav,
+                onSizeChanged = { bottomBarHeight = it }
+            )
         }
     }
 }

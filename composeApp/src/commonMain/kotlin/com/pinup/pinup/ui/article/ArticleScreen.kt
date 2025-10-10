@@ -54,7 +54,6 @@ fun ArticleScreen(
 ) {
     val scrollState = rememberLazyListState()
 
-    val density = LocalDensity.current
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
 
     ScrollToEndCallback(scrollState) {
@@ -144,18 +143,12 @@ fun ArticleScreen(
             .fillMaxSize(),
         verticalArrangement = Arrangement.Bottom
     ) {
-        Box(
-            modifier = Modifier
-                .onGloballyPositioned { coords ->
-                    bottomBarHeight = with(density) { coords.size.height.toDp() }
-                }
-        ) {
-            BottomBar(
-                selectedMenu = MainDestination.Article,
-                profileImage = profile,
-                onBottomMenuClick = onClickBottomNav
-            )
-        }
+        BottomBar(
+            selectedMenu = MainDestination.Article,
+            profileImage = profile,
+            onBottomMenuClick = onClickBottomNav,
+            onSizeChanged = { bottomBarHeight = it }
+        )
     }
 
 }

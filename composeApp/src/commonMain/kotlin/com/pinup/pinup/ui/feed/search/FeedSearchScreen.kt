@@ -106,6 +106,7 @@ fun FeedSearchScreen(
     ) {
         Column(
             modifier = Modifier
+                .background(color = Colors.White)
                 .padding(horizontal = 20.dp)
                 .statusBarsPadding(),
         ) {

@@ -3,12 +3,14 @@ package com.pinup.pinup.ui.map
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -124,8 +127,7 @@ fun MapScreen(
 
     var parentHeightPx by remember { mutableIntStateOf(0) }
     val parentHeightDp = with(LocalDensity.current) { parentHeightPx.toDp() }
-    var bottomBarHeightPx by remember { mutableIntStateOf(0) }
-    val bottomBarHeightDp = with(LocalDensity.current) { bottomBarHeightPx.toDp() }
+    var bottomBarHeightDp by remember { mutableStateOf(0.dp) }
     val statusBarHeightDp = WindowInsets.statusBars
         .asPaddingValues()
         .calculateTopPadding()
@@ -377,6 +379,7 @@ fun MapScreen(
 
                 Column(
                     modifier = Modifier
+                        .padding(bottom = bottomBarHeightDp)
                         .fillMaxWidth()
                         .constrainAs(sheet) {
                             bottom.linkTo(parent.bottom)
@@ -422,20 +425,23 @@ fun MapScreen(
                             onMoveWriteReview = onMoveWriteReview
                         )
                     }
-
-                    Box(
-                        modifier = Modifier
-                            .onSizeChanged { bottomBarHeightPx = it.height }
-                    ){
-                        BottomBar(
-                            selectedMenu = MainDestination.Map,
-                            profileImage = profileImage,
-                            onBottomMenuClick = onClickBottomNav
-                        )
-                    }
                 }
             }
         }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            BottomBar(
+                selectedMenu = MainDestination.Map,
+                profileImage = profileImage,
+                onBottomMenuClick = onClickBottomNav,
+                onSizeChanged = { bottomBarHeightDp = it }
+            )
+        }
+
     }
 
     if (isShowPermissionDialog.value) {
