@@ -335,6 +335,9 @@ fun PinUpApp(
                         },
                         onClickEdit = {
                             navHostController.navigate(PinUpAppDestination.WriteReview(it, null))
+                        },
+                        onMovePlaceDetail = {
+                            navHostController.navigate(PinUpAppDestination.PlaceDetail(it))
                         }
                     )
                 }

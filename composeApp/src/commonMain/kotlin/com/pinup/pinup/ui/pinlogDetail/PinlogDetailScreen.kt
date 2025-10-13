@@ -86,7 +86,6 @@ fun PinlogDetailScreen(
     userInfo: UserInfo,
     replyId: Int?,
     onValueChange: (String) -> Unit = {},
-    onClickPlaceDetail: (String) -> Unit = {},
     onBackPressed: () -> Unit = {},
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
@@ -95,6 +94,7 @@ fun PinlogDetailScreen(
     onClickDeleteComment: (Int) -> Unit = {},
     updateNonFocusMode: () -> Unit = {},
     updateReplyCommentId: (Int) -> Unit = {},
+    onMovePlaceDetail: (String) -> Unit = {},
 ) {
 
     val density = LocalDensity.current
@@ -175,6 +175,9 @@ fun PinlogDetailScreen(
                         Row(
                             modifier = Modifier
                                 .padding(horizontal = 20.dp)
+                                .clickableWithNoRipple {
+                                    onMovePlaceDetail(pinlogDetail.kakaoPlaceId)
+                                }
                                 .fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -203,10 +206,6 @@ fun PinlogDetailScreen(
                             }
 
                             Image(
-                                modifier = Modifier
-                                    .clickableWithNoRipple {
-                                        onClickPlaceDetail("")
-                                    },
                                 painter = painterResource(Res.drawable.ic_right_arrow_300),
                                 contentDescription = null,
                                 colorFilter = ColorFilter.tint(Colors.Gray400)

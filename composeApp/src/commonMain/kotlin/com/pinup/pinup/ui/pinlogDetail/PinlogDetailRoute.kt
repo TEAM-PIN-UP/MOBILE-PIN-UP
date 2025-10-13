@@ -20,7 +20,7 @@ fun PinlogDetailRoute(
     viewModel: PinlogDetailViewModel = koinViewModel(),
     onBackPressed: () -> Unit = {},
     onClickEdit: (Int) -> Unit = {},
-    onClickPlaceDetail: (String) -> Unit = {},
+    onMovePlaceDetail: (String) -> Unit = {},
 ) {
     val toast = rememberToastState()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -79,7 +79,6 @@ fun PinlogDetailRoute(
         query = uiState.myComment,
         replyId = uiState.clickedReplyId,
         onValueChange = viewModel::updateMyComment,
-        onClickPlaceDetail = onClickPlaceDetail,
         onClickEdit = {
             onClickEdit(viewModel.reviewId)
         },
@@ -96,6 +95,7 @@ fun PinlogDetailRoute(
             if(uiState.isEditComment || uiState.clickedReplyId != null) viewModel::updateNormalMode
         },
         updateReplyCommentId = viewModel::updateClickedReplyId,
+        onMovePlaceDetail = onMovePlaceDetail,
         userInfo = uiState.userInfo
     )
 }
