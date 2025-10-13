@@ -395,7 +395,8 @@ fun MapScreen(
                         consumeDetailClicked = consumeDetailClicked,
                         isMoving = isCameraMoving,
                         isDetailClicked = isDetailClicked,
-                        isFocusSearch = searchUiState.isFocus
+                        isFocusSearch = searchUiState.isFocus,
+                        isShowPinch = isShowPinch
                     ) {
                         MapBottomSheetNavHost(
                             searchUiState = searchUiState,

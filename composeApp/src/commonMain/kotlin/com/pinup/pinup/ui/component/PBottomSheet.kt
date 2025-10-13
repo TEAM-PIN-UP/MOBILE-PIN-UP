@@ -45,6 +45,7 @@ fun PBottomSheet(
     isMoving: Boolean = false,
     isDetailClicked: Boolean = false,
     isFocusSearch: Boolean = false,
+    isShowPinch: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     var currentTargetValue by remember { mutableStateOf(pBottomSheetTargetValue) }
@@ -82,7 +83,11 @@ fun PBottomSheet(
     }
 
     LaunchedEffect(isFocusSearch){
-        realHeight = expandedHeight
+        if (isFocusSearch) realHeight = expandedHeight
+    }
+
+    LaunchedEffect(isShowPinch){
+        if (isShowPinch) realHeight = halfHeight
     }
 
     Column(
