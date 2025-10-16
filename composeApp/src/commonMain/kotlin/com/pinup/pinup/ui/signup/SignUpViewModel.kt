@@ -13,6 +13,7 @@ import com.pinup.pinup.domain.usecase.EmailSignUpUseCase
 import com.pinup.pinup.domain.usecase.PostImageUploadUseCase
 import com.pinup.pinup.domain.usecase.SocialSignUpUseCase
 import com.pinup.pinup.domain.validator.NickNameValidator
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
@@ -20,12 +21,14 @@ import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.login.model.SNSUserInfo
 import com.pinup.pinup.util.Const
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(FlowPreview::class)
 
@@ -38,8 +41,10 @@ class SignUpViewModel (
     private val emailSignUpUseCase: EmailSignUpUseCase,
     private val uploadImageUploadUseCase: PostImageUploadUseCase
 ) : BaseViewModel<SignUpUiState, SignUpUiEvent>(SignUpUiState()) {
+
     private val snsUserInfo = Json.decodeFromString<SNSUserInfo>(savedStateHandle.get<String>(SNS_USER_INFO) ?: "")
     private val query = MutableStateFlow("")
+    private var timer = INIT_TIME
 
     init {
         updateState {
@@ -137,7 +142,9 @@ class SignUpViewModel (
             )
             resultResponse(
                 response = sendVerifyCodeUseCase(request),
-                successCallback = {}
+                successCallback = {
+                    startTimer()
+                }
             )
         }
     }
@@ -290,8 +297,29 @@ class SignUpViewModel (
         )
     }
 
+    private fun startTimer() {
+        timer = INIT_TIME
+        viewModelScope.launch {
+            while (timer > 0) {
+                val m = timer / 60
+                val s = timer % 60
+                val textSecond = if(s < 10) "0$s" else "$s"
+                updateState {
+                    copy(
+                        emailState = emailState.copy(
+                            timer = "$m:$textSecond"
+                        )
+                    )
+                }
+                timer -= 1
+                delay(1.seconds)
+            }
+        }
+    }
+
     companion object {
         private const val SNS_USER_INFO = "snsUserInfo"
+        private const val INIT_TIME = 300
     }
 }
 
@@ -325,6 +353,7 @@ enum class EmailVerifyType {
 data class EmailState(
     val email: String = "",
     val verificationCode: String = "",
+    val timer: String = "",
     val isEmailValid: Boolean = true,
     val isEmailUsed: Boolean = false,
     val emailVerifyType: EmailVerifyType = EmailVerifyType.NONE,

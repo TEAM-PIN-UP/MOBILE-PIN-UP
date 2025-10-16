@@ -10,12 +10,12 @@ import com.pinup.pinup.domain.usecase.GetFindIdByEmailUseCase
 import com.pinup.pinup.domain.usecase.GetFindIdByNicknameUseCase
 import com.pinup.pinup.domain.usecase.PostEmailVerifyUseCase
 import com.pinup.pinup.domain.usecase.PostSendVerifyCodeUseCase
-import com.pinup.pinup.domain.usecase.PostTemporaryPasswordUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.signup.EmailVerifyType
 import com.pinup.pinup.util.Const
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 class FindIdViewModel(
     private val sendVerifyCodeUseCase: PostSendVerifyCodeUseCase,
@@ -27,6 +27,11 @@ class FindIdViewModel(
     FindIdUiState()
 ) {
 
+    companion object {
+        private const val INIT_TIME = 300
+    }
+
+    private var timer = INIT_TIME
     fun verifyEmail() = viewModelScope.launch {
         val request = EmailVerifyRequest(
             email = uiState.value.email,
@@ -60,7 +65,9 @@ class FindIdViewModel(
             )
             resultResponse(
                 response = sendVerifyCodeUseCase(request),
-                successCallback = {}
+                successCallback = {
+                    startTimer()
+                }
             )
         }
     }
@@ -189,6 +196,24 @@ class FindIdViewModel(
             )
         }
     }
+
+    private fun startTimer() {
+        timer = INIT_TIME
+        viewModelScope.launch {
+            while (timer > 0) {
+                val m = timer / 60
+                val s = timer % 60
+                val textSecond = if(s < 10) "0$s" else "$s"
+                updateState {
+                    copy(
+                        timer = "$m:$textSecond"
+                    )
+                }
+                timer -= 1
+                delay(1.seconds)
+            }
+        }
+    }
 }
 
 data class FindIdUiState(
@@ -202,6 +227,7 @@ data class FindIdUiState(
     val isFindByEmail: Boolean = true,
     val isShowInfoPage: Boolean = false,
     val findEmail: String = "",
+    val timer: String = "",
     val findNickName: String = "",
     val findProfileUrl: String = "",
 ) : UiState

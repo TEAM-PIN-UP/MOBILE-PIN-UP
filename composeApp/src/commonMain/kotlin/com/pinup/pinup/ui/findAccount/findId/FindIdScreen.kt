@@ -54,6 +54,7 @@ fun FindIdScreen(
     emailVerifyType: EmailVerifyType = EmailVerifyType.NONE,
     nickname: String = "",
     isNicknameUsed: Boolean = false,
+    timer: String = "",
     sheetState: ModalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
     onClickSendCode: () -> Unit = {},
     onClickConfirm: () -> Unit,
@@ -229,10 +230,28 @@ fun FindIdScreen(
                         isError = emailVerifyType == EmailVerifyType.NOT_VERIFIED,
                     )
 
-                    if (emailVerifyType == EmailVerifyType.NOT_VERIFIED) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        ErrorText(Texts.SignupEmail.CODE_INVALID)
+                    Row(
+                        modifier = Modifier
+                            .padding(vertical = 17.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = timer,
+                            style = Typography.L3.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = Colors.Gray300
+                        )
+
+                        Spacer(modifier = Modifier.width(17.dp))
                     }
+                }
+
+                if (emailVerifyType == EmailVerifyType.NOT_VERIFIED) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    ErrorText(Texts.SignupEmail.CODE_INVALID)
                 }
             } else {
                 Text(

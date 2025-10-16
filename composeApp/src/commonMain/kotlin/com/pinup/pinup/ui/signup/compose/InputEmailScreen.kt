@@ -126,16 +126,37 @@ fun InputEmailScreen(
         }
 
         if (emailState.isClickedVerify) {
-            RoundedTextField(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                text = emailState.verificationCode,
-                onValueChange = onCodeChanged,
-                placeholder = Texts.SignupEmail.CODE_HINT,
-                cornerRounded = 100,
-                backgroundColor = Colors.White,
-                isError = emailState.emailVerifyType == EmailVerifyType.NOT_VERIFIED,
-            )
+            Box {
+                RoundedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    text = emailState.verificationCode,
+                    onValueChange = onCodeChanged,
+                    placeholder = Texts.SignupEmail.CODE_HINT,
+                    cornerRounded = 100,
+                    backgroundColor = Colors.White,
+                    isError = emailState.emailVerifyType == EmailVerifyType.NOT_VERIFIED,
+                )
+
+                Row(
+                    modifier = Modifier
+                        .padding(vertical = 17.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = emailState.timer,
+                        style = Typography.L3.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        color = Colors.Gray300
+                    )
+
+                    Spacer(modifier = Modifier.width(17.dp))
+                }
+
+            }
 
             if (emailState.emailVerifyType == EmailVerifyType.NOT_VERIFIED) {
                 Spacer(modifier = Modifier.height(8.dp))
