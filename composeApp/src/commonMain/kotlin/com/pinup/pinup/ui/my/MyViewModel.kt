@@ -121,7 +121,7 @@ class MyViewModel (
         kakaoShare(
             context = contextFactory.getActivity(),
             memberId = uiState.value.member.profile.memberId,
-            memberName = uiState.value.member.profile.name
+            memberName = uiState.value.member.profile.nickname
         )
     }
 

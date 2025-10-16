@@ -300,6 +300,6 @@ object Texts {
     object Kakao {
         fun getProfileShareTitle(name: String) = "$name 님의 핀업 계정"
         fun getProfileShareContent(name: String) = "핀업에서 $name 님의 핀들을 구경해 보세요."
-        const val PROFILE_SHARE_BUTTON = "버튼 이름"
+        const val PROFILE_SHARE_BUTTON = "핀업으로 이동하기"
     }
 }
