@@ -39,4 +39,9 @@ object ApiPath {
         const val COMMENT = "$PINLOG_MODIFY/comments"
         const val COMMENT_MODIFY = "$COMMENT/{commentId}"
     }
+
+    object Pints {
+        const val PINTS = "api/pints"
+        const val PINTS_MODIFY = "$PINTS/{pintsId}"
+    }
 }
