@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.PinchListItem
+import com.pinup.pinup.domain.model.PintsPageAble
 import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
@@ -70,6 +71,7 @@ fun MyScreen(
     member: Member,
     reviews: List<Review>,
     scrapList: List<BookmarkedPlace>,
+    pinchPageAble: PintsPageAble,
     onClickBottomNav: (MainDestination) -> Unit,
     modifier: Modifier = Modifier,
     onAlarmClick: () -> Unit = {},
@@ -161,7 +163,7 @@ fun MyScreen(
                 this.MyScrapList(
                     member = member,
                     scrapList = scrapList,
-                    pinchListItem = emptyList(),
+                    pinchPageAble = pinchPageAble,
                     onClickMoreScrap = onClickMoreScrap,
                     onClickPlaceDetail = onMovePlaceDetail,
                     onClickGoCreatePinch = onMovePinchWrite,
@@ -602,7 +604,7 @@ private fun ReviewEmptyScreen(
 fun LazyListScope.MyScrapList(
     member: Member,
     scrapList: List<BookmarkedPlace>,
-    pinchListItem: List<PinchListItem>,
+    pinchPageAble: PintsPageAble,
     onClickGoFeed: () -> Unit = {},
     onClickGoCreatePinch: () -> Unit = {},
     onClickPlaceDetail: (String) -> Unit = {},
@@ -770,7 +772,7 @@ fun LazyListScope.MyScrapList(
     }
 
 
-    if (pinchListItem.isEmpty()) {
+    if (pinchPageAble.content.isEmpty()) {
         item {
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -824,7 +826,7 @@ fun LazyListScope.MyScrapList(
             Spacer(modifier = Modifier.height(15.dp))
         }
 
-        items(pinchListItem) {
+        items(pinchPageAble.content) {
             PinchItemView(it)
             Spacer(modifier = Modifier.height(12.dp))
         }

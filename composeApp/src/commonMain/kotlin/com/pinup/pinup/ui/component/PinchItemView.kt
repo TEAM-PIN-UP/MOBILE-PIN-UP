@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.pinup.pinup.domain.model.PinchListItem
+import com.pinup.pinup.domain.model.PintsItem
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
@@ -22,7 +22,7 @@ import pinup.composeapp.generated.resources.ic_share_root
 
 @Composable
 fun PinchItemView(
-    pinchListItem: PinchListItem,
+    pinchListItem: PintsItem,
 ) {
     RoundedBox(
         modifier = Modifier
@@ -52,7 +52,7 @@ fun PinchItemView(
                 Spacer(modifier = Modifier.height(3.dp))
 
                 Text(
-                    text = pinchListItem.description,
+                    text = pinchListItem.content,
                     color = Colors.Gray500,
                     style = Typography.B3.copy(
                         fontWeight = FontWeight.Medium

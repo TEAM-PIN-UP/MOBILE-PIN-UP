@@ -56,6 +56,7 @@ fun MyRoute(
         member = uiState.value.member,
         reviews = uiState.value.pagingReview.reviews,
         scrapList = uiState.value.scrapList,
+        pinchPageAble = uiState.value.pinchPageAble,
         onAddPinBuddyClick = onAddPinBuddyClick,
         onMovePinBuddy = onMovePinBuddy,
         onSettingClick = onMoveSetting,

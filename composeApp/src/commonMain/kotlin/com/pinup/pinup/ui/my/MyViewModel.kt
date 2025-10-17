@@ -1,12 +1,15 @@
 package com.pinup.pinup.ui.my
 
 import androidx.lifecycle.viewModelScope
+import com.pinup.pinup.data.request.pints.PageAble
 import com.pinup.pinup.data.response.GetBookmarksResponse
 import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.Pagination
 import com.pinup.pinup.domain.model.PagingReview
+import com.pinup.pinup.domain.model.PinchListItem
+import com.pinup.pinup.domain.model.PintsPageAble
 import com.pinup.pinup.domain.model.Profile
 import com.pinup.pinup.domain.model.RelationType
 import com.pinup.pinup.domain.model.Review
@@ -18,6 +21,7 @@ import com.pinup.pinup.domain.usecase.GetFeedUseCase
 import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPhotoReviewsUseCase
 import com.pinup.pinup.domain.usecase.GetPinlogDetailUseCase
+import com.pinup.pinup.domain.usecase.GetPintsUseCase
 import com.pinup.pinup.domain.usecase.GetTextReviewsUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.platform.ContextFactory
@@ -40,12 +44,14 @@ class MyViewModel (
     private val postReviewLikeChangeUseCase: PostReviewLikeChangeUseCase,
     private val getBookmarksUseCase: GetBookmarksUseCase,
     private val getPinlogDetailUseCase: GetPinlogDetailUseCase,
+    private val getPintsUseCase: GetPintsUseCase,
 ) : BaseViewModel<MyUiState, UiEvent>(MyUiState()) {
 
     fun initMyInfo() = viewModelScope.launch {
         val memberInfo = getMemberInfoUseCase().getSuccessOrNull() ?: return@launch
         getFeedList(memberId = memberInfo.profile.memberId)
         getScrapList()
+        getPintsList()
         updateState {
             copy(
                 member = memberInfo,
@@ -142,6 +148,22 @@ class MyViewModel (
             }
         )
     }
+
+    private fun getPintsList() = viewModelScope.launch {
+        val pageAble = PageAble(
+            page = uiState.value.nowPage
+        )
+        resultResponse(
+            response = getPintsUseCase(uiState.value.member.profile.memberId, pageAble),
+            successCallback = {
+                updateState {
+                    copy(
+                        pinchPageAble = it
+                    )
+                }
+            }
+        )
+    }
 }
 
 data class MyUiState(
@@ -163,5 +185,7 @@ data class MyUiState(
     ),
     val pagingReview: PagingReview = PagingReview(),
     val prevCursor: Int? = null,
-    val scrapList: List<BookmarkedPlace> = emptyList()
+    val scrapList: List<BookmarkedPlace> = emptyList(),
+    val pinchPageAble: PintsPageAble = PintsPageAble(),
+    val nowPage: Int = 1
 ) : UiState
