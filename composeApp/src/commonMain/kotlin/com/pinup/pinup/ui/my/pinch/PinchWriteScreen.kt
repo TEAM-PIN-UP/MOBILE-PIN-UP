@@ -25,7 +25,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ExposedDropdownMenuBox
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,6 +54,7 @@ import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.platform.PinchNaverMap
 import com.pinup.pinup.ui.component.IndexedRoundedTextField
 import com.pinup.pinup.ui.component.PButton
+import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.RoundedTextField
@@ -80,10 +83,12 @@ fun PinchWriteScreen(
     onBackPressed: () -> Unit = {},
     onTitleChanged: (String) -> Unit = {},
     onDescriptionChanged: (String) -> Unit = {},
-    onNameChanged: (Int, String) -> Unit = {_, _ -> },
+    onNameChanged: (Int, String) -> Unit = { _, _ -> },
     onClickDelete: (Int) -> Unit = {},
-    moveItem: (Int, Int) -> Unit = {_, _ -> },
-    onPlaceClick: (Place, Int) -> Unit = {_, _ -> },
+    moveItem: (Int, Int) -> Unit = { _, _ -> },
+    onPlaceClick: (Place, Int) -> Unit = { _, _ -> },
+    onMoveWriteReview: (String) -> Unit = {},
+    registerPints: () -> Unit = {},
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -101,6 +106,11 @@ fun PinchWriteScreen(
     var textFieldSize by remember { mutableStateOf(IntSize.Zero) }
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
+    val isShowWritePinlogDialog = remember { mutableStateOf(false) }
+    val clickedKakaoPlaceId = remember { mutableStateOf("") }
+    val sheetState = rememberModalBottomSheetState(
+        ModalBottomSheetValue.Hidden
+    )
 
     Column(
         modifier = Modifier
@@ -266,13 +276,14 @@ fun PinchWriteScreen(
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically
-                        ){
-                            Box(modifier = Modifier
-                                .weight(1f)
-                                .dragModifier(index, dragAndDropListState)
-                                .onGloballyPositioned { coordinates ->
-                                    textFieldSize = coordinates.size
-                                }
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .dragModifier(index, dragAndDropListState)
+                                    .onGloballyPositioned { coordinates ->
+                                        textFieldSize = coordinates.size
+                                    }
                             ) {
                                 IndexedRoundedTextField(
                                     modifier = Modifier
@@ -293,7 +304,10 @@ fun PinchWriteScreen(
                                     placeholderTextColor = Colors.Gray300,
                                     cornerRounded = 8,
                                     fixedBorderColor = Colors.Gray200,
-                                    contentPadding = PaddingValues(vertical = 24.dp, horizontal = 16.dp),
+                                    contentPadding = PaddingValues(
+                                        vertical = 24.dp,
+                                        horizontal = 16.dp
+                                    ),
                                     readOnly = dragAndDropListState.currentIndexOfDraggedItem != null
                                 )
                             }
@@ -330,7 +344,12 @@ fun PinchWriteScreen(
                                 DropdownMenuItem(
                                     modifier = Modifier.fillMaxWidth(),
                                     onClick = {
-                                        onPlaceClick(place, index)
+                                        if (place.hasMyReview) {
+                                            onPlaceClick(place, index)
+                                        } else {
+                                            isShowWritePinlogDialog.value = true
+                                            clickedKakaoPlaceId.value = place.kakaoPlaceId
+                                        }
                                         expandedIndex = null
                                     }
                                 ) {
@@ -366,7 +385,7 @@ fun PinchWriteScreen(
         modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.Bottom
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .background(Colors.White)
@@ -383,12 +402,29 @@ fun PinchWriteScreen(
                     .padding(horizontal = 20.dp),
                 text = Texts.Pinch.CREATE_PINCH,
                 onClick = {
-                    //
+                    registerPints()
                 },
                 isEnable = pinchList.size > 1
             )
 
             Spacer(modifier = Modifier.height(39.dp))
         }
+
+    }
+
+    if (isShowWritePinlogDialog.value) {
+        PDialog(
+            titleText = Texts.Pinch.NO_PINLOG_DIALOG_TITLE,
+            descriptionText = Texts.Pinch.NO_PINLOG_DIALOG_CONTENT,
+            leftButtonText = Texts.Word.DO_RETURN,
+            rightButtonText = Texts.Word.DO_CONFiRM,
+            onLeftButtonClick = {
+                isShowWritePinlogDialog.value = false
+            },
+            onRightButtonClick = {
+                isShowWritePinlogDialog.value = false
+                onMoveWriteReview(clickedKakaoPlaceId.value)
+            },
+        )
     }
 }

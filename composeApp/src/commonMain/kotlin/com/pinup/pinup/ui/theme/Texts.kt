@@ -282,11 +282,15 @@ object Texts {
     }
 
     object Pinch {
-        const val PINCH_WRITE = "핀츠작성"
+        const val PINCH_WRITE = "핀츠 작성"
         const val TITLE_HINT = "제목을 입력하세요"
         const val DESCRIPTION_HINT = "핀츠의 설명을 적어주세요(0/120)"
         const val CREATE_PINCH = "핀츠 등록하기"
         const val CREATE_MY_PINCH = "마이핀츠 작성"
+        const val EDIT_PINTS = "핀츠 수정"
+        const val DELETE_PINTS = "핀츠 삭제"
+        const val NO_PINLOG_DIALOG_TITLE = "스크랩 되지 않은 장소입니다."
+        const val NO_PINLOG_DIALOG_CONTENT = "스크랩한 장소만 핀츠에 등록할 수 있어요.\n스크랩을 확인할까요?"
     }
 
     object Toast {

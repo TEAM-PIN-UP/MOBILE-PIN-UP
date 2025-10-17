@@ -1,10 +1,18 @@
 package com.pinup.pinup.ui.my.pinch
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.pinup.pinup.data.request.pints.ModifyPintsRequest
+import com.pinup.pinup.data.request.pints.PlaceSummariesRequest
 import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.model.SortType
+import com.pinup.pinup.domain.usecase.DeletePintsUseCase
+import com.pinup.pinup.domain.usecase.EditPintsUseCase
+import com.pinup.pinup.domain.usecase.GetPintsDetailUseCase
+import com.pinup.pinup.domain.usecase.GetPintsUseCase
+import com.pinup.pinup.domain.usecase.RegisterPintsUseCase
 import com.pinup.pinup.domain.usecase.SearchPlacesUseCase
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.base.BaseViewModel
@@ -19,11 +27,25 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 class PinchWriteViewModel (
+    savedStateHandle: SavedStateHandle,
     private val searchPlacesUseCase: SearchPlacesUseCase,
+    private val getPintsDetailUseCase: GetPintsDetailUseCase,
+    private val registerPintsUseCase: RegisterPintsUseCase,
+    private val editPintsUseCase: EditPintsUseCase,
     val locationTracker: LocationTracker
-) : BaseViewModel<PinchWriteUiState, UiEvent>(PinchWriteUiState()) {
+) : BaseViewModel<PinchWriteUiState, PinchWriteUiEvent>(PinchWriteUiState()) {
+
+    companion object {
+        private const val PINTS_ID = "pintsId"
+    }
+
+    val pintsId = savedStateHandle.get<Int>(PINTS_ID) ?: 0
 
     init {
+        if (pintsId != 0) {
+            getPintsDetail()
+        }
+
         initCollectLocation()
     }
 
@@ -37,6 +59,30 @@ class PinchWriteViewModel (
                 updateCameraPosition(myLocation)
                 updatePosition(myLocation)
             }
+    }
+
+    private fun getPintsDetail() = viewModelScope.launch {
+        resultResponse(
+            response = getPintsDetailUseCase(pintsId),
+            successCallback = { result ->
+                updateState {
+                    copy(
+                        title = result.title,
+                        description = result.content,
+                        createdAt = toShortDateXd(result.createdAt),
+                        pinchList = result.placeSummaries.map {
+                            Place(
+                                kakaoPlaceId = it.kakaoPlaceId,
+                                name = it.name,
+                                address = it.address,
+                                latitude = it.latitude,
+                                longitude = it.latitude
+                            )
+                        }
+                    )
+                }
+            }
+        )
     }
 
     private fun updateCameraPosition(position: Position?) {
@@ -113,6 +159,29 @@ class PinchWriteViewModel (
         }
     }
 
+    fun registerPints() = viewModelScope.launch {
+        val request = ModifyPintsRequest(
+            title = uiState.value.title,
+            content = uiState.value.description,
+            placeSummaries = uiState.value.pinchList.filter { it.kakaoPlaceId != "" }.map {
+                PlaceSummariesRequest(
+                    kakaoPlaceId = it.kakaoPlaceId,
+                    name = it.name,
+                    address = it.address,
+                    latitude = it.latitude,
+                    longitude = it.longitude
+                )
+            }
+        )
+
+        resultResponse(
+            response = if (pintsId != 0) editPintsUseCase(pintsId, request) else registerPintsUseCase(request),
+            successCallback = {
+                emitEvent(PinchWriteUiEvent.SuccessModify)
+            }
+        )
+    }
+
     fun moveItem(from: Int, to: Int) {
         if (from == to) return
         updateState {
@@ -155,3 +224,7 @@ data class PinchWriteUiState(
     val currentPosition: Position? = null,
     val cameraPosition: Position? = null,
 ) : UiState
+
+sealed interface PinchWriteUiEvent : UiEvent {
+    data object SuccessModify : PinchWriteUiEvent
+}

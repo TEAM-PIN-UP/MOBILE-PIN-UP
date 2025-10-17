@@ -426,6 +426,9 @@ fun PinUpApp(
                         onBackPressed = {
                             navHostController.popBackStack()
                         },
+                        onMoveWriteReview = {
+                            navHostController.navigate(PinUpAppDestination.WriteReview(0, it))
+                        },
                     )
                 }
             }

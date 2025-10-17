@@ -16,4 +16,5 @@ data class Place(
     val reviewCount: Int = 0,
     val roadAddress: String = "",
     val image: String = "",
+    val hasMyReview: Boolean = false,
 )
