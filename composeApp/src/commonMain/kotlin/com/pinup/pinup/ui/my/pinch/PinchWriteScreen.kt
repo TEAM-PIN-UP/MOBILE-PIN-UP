@@ -108,9 +108,6 @@ fun PinchWriteScreen(
     val density = LocalDensity.current
     val isShowWritePinlogDialog = remember { mutableStateOf(false) }
     val clickedKakaoPlaceId = remember { mutableStateOf("") }
-    val sheetState = rememberModalBottomSheetState(
-        ModalBottomSheetValue.Hidden
-    )
 
     Column(
         modifier = Modifier

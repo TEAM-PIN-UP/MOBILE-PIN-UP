@@ -30,6 +30,7 @@ import com.pinup.pinup.ui.feed.FeedRoute
 import com.pinup.pinup.ui.main.MainViewModel
 import com.pinup.pinup.ui.map.MapRoute
 import com.pinup.pinup.ui.my.MyRoute
+import com.pinup.pinup.ui.my.pinch.detail.PinchDetailRoute
 import com.pinup.pinup.ui.my.scrap.ScrapRoute
 import kotlinx.serialization.Serializable
 
@@ -214,6 +215,30 @@ fun MainNavHost(
                     },
                     onMovePlaceDetail = onMovePlaceDetail,
                     onSettingClick = onMoveSetting
+                )
+            }
+
+            composable<PinUpAppDestination.PinchDetail> {
+                PinchDetailRoute(
+                    onClickBottomNav = {
+                        if (it is MainDestination.Upload) {
+                            if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()
+                        } else {
+                            navHostController.navigate(it) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
+                        }
+                    },
+                    onBackPressed = {
+                        navHostController.popBackStack()
+                    },
+                    onClickEdit = {
+                        navHostController.navigate(PinUpAppDestination.PinchWrite(it))
+                    }
                 )
             }
         }

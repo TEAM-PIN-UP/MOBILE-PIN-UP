@@ -292,7 +292,7 @@ fun PinUpApp(
                             navHostController.navigate(PinUpAppDestination.PlaceDetail(it))
                         },
                         onMovePinchWrite = {
-                            navHostController.navigate(PinUpAppDestination.PinchWrite)
+                            navHostController.navigate(PinUpAppDestination.PinchWrite(0))
                         }
                     )
                 }
@@ -363,7 +363,7 @@ fun PinUpApp(
                             navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
                         },
                         onMovePinchWrite = {
-                            navHostController.navigate(PinUpAppDestination.PinchWrite)
+                            navHostController.navigate(PinUpAppDestination.PinchWrite(0))
                         }
                     )
                 }
@@ -502,7 +502,11 @@ sealed interface PinUpAppDestination {
     @Serializable
     data object Scrap : PinUpAppDestination
     @Serializable
-    data object PinchWrite : PinUpAppDestination
+    data class PinchWrite(
+        val pintsId: Int
+    ) : PinUpAppDestination
+    @Serializable
+    data object PinchDetail : PinUpAppDestination
     @Serializable
     data class PlaceDetail(
         val kakaoPlaceId: String

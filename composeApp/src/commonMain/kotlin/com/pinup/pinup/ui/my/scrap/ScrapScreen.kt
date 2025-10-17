@@ -209,7 +209,6 @@ fun ScrapScreen(
                 onBottomMenuClick = onClickBottomNav,
                 onSizeChanged = { bottomBarHeight = it }
             )
-
         }
     }
 }

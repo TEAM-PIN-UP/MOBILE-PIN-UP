@@ -1,15 +1,13 @@
-package com.pinup.pinup.ui.my.pinch
+package com.pinup.pinup.ui.my.pinch.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.pinup.pinup.data.request.pints.ModifyPintsRequest
-import com.pinup.pinup.data.request.pints.PlaceSummariesRequest
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
-import com.pinup.pinup.domain.usecase.EditPintsUseCase
+import com.pinup.pinup.domain.model.getSuccessOrNull
+import com.pinup.pinup.domain.usecase.DeletePintsUseCase
+import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPintsDetailUseCase
-import com.pinup.pinup.domain.usecase.RegisterPintsUseCase
-import com.pinup.pinup.domain.usecase.SearchPlacesUseCase
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
@@ -21,27 +19,32 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
-class PinchWriteViewModel (
+class PinchDetailViewModel (
     savedStateHandle: SavedStateHandle,
-    private val searchPlacesUseCase: SearchPlacesUseCase,
     private val getPintsDetailUseCase: GetPintsDetailUseCase,
-    private val registerPintsUseCase: RegisterPintsUseCase,
-    private val editPintsUseCase: EditPintsUseCase,
+    private val getMemberInfoUseCase: GetMemberInfoUseCase,
+    private val deletePintsUseCase: DeletePintsUseCase,
     val locationTracker: LocationTracker
-) : BaseViewModel<PinchWriteUiState, PinchWriteUiEvent>(PinchWriteUiState()) {
+) : BaseViewModel<PinchDetailUiState, PinchDetailUiEvent>(PinchDetailUiState()) {
 
-    companion object {
+    companion object Companion {
         private const val PINTS_ID = "pintsId"
     }
 
     val pintsId = savedStateHandle.get<Int>(PINTS_ID) ?: 0
 
     init {
-        if (pintsId != 0) {
-            getPintsDetail()
-        }
-
+        getPintsDetail()
+        initMyInfo()
         initCollectLocation()
+    }
+    private fun initMyInfo() = viewModelScope.launch {
+        val memberInfo = getMemberInfoUseCase().getSuccessOrNull() ?: return@launch
+        updateState {
+            copy(
+                profileUrl = memberInfo.profile.profilePictureUrl ?: "",
+            )
+        }
     }
 
     private fun initCollectLocation() = viewModelScope.launch {
@@ -97,95 +100,13 @@ class PinchWriteViewModel (
         }
     }
 
-    fun updateTitle(title: String) {
-        updateState {
-            copy(
-                title = title
-            )
-        }
-    }
-
-    fun updateDescription(des: String) {
-        updateState {
-            copy(
-                description = des
-            )
-        }
-    }
-
-    fun updatePinchName(index: Int, name: String) {
-        getSearchedPlaceList(name)
-        updateState {
-            copy(
-                pinchList = pinchList.mapIndexed { i, place ->
-                    if (i == index) {
-                        place.copy(name = name)
-                    } else {
-                        place
-                    }
-                }
-            )
-        }
-    }
-
-    private fun getSearchedPlaceList(search: String) = viewModelScope.launch {
+    fun deletePinch() = viewModelScope.launch {
         resultResponse(
-            response = searchPlacesUseCase(search),
-            successCallback = { result ->
-                updateState {
-                    copy(
-                        searchedList = result.take(4)
-                    )
-                }
-            }
-        )
-    }
-
-    fun deletePinch(index: Int) {
-        updateState {
-            if (index !in pinchList.indices) return@updateState this
-
-            val reordered =
-                pinchList
-                    .filterIndexed { i, _ -> i != index }
-                    .plus(Place())
-            val lastIdx = reordered.indexOfLast { it.kakaoPlaceId.isNotEmpty() }
-            updatePosition(Position(reordered[lastIdx].latitude,reordered[lastIdx].longitude))
-            copy(pinchList = reordered)
-        }
-    }
-
-    fun registerPints() = viewModelScope.launch {
-        val request = ModifyPintsRequest(
-            title = uiState.value.title,
-            content = uiState.value.description,
-            placeSummaries = uiState.value.pinchList.filter { it.kakaoPlaceId != "" }.map {
-                PlaceSummariesRequest(
-                    kakaoPlaceId = it.kakaoPlaceId,
-                    name = it.name,
-                    address = it.address,
-                    latitude = it.latitude,
-                    longitude = it.longitude
-                )
-            }
-        )
-
-        resultResponse(
-            response = if (pintsId != 0) editPintsUseCase(pintsId, request) else registerPintsUseCase(request),
+            response = deletePintsUseCase(pintsId),
             successCallback = {
-                emitEvent(PinchWriteUiEvent.SuccessModify)
+                emitEvent(PinchDetailUiEvent.SuccessModify)
             }
         )
-    }
-
-    fun moveItem(from: Int, to: Int) {
-        if (from == to) return
-        updateState {
-            val new = pinchList.toMutableList().apply {
-                add(to, removeAt(from))
-            }
-            copy(pinchList = new)
-        }
     }
 
     fun updatePlace(place: Place, index: Int) {
@@ -207,16 +128,16 @@ class PinchWriteViewModel (
     }
 }
 
-data class PinchWriteUiState(
+data class PinchDetailUiState(
     val title: String = "",
     val description: String = "",
     val createdAt: String = toShortDateXd(currentDate.toString()),
     val pinchList: List<Place> = List(5) { Place() },
-    val searchedList: List<Place> = emptyList(),
+    val profileUrl: String = "",
     val currentPosition: Position? = null,
     val cameraPosition: Position? = null,
 ) : UiState
 
-sealed interface PinchWriteUiEvent : UiEvent {
-    data object SuccessModify : PinchWriteUiEvent
+sealed interface PinchDetailUiEvent : UiEvent {
+    data object SuccessModify : PinchDetailUiEvent
 }
