@@ -11,12 +11,14 @@ val useCaseModule = module {
     single<DeleteCommentUseCase> { DeleteCommentUseCase(get()) }
     single<DeletePinlogUseCase> { DeletePinlogUseCase(get()) }
     single<DeletePinBuddyUseCase> { DeletePinBuddyUseCase(get()) }
+    single<DeletePintsUseCase> { DeletePintsUseCase(get()) }
     single<DeleteRecentSearchUseCase> { DeleteRecentSearchUseCase(get()) }
     single<DeleteRecentPinBuddySearchUseCase> { DeleteRecentPinBuddySearchUseCase(get()) }
     single<DeleteRequestPinBuddyUseCase> { DeleteRequestPinBuddyUseCase(get()) }
     single<EditCommentUseCase> { EditCommentUseCase(get()) }
     single<EditPinlogUseCase> { EditPinlogUseCase(get()) }
     single<EditProfileUseCase> { EditProfileUseCase(get()) }
+    single<EditPintsUseCase> { EditPintsUseCase(get()) }
     single<GetBookmarksUseCase> { GetBookmarksUseCase(get()) }
     single<GetDetailPlaceUseCase> { GetDetailPlaceUseCase(get()) }
     single<GetFeedUseCase> { GetFeedUseCase(get()) }
@@ -27,6 +29,8 @@ val useCaseModule = module {
     single<GetPhotoReviewsUseCase> { GetPhotoReviewsUseCase(get()) }
     single<GetPinBuddiesUseCase> { GetPinBuddiesUseCase(get()) }
     single<GetPinlogDetailUseCase> { GetPinlogDetailUseCase(get()) }
+    single<GetPintsUseCase> { GetPintsUseCase(get()) }
+    single<GetPintsDetailUseCase> { GetPintsDetailUseCase(get()) }
     single<GetRecentSearchUseCase> { GetRecentSearchUseCase(get()) }
     single<GetRecentPinBuddySearchUseCase> { GetRecentPinBuddySearchUseCase(get()) }
     single<GetReceivePinBuddyRequestsUseCase> { GetReceivePinBuddyRequestsUseCase(get()) }
@@ -45,6 +49,7 @@ val useCaseModule = module {
     single<EmailLoginUseCase> { EmailLoginUseCase(get(), get(), get()) }
     single<LogoutUseCase> { LogoutUseCase(get(), get()) }
     single<RegisterReviewUseCase> { RegisterReviewUseCase(get()) }
+    single<RegisterPintsUseCase> { RegisterPintsUseCase(get()) }
     single<RejectPinBuddyUseCase> { RejectPinBuddyUseCase(get()) }
     single<RequestPinBuddyUseCase> { RequestPinBuddyUseCase(get()) }
     single<SaveRecentSearchUseCase> { SaveRecentSearchUseCase(get()) }
