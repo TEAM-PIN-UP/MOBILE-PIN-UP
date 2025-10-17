@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -44,6 +45,7 @@ import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.PintsPageAble
 import com.pinup.pinup.domain.model.Review
+import com.pinup.pinup.extentions.ScrollToEndCallback
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.BottomBar
@@ -87,15 +89,23 @@ fun MyScreen(
     onClickMoreScrap: () -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
     onMovePinchWrite: () -> Unit = {},
+    getMorePints: () -> Unit = {},
+    onMoveDetail: (Int) -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
     var clickedReviewId by remember { mutableStateOf(0) }
-    val density = LocalDensity.current
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
     val pagerState = remember { mutableStateOf(0) }
+    val scrollState = rememberLazyListState()
+
+    ScrollToEndCallback(scrollState) {
+        if (pagerState.value == 1 && !pinchPageAble.last) {
+            getMorePints()
+        }
+    }
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -121,7 +131,8 @@ fun MyScreen(
                 )
                 .padding(bottom = bottomBarHeight)
                 .statusBarsPadding()
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            state = scrollState
         ) {
             item {
                 HeaderItem(
@@ -167,7 +178,8 @@ fun MyScreen(
                     onClickMoreScrap = onClickMoreScrap,
                     onClickPlaceDetail = onMovePlaceDetail,
                     onClickGoCreatePinch = onMovePinchWrite,
-                    onClickGoFeed = { onClickBottomNav(MainDestination.Feed) }
+                    onClickGoFeed = { onClickBottomNav(MainDestination.Feed) },
+                    onMoveDetail = onMoveDetail
                 )
             }
         }
@@ -609,6 +621,7 @@ fun LazyListScope.MyScrapList(
     onClickGoCreatePinch: () -> Unit = {},
     onClickPlaceDetail: (String) -> Unit = {},
     onClickMoreScrap: () -> Unit = {},
+    onMoveDetail: (Int) -> Unit = {},
 ) {
     item {
         Spacer(modifier = Modifier.height(19.dp))
@@ -827,7 +840,10 @@ fun LazyListScope.MyScrapList(
         }
 
         items(pinchPageAble.content) {
-            PinchItemView(it)
+            PinchItemView(
+                pinchListItem = it,
+                onMoveDetail = onMoveDetail
+            )
             Spacer(modifier = Modifier.height(12.dp))
         }
     }

@@ -1,6 +1,7 @@
 package com.pinup.pinup.ui.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.PintsItem
+import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
@@ -23,6 +25,7 @@ import pinup.composeapp.generated.resources.ic_share_root
 @Composable
 fun PinchItemView(
     pinchListItem: PintsItem,
+    onMoveDetail: (Int) -> Unit = {},
 ) {
     RoundedBox(
         modifier = Modifier
@@ -33,6 +36,9 @@ fun PinchItemView(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .clickableWithNoRipple {
+                    onMoveDetail(pinchListItem.pintsId)
+                }
                 .padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {

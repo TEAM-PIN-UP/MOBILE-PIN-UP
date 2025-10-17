@@ -26,6 +26,7 @@ fun MyRoute(
     onClickMoreScrap: () -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
     onMovePinchWrite: () -> Unit = {},
+    onMovePintsDetail: (Int) -> Unit = {},
 ) {
     val uiState = myViewModel.uiState.collectAsStateWithLifecycle()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
@@ -74,6 +75,8 @@ fun MyRoute(
         onClickShare = myViewModel::shareMyProfile,
         onClickMoreScrap = onClickMoreScrap,
         onMovePlaceDetail = onMovePlaceDetail,
-        onMovePinchWrite = onMovePinchWrite
+        onMovePinchWrite = onMovePinchWrite,
+        getMorePints = myViewModel::getMorePints,
+        onMoveDetail = onMovePintsDetail
     )
 }

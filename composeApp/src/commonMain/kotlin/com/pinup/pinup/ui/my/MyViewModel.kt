@@ -158,7 +158,27 @@ class MyViewModel (
             successCallback = {
                 updateState {
                     copy(
-                        pinchPageAble = it
+                        pinchPageAble = it,
+                        nowPage = nowPage + 1
+                    )
+                }
+            }
+        )
+    }
+
+    fun getMorePints() = viewModelScope.launch {
+        val pageAble = PageAble(
+            page = uiState.value.nowPage
+        )
+        resultResponse(
+            response = getPintsUseCase(uiState.value.member.profile.memberId, pageAble),
+            successCallback = {
+                updateState {
+                    copy(
+                        pinchPageAble = it.copy(
+                            content = uiState.value.pinchPageAble.content + it.content
+                        ),
+                        nowPage = nowPage + 1
                     )
                 }
             }
