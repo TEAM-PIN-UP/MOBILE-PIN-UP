@@ -6,6 +6,7 @@ import com.pinup.pinup.remote.api.EmailApi
 import com.pinup.pinup.remote.api.ImageApi
 import com.pinup.pinup.remote.api.MembersApi
 import com.pinup.pinup.remote.api.PinBuddyApi
+import com.pinup.pinup.remote.api.PintsApi
 import com.pinup.pinup.remote.api.PlacesApi
 import com.pinup.pinup.remote.api.ReviewsApi
 import com.pinup.pinup.remote.api.createAuthApi
@@ -14,6 +15,7 @@ import com.pinup.pinup.remote.api.createEmailApi
 import com.pinup.pinup.remote.api.createImageApi
 import com.pinup.pinup.remote.api.createMembersApi
 import com.pinup.pinup.remote.api.createPinBuddyApi
+import com.pinup.pinup.remote.api.createPintsApi
 import com.pinup.pinup.remote.api.createPlacesApi
 import com.pinup.pinup.remote.api.createReviewsApi
 import de.jensklingenberg.ktorfit.Ktorfit
@@ -28,5 +30,5 @@ val apiModule = module {
     single<PinBuddyApi> { get<Ktorfit>().createPinBuddyApi() }
     single<PlacesApi> { get<Ktorfit>().createPlacesApi() }
     single<ReviewsApi> { get<Ktorfit>().createReviewsApi() }
-
+    single<PintsApi> { get<Ktorfit>().createPintsApi() }
 }

@@ -18,4 +18,5 @@ val dataSourceModule = module {
     single<PinBuddyRemoteDataSource> { PinBuddyRemoteDataSourceImpl(get()) }
     single<PlacesRemoteDataSource> { PlacesRemoteDataSourceImpl(get()) }
     single<ReviewsRemoteDataSource> { ReviewsRemoteDataSourceImpl(get()) }
+    single<PintsRemoteDataSource> { PintsRemoteDataSourceImpl(get()) }
 }
