@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
@@ -41,8 +42,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.PinchListItem
+import com.pinup.pinup.domain.model.PintsPageAble
 import com.pinup.pinup.domain.model.RelationType
 import com.pinup.pinup.domain.model.Review
+import com.pinup.pinup.extentions.ScrollToEndCallback
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.FeedView
@@ -65,6 +68,7 @@ import pinup.composeapp.generated.resources.*
 fun UserProfileScreen(
     member: Member,
     photoReviews: List<Review>,
+    pinchPageAble: PintsPageAble,
     modifier: Modifier = Modifier,
     onRequestPinBuddy: () -> Unit = {},
     onAlarmClick: () -> Unit = {},
@@ -75,6 +79,8 @@ fun UserProfileScreen(
     onClickDetail: (Int) -> Unit = {},
     onClickShare: () -> Unit = {},
     onMovePinchWrite: () -> Unit = {},
+    getMorePints: () -> Unit = {},
+    onMoveDetail: (Int) -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     var isShowDeleteDialog by remember { mutableStateOf(false) }
@@ -82,6 +88,13 @@ fun UserProfileScreen(
         ModalBottomSheetValue.Hidden
     )
     val pagerState = remember { mutableStateOf(0) }
+    val scrollState = rememberLazyListState()
+
+    ScrollToEndCallback(scrollState) {
+        if (pagerState.value == 1 && !pinchPageAble.last) {
+            getMorePints()
+        }
+    }
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -106,7 +119,8 @@ fun UserProfileScreen(
                 )
                 .statusBarsPadding()
                 .navigationBarsPadding()
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            state = scrollState
         ) {
             item {
                 Row(
@@ -347,37 +361,11 @@ fun UserProfileScreen(
                         onClickLike = onClickLike,
                     )
                 } else {
-                    //TODO 더미데이터 임시
                     this.UserPinchList(
                         member = member,
-                        pinchListItem = listOf(
-                            PinchListItem(
-                                id = 1,
-                                title = "임시 루트명1",
-                                description = "임시 설명글1"
-                            ),
-                            PinchListItem(
-                                id = 2,
-                                title = "임시 루트명2",
-                                description = "임시 설명글2"
-                            ),
-                            PinchListItem(
-                                id = 3,
-                                title = "임시 루트명3",
-                                description = "임시 설명글3"
-                            ),
-                            PinchListItem(
-                                id = 4,
-                                title = "임시 루트명4",
-                                description = "임시 설명글4"
-                            ),
-                            PinchListItem(
-                                id = 5,
-                                title = "임시 루트명5",
-                                description = "임시 설명글5"
-                            )
-                        ),
-                        onClickGoCreatePinch = onMovePinchWrite
+                        pinchPageAble = pinchPageAble,
+                        onClickGoCreatePinch = onMovePinchWrite,
+                        onMoveDetail = onMoveDetail
                     )
                 }
             }
@@ -663,8 +651,9 @@ fun LazyListScope.UserPinlogList(
 
 fun LazyListScope.UserPinchList(
     member: Member,
-    pinchListItem: List<PinchListItem>,
+    pinchPageAble: PintsPageAble,
     onClickGoCreatePinch: () -> Unit = {},
+    onMoveDetail: (Int) -> Unit = {},
 ) {
     item {
         Spacer(modifier = Modifier.height(20.dp))
@@ -704,7 +693,7 @@ fun LazyListScope.UserPinchList(
     }
 
 
-    if (pinchListItem.isEmpty()) {
+    if (pinchPageAble.content.isEmpty()) {
         item {
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -758,8 +747,11 @@ fun LazyListScope.UserPinchList(
             Spacer(modifier = Modifier.height(15.dp))
         }
 
-        items(pinchListItem) {
-            PinchItemView(it)
+        items(pinchPageAble.content) {
+            PinchItemView(
+                pinchListItem = it,
+                onMoveDetail = onMoveDetail
+            )
             Spacer(modifier = Modifier.height(12.dp))
         }
     }

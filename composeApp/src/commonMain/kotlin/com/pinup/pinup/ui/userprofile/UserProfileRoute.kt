@@ -9,22 +9,24 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun UserProfileRoute(
     contextFactory: ContextFactory,
-    onBackPressed: () -> Unit,
     onClickDetail: (Int) -> Unit = {},
     onMovePinchWrite: () -> Unit = {},
-
+    onMovePintsDetail: (Int) -> Unit = {},
     viewModel: UserProfileViewModel = koinViewModel(parameters = { parametersOf(contextFactory) })
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     UserProfileScreen(
         member = uiState.value.member,
         photoReviews = uiState.value.pagingReview.reviews,
+        pinchPageAble = uiState.value.pinchPageAble,
         onRequestCancel = viewModel::deleteRequestPinBuddy,
         onRemovePinBuddy = viewModel::deletePinBuddy,
         onRequestPinBuddy = viewModel::requestPinBuddy,
         onClickLike = viewModel::likeChanged,
         onClickDetail = onClickDetail,
         onMovePinchWrite = onMovePinchWrite,
-        onClickShare = viewModel::shareMyProfile
+        onClickShare = viewModel::shareMyProfile,
+        onMoveDetail = onMovePintsDetail,
+        getMorePints = viewModel::getMorePints
     )
 }

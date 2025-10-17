@@ -359,14 +359,14 @@ fun PinUpApp(
                 composable<PinUpAppDestination.UserProfile> {
                     UserProfileRoute(
                         contextFactory = contextFactory,
-                        onBackPressed = {
-                            navHostController.popBackStack()
-                        },
                         onClickDetail = { it ->
                             navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
                         },
                         onMovePinchWrite = {
                             navHostController.navigate(PinUpAppDestination.PinchWrite(0))
+                        },
+                        onMovePintsDetail = {
+                            navHostController.navigate(PinUpAppDestination.PinchDetail(it))
                         }
                     )
                 }

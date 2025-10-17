@@ -2,8 +2,10 @@ package com.pinup.pinup.ui.userprofile
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.pinup.pinup.data.request.pints.PageAble
 import com.pinup.pinup.domain.model.Member
 import com.pinup.pinup.domain.model.PagingReview
+import com.pinup.pinup.domain.model.PintsPageAble
 import com.pinup.pinup.domain.model.Profile
 import com.pinup.pinup.domain.model.RelationType
 import com.pinup.pinup.domain.model.getSuccessOrNull
@@ -11,6 +13,7 @@ import com.pinup.pinup.domain.usecase.DeletePinBuddyUseCase
 import com.pinup.pinup.domain.usecase.DeleteRequestPinBuddyUseCase
 import com.pinup.pinup.domain.usecase.GetFeedUseCase
 import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
+import com.pinup.pinup.domain.usecase.GetPintsUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.domain.usecase.RequestPinBuddyUseCase
 import com.pinup.pinup.platform.ContextFactory
@@ -29,12 +32,14 @@ class UserProfileViewModel (
     private val getFeedUseCase: GetFeedUseCase,
     private val deleteRequestPinBuddyUseCase: DeleteRequestPinBuddyUseCase,
     private val deletePinBuddyUseCase: DeletePinBuddyUseCase,
-    private val postReviewLikeChangeUseCase : PostReviewLikeChangeUseCase
+    private val postReviewLikeChangeUseCase : PostReviewLikeChangeUseCase,
+    private val getPintsUseCase: GetPintsUseCase,
 ) : BaseViewModel<UserProfileUiState, UiEvent>(UserProfileUiState()) {
     val memberId = savedStateHandle.get<Int>(MEMBER_ID) ?: 0
 
     init {
         initUserProfile()
+        getPintsList()
     }
 
     private fun initUserProfile() = viewModelScope.launch {
@@ -133,6 +138,42 @@ class UserProfileViewModel (
         )
     }
 
+    private fun getPintsList() = viewModelScope.launch {
+        val pageAble = PageAble(
+            page = uiState.value.nowPage
+        )
+        resultResponse(
+            response = getPintsUseCase(uiState.value.member.profile.memberId, pageAble),
+            successCallback = {
+                updateState {
+                    copy(
+                        pinchPageAble = it,
+                        nowPage = nowPage + 1
+                    )
+                }
+            }
+        )
+    }
+
+    fun getMorePints() = viewModelScope.launch {
+        val pageAble = PageAble(
+            page = uiState.value.nowPage
+        )
+        resultResponse(
+            response = getPintsUseCase(uiState.value.member.profile.memberId, pageAble),
+            successCallback = {
+                updateState {
+                    copy(
+                        pinchPageAble = it.copy(
+                            content = uiState.value.pinchPageAble.content + it.content
+                        ),
+                        nowPage = nowPage + 1
+                    )
+                }
+            }
+        )
+    }
+
     fun shareMyProfile(){
         kakaoShare(
             context = contextFactory.getActivity(),
@@ -167,4 +208,6 @@ data class UserProfileUiState(
     ),
     val pagingReview: PagingReview = PagingReview(),
     val prevCursor: Int? = null,
+    val pinchPageAble: PintsPageAble = PintsPageAble(),
+    val nowPage: Int = 1
 ) : UiState
