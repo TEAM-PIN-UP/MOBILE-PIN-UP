@@ -16,7 +16,8 @@ data class SearchPlacesResponse(
     val name: String,
     val placeCategory: String,
     val reviewCount: Int,
-    val roadAddress: String
+    val roadAddress: String,
+    val hasMyReview: Boolean
 ) {
     companion object {
         fun SearchPlacesResponse.toModel(): Place {
@@ -31,7 +32,8 @@ data class SearchPlacesResponse(
                 address = address,
                 categoryCode = categoryCode,
                 description = description,
-                roadAddress = roadAddress
+                roadAddress = roadAddress,
+                hasMyReview = hasMyReview
             )
         }
     }

@@ -22,9 +22,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -79,12 +83,14 @@ import pinup.composeapp.generated.resources.ic_menu_dot
 import pinup.composeapp.generated.resources.ic_right_arrow_300
 import pinup.composeapp.generated.resources.ic_star
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PinlogDetailScreen(
     pinlogDetail: PinlogDetail,
     query: String,
     userInfo: UserInfo,
     replyId: Int?,
+    isRefreshing: Boolean = false,
     onValueChange: (String) -> Unit = {},
     onBackPressed: () -> Unit = {},
     onClickEdit: () -> Unit = {},
@@ -95,6 +101,7 @@ fun PinlogDetailScreen(
     updateNonFocusMode: () -> Unit = {},
     updateReplyCommentId: (Int) -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
+    onRefresh: () -> Unit = {},
 ) {
 
     val density = LocalDensity.current
@@ -112,6 +119,10 @@ fun PinlogDetailScreen(
 
     var clickedCommentId by remember { mutableStateOf(0) }
     var clickedComment by remember { mutableStateOf("") }
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = onRefresh
+    )
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -164,307 +175,321 @@ fun PinlogDetailScreen(
                     onLeftButtonClick = onBackPressed
                 )
 
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentPadding = PaddingValues(bottom = bottomBarHeightDp + 20.dp)
+                Box(
+                    Modifier
+                        .weight(1f)
+                        .pullRefresh(
+                            state = pullRefreshState,
+                        )
                 ) {
-                    item {
-                        Spacer(modifier = Modifier.height(16.dp))
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentPadding = PaddingValues(bottom = bottomBarHeightDp + 20.dp)
+                    ) {
+                        item {
+                            Spacer(modifier = Modifier.height(16.dp))
 
-                        Row(
-                            modifier = Modifier
-                                .padding(horizontal = 20.dp)
-                                .clickableWithNoRipple {
-                                    onMovePlaceDetail(pinlogDetail.kakaoPlaceId)
-                                }
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(
+                            Row(
                                 modifier = Modifier
-                                    .weight(1f)
+                                    .padding(horizontal = 20.dp)
+                                    .clickableWithNoRipple {
+                                        onMovePlaceDetail(pinlogDetail.kakaoPlaceId)
+                                    }
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-
-                                Text(
-                                    text = pinlogDetail.placeName,
-                                    style = Typography.B2.copy(
-                                        fontWeight = FontWeight.SemiBold
-                                    ),
-                                    color = Colors.Black,
-                                )
-
-                                Spacer(modifier = Modifier.height(6.dp))
-
-                                Text(
-                                    text = "${toShortDateXd(pinlogDetail.visitedDate)} 방문",
-                                    style = Typography.L2.copy(
-                                        fontWeight = FontWeight.Medium
-                                    ),
-                                    color = Colors.Gray400,
-                                )
-                            }
-
-                            Image(
-                                painter = painterResource(Res.drawable.ic_right_arrow_300),
-                                contentDescription = null,
-                                colorFilter = ColorFilter.tint(Colors.Gray400)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(20.dp))
-
-                        PHorizontalDivider()
-
-                        Spacer(modifier = Modifier.height(20.dp))
-                    }
-
-                    item {
-                        Row(
-                            modifier = Modifier
-                                .padding(horizontal = 20.dp)
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            ProfileImageView(
-                                imgUrl = pinlogDetail.writerProfileImageUrl,
-                                size = 36.dp,
-                            )
-
-                            Spacer(modifier = Modifier.width(12.dp))
-
-                            Column(
-                                modifier = Modifier
-                                    .weight(1f)
-                            ) {
-                                Text(
-                                    text = pinlogDetail.writerName,
-                                    style = Typography.B2.copy(
-                                        fontWeight = FontWeight.SemiBold
-                                    ),
-                                    color = Colors.Gray900,
-                                )
-
-                                Spacer(modifier = Modifier.height(2.dp))
-
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically
+                                Column(
+                                    modifier = Modifier
+                                        .weight(1f)
                                 ) {
+
                                     Text(
-                                        text = Texts.Word.PINLOG,
+                                        text = pinlogDetail.placeName,
+                                        style = Typography.B2.copy(
+                                            fontWeight = FontWeight.SemiBold
+                                        ),
+                                        color = Colors.Black,
+                                    )
+
+                                    Spacer(modifier = Modifier.height(6.dp))
+
+                                    Text(
+                                        text = "${toShortDateXd(pinlogDetail.visitedDate)} 방문",
                                         style = Typography.L2.copy(
                                             fontWeight = FontWeight.Medium
                                         ),
-                                        color = Colors.Gray500,
+                                        color = Colors.Gray400,
+                                    )
+                                }
+
+                                Image(
+                                    painter = painterResource(Res.drawable.ic_right_arrow_300),
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.tint(Colors.Gray400)
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            PHorizontalDivider()
+
+                            Spacer(modifier = Modifier.height(20.dp))
+                        }
+
+                        item {
+                            Row(
+                                modifier = Modifier
+                                    .padding(horizontal = 20.dp)
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                ProfileImageView(
+                                    imgUrl = pinlogDetail.writerProfileImageUrl,
+                                    size = 36.dp,
+                                )
+
+                                Spacer(modifier = Modifier.width(12.dp))
+
+                                Column(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                ) {
+                                    Text(
+                                        text = pinlogDetail.writerName,
+                                        style = Typography.B2.copy(
+                                            fontWeight = FontWeight.SemiBold
+                                        ),
+                                        color = Colors.Gray900,
+                                    )
+
+                                    Spacer(modifier = Modifier.height(2.dp))
+
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = Texts.Word.PINLOG,
+                                            style = Typography.L2.copy(
+                                                fontWeight = FontWeight.Medium
+                                            ),
+                                            color = Colors.Gray500,
+                                        )
+
+                                        Spacer(modifier = Modifier.width(2.dp))
+
+                                        Text(
+                                            text = pinlogDetail.authorReviewCount.toString(),
+                                            style = Typography.L2.copy(
+                                                fontWeight = FontWeight.Medium
+                                            ),
+                                            color = Colors.Gray800,
+                                        )
+                                    }
+                                }
+
+                                if (pinlogDetail.isOwn) {
+                                    Image(
+                                        modifier = Modifier
+                                            .clickableWithNoRipple {
+                                                scope.launch { sheetState.show() }
+                                            },
+                                        painter = painterResource(Res.drawable.ic_menu_dot),
+                                        contentDescription = null,
+                                    )
+                                }
+                            }
+                        }
+
+                        item {
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            Column {
+                                Row(
+                                    modifier = Modifier
+                                        .padding(horizontal = 20.dp)
+                                        .fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Image(
+                                        painter = painterResource(Res.drawable.ic_star),
+                                        contentDescription = null
                                     )
 
                                     Spacer(modifier = Modifier.width(2.dp))
 
                                     Text(
-                                        text = pinlogDetail.authorReviewCount.toString(),
+                                        text = pinlogDetail.starRating.toString(),
+                                        style = Typography.B2.copy(
+                                            fontWeight = FontWeight.Medium
+                                        ),
+                                        color = Colors.Gray900,
+                                    )
+
+                                    Spacer(modifier = Modifier.weight(1f))
+
+                                    Text(
+                                        text = "${pinlogDetail.createdAt[0]}.${pinlogDetail.createdAt[1]}.${pinlogDetail.createdAt[2]} 작성",
                                         style = Typography.L2.copy(
                                             fontWeight = FontWeight.Medium
+                                        ),
+                                        color = Colors.Gray400,
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                if (pinlogDetail.reviewImageUrls.isNotEmpty()) {
+                                    Box {
+                                        HorizontalPager(
+                                            state = pagerState,
+                                        ) { page ->
+                                            RoundedBox(
+                                                modifier = Modifier
+                                                    .padding(horizontal = 20.dp),
+                                                cornerRounded = 8,
+                                                backgroundColor = Colors.Gray100,
+                                            ) {
+                                                AsyncImage(
+                                                    modifier = Modifier
+                                                        .aspectRatio(1f)
+                                                        .fillMaxWidth(),
+                                                    model = pinlogDetail.reviewImageUrls[page],
+                                                    contentScale = ContentScale.Crop,
+                                                    contentDescription = "default profile image"
+                                                )
+                                            }
+                                        }
+
+                                        Column(
+                                            modifier = Modifier
+                                                .align(Alignment.BottomCenter)
+                                        ) {
+                                            PagerIndicator(
+                                                page = pagerState.pageCount,
+                                                selectedPage = pagerState.currentPage
+                                            )
+
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                        }
+                                    }
+                                }
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Text(
+                                    modifier = Modifier
+                                        .padding(horizontal = 20.dp),
+                                    text = pinlogDetail.content,
+                                    style = Typography.B3.copy(
+                                        fontWeight = FontWeight.Medium
+                                    ),
+                                    color = Colors.Gray700,
+                                )
+
+                                Spacer(modifier = Modifier.height(20.dp))
+
+                                Row(
+                                    modifier = Modifier
+                                        .padding(horizontal = 20.dp)
+                                        .fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Image(
+                                        painter = painterResource(if (pinlogDetail.isLikedByUser) Res.drawable.ic_heat_on else Res.drawable.ic_heart_off),
+                                        contentDescription = null
+                                    )
+
+                                    Spacer(modifier = Modifier.width(3.dp))
+
+                                    Text(
+                                        text = pinlogDetail.likeCount.toString(),
+                                        style = Typography.L2.copy(
+                                            fontWeight = FontWeight.SemiBold
+                                        ),
+                                        color = Colors.Gray800,
+                                    )
+
+                                    Spacer(modifier = Modifier.width(14.dp))
+
+                                    Image(
+                                        painter = painterResource(Res.drawable.ic_comment),
+                                        contentDescription = null
+                                    )
+
+                                    Spacer(modifier = Modifier.width(4.dp))
+
+                                    Text(
+                                        text = pinlogDetail.commentCount.toString(),
+                                        style = Typography.L2.copy(
+                                            fontWeight = FontWeight.SemiBold
                                         ),
                                         color = Colors.Gray800,
                                     )
                                 }
                             }
-
-                            if (pinlogDetail.isOwn) {
-                                Image(
-                                    modifier = Modifier
-                                        .clickableWithNoRipple {
-                                            scope.launch { sheetState.show() }
-                                        },
-                                    painter = painterResource(Res.drawable.ic_menu_dot),
-                                    contentDescription = null,
-                                )
-                            }
                         }
-                    }
 
-                    item {
-                        Spacer(modifier = Modifier.height(20.dp))
-
-                        Column {
-                            Row(
-                                modifier = Modifier
-                                    .padding(horizontal = 20.dp)
-                                    .fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Image(
-                                    painter = painterResource(Res.drawable.ic_star),
-                                    contentDescription = null
-                                )
-
-                                Spacer(modifier = Modifier.width(2.dp))
-
-                                Text(
-                                    text = pinlogDetail.starRating.toString(),
-                                    style = Typography.B2.copy(
-                                        fontWeight = FontWeight.Medium
-                                    ),
-                                    color = Colors.Gray900,
-                                )
-
-                                Spacer(modifier = Modifier.weight(1f))
-
-                                Text(
-                                    text = "${pinlogDetail.createdAt[0]}.${pinlogDetail.createdAt[1]}.${pinlogDetail.createdAt[2]} 작성",
-                                    style = Typography.L2.copy(
-                                        fontWeight = FontWeight.Medium
-                                    ),
-                                    color = Colors.Gray400,
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            if (pinlogDetail.reviewImageUrls.isNotEmpty()) {
-                                Box {
-                                    HorizontalPager(
-                                        state = pagerState,
-                                    ) { page ->
-                                        RoundedBox(
-                                            modifier = Modifier
-                                                .padding(horizontal = 20.dp),
-                                            cornerRounded = 8,
-                                            backgroundColor = Colors.Gray100,
-                                        ) {
-                                            AsyncImage(
-                                                modifier = Modifier
-                                                    .aspectRatio(1f)
-                                                    .fillMaxWidth(),
-                                                model = pinlogDetail.reviewImageUrls[page],
-                                                contentScale = ContentScale.Crop,
-                                                contentDescription = "default profile image"
-                                            )
-                                        }
-                                    }
-
-                                    Column(
-                                        modifier = Modifier
-                                            .align(Alignment.BottomCenter)
-                                    ) {
-                                        PagerIndicator(
-                                            page = pagerState.pageCount,
-                                            selectedPage = pagerState.currentPage
-                                        )
-
-                                        Spacer(modifier = Modifier.height(8.dp))
-                                    }
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(8.dp))
-
-                            Text(
-                                modifier = Modifier
-                                    .padding(horizontal = 20.dp),
-                                text = pinlogDetail.content,
-                                style = Typography.B3.copy(
-                                    fontWeight = FontWeight.Medium
-                                ),
-                                color = Colors.Gray700,
-                            )
-
-                            Spacer(modifier = Modifier.height(20.dp))
+                        item {
+                            Spacer(modifier = Modifier.height(50.dp))
 
                             Row(
                                 modifier = Modifier
-                                    .padding(horizontal = 20.dp)
-                                    .fillMaxWidth(),
+                                    .padding(horizontal = 16.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Image(
-                                    painter = painterResource(if (pinlogDetail.isLikedByUser) Res.drawable.ic_heat_on else Res.drawable.ic_heart_off),
-                                    contentDescription = null
-                                )
-
-                                Spacer(modifier = Modifier.width(3.dp))
-
                                 Text(
-                                    text = pinlogDetail.likeCount.toString(),
-                                    style = Typography.L2.copy(
-                                        fontWeight = FontWeight.SemiBold
+                                    text = Texts.Word.COMMENT,
+                                    style = Typography.T2.copy(
+                                        fontWeight = FontWeight.Medium
                                     ),
                                     color = Colors.Gray800,
-                                )
-
-                                Spacer(modifier = Modifier.width(14.dp))
-
-                                Image(
-                                    painter = painterResource(Res.drawable.ic_comment),
-                                    contentDescription = null
                                 )
 
                                 Spacer(modifier = Modifier.width(4.dp))
 
                                 Text(
                                     text = pinlogDetail.commentCount.toString(),
-                                    style = Typography.L2.copy(
-                                        fontWeight = FontWeight.SemiBold
+                                    style = Typography.T2.copy(
+                                        fontWeight = FontWeight.Medium
                                     ),
                                     color = Colors.Gray800,
                                 )
                             }
+
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            PHorizontalDivider()
+
+                            Spacer(modifier = Modifier.height(20.dp))
+                        }
+
+                        items(pinlogDetail.comments){
+                            CommentView(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp),
+                                comment = it,
+                                onClickMenu = { id, comment ->
+                                    commentSheet = true
+                                    clickedCommentId = id
+                                    clickedComment = comment
+                                    scope.launch { sheetState.show() }
+                                },
+                                onReplyClick = { id ->
+                                    updateReplyCommentId(id)
+                                    focusRequester.requestFocus()
+                                }
+                            )
+
+                            Spacer(modifier = Modifier.height(20.dp))
                         }
                     }
 
-                    item {
-                        Spacer(modifier = Modifier.height(50.dp))
-
-                        Row(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = Texts.Word.COMMENT,
-                                style = Typography.T2.copy(
-                                    fontWeight = FontWeight.Medium
-                                ),
-                                color = Colors.Gray800,
-                            )
-
-                            Spacer(modifier = Modifier.width(4.dp))
-
-                            Text(
-                                text = pinlogDetail.commentCount.toString(),
-                                style = Typography.T2.copy(
-                                    fontWeight = FontWeight.Medium
-                                ),
-                                color = Colors.Gray800,
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(20.dp))
-
-                        PHorizontalDivider()
-
-                        Spacer(modifier = Modifier.height(20.dp))
-                    }
-
-                    items(pinlogDetail.comments){
-                        CommentView(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp),
-                            comment = it,
-                            onClickMenu = { id, comment ->
-                                commentSheet = true
-                                clickedCommentId = id
-                                clickedComment = comment
-                                scope.launch { sheetState.show() }
-                            },
-                            onReplyClick = { id ->
-                                updateReplyCommentId(id)
-                                focusRequester.requestFocus()
-                            }
-                        )
-
-                        Spacer(modifier = Modifier.height(20.dp))
-                    }
+                    PullRefreshIndicator(
+                        refreshing = isRefreshing,
+                        state = pullRefreshState,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
                 }
             }
 

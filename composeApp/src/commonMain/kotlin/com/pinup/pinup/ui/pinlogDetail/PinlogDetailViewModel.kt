@@ -15,9 +15,11 @@ import com.pinup.pinup.domain.usecase.PostCommentUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 class PinlogDetailViewModel(
     savedStateHandle: SavedStateHandle,
@@ -57,6 +59,7 @@ class PinlogDetailViewModel(
                 updateState {
                     copy(
                         pinlogDetail = it,
+                        isRefreshing = false
                     )
                 }
             }
@@ -146,6 +149,16 @@ class PinlogDetailViewModel(
                 }
             }
     }
+
+    fun refreshView() = viewModelScope.launch{
+        updateState {
+            copy(
+                isRefreshing = true
+            )
+        }
+        delay(1.seconds)
+        getPinlogDetail()
+    }
 }
 
 
@@ -155,7 +168,8 @@ data class PinlogUiState(
     val myComment: String = "",
     val clickedReplyId: Int? = null,
     val isEditComment: Boolean = false,
-    val userInfo: UserInfo = UserInfo()
+    val userInfo: UserInfo = UserInfo(),
+    val isRefreshing: Boolean = false
 ) : UiState
 
 sealed interface PinlogUiEvent : UiEvent {

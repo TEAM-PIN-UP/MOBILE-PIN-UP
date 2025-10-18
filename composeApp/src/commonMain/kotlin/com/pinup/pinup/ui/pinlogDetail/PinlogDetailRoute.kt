@@ -78,6 +78,7 @@ fun PinlogDetailRoute(
         onBackPressed = onBackPressed,
         query = uiState.myComment,
         replyId = uiState.clickedReplyId,
+        isRefreshing = uiState.isRefreshing,
         onValueChange = viewModel::updateMyComment,
         onClickEdit = {
             onClickEdit(viewModel.reviewId)
@@ -96,6 +97,7 @@ fun PinlogDetailRoute(
         },
         updateReplyCommentId = viewModel::updateClickedReplyId,
         onMovePlaceDetail = onMovePlaceDetail,
-        userInfo = uiState.userInfo
+        userInfo = uiState.userInfo,
+        onRefresh = viewModel::refreshView
     )
 }
