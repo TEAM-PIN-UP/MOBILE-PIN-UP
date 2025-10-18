@@ -20,9 +20,13 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -52,6 +56,7 @@ import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.FeedView
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.PVerticalDivider
+import com.pinup.pinup.ui.component.PagerIndicator
 import com.pinup.pinup.ui.component.PinchItemView
 import com.pinup.pinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.pinup.ui.component.ProfileImageView
@@ -68,6 +73,7 @@ import pinup.composeapp.generated.resources.*
 import kotlin.Boolean
 import kotlin.String
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MyScreen(
     member: Member,
@@ -76,6 +82,7 @@ fun MyScreen(
     pinchPageAble: PintsPageAble,
     onClickBottomNav: (MainDestination) -> Unit,
     modifier: Modifier = Modifier,
+    isRefreshing: Boolean,
     onAlarmClick: () -> Unit = {},
     onSettingClick: () -> Unit = {},
     onAddPinBuddyClick: () -> Unit = {},
@@ -91,6 +98,7 @@ fun MyScreen(
     onMovePinchWrite: () -> Unit = {},
     getMorePints: () -> Unit = {},
     onMoveDetail: (Int) -> Unit = {},
+    onRefresh: () -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -100,6 +108,10 @@ fun MyScreen(
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
     val pagerState = remember { mutableStateOf(0) }
     val scrollState = rememberLazyListState()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = onRefresh
+    )
 
     ScrollToEndCallback(scrollState) {
         if (pagerState.value == 1 && !pinchPageAble.last) {
@@ -124,64 +136,75 @@ fun MyScreen(
         sheetBackgroundColor = Colors.White,
         sheetState = sheetState,
     ) {
-        LazyColumn(
-            modifier = modifier
-                .background(
-                    color = Colors.White
-                )
-                .padding(bottom = bottomBarHeight)
-                .statusBarsPadding()
-                .fillMaxWidth(),
-            state = scrollState
+        Box(
+            Modifier
+                .pullRefresh(state = pullRefreshState,)
         ) {
-            item {
-                HeaderItem(
-                    member = member,
-                    onAlarmClick = onAlarmClick,
-                    onSettingClick = onSettingClick
-                )
+            LazyColumn(
+                modifier = modifier
+                    .background(
+                        color = Colors.White
+                    )
+                    .padding(bottom = bottomBarHeight)
+                    .statusBarsPadding()
+                    .fillMaxWidth(),
+                state = scrollState
+            ) {
+                item {
+                    HeaderItem(
+                        member = member,
+                        onAlarmClick = onAlarmClick,
+                        onSettingClick = onSettingClick
+                    )
+                }
+
+                item {
+                    ProfileItem(
+                        member = member,
+                        onMovePinBuddy = onMovePinBuddy,
+                        onClickShare = onClickShare,
+                        onAddPinBuddyClick = onAddPinBuddyClick
+                    )
+                }
+
+                item {
+                    ContentView(
+                        scope = scope,
+                        pagerState = pagerState,
+                        onClickPage = { pagerState.value = it }
+                    )
+                }
+
+                if (pagerState.value == 0) {
+                    this.MyPinLogList(
+                        reviewList = reviews,
+                        onClickMenu = {
+                            clickedReviewId = it
+                            scope.launch { sheetState.show() }
+                        },
+                        onClickPinLog = onClickPinLog,
+                        onClickLike = onClickLike,
+                        onClickDetail = onClickDetail
+                    )
+                } else {
+                    this.MyScrapList(
+                        member = member,
+                        scrapList = scrapList,
+                        pinchPageAble = pinchPageAble,
+                        onClickMoreScrap = onClickMoreScrap,
+                        onClickPlaceDetail = onMovePlaceDetail,
+                        onClickGoCreatePinch = onMovePinchWrite,
+                        onClickGoFeed = { onClickBottomNav(MainDestination.Feed) },
+                        onMoveDetail = onMoveDetail
+                    )
+                }
             }
 
-            item {
-                ProfileItem(
-                    member = member,
-                    onMovePinBuddy = onMovePinBuddy,
-                    onClickShare = onClickShare,
-                    onAddPinBuddyClick = onAddPinBuddyClick
-                )
-            }
-
-            item {
-                ContentView(
-                    scope = scope,
-                    pagerState = pagerState,
-                    onClickPage = { pagerState.value = it }
-                )
-            }
-
-            if (pagerState.value == 0) {
-                this.MyPinLogList(
-                    reviewList = reviews,
-                    onClickMenu = {
-                        clickedReviewId = it
-                        scope.launch { sheetState.show() }
-                    },
-                    onClickPinLog = onClickPinLog,
-                    onClickLike = onClickLike,
-                    onClickDetail = onClickDetail
-                )
-            } else {
-                this.MyScrapList(
-                    member = member,
-                    scrapList = scrapList,
-                    pinchPageAble = pinchPageAble,
-                    onClickMoreScrap = onClickMoreScrap,
-                    onClickPlaceDetail = onMovePlaceDetail,
-                    onClickGoCreatePinch = onMovePinchWrite,
-                    onClickGoFeed = { onClickBottomNav(MainDestination.Feed) },
-                    onMoveDetail = onMoveDetail
-                )
-            }
+            PullRefreshIndicator(
+                refreshing = isRefreshing,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
         }
 
         Column(

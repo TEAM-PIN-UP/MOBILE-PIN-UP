@@ -31,9 +31,11 @@ import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
 import com.pinup.pinup.ui.model.ChipState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.collections.plus
 import kotlin.text.ifEmpty
+import kotlin.time.Duration.Companion.seconds
 
 
 class MyViewModel (
@@ -51,10 +53,11 @@ class MyViewModel (
         val memberInfo = getMemberInfoUseCase().getSuccessOrNull() ?: return@launch
         getFeedList(memberId = memberInfo.profile.memberId)
         getScrapList()
-        getPintsList()
+        getPintsList(memberId = memberInfo.profile.memberId)
         updateState {
             copy(
                 member = memberInfo,
+                isRefreshing = false
             )
         }
     }
@@ -149,12 +152,10 @@ class MyViewModel (
         )
     }
 
-    private fun getPintsList() = viewModelScope.launch {
-        val pageAble = PageAble(
-            page = uiState.value.nowPage
-        )
+    private fun getPintsList(memberId: Int) = viewModelScope.launch {
+        val pageAble = PageAble()
         resultResponse(
-            response = getPintsUseCase(uiState.value.member.profile.memberId, pageAble),
+            response = getPintsUseCase(memberId, pageAble),
             successCallback = {
                 updateState {
                     copy(
@@ -184,6 +185,16 @@ class MyViewModel (
             }
         )
     }
+
+    fun refreshView() = viewModelScope.launch{
+        updateState {
+            copy(
+                isRefreshing = true
+            )
+        }
+        delay(1.seconds)
+        initMyInfo()
+    }
 }
 
 data class MyUiState(
@@ -207,5 +218,6 @@ data class MyUiState(
     val prevCursor: Int? = null,
     val scrapList: List<BookmarkedPlace> = emptyList(),
     val pinchPageAble: PintsPageAble = PintsPageAble(),
-    val nowPage: Int = 1
+    val nowPage: Int = 1,
+    val isRefreshing: Boolean = false
 ) : UiState

@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PageAble(
-    val page: Int,
+    val page: Int = 1,
     val size: Int = 20
 )

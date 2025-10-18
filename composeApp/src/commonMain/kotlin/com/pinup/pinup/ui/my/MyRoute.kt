@@ -58,6 +58,7 @@ fun MyRoute(
         reviews = uiState.value.pagingReview.reviews,
         scrapList = uiState.value.scrapList,
         pinchPageAble = uiState.value.pinchPageAble,
+        isRefreshing = uiState.value.isRefreshing,
         onAddPinBuddyClick = onAddPinBuddyClick,
         onMovePinBuddy = onMovePinBuddy,
         onSettingClick = onMoveSetting,
@@ -77,6 +78,7 @@ fun MyRoute(
         onMovePlaceDetail = onMovePlaceDetail,
         onMovePinchWrite = onMovePinchWrite,
         getMorePints = myViewModel::getMorePints,
-        onMoveDetail = onMovePintsDetail
+        onMoveDetail = onMovePintsDetail,
+        onRefresh = myViewModel::refreshView,
     )
 }
