@@ -13,8 +13,10 @@ import com.pinup.pinup.domain.usecase.SaveRecentSearchUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 class FeedViewModel(
     private val deletePinlogUseCase: DeletePinlogUseCase,
@@ -33,6 +35,20 @@ class FeedViewModel(
     }
 
     fun getFeedList() = viewModelScope.launch {
+        resultResponse(
+            response = getFeedUseCase(null, memberId = null, keyword = uiState.value.searchText.ifEmpty { null }),
+            successCallback = {
+                updateState {
+                    copy(
+                        pagingReview = it,
+                        isRefreshing = false
+                    )
+                }
+            }
+        )
+    }
+
+    fun getMoreFeed() = viewModelScope.launch {
         if (!uiState.value.pagingReview.hasNext) return@launch
         resultResponse(
             response = getFeedUseCase(uiState.value.pagingReview.nextCursor, memberId = null, keyword = uiState.value.searchText.ifEmpty { null }),
@@ -147,10 +163,21 @@ class FeedViewModel(
     private fun saveRecentSearch() = viewModelScope.launch {
         saveRecentSearchUseCase(uiState.value.searchText)
     }
+
+    fun refreshView() = viewModelScope.launch {
+        updateState {
+            copy(
+                isRefreshing = true
+            )
+        }
+        delay(1.seconds)
+        getFeedList()
+    }
 }
 
 data class FeedUiState(
     val pagingReview: PagingReview = PagingReview(),
+    val isRefreshing: Boolean = false,
     val prevCursor: Int? = null,
     val searchMode: Boolean = false,
     val searchText: String = "",

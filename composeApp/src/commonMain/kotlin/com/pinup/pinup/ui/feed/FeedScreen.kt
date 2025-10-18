@@ -16,9 +16,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -49,10 +53,12 @@ import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_search
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FeedScreen(
     reviewList: List<Review>,
     profile: String,
+    isRefreshing: Boolean,
     getMoreFeed: () -> Unit = {},
     onClickBottomNav: (MainDestination) -> Unit,
     onClickSearch: () -> Unit,
@@ -60,6 +66,7 @@ fun FeedScreen(
     onClickDelete: (Int) -> Unit = {},
     onClickDetail: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
+    onRefresh: () -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -67,9 +74,12 @@ fun FeedScreen(
     )
     var clickedReviewId by remember { mutableStateOf(0) }
     val scrollState = rememberLazyListState()
-
-    val density = LocalDensity.current
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
+
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = onRefresh
+    )
 
     ScrollToEndCallback(scrollState) {
         getMoreFeed()
@@ -143,34 +153,48 @@ fun FeedScreen(
                     )
                 }
             } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(bottom = bottomBarHeight)
-                        .background(Colors.White),
-                    state = scrollState,
+                Box(
+                    Modifier
+                        .weight(1f)
+                        .pullRefresh(
+                            state = pullRefreshState,
+                        )
                 ) {
-                    item {
-                        Spacer(
-                            modifier = Modifier
-                                .height(16.dp)
-                        )
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(bottom = bottomBarHeight)
+                            .background(Colors.White),
+                        state = scrollState,
+                    ) {
+                        item {
+                            Spacer(
+                                modifier = Modifier
+                                    .height(16.dp)
+                            )
+                        }
+
+                        items(reviewList) {
+                            FeedView(
+                                item = it,
+                                onClickMenu = {
+                                    clickedReviewId = it
+                                    scope.launch { sheetState.show() }
+                                },
+                                onClickLike = onClickLike,
+                                onClickDetail = onClickDetail,
+                            )
+
+                            PHorizontalDivider(modifier = Modifier.height(10.dp))
+
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
                     }
 
-                    items(reviewList) {
-                        FeedView(
-                            item = it,
-                            onClickMenu = {
-                                clickedReviewId = it
-                                scope.launch { sheetState.show() }
-                            },
-                            onClickLike = onClickLike,
-                            onClickDetail = onClickDetail,
-                        )
-
-                        PHorizontalDivider(modifier = Modifier.height(10.dp))
-
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
+                    PullRefreshIndicator(
+                        refreshing = isRefreshing,
+                        state = pullRefreshState,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
                 }
             }
         }

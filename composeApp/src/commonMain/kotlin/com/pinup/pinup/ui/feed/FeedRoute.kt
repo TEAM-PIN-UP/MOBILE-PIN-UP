@@ -55,7 +55,7 @@ fun FeedRoute(
             onClickDeleteRecentSearch = viewModel::deleteRecentSearch,
             onClickBack = viewModel::updateSearchMode,
             onClickBottomNav = onClickBottomNav,
-            getMoreFeed = viewModel::getFeedList,
+            getMoreFeed = viewModel::getMoreFeed,
             onClickEdit = {
                 onClickEdit(it)
             },
@@ -67,7 +67,8 @@ fun FeedRoute(
         FeedScreen(
             reviewList = uiState.pagingReview.reviews,
             profile = uiState.profileUrl,
-            getMoreFeed = viewModel::getFeedList,
+            isRefreshing = uiState.isRefreshing,
+            getMoreFeed = viewModel::getMoreFeed,
             onClickBottomNav = onClickBottomNav,
             onClickSearch = viewModel::updateSearchMode,
             onClickEdit = {
@@ -78,7 +79,8 @@ fun FeedRoute(
                 isShowDeleteDialog.value = true
             },
             onClickDetail = onClickDetail,
-            onClickLike = viewModel::likeChanged
+            onClickLike = viewModel::likeChanged,
+            onRefresh = viewModel::refreshView,
         )
     }
 }
