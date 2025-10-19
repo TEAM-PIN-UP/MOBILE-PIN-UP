@@ -3,7 +3,6 @@ package com.pinup.pinup.ui.my.pinch.detail
 import PintsMenuBottomSheet
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,11 +22,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -36,10 +31,8 @@ import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.platform.PinchNaverMap
-import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.TitleBar
-import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
@@ -59,14 +52,11 @@ fun PinchWriteScreen(
     position: Position = Position.INVALID,
     cameraPosition: Position? = null,
     onBackPressed: () -> Unit = {},
-    profileUrl: String = "",
-    onClickBottomNav: (MainDestination) -> Unit,
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
 
-    var bottomBarHeight by remember { mutableStateOf(0.dp) }
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
@@ -96,7 +86,6 @@ fun PinchWriteScreen(
                 .statusBarsPadding()
                 .fillMaxSize()
                 .padding(horizontal = 20.dp)
-                .padding(bottom = bottomBarHeight)
         ) {
             TitleBar(
                 title = Texts.Pinch.PINCH_WRITE,
@@ -207,18 +196,5 @@ fun PinchWriteScreen(
                 }
             }
         }
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Bottom
-    ) {
-        BottomBar(
-            selectedMenu = MainDestination.My,
-            profileImage = profileUrl,
-            onBottomMenuClick = onClickBottomNav,
-            onSizeChanged = { bottomBarHeight = it }
-        )
     }
 }

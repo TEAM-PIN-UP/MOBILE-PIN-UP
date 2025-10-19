@@ -10,6 +10,7 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 
@@ -37,7 +38,7 @@ interface PintsApi {
         @Path(PATH_PINTS_ID) pintsId: Int,
     ): PResult<PResponse<Unit>>
 
-    @DELETE(ApiPath.Pints.PINTS_MODIFY)
+    @PUT(ApiPath.Pints.PINTS_MODIFY)
     suspend fun editPints(
         @Path(PATH_PINTS_ID) pintsId: Int,
         @Body request: ModifyPintsRequest

@@ -16,7 +16,6 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun PinchDetailRoute(
     onBackPressed: () -> Unit = {},
-    onClickBottomNav: (MainDestination) -> Unit,
     onClickEdit: (Int) -> Unit = {},
 ) {
     val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
@@ -43,8 +42,6 @@ fun PinchDetailRoute(
         position = uiState.value.currentPosition ?: Position.INVALID,
         cameraPosition = uiState.value.cameraPosition,
         onBackPressed = onBackPressed,
-        profileUrl = uiState.value.profileUrl,
-        onClickBottomNav = onClickBottomNav,
         onClickDelete = viewModel::deletePinch,
         onClickEdit = { onClickEdit(viewModel.pintsId) }
     )

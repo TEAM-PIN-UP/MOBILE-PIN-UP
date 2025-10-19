@@ -1,6 +1,5 @@
 package com.pinup.pinup.data.response
 
-import com.pinup.pinup.data.request.pints.PlaceSummariesRequest
 import com.pinup.pinup.domain.model.PinchPlaceItem
 import com.pinup.pinup.domain.model.PintsDetail
 import kotlinx.serialization.Serializable
@@ -11,7 +10,7 @@ data class PintsDetailResponse(
     val title: String = "",
     val content: String = "",
     val createdAt: String = "",
-    val placeSummaries: List<PlaceSummariesRequest> = emptyList()
+    val placeSummaries: List<PlaceSummariesResponse> = emptyList()
 ) {
     companion object {
         fun PintsDetailResponse.toModel() : PintsDetail {
@@ -33,3 +32,12 @@ data class PintsDetailResponse(
         }
     }
 }
+
+@Serializable
+data class PlaceSummariesResponse(
+    val kakaoPlaceId: String,
+    val name: String,
+    val address: String,
+    val latitude: Double,
+    val longitude: Double
+)

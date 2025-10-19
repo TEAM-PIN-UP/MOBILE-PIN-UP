@@ -6,14 +6,5 @@ import kotlinx.serialization.Serializable
 data class ModifyPintsRequest(
     val title: String,
     val content: String,
-    val placeSummaries: List<PlaceSummariesRequest>
-)
-
-@Serializable
-data class PlaceSummariesRequest(
-    val kakaoPlaceId: String,
-    val name: String,
-    val address: String,
-    val latitude: Double,
-    val longitude: Double
+    val kakaoPlaceIds: List<String>
 )

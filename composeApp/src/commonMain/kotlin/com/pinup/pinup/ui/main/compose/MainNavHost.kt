@@ -219,30 +219,6 @@ fun MainNavHost(
                     onSettingClick = onMoveSetting
                 )
             }
-
-            composable<PinUpAppDestination.PinchDetail> {
-                PinchDetailRoute(
-                    onClickBottomNav = {
-                        if (it is MainDestination.Upload) {
-                            if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()
-                        } else {
-                            navHostController.navigate(it) {
-                                launchSingleTop = true
-                                restoreState = true
-                                popUpTo(navHostController.graph.startDestinationId) {
-                                    saveState = true
-                                }
-                            }
-                        }
-                    },
-                    onBackPressed = {
-                        navHostController.popBackStack()
-                    },
-                    onClickEdit = {
-                        navHostController.navigate(PinUpAppDestination.PinchWrite(it))
-                    }
-                )
-            }
         }
     }
 }

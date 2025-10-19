@@ -28,8 +28,10 @@ import com.pinup.pinup.ui.findAccount.findPassword.FindPasswordEmailRoute
 import com.pinup.pinup.ui.login.compose.LoginRoute
 import com.pinup.pinup.ui.login.model.SNSType
 import com.pinup.pinup.ui.login.model.SNSUserInfo
+import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.main.compose.MainNavHost
 import com.pinup.pinup.ui.my.pinch.PinchWriteRoute
+import com.pinup.pinup.ui.my.pinch.detail.PinchDetailRoute
 import com.pinup.pinup.ui.onboarding.OnboardingRoute
 import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpRoute
 import com.pinup.pinup.ui.pinbuddy.PinBuddyRoute
@@ -367,6 +369,17 @@ fun PinUpApp(
                         },
                         onMovePintsDetail = {
                             navHostController.navigate(PinUpAppDestination.PinchDetail(it))
+                        }
+                    )
+                }
+
+                composable<PinUpAppDestination.PinchDetail> {
+                    PinchDetailRoute(
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
+                        onClickEdit = {
+                            navHostController.navigate(PinUpAppDestination.PinchWrite(it))
                         }
                     )
                 }

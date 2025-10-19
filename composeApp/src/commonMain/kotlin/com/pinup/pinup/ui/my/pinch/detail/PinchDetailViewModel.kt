@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
-import com.pinup.pinup.domain.model.getSuccessOrNull
 import com.pinup.pinup.domain.usecase.DeletePintsUseCase
 import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPintsDetailUseCase
@@ -22,7 +21,6 @@ import kotlinx.coroutines.launch
 class PinchDetailViewModel (
     savedStateHandle: SavedStateHandle,
     private val getPintsDetailUseCase: GetPintsDetailUseCase,
-    private val getMemberInfoUseCase: GetMemberInfoUseCase,
     private val deletePintsUseCase: DeletePintsUseCase,
     val locationTracker: LocationTracker
 ) : BaseViewModel<PinchDetailUiState, PinchDetailUiEvent>(PinchDetailUiState()) {
@@ -35,16 +33,7 @@ class PinchDetailViewModel (
 
     init {
         getPintsDetail()
-        initMyInfo()
         initCollectLocation()
-    }
-    private fun initMyInfo() = viewModelScope.launch {
-        val memberInfo = getMemberInfoUseCase().getSuccessOrNull() ?: return@launch
-        updateState {
-            copy(
-                profileUrl = memberInfo.profile.profilePictureUrl ?: "",
-            )
-        }
     }
 
     private fun initCollectLocation() = viewModelScope.launch {
@@ -133,7 +122,6 @@ data class PinchDetailUiState(
     val description: String = "",
     val createdAt: String = toShortDateXd(currentDate.toString()),
     val pinchList: List<Place> = List(5) { Place() },
-    val profileUrl: String = "",
     val currentPosition: Position? = null,
     val cameraPosition: Position? = null,
 ) : UiState
