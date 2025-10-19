@@ -5,6 +5,7 @@ import com.pinup.pinup.data.request.pints.PageAble
 import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.data.response.PintsDetailResponse
 import com.pinup.pinup.data.response.PintsListResponse
+import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.PResult
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
@@ -48,4 +49,19 @@ interface PintsApi {
     suspend fun getPintsDetail(
         @Path(PATH_PINTS_ID) pintsId: Int,
     ): PResult<PResponse<PintsDetailResponse>>
+
+    @GET(ApiPath.Pints.EDITOR)
+    suspend fun getEditorPints(
+        @Query("category") category: Category,
+        @Query("swLatitude") swLatitude: String,
+        @Query("swLongitude") swLongitude: String,
+        @Query("neLatitude") neLatitude: String,
+        @Query("neLongitude") neLongitude: String,
+    ): PResult<PResponse<PintsDetailResponse>>
+
+    @GET(ApiPath.Pints.PINTS_MODIFY)
+    suspend fun getEditorPintsDetail(
+        @Path(PATH_PINTS_ID) pintsId: Int,
+    ): PResult<PResponse<PintsDetailResponse>>
+
 }

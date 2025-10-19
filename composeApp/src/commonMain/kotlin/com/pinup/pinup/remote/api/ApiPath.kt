@@ -43,5 +43,7 @@ object ApiPath {
     object Pints {
         const val PINTS = "api/pints"
         const val PINTS_MODIFY = "$PINTS/{pintsId}"
+        const val EDITOR = "api/editor"
+        const val EDITOR_PINCH = "$EDITOR/{pintsId}"
     }
 }
