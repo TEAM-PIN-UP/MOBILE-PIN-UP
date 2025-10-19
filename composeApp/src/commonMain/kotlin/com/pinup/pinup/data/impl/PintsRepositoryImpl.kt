@@ -1,11 +1,16 @@
 package com.pinup.pinup.data.impl
 
 import com.pinup.pinup.data.remote.PintsRemoteDataSource
+import com.pinup.pinup.data.request.GetReviewedPlacesRequest
 import com.pinup.pinup.data.request.pints.ModifyPintsRequest
 import com.pinup.pinup.data.request.pints.PageAble
+import com.pinup.pinup.data.response.EditorPintsDetailResponse.Companion.toModel
+import com.pinup.pinup.data.response.EditorPintsResponse.Companion.toModel
 import com.pinup.pinup.data.response.PintsDetailResponse.Companion.toModel
 import com.pinup.pinup.data.response.PintsListResponse.Companion.toModel
+import com.pinup.pinup.domain.model.EditorPintsDetail
 import com.pinup.pinup.domain.model.PResult
+import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.PintsDetail
 import com.pinup.pinup.domain.model.PintsPageAble
 import com.pinup.pinup.domain.model.map
@@ -42,5 +47,17 @@ class PintsRepositoryImpl (
         request: ModifyPintsRequest
     ): PResult<Unit> {
         return pintsRemoteDataSource.editPints(pintsId, request)
+    }
+
+    override suspend fun getEditorPints(request: GetReviewedPlacesRequest): PResult<List<PinchListItem>> {
+        return pintsRemoteDataSource.getEditorPints(request).map {
+            it.map { item -> item.toModel() }
+        }
+    }
+
+    override suspend fun getEditorPintsDetail(pintsId: Int): PResult<EditorPintsDetail> {
+        return pintsRemoteDataSource.getEditorPintsDetail(pintsId).map {
+            it.toModel()
+        }
     }
 }
