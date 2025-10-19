@@ -414,7 +414,7 @@ fun PinchWriteScreen(
             titleText = Texts.Pinch.NO_PINLOG_DIALOG_TITLE,
             descriptionText = Texts.Pinch.NO_PINLOG_DIALOG_CONTENT,
             leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_CONFiRM,
+            rightButtonText = Texts.Word.DO_REGISTER,
             onLeftButtonClick = {
                 isShowWritePinlogDialog.value = false
             },

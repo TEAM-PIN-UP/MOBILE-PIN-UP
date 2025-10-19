@@ -22,6 +22,8 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.platform.PinchNaverMap
+import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
@@ -44,7 +47,7 @@ import pinup.composeapp.generated.resources.ic_menu_dot
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PinchWriteScreen(
+fun PinchDetailScreen(
     title: String = "",
     createdAt: String = "",
     description: String = "",
@@ -56,7 +59,7 @@ fun PinchWriteScreen(
     onClickDelete: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
-
+    val isShowDeleteDialog = remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
@@ -70,7 +73,7 @@ fun PinchWriteScreen(
                     scope.launch { sheetState.hide() }
                 },
                 onClickDelete = {
-                    onClickDelete()
+                    isShowDeleteDialog.value = true
                     scope.launch { sheetState.hide() }
                 },
             )
@@ -196,5 +199,21 @@ fun PinchWriteScreen(
                 }
             }
         }
+    }
+
+    if (isShowDeleteDialog.value) {
+        PDialog(
+            titleText = Texts.Pinch.PINCH_DELETE_DIALOG_TITLE,
+            descriptionText = Texts.Pinch.PINCH_DELETE_DIALOG_CONTENT,
+            leftButtonText = Texts.Word.DO_RETURN,
+            rightButtonText = Texts.Word.DO_DELETE,
+            onLeftButtonClick = {
+                isShowDeleteDialog.value = false
+            },
+            onRightButtonClick = {
+                isShowDeleteDialog.value = false
+                onClickDelete()
+            },
+        )
     }
 }

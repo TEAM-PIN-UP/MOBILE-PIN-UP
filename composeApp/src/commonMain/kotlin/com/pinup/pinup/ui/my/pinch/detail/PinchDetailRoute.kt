@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.pinup.domain.model.Position
-import com.pinup.pinup.ui.main.compose.MainDestination
 import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
 import dev.icerock.moko.geo.compose.LocationTrackerAccuracy
 import dev.icerock.moko.geo.compose.LocationTrackerFactory
@@ -34,7 +33,7 @@ fun PinchDetailRoute(
 
 
     BindLocationTrackerEffect(viewModel.locationTracker)
-    PinchWriteScreen(
+    PinchDetailScreen(
         title = uiState.value.title,
         description = uiState.value.description,
         createdAt = uiState.value.createdAt,

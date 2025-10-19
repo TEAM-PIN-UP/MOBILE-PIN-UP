@@ -54,6 +54,7 @@ object Texts {
         const val DO_DELETE = "삭제하기"
         const val COMMENT = "댓글"
         const val DO_REPLY_COMMENT = "답글달기"
+        const val DO_REGISTER = "등록하기"
         const val SEE_MORE = "자세히 보기"
         const val PIN_BUDDY = "핀버디"
         const val PINCH = "핀츠"
@@ -289,8 +290,10 @@ object Texts {
         const val CREATE_MY_PINCH = "마이핀츠 작성"
         const val EDIT_PINTS = "핀츠 수정"
         const val DELETE_PINTS = "핀츠 삭제"
-        const val NO_PINLOG_DIALOG_TITLE = "스크랩 되지 않은 장소입니다."
-        const val NO_PINLOG_DIALOG_CONTENT = "스크랩한 장소만 핀츠에 등록할 수 있어요.\n스크랩을 확인할까요?"
+        const val NO_PINLOG_DIALOG_TITLE = "핀로그가 작성되지 않은 장소입니다."
+        const val NO_PINLOG_DIALOG_CONTENT = "핀로그 작성한 장소만 핀츠에 등록 할 수 있어요.\n핀로그를 등록할까요?"
+        const val PINCH_DELETE_DIALOG_TITLE = "핀츠를 정말 삭제할건가요?"
+        const val PINCH_DELETE_DIALOG_CONTENT = "한 번 삭제하면 되돌릴 수 없어요.\n삭제하시겠습니까?"
     }
 
     object Toast {
