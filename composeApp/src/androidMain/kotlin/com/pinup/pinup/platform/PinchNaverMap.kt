@@ -57,7 +57,9 @@ actual fun PinchNaverMap(
     LaunchedEffect(cameraPosition) {
         cameraPosition?.let { target ->
             val now = cameraPositionState.position.target
+            hLog("1. 테스트 $target")
             if (target.latitude != now.latitude || target.longitude != now.longitude) {
+                hLog("2. 테스트 $target")
                 cameraPositionState.animate(CameraUpdate.scrollTo(target.toLatLng()))
             }
         }

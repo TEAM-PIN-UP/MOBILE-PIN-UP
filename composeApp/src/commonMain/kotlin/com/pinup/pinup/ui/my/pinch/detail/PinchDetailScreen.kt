@@ -22,6 +22,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -57,12 +58,17 @@ fun PinchDetailScreen(
     onBackPressed: () -> Unit = {},
     onClickEdit: () -> Unit = {},
     onClickDelete: () -> Unit = {},
+    getPintsDetail: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
+
+    LaunchedEffect(Unit){
+        getPintsDetail()
+    }
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -187,7 +193,7 @@ fun PinchDetailScreen(
                         Text(
                             modifier = Modifier
                                 .padding(vertical = 24.dp, horizontal = 16.dp),
-                            text = "${index + 1}. ${item.name}",
+                            text = if(item.name.isNotEmpty()) "${index + 1}. ${item.name}" else "",
                             style = Typography.B2.copy(
                                 fontWeight = FontWeight.Medium
                             ),

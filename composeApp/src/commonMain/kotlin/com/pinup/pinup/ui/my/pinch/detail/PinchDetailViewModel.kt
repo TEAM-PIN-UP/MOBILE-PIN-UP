@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.domain.usecase.DeletePintsUseCase
-import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPintsDetailUseCase
 import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.base.BaseViewModel
@@ -13,16 +12,12 @@ import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
 import com.pinup.pinup.util.currentDate
 import com.pinup.pinup.util.toShortDateXd
-import dev.icerock.moko.geo.LocationTracker
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 class PinchDetailViewModel (
     savedStateHandle: SavedStateHandle,
     private val getPintsDetailUseCase: GetPintsDetailUseCase,
     private val deletePintsUseCase: DeletePintsUseCase,
-    val locationTracker: LocationTracker
 ) : BaseViewModel<PinchDetailUiState, PinchDetailUiEvent>(PinchDetailUiState()) {
 
     companion object Companion {
@@ -31,24 +26,7 @@ class PinchDetailViewModel (
 
     val pintsId = savedStateHandle.get<Int>(PINTS_ID) ?: 0
 
-    init {
-        getPintsDetail()
-        initCollectLocation()
-    }
-
-    private fun initCollectLocation() = viewModelScope.launch {
-        locationTracker.startTracking()
-        locationTracker.getLocationsFlow()
-            .distinctUntilChanged()
-            .collectLatest {
-                val myLocation = Position(it.latitude, it.longitude)
-                hLog(myLocation.toString())
-                updateCameraPosition(myLocation)
-                updatePosition(myLocation)
-            }
-    }
-
-    private fun getPintsDetail() = viewModelScope.launch {
+    fun getPintsDetail() = viewModelScope.launch {
         resultResponse(
             response = getPintsDetailUseCase(pintsId),
             successCallback = { result ->
@@ -65,7 +43,7 @@ class PinchDetailViewModel (
                         name = item.name,
                         address = item.address,
                         latitude = item.latitude,
-                        longitude = item.latitude
+                        longitude = item.longitude
                     )
                     updatePlace(place = place, index = index)
                 }
@@ -100,6 +78,7 @@ class PinchDetailViewModel (
 
     fun updatePlace(place: Place, index: Int) {
         updateState {
+            hLog("latitude: ${place.latitude} longitude: ${place.longitude}")
             copy(
                 cameraPosition = Position(
                     latitude = place.latitude,

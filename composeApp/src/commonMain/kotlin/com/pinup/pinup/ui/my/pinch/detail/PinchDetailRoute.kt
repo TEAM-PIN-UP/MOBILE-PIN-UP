@@ -17,10 +17,7 @@ fun PinchDetailRoute(
     onBackPressed: () -> Unit = {},
     onClickEdit: (Int) -> Unit = {},
 ) {
-    val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
-        accuracy = LocationTrackerAccuracy.Best
-    )
-    val viewModel: PinchDetailViewModel = koinViewModel(parameters = { parametersOf(locationTrackerFactory.createLocationTracker()) })
+    val viewModel: PinchDetailViewModel = koinViewModel()
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
@@ -31,8 +28,6 @@ fun PinchDetailRoute(
         }
     }
 
-
-    BindLocationTrackerEffect(viewModel.locationTracker)
     PinchDetailScreen(
         title = uiState.value.title,
         description = uiState.value.description,
@@ -42,6 +37,7 @@ fun PinchDetailRoute(
         cameraPosition = uiState.value.cameraPosition,
         onBackPressed = onBackPressed,
         onClickDelete = viewModel::deletePinch,
-        onClickEdit = { onClickEdit(viewModel.pintsId) }
+        onClickEdit = { onClickEdit(viewModel.pintsId) },
+        getPintsDetail = viewModel::getPintsDetail
     )
 }

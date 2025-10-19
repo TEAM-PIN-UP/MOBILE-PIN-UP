@@ -72,7 +72,7 @@ class PinchWriteViewModel (
                         name = item.name,
                         address = item.address,
                         latitude = item.latitude,
-                        longitude = item.latitude
+                        longitude = item.longitude
                     )
                     updatePlace(place = place, index = index)
                 }
