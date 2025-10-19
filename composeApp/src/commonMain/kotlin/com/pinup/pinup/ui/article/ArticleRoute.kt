@@ -21,7 +21,7 @@ fun ArticleRoute(
     }
 
     ArticleScreen(
-        articleList = uiState.pagingArticle.articles,
+        articleList = uiState.pintsListItem,
         profile = uiState.profileUrl,
         getMoreArticle = {},
         onClickBottomNav = onClickBottomNav,

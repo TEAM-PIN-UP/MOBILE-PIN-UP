@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 data class PinchListItem(
     val id: Int = -1,
     val title: String = "",
+    val createdAt: String = "",
     val description: String = "",
     val author: String = "",
     val imageUrl: String? = "",

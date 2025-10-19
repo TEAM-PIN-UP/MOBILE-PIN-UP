@@ -490,7 +490,7 @@ sealed interface PinUpAppDestination {
     ) : PinUpAppDestination
     @Serializable
     data class ArticleDetail(
-        val articleId: Int,
+        val pintsId: Int,
     ) : PinUpAppDestination
     @Serializable
     data object AddPinBuddy : PinUpAppDestination

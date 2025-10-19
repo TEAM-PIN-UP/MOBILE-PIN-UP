@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.ArticlePlace
+import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.extentions.ScrollToEndCallback
 import com.pinup.pinup.extentions.clickableWithNoRipple
@@ -45,7 +46,7 @@ import pinup.composeapp.generated.resources.ic_search
 
 @Composable
 fun ArticleScreen(
-    articleList: List<ArticlePlace>,
+    articleList: List<PinchListItem>,
     profile: String,
     getMoreArticle: () -> Unit = {},
     onClickBottomNav: (MainDestination) -> Unit,

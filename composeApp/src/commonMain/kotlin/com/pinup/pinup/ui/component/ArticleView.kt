@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.pinup.pinup.domain.model.ArticlePlace
+import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
@@ -20,7 +21,7 @@ import com.pinup.pinup.ui.theme.Typography
 @Composable
 fun ArticleView(
     modifier: Modifier = Modifier,
-    item: ArticlePlace,
+    item: PinchListItem,
     onClickItem: (Int) -> Unit = {},
 ){
     Column (
@@ -34,7 +35,7 @@ fun ArticleView(
                 modifier = Modifier
                     .aspectRatio(335f/188f)
                     .fillMaxWidth(),
-                model = item.image,
+                model = item.imageUrl,
                 contentScale = ContentScale.Crop,
                 contentDescription = null
             )

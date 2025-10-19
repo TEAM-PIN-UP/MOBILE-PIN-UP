@@ -6,6 +6,7 @@ import com.pinup.pinup.domain.model.ArticleDetail
 import com.pinup.pinup.domain.model.ArticlePlace
 import com.pinup.pinup.domain.model.PagingArticle
 import com.pinup.pinup.domain.model.Place
+import com.pinup.pinup.domain.usecase.GetEditorPintsDetailUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
@@ -13,14 +14,15 @@ import kotlinx.coroutines.launch
 
 class ArticleDetailViewModel(
     savedStateHandle: SavedStateHandle,
+    private val getEditorPintsDetailUseCase: GetEditorPintsDetailUseCase
 ) : BaseViewModel<ArticleDetailUiState, UiEvent>(ArticleDetailUiState()) {
 
     companion object {
-        private const val ARTICLE_ID = "articleId"
+        private const val PINTS_ID = "pintId"
 
     }
 
-    val articleId = savedStateHandle.get<Int>(ARTICLE_ID) ?: 0
+    val pintId = savedStateHandle.get<Int>(PINTS_ID) ?: 0
 
     init {
         getArticleDetail()
@@ -59,7 +61,7 @@ class ArticleDetailViewModel(
                         createdAt = "Jun 13. 2025",
                         description = "아 몰랑 이게 설명글이야"
                     ),
-                ).filter { it.id != articleId },
+                ).filter { it.id != pintId },
                 articleDetail = ArticleDetail(
                     id = 10,
                     title = "묵호 1박2일 단기코스",
