@@ -2,6 +2,7 @@ package com.pinup.pinup.data.response
 
 import com.pinup.pinup.data.response.EditorPintsPlaceResponse.Companion.toModel
 import com.pinup.pinup.data.response.ReviewImageResponse.Companion.toModel
+import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.EditorPintsDetail
 import com.pinup.pinup.domain.model.EditorPintsPlace
 import com.pinup.pinup.domain.model.ReviewImage
@@ -57,7 +58,7 @@ data class EditorPintsPlaceResponse(
                 distant = distant,
                 latitude = latitude,
                 longitude = longitude,
-                pintsPlaceCategory = pintsPlaceCategory,
+                pintsPlaceCategory = Category.of(pintsPlaceCategory),
                 reviewImages = reviewImages.map {
                     it.toModel()
                 },

@@ -1,9 +1,11 @@
 package com.pinup.pinup.ui.map
 
 import androidx.lifecycle.viewModelScope
+import com.pinup.pinup.data.request.GetReviewedPlacesRequest
 import com.pinup.pinup.domain.model.CameraState
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.DetailPlace
+import com.pinup.pinup.domain.model.EditorPintsDetail
 import com.pinup.pinup.domain.model.LocationBound
 import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.Place
@@ -15,6 +17,8 @@ import com.pinup.pinup.domain.usecase.AddBookmarkUseCase
 import com.pinup.pinup.domain.usecase.DeleteBookmarkUseCase
 import com.pinup.pinup.domain.usecase.DeletePinlogUseCase
 import com.pinup.pinup.domain.usecase.GetDetailPlaceUseCase
+import com.pinup.pinup.domain.usecase.GetEditorPintsDetailUseCase
+import com.pinup.pinup.domain.usecase.GetEditorPintsUseCase
 import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.pinup.domain.usecase.GetReviewedPlacesUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
@@ -43,6 +47,8 @@ class MapViewModel (
     private val getMyProfileUseCase: GetMyProfileUseCase,
     private val searchPlacesUseCase: SearchPlacesUseCase,
     private val deletePinlogUseCase: DeletePinlogUseCase,
+    private val getEditorPintsUseCase: GetEditorPintsUseCase,
+    private val getEditorPintsDetailUseCase: GetEditorPintsDetailUseCase,
     private val postReviewLikeChangeUseCase: PostReviewLikeChangeUseCase,
     val locationTracker: LocationTracker
 ) : BaseViewModel<MapUiState, MapUiEvent>(MapUiState()) {
@@ -89,9 +95,6 @@ class MapViewModel (
         clearDetailPlace()
         updateState {
             copy(
-                pinchUiState = pinchUiState.copy(
-                    pinchDetailList = if(isShowPinch) emptyList() else pinchUiState.pinchDetailList,
-                ),
                 isShowPinch = !isShowPinch
             )
         }
@@ -127,13 +130,16 @@ class MapViewModel (
 
         if (uiState.value.currentPosition?.near(cameraState.position, 10.0) == true && initPlace) {
             getPlaces()
+            getEditorPints()
             initPlace = false
         }
     }
 
     fun getPlaces() = viewModelScope.launch {
+        if (uiState.value.isShowPinch) {
+            getEditorPints()
+        }
         if (uiState.value.cameraState != null) {
-            //updateCameraPosition(uiState.value.cameraState!!.position)
             val latLngBounds = uiState.value.cameraState!!.contentBounds
             val request = uiState.value.locationBound.copy(
                 neLatitude = latLngBounds.northEast.latitude.toString(),
@@ -161,6 +167,29 @@ class MapViewModel (
         if (uiState.value.cameraState?.reason == CameraState.Reason.GESTURE && uiState.value.isFocusLocation) {
             updateFocusLocation(false)
         }
+    }
+
+    private fun getEditorPints() = viewModelScope.launch {
+        val latLngBounds = uiState.value.cameraState!!.contentBounds
+        val request = GetReviewedPlacesRequest(
+            neLatitude = latLngBounds.northEast.latitude.toString(),
+            neLongitude = latLngBounds.northEast.longitude.toString(),
+            swLatitude = latLngBounds.southWest.latitude.toString(),
+            swLongitude = latLngBounds.southWest.longitude.toString(),
+            //category = uiState.value.searchUiState.chipStates.find { it.isSelected }?.type ?: Category.ALL
+        )
+        resultResponse(
+            response = getEditorPintsUseCase(request),
+            successCallback = {
+                updateState {
+                    copy(
+                        pinchUiState = pinchUiState.copy(
+                            pinchList = it
+                        )
+                    )
+                }
+            }
+        )
     }
 
     fun updateSearchText(search: String) {
@@ -329,17 +358,13 @@ class MapViewModel (
     }
 
     fun getPinchDetailList(id : Int) = viewModelScope.launch {
-        //TODO 임시
-        val request = uiState.value.locationBound
-        val chipState = uiState.value.searchUiState.chipStates.first { it.isSelected }
-        val currentLatLng = uiState.value.currentPosition
         resultResponse(
-            response = getReviewedPlacesUseCase(request, currentLatLng, SortType.NEAR, chipState.type),
+            response = getEditorPintsDetailUseCase(id),
             successCallback = {
                 updateState {
                     copy(
                         pinchUiState = pinchUiState.copy(
-                            pinchDetailList = it
+                            editorPintsDetail = it
                         )
                     )
                 }
@@ -351,7 +376,7 @@ class MapViewModel (
         updateState {
             copy(
                 pinchUiState = pinchUiState.copy(
-                    pinchDetailList = emptyList()
+                    editorPintsDetail = EditorPintsDetail()
                 )
             )
         }
@@ -397,7 +422,7 @@ data class PlaceDetailUiState(
 
 data class PinchUiState(
     val pinchList: List<PinchListItem> = emptyList(),
-    val pinchDetailList : List<ReviewedPlace> = emptyList(),
+    val editorPintsDetail: EditorPintsDetail = EditorPintsDetail(),
 )
 
 data class MapUiState(

@@ -9,5 +9,5 @@ data class PinchListItem(
     val description: String = "",
     val author: String = "",
     val imageUrl: String? = "",
-    val keywordList: String = ""
+    val keywordList: List<String> = emptyList()
 )

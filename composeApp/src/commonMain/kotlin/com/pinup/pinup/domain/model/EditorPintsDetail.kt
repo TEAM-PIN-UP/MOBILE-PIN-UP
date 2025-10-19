@@ -21,7 +21,7 @@ data class EditorPintsPlace(
     val distant: String = "",
     val latitude: Double = 0.0,
     val longitude: Double = 0.0,
-    val pintsPlaceCategory: String = "",
+    val pintsPlaceCategory: Category = Category.NONE,
     val reviewImages: List<ReviewImage> = emptyList(),
     val reviewerProfileImages: List<ReviewImage> = emptyList(),
     val bookmark: Boolean = false,

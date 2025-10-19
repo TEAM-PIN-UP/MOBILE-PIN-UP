@@ -12,7 +12,7 @@ data class EditorPintsResponse(
     val clickCnt: Int = 0,
     val imageUrl: String? = "",
     val placeList: List<PlaceItemResponse> = emptyList(),
-    val keywordList: String = ""
+    val keywordList: List<String> = emptyList()
 ) {
     companion object {
         fun EditorPintsResponse.toModel() : PinchListItem {

@@ -33,7 +33,6 @@ import pinup.composeapp.generated.resources.ic_back
 @Composable
 fun MapBottomSheetPinchDetailScreen(
     id: Int,
-    title: String,
     pinchUiState: PinchUiState,
     onClickArticle: (Int) -> Unit = {},
     onClickPinch: (String) -> Unit = {},
@@ -69,7 +68,7 @@ fun MapBottomSheetPinchDetailScreen(
             Text(
                 modifier = Modifier
                     .weight(1f),
-                text = title,
+                text = pinchUiState.editorPintsDetail.title,
                 color = Colors.Gray800,
                 style = Typography.T1
             )
@@ -102,14 +101,18 @@ fun MapBottomSheetPinchDetailScreen(
             state = scrollState,
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            items(pinchUiState.pinchDetailList) {
+            items(pinchUiState.editorPintsDetail.pintsPlaceList) {
                 ReviewedPlaceCard(
                     name = it.name,
                     rating = it.averageStarRating,
-                    distance = it.distance,
+                    distance = it.distant,
                     reviewCount = it.reviewCount,
-                    reviewerProfileImageUrls = it.reviewerProfileImageUrls,
-                    reviewImageUrls = it.reviewImageUrls,
+                    reviewerProfileImageUrls = it.reviewerProfileImages.map { profile ->
+                        profile.url
+                    },
+                    reviewImageUrls = it.reviewImages.map { reviewImage ->
+                        reviewImage.url
+                    },
                     onItemClick = {
                         onClickPinch(it.kakaoPlaceId)
                     }

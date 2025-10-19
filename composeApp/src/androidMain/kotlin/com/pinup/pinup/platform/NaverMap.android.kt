@@ -144,16 +144,16 @@ actual fun PlatformNaverMap(
             )
         }
 
-        if (isShowPinch && pinchUiState.pinchDetailList.isNotEmpty()) {
+        if (isShowPinch && pinchUiState.editorPintsDetail.pintsPlaceList.isNotEmpty()) {
             PolylineOverlay(
-                coords = pinchUiState.pinchDetailList.map {
+                coords = pinchUiState.editorPintsDetail.pintsPlaceList.map {
                     LatLng(it.latitude, it.longitude)
                 },
                 width = 1.dp,
                 color = Colors.Negative,
                 pattern = arrayOf(1.dp, 3.dp)
             )
-            pinchUiState.pinchDetailList.forEach {
+            pinchUiState.editorPintsDetail.pintsPlaceList.forEach {
                 key(
                     it.kakaoPlaceId,
                     it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId
@@ -175,7 +175,7 @@ actual fun PlatformNaverMap(
                         ) {
                             if (it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
                                 Image(
-                                    painter = when (it.placeCategory) {
+                                    painter = when (it.pintsPlaceCategory) {
                                         Category.RESTAURANT -> {
                                             painterResource(Res.drawable.ic_food_marker_on)
                                         }
@@ -188,7 +188,7 @@ actual fun PlatformNaverMap(
                                 )
                             } else {
                                 Image(
-                                    painter = when (it.placeCategory) {
+                                    painter = when (it.pintsPlaceCategory) {
                                         Category.RESTAURANT -> {
                                             painterResource(Res.drawable.ic_food_marker_pinch)
                                         }

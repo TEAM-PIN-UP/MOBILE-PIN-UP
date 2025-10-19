@@ -136,23 +136,7 @@ fun MapBottomSheetNavHost(
                         type = Category.NONE
                     ),
                 ),
-                pinchList = listOf(
-                    PinchListItem(
-                        id = 1,
-                        title = "하늘은 푸르고",
-                        description = "끼얏호우~"
-                    ),
-                    PinchListItem(
-                        id = 2,
-                        title = "비가 언제쯤 그칠까",
-                        description = "비가 오니까 습하고 어쩌구 저쩌구.."
-                    ),
-                    PinchListItem(
-                        id = 3,
-                        title = "비가 부릅니다 깡",
-                        description = "태양이 싫어 태양이 싫어"
-                    ),
-                ),
+                pinchList = pinchUiState.pinchList,
                 onClickPinch = { id ->
                     onPinchListClick(id)
                     navHostController.navigate(MapBottomSheetDestination.PinchDetail)
@@ -161,10 +145,8 @@ fun MapBottomSheetNavHost(
         }
 
         composable<MapBottomSheetDestination.PinchDetail> {
-            //TODO 임시입니다.
             MapBottomSheetPinchDetailScreen(
                 id = 1,
-                title = "비가 언제쯤 그칠까",
                 pinchUiState = pinchUiState,
                 onClickBack = {
                     clearPinchList()
