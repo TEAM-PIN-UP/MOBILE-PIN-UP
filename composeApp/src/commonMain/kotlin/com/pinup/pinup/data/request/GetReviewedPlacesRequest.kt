@@ -12,10 +12,10 @@ data class GetReviewedPlacesRequest(
     val swLongitude: String,
     val neLatitude: String,
     val neLongitude: String,
-    val currentLatitude: String,
-    val currentLongitude: String,
-    val sort: SortType,
-    val category: Category,
+    val currentLatitude: String = "",
+    val currentLongitude: String = "",
+    val sort: SortType = SortType.LATEST,
+    val category: Category = Category.ALL,
 ) {
     companion object {
         fun of(locationBound: LocationBound, currentPosition: Position?, sort: SortType, category: Category): GetReviewedPlacesRequest {
