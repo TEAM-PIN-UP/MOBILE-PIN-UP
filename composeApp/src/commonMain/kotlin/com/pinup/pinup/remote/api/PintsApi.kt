@@ -2,6 +2,8 @@ package com.pinup.pinup.remote.api
 
 import com.pinup.pinup.data.request.pints.ModifyPintsRequest
 import com.pinup.pinup.data.request.pints.PageAble
+import com.pinup.pinup.data.response.EditorPintsDetailResponse
+import com.pinup.pinup.data.response.EditorPintsResponse
 import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.data.response.PintsDetailResponse
 import com.pinup.pinup.data.response.PintsListResponse
@@ -57,11 +59,10 @@ interface PintsApi {
         @Query("swLongitude") swLongitude: String,
         @Query("neLatitude") neLatitude: String,
         @Query("neLongitude") neLongitude: String,
-    ): PResult<PResponse<PintsDetailResponse>>
+    ): PResult<PResponse<List<EditorPintsResponse>>>
 
-    @GET(ApiPath.Pints.PINTS_MODIFY)
+    @GET(ApiPath.Pints.EDITOR_PINCH)
     suspend fun getEditorPintsDetail(
         @Path(PATH_PINTS_ID) pintsId: Int,
-    ): PResult<PResponse<PintsDetailResponse>>
-
+    ): PResult<PResponse<EditorPintsDetailResponse>>
 }
