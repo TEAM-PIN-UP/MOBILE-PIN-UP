@@ -26,6 +26,8 @@ fun ArticleRoute(
         getMoreArticle = {},
         onClickBottomNav = onClickBottomNav,
         onClickSearch = onClickSearch,
-        onClickDetail = onClickDetail
+        onClickDetail = onClickDetail,
+        onRefresh = viewModel::refreshView,
+        isRefreshing = uiState.isRefreshing
     )
 }

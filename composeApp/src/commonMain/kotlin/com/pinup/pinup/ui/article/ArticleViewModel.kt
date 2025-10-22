@@ -2,23 +2,16 @@ package com.pinup.pinup.ui.article
 
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.data.request.GetReviewedPlacesRequest
-import com.pinup.pinup.domain.model.ArticlePlace
-import com.pinup.pinup.domain.model.PagingArticle
-import com.pinup.pinup.domain.model.PagingReview
 import com.pinup.pinup.domain.model.PinchListItem
-import com.pinup.pinup.domain.usecase.DeletePinlogUseCase
-import com.pinup.pinup.domain.usecase.DeleteRecentSearchUseCase
 import com.pinup.pinup.domain.usecase.GetEditorPintsUseCase
-import com.pinup.pinup.domain.usecase.GetFeedUseCase
 import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
-import com.pinup.pinup.domain.usecase.GetRecentSearchUseCase
-import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
-import com.pinup.pinup.domain.usecase.SaveRecentSearchUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 class ArticleViewModel(
     private val getMyProfileUseCase: GetMyProfileUseCase,
@@ -41,7 +34,8 @@ class ArticleViewModel(
             successCallback = {
                 updateState {
                     copy(
-                        pintsListItem = it
+                        pintsListItem = it,
+                        isRefreshing = false
                     )
                 }
             }
@@ -59,10 +53,21 @@ class ArticleViewModel(
             }
     }
 
+    fun refreshView() = viewModelScope.launch {
+        updateState {
+            copy(
+                isRefreshing = true
+            )
+        }
+        delay(1.seconds)
+        getArticleList()
+    }
+
 }
 
 data class ArticleUiState(
     val pintsListItem: List<PinchListItem> = emptyList(),
     val prevCursor: Int? = null,
     val profileUrl: String = "",
+    val isRefreshing: Boolean = false,
 ): UiState

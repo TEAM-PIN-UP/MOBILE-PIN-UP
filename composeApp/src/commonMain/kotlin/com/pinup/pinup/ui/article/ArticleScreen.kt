@@ -14,7 +14,11 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +48,7 @@ import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_search
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ArticleScreen(
     articleList: List<PinchListItem>,
@@ -52,91 +57,109 @@ fun ArticleScreen(
     onClickBottomNav: (MainDestination) -> Unit,
     onClickSearch: () -> Unit,
     onClickDetail: (Int) -> Unit = {},
+    onRefresh: () -> Unit = {},
+    isRefreshing: Boolean = false,
 ) {
     val scrollState = rememberLazyListState()
-
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = onRefresh
+    )
 
     ScrollToEndCallback(scrollState) {
         getMoreArticle()
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                color = Colors.White
+    Box(
+        Modifier
+            .pullRefresh(
+                state = pullRefreshState,
             )
-    ) {
-        Row(
+    ){
+        Column(
             modifier = Modifier
-                .statusBarsPadding()
-                .padding(horizontal = 20.dp, vertical = 15.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .background(
+                    color = Colors.White
+                )
         ) {
-            Text(
-                text = Texts.Article.TITLE,
-                style = Typography.T1.copy(
-                    fontWeight = FontWeight.SemiBold
-                ),
-                color = Colors.Gray800
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Image(
+            Row(
                 modifier = Modifier
-                    .clickableWithNoRipple {
-                        onClickSearch()
-                    },
-                painter = painterResource(Res.drawable.ic_search),
-                contentDescription = null,
-            )
-        }
-
-        PHorizontalDivider()
-
-        if (articleList.isEmpty()) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .statusBarsPadding()
+                    .padding(horizontal = 20.dp, vertical = 15.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = Texts.FEED.EMPTY_FEED,
-                    color = Colors.Gray400,
-                    style = Typography.B1.copy(
+                    text = Texts.Article.TITLE,
+                    style = Typography.T1.copy(
                         fontWeight = FontWeight.SemiBold
-                    )
+                    ),
+                    color = Colors.Gray800
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Image(
+                    modifier = Modifier
+                        .clickableWithNoRipple {
+                            onClickSearch()
+                        },
+                    painter = painterResource(Res.drawable.ic_search),
+                    contentDescription = null,
                 )
             }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(bottom = bottomBarHeight)
-                    .background(Colors.White),
-                state = scrollState,
-            ) {
-                item {
-                    Spacer(
-                        modifier = Modifier
-                            .height(24.dp)
+
+            PHorizontalDivider()
+
+            if (articleList.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = Texts.FEED.EMPTY_FEED,
+                        color = Colors.Gray400,
+                        style = Typography.B1.copy(
+                            fontWeight = FontWeight.SemiBold
+                        )
                     )
                 }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(bottom = bottomBarHeight)
+                        .background(Colors.White),
+                    state = scrollState,
+                ) {
+                    item {
+                        Spacer(
+                            modifier = Modifier
+                                .height(24.dp)
+                        )
+                    }
 
-                items(articleList) {
-                    ArticleView(
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp),
-                        item = it,
-                        onClickItem = onClickDetail,
-                    )
+                    items(articleList) {
+                        ArticleView(
+                            modifier = Modifier
+                                .padding(horizontal = 20.dp),
+                            item = it,
+                            onClickItem = onClickDetail,
+                        )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
             }
         }
+
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 
     Column(
