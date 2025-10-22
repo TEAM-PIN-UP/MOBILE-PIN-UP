@@ -17,8 +17,7 @@ fun ArticleDetailRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     ArticleDetailScreen(
-        detail = uiState.articleDetail,
-        articleList = uiState.articleList,
+        editorPintsDetail = uiState.editorPintsDetail,
         onClickPlaceDetail = onClickPlaceDetail,
         onClickScrap = {},
         onClickBack = onClickBack

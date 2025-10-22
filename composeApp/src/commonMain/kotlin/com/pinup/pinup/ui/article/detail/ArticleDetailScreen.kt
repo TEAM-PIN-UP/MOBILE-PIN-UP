@@ -30,8 +30,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.multiplatform.webview.web.WebView
+import com.multiplatform.webview.web.rememberWebViewState
+import com.multiplatform.webview.web.rememberWebViewStateWithHTMLData
 import com.pinup.pinup.domain.model.ArticleDetail
 import com.pinup.pinup.domain.model.ArticlePlace
+import com.pinup.pinup.domain.model.EditorPintsDetail
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.TitleBar
@@ -44,14 +48,16 @@ import pinup.composeapp.generated.resources.ic_bookmark_off
 
 @Composable
 fun ArticleDetailScreen(
-    detail: ArticleDetail,
-    articleList: List<ArticlePlace>,
+    editorPintsDetail: EditorPintsDetail,
     onClickPlaceDetail: (String) -> Unit = {},
     onClickScrap: (String) -> Unit = {},
     onClickBack: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
-    val pagerState = rememberPagerState(pageCount = { articleList.size })
+    //val pagerState = rememberPagerState(pageCount = { articleList.size })
+    val webViewState = rememberWebViewStateWithHTMLData(
+        data = editorPintsDetail.content
+    )
 
     Column(
         modifier = Modifier
@@ -65,7 +71,7 @@ fun ArticleDetailScreen(
             modifier = Modifier
                 .padding(start = 20.dp),
             onLeftButtonClick = onClickBack,
-            title = detail.title
+            title = editorPintsDetail.title
         )
 
         PHorizontalDivider()
@@ -75,91 +81,30 @@ fun ArticleDetailScreen(
                 .background(Colors.White),
             state = scrollState,
         ) {
-            item {
-                Spacer(modifier = Modifier.height(30.dp))
-
-                Text(
-                    modifier = Modifier
-                        .padding(start = 20.dp),
-                    text = detail.title,
-                    color = Colors.Black,
-                    style = Typography.D1.copy(
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-
-                Spacer(modifier = Modifier.height(25.dp))
-
-                Text(
-                    modifier = Modifier
-                        .padding(start = 20.dp),
-                    text = detail.description,
-                    color = Colors.Gray600,
-                    style = Typography.B1.copy(
-                        fontWeight = FontWeight.Medium
-                    )
-                )
-
-                Spacer(modifier = Modifier.height(27.dp))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = detail.writer,
-                        color = Colors.Gray600,
-                        style = Typography.B2.copy(
-                            fontWeight = FontWeight.Medium
-                        )
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Text(
-                        text = detail.createdAt,
-                        color = Colors.Gray600,
-                        style = Typography.B2.copy(
-                            fontWeight = FontWeight.Medium
-                        )
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                detail.image.forEach {
-                    AsyncImage(
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .fillMaxWidth(),
-                        model = it,
-                        contentScale = ContentScale.Crop,
-                        contentDescription = null
-                    )
-
-                    Spacer(modifier = Modifier.height(20.dp))
-                }
-            }
+//            item {
+//                Spacer(modifier = Modifier.height(30.dp))
+//
+//                Text(
+//                    modifier = Modifier
+//                        .padding(start = 20.dp),
+//                    text = editorPintsDetail.title,
+//                    color = Colors.Black,
+//                    style = Typography.D1.copy(
+//                        fontWeight = FontWeight.Bold
+//                    )
+//                )
+//
+//                Spacer(modifier = Modifier.height(25.dp))
+//            }
 
             item {
-                Spacer(modifier = Modifier.height(15.dp))
-
-                Text(
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .fillMaxWidth(),
-                    text = detail.title,
-                    color = Colors.Black,
-                    style = Typography.D2.copy(
-                        fontWeight = FontWeight.Bold
-                    )
+                WebView(
+                    state = webViewState
                 )
             }
 
             item {
-                detail.place.forEach {
+                editorPintsDetail.pintsPlaceList.forEach {
                     Spacer(modifier = Modifier.height(15.dp))
 
                     Row(
@@ -173,7 +118,7 @@ fun ArticleDetailScreen(
                         AsyncImage(
                             modifier = Modifier
                                 .size(91.dp),
-                            model = it.image,
+                            model = it.reviewImages[0],
                             contentScale = ContentScale.Crop,
                             contentDescription = null
                         )
@@ -221,86 +166,86 @@ fun ArticleDetailScreen(
                 }
             }
 
-            item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Colors.Gray800)
-                ) {
-                    AsyncImage(
-                        modifier = Modifier
-                            .alpha(0.3f)
-                            .matchParentSize(),
-                        model = articleList[pagerState.currentPage].image,
-                        contentScale = ContentScale.Crop,
-                        contentDescription = null
-                    )
-
-                    Column(
-                        modifier = Modifier
-                            .padding(vertical = 20.dp)
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(start = 20.dp),
-                            text = Texts.Article.RECOMMEND_ARTICLE,
-                            color = Colors.Gray100,
-                            style = Typography.D2.copy(
-                                fontWeight = FontWeight.Bold
-                            )
-                        )
-
-                        Spacer(modifier = Modifier.height(18.dp))
-
-                        BoxWithConstraints(Modifier.fillMaxWidth()) {
-                            val itemWidth = 225.dp
-                            val startPad = 20.dp
-                            val endPad = (maxWidth - itemWidth - startPad).coerceAtLeast(0.dp)
-                            HorizontalPager(
-                                state = pagerState,
-                                modifier = Modifier.fillMaxWidth(),
-                                pageSize = PageSize.Fixed(itemWidth),
-                                contentPadding = PaddingValues(start = startPad, end = endPad),
-                                pageSpacing = 20.dp
-                            ) { page ->
-                                AsyncImage(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(300.dp),
-                                    model = articleList[page].image,
-                                    contentScale = ContentScale.Crop,
-                                    contentDescription = null
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(12.dp))
-
-                        Text(
-                            modifier = Modifier
-                                .padding(start = 20.dp),
-                            text = articleList[pagerState.currentPage].title,
-                            color = Colors.Gray200,
-                            style = Typography.T1.copy(
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        )
-
-                        Spacer(modifier = Modifier.height(4.dp))
-
-                        Text(
-                            modifier = Modifier
-                                .padding(start = 20.dp),
-                            text = articleList[pagerState.currentPage].description,
-                            color = Colors.Gray200,
-                            style = Typography.B2.copy(
-                                fontWeight = FontWeight.Normal
-                            )
-                        )
-
-                    }
-                }
-            }
+//            item {
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .background(Colors.Gray800)
+//                ) {
+//                    AsyncImage(
+//                        modifier = Modifier
+//                            .alpha(0.3f)
+//                            .matchParentSize(),
+//                        model = articleList[pagerState.currentPage].image,
+//                        contentScale = ContentScale.Crop,
+//                        contentDescription = null
+//                    )
+//
+//                    Column(
+//                        modifier = Modifier
+//                            .padding(vertical = 20.dp)
+//                    ) {
+//                        Text(
+//                            modifier = Modifier
+//                                .padding(start = 20.dp),
+//                            text = Texts.Article.RECOMMEND_ARTICLE,
+//                            color = Colors.Gray100,
+//                            style = Typography.D2.copy(
+//                                fontWeight = FontWeight.Bold
+//                            )
+//                        )
+//
+//                        Spacer(modifier = Modifier.height(18.dp))
+//
+//                        BoxWithConstraints(Modifier.fillMaxWidth()) {
+//                            val itemWidth = 225.dp
+//                            val startPad = 20.dp
+//                            val endPad = (maxWidth - itemWidth - startPad).coerceAtLeast(0.dp)
+//                            HorizontalPager(
+//                                state = pagerState,
+//                                modifier = Modifier.fillMaxWidth(),
+//                                pageSize = PageSize.Fixed(itemWidth),
+//                                contentPadding = PaddingValues(start = startPad, end = endPad),
+//                                pageSpacing = 20.dp
+//                            ) { page ->
+//                                AsyncImage(
+//                                    modifier = Modifier
+//                                        .fillMaxWidth()
+//                                        .height(300.dp),
+//                                    model = articleList[page].image,
+//                                    contentScale = ContentScale.Crop,
+//                                    contentDescription = null
+//                                )
+//                            }
+//                        }
+//
+//                        Spacer(modifier = Modifier.height(12.dp))
+//
+//                        Text(
+//                            modifier = Modifier
+//                                .padding(start = 20.dp),
+//                            text = articleList[pagerState.currentPage].title,
+//                            color = Colors.Gray200,
+//                            style = Typography.T1.copy(
+//                                fontWeight = FontWeight.SemiBold
+//                            )
+//                        )
+//
+//                        Spacer(modifier = Modifier.height(4.dp))
+//
+//                        Text(
+//                            modifier = Modifier
+//                                .padding(start = 20.dp),
+//                            text = articleList[pagerState.currentPage].description,
+//                            color = Colors.Gray200,
+//                            style = Typography.B2.copy(
+//                                fontWeight = FontWeight.Normal
+//                            )
+//                        )
+//
+//                    }
+//                }
+//            }
         }
     }
 }

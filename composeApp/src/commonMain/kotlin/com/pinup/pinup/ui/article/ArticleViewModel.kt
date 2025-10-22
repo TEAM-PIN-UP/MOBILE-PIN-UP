@@ -31,10 +31,10 @@ class ArticleViewModel(
 
     fun getArticleList() = viewModelScope.launch {
         val request = GetReviewedPlacesRequest(
-            swLatitude = "",
-            swLongitude = "",
-            neLatitude = "",
-            neLongitude = "",
+            swLatitude = "0.0",
+            swLongitude = "0.0",
+            neLatitude = "0.0",
+            neLongitude = "0.0",
         )
         resultResponse(
             response = getEditorPintsUseCase(request),
