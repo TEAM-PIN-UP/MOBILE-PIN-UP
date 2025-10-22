@@ -40,10 +40,15 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
 import com.pinup.pinup.ui.theme.Texts
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PinBuddyScreen(
     pinBuddies: PersistentList<Profile>,
@@ -57,115 +62,134 @@ fun PinBuddyScreen(
     onRejectClick: (Int) -> Unit = {},
     onProfileClick: (Int) -> Unit = {},
     onClickSearch: () -> Unit = {},
-    scope: CoroutineScope = rememberCoroutineScope()
+    scope: CoroutineScope = rememberCoroutineScope(),
+    onRefresh: () -> Unit = {},
+    isRefreshing: Boolean = false,
 ) {
     val isShowCompleteDialog = remember { mutableStateOf<Pair<Boolean, Int?>>(false to null) }
     val pages = remember { listOf(Texts.Word.PIN_BUDDY, Texts.PROFILE.RECEIVE_REQUEST , Texts.PROFILE.SENT_REQUEST) }
     val listSize = listOf(pinBuddies.size, receivePinBuddyRequests.size, sentPinBuddyRequests.size)
     val pagerState = rememberPagerState{ pages.size }
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = onRefresh
+    )
 
-    Column(
-        modifier = modifier
-            .background(Colors.White)
-            .fillMaxSize()
+    Box(
+        Modifier
+            .pullRefresh(
+                state = pullRefreshState,
+            )
     ) {
-        TitleBar(
-            modifier = Modifier
-                .padding(horizontal = 20.dp),
-            title = Texts.Word.PIN_BUDDY,
-            onLeftButtonClick = onBackPressed,
-            rightIcon = painterResource(Res.drawable.ic_search),
-            onRightButtonClick = onClickSearch
-        )
-
-        PHorizontalDivider()
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        Column(
+            modifier = modifier
+                .background(Colors.White)
+                .fillMaxSize()
         ) {
-            pages.forEachIndexed{ index, item ->
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickableWithNoRipple {
-                            scope.launch {
-                                pagerState.animateScrollToPage(index)
+            TitleBar(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp),
+                title = Texts.Word.PIN_BUDDY,
+                onLeftButtonClick = onBackPressed,
+                rightIcon = painterResource(Res.drawable.ic_search),
+                onRightButtonClick = onClickSearch
+            )
+
+            PHorizontalDivider()
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                pages.forEachIndexed{ index, item ->
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickableWithNoRipple {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(index)
+                                }
+                            }
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .padding(top = 12.dp, bottom = 11.dp),
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                text = "$item ${listSize[index]}",
+                                style = if (pagerState.currentPage == index) Typography.B1.copy(fontWeight = FontWeight.SemiBold)
+                                else Typography.T2.copy(fontWeight = FontWeight.Medium),
+                                color = if (pagerState.currentPage == index) Colors.Gray800 else Colors.Gray300,
+                                textAlign = TextAlign.Center
+                            )
+
+                            if (receivePinBuddyRequests.isNotEmpty()) {
+                                Image(
+                                    painter = painterResource(Res.drawable.ic_new_alarm),
+                                    contentDescription = "new pinBuddy request"
+                                )
                             }
                         }
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 12.dp, bottom = 11.dp),
-                    ) {
-                        Text(
+
+                        Box(
                             modifier = Modifier
-                                .fillMaxWidth(),
-                            text = "$item ${listSize[index]}",
-                            style = if (pagerState.currentPage == index) Typography.B1.copy(fontWeight = FontWeight.SemiBold)
-                                    else Typography.T2.copy(fontWeight = FontWeight.Medium),
-                            color = if (pagerState.currentPage == index) Colors.Gray800 else Colors.Gray300,
-                            textAlign = TextAlign.Center
+                                .height(1.dp)
+                                .fillMaxWidth()
+                                .background(
+                                    color = if (pagerState.currentPage == index) Colors.Gray800 else Colors.Transparency
+                                )
                         )
-
-                        if (receivePinBuddyRequests.isNotEmpty()) {
-                            Image(
-                                painter = painterResource(Res.drawable.ic_new_alarm),
-                                contentDescription = "new pinBuddy request"
-                            )
-                        }
                     }
+                }
+            }
 
-                    Box(
-                        modifier = Modifier
-                            .height(1.dp)
-                            .fillMaxWidth()
-                            .background(
-                                color = if (pagerState.currentPage == index) Colors.Gray800 else Colors.Transparency
-                            )
-                    )
+            PHorizontalDivider()
+
+            HorizontalPager(
+                state = pagerState,
+                userScrollEnabled = false,
+                verticalAlignment = Alignment.Top
+            ) {
+                when (it) {
+                    0 -> {
+                        PinBuddyList(
+                            pinBuddies = pinBuddies,
+                            onProfileClick = onProfileClick,
+                            onDeletePinBuddy = { memberId ->
+                                isShowCompleteDialog.value = true to memberId
+                            }
+                        )
+                    }
+                    1 -> {
+                        ReceivePinBuddyRequestList(
+                            receivePinBuddyRequests = receivePinBuddyRequests,
+                            onProfileClick = onProfileClick,
+                            onAcceptClick = onAcceptClick,
+                            onRejectClick = onRejectClick
+                        )
+                    }
+                    else -> {
+                        SentPinBuddyRequestList(
+                            sentPinBuddyRequests = sentPinBuddyRequests,
+                            onProfileClick = onProfileClick,
+                            onDeletePinBuddyRequest = onDeletePinBuddyRequest
+                        )
+                    }
                 }
             }
         }
 
-        PHorizontalDivider()
-
-        HorizontalPager(
-            state = pagerState,
-            userScrollEnabled = false,
-            verticalAlignment = Alignment.Top
-        ) {
-            when (it) {
-                0 -> {
-                    PinBuddyList(
-                        pinBuddies = pinBuddies,
-                        onProfileClick = onProfileClick,
-                        onDeletePinBuddy = { memberId ->
-                            isShowCompleteDialog.value = true to memberId
-                        }
-                    )
-                }
-                1 -> {
-                    ReceivePinBuddyRequestList(
-                        receivePinBuddyRequests = receivePinBuddyRequests,
-                        onProfileClick = onProfileClick,
-                        onAcceptClick = onAcceptClick,
-                        onRejectClick = onRejectClick
-                    )
-                }
-                else -> {
-                    SentPinBuddyRequestList(
-                        sentPinBuddyRequests = sentPinBuddyRequests,
-                        onProfileClick = onProfileClick,
-                        onDeletePinBuddyRequest = onDeletePinBuddyRequest
-                    )
-                }
-            }
-        }
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 
     if (isShowCompleteDialog.value.first) {

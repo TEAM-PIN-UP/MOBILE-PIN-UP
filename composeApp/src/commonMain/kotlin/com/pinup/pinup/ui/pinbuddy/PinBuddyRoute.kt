@@ -55,6 +55,8 @@ fun PinBuddyRoute(
         onProfileClick = onMoveUserProfile,
         onAcceptClick = pinBuddyViewModel::acceptPinBuddy,
         onRejectClick = pinBuddyViewModel::rejectPinBuddy,
-        onClickSearch = onClickSearch
+        onClickSearch = onClickSearch,
+        onRefresh = pinBuddyViewModel::refreshView,
+        isRefreshing = uiState.value.isRefreshing
     )
 }

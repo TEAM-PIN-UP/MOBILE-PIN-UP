@@ -15,7 +15,9 @@ import com.pinup.pinup.domain.usecase.RejectPinBuddyUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 
 class PinBuddyViewModel (
@@ -41,6 +43,7 @@ class PinBuddyViewModel (
                 pinBuddies = pinBuddies.profiles,
                 sentPinBuddyRequests = sentPinBuddyRequests.pinBuddyRequests,
                 receivePinBuddyRequests = receivePinBuddyRequests.pinBuddyRequests,
+                isRefreshing = false
             )
         }
     }
@@ -124,10 +127,21 @@ class PinBuddyViewModel (
             }
         )
     }
+
+    fun refreshView() = viewModelScope.launch {
+        updateState {
+            copy(
+                isRefreshing = true
+            )
+        }
+        delay(1.seconds)
+        initPinBuddies()
+    }
 }
 
 data class PinBuddyUiState(
     val pinBuddies: List<Profile> = emptyList(),
+    val isRefreshing: Boolean = false,
     val sentPinBuddyRequests: List<PinBuddyRequest> = emptyList(),
     val receivePinBuddyRequests: List<PinBuddyRequest> = emptyList(),
 ) : UiState
