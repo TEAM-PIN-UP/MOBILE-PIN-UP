@@ -116,18 +116,18 @@ struct NaverMap: UIViewRepresentable {
         context.coordinator.clearPolyline()
 
         // 핀치 모드: 폴리라인 + 마커
-        if isShowPinch, !pinchUiState.pinchDetailList.isEmpty {
-            let points = pinchUiState.pinchDetailList.map { NMGLatLng(lat: $0.latitude, lng: $0.longitude) }
+        if isShowPinch, !pinchUiState.editorPintsDetail.pintsPlaceList.isEmpty {
+            let points = pinchUiState.editorPintsDetail.pintsPlaceList.map { NMGLatLng(lat: $0.latitude, lng: $0.longitude) }
             let pl = NMFPolylineOverlay(points)
             pl?.width = 1
             pl?.color = UIColor.systemRed   // Colors.Negative 대체
             pl?.mapView = uiView.mapView
             context.coordinator.polyline = pl
 
-            for p in pinchUiState.pinchDetailList {
+            for p in pinchUiState.editorPintsDetail.pintsPlaceList {
                 let selected = (p.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace.kakaoPlaceId)
                 let iconName: String = {
-                    switch p.placeCategory {
+                    switch p.pintsPlaceCategory {
                     case .restaurant: return selected ? "ic_food_marker_on" : "ic_food_marker_pinch"
                     default:          return selected ? "ic_cafe_marker_on" : "ic_cafe_marker_pinch"
                     }
