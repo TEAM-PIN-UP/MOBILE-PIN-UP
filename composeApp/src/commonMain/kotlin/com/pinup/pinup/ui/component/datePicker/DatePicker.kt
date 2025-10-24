@@ -44,7 +44,7 @@ fun DatePicker(
     dateTimePickerColors: DateTimePickerColors = DateTimePickerColors(
         selectedDateColor = Colors.Main,
         disabledDateColor = Colors.White,
-        todayDateBorderColor = Colors.Transparency,
+        todayDateBorderColor = Colors.Main,
         rangeDateDateColor = Colors.White,
         textDisabledDateColor = Colors.Gray800,
         textSelectedDateColor = Colors.White,
@@ -207,6 +207,7 @@ fun DatePicker(
                                 .weight(1f)
                                 .datePickerBoxSelectedRange(calendarDate,dateTimePickerColors)
                                 .clip(shape = RoundedCornerShape(100))
+                                .datePickerBoxToday(calendarDate, dateTimePickerColors)
                                 .datePickerBoxSelected(calendarDate, dateTimePickerColors)
                                 .clickableWithNoRipple(enabled = !calendarDate.isDisabled && clickable) {
                                     if (selectedDate == null) {
