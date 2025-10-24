@@ -74,17 +74,7 @@ fun PinUpApp(
                 startDestination = PinUpAppDestination.Onboarding,
                 navController = navHostController
             ) {
-                composable<PinUpAppDestination.Onboarding>(
-                    enterTransition = {
-                        slideInHorizontally(initialOffsetX = { it })
-                    },
-                    popEnterTransition = {
-                        fadeIn(animationSpec = tween(200))
-                    },
-                    popExitTransition = {
-                        slideOutHorizontally(targetOffsetX = { it })
-                    }
-                ){
+                composable<PinUpAppDestination.Onboarding>{
                     val navOptions = navOptions {
                         popUpTo<PinUpAppDestination.Onboarding> {
                             inclusive = true
@@ -103,17 +93,7 @@ fun PinUpApp(
                     )
                 }
 
-                composable<PinUpAppDestination.ChoiceSignUp>(
-                    enterTransition = {
-                        slideInHorizontally(initialOffsetX = { it })
-                    },
-                    popEnterTransition = {
-                        fadeIn(animationSpec = tween(200))
-                    },
-                    popExitTransition = {
-                        slideOutHorizontally(targetOffsetX = { it })
-                    }
-                ){
+                composable<PinUpAppDestination.ChoiceSignUp>{
                     ChoiceSignUpRoute(
                         contextFactory = contextFactory,
                         onMoveLogin = {
@@ -129,17 +109,7 @@ fun PinUpApp(
                     )
                 }
 
-                composable<PinUpAppDestination.Login>(
-                    enterTransition = {
-                        slideInHorizontally(initialOffsetX = { it })
-                    },
-                    popEnterTransition = {
-                        fadeIn(animationSpec = tween(200))
-                    },
-                    popExitTransition = {
-                        slideOutHorizontally(targetOffsetX = { it })
-                    }
-                ){
+                composable<PinUpAppDestination.Login>{
                     LoginRoute(
                         contextFactory = contextFactory,
                         onMoveSignUp = {
@@ -158,17 +128,7 @@ fun PinUpApp(
                     )
                 }
 
-                composable<PinUpAppDestination.FindPasswordEmail>(
-                    enterTransition = {
-                        slideInHorizontally(initialOffsetX = { it })
-                    },
-                    popEnterTransition = {
-                        fadeIn(animationSpec = tween(200))
-                    },
-                    popExitTransition = {
-                        slideOutHorizontally(targetOffsetX = { it })
-                    }
-                ){
+                composable<PinUpAppDestination.FindPasswordEmail>{
                     FindPasswordEmailRoute(
                         onMoveLogin = {
                             navHostController.navigate(PinUpAppDestination.Login) {
@@ -183,17 +143,7 @@ fun PinUpApp(
                     )
                 }
 
-                composable<PinUpAppDestination.FindId>(
-                    enterTransition = {
-                        slideInHorizontally(initialOffsetX = { it })
-                    },
-                    popEnterTransition = {
-                        fadeIn(animationSpec = tween(200))
-                    },
-                    popExitTransition = {
-                        slideOutHorizontally(targetOffsetX = { it })
-                    }
-                ){
+                composable<PinUpAppDestination.FindId>{
                     FindIdRoute(
                         onMoveLogin = {
                             navHostController.navigate(PinUpAppDestination.Login) {
@@ -211,17 +161,7 @@ fun PinUpApp(
                     )
                 }
 
-                composable<PinUpAppDestination.ChangePassword>(
-                    enterTransition = {
-                        slideInHorizontally(initialOffsetX = { it })
-                    },
-                    popEnterTransition = {
-                        fadeIn(animationSpec = tween(200))
-                    },
-                    popExitTransition = {
-                        slideOutHorizontally(targetOffsetX = { it })
-                    }
-                ){
+                composable<PinUpAppDestination.ChangePassword>{
                     ChangePasswordRoute(
                         onMoveLogin = {
                             navHostController.navigate(PinUpAppDestination.Login) {

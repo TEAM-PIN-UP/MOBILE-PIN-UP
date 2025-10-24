@@ -1,5 +1,7 @@
 package com.pinup.pinup.ui.map
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavHostController
@@ -75,6 +77,10 @@ fun MapBottomSheetNavHost(
     NavHost(
         navController = navHostController,
         startDestination = if (placeDetailUiState.detailPlace != null) MapBottomSheetDestination.Detail else MapBottomSheetDestination.Search,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None },
+        popExitTransition = { ExitTransition.None },
     ) {
         composable<MapBottomSheetDestination.Search> {
             MapBottomSheetSearchScreen(
