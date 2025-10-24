@@ -32,7 +32,7 @@ fun CommentView(
         modifier = modifier
     ) {
         ProfileImageView(
-            imgUrl = comment.author.profileImageUrls,
+            imgUrl = comment.author.profileImageUrl,
             size = 36.dp,
         )
 
@@ -98,7 +98,7 @@ fun CommentView(
                     Row(
                     ) {
                         ProfileImageView(
-                            imgUrl = it.author.profileImageUrls,
+                            imgUrl = it.author.profileImageUrl,
                             size = 36.dp,
                         )
 

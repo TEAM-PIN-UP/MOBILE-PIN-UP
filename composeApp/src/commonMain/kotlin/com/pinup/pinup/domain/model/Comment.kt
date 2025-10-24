@@ -22,6 +22,6 @@ data class ReplyComment(
 
 data class AuthorInfo(
     val id: Int = 0,
-    val profileImageUrls: String = "",
+    val profileImageUrl: String = "",
     val nickname: String = ""
 )

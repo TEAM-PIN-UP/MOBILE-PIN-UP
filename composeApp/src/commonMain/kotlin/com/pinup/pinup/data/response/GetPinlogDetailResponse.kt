@@ -109,14 +109,14 @@ data class ReplyCommentResponse(
 @Serializable
 data class AuthorInfoResponse(
     val id: Int = 0,
-    val profileImageUrls: String = "",
+    val profileImageUrl: String? = "",
     val nickname: String = ""
 ) {
     companion object {
         fun AuthorInfoResponse.toModel(): AuthorInfo {
             return AuthorInfo(
                 id = id,
-                profileImageUrls = profileImageUrls,
+                profileImageUrl = profileImageUrl ?: "",
                 nickname = nickname,
             )
         }
