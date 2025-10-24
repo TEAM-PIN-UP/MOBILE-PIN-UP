@@ -86,7 +86,9 @@ fun MainNavHost(
             startDestination = MainDestination.Map,
             navController = navHostController,
             enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None }
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None },
         ) {
             composable<MainDestination.Map> {
                 MapRoute(

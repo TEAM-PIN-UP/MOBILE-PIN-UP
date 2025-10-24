@@ -1,5 +1,7 @@
 package com.pinup.pinup
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
@@ -72,7 +74,11 @@ fun PinUpApp(
         Box{
             NavHost(
                 startDestination = PinUpAppDestination.Onboarding,
-                navController = navHostController
+                navController = navHostController,
+                enterTransition = { EnterTransition.None },
+                exitTransition = { ExitTransition.None },
+                popEnterTransition = { EnterTransition.None },
+                popExitTransition = { ExitTransition.None },
             ) {
                 composable<PinUpAppDestination.Onboarding>{
                     val navOptions = navOptions {
