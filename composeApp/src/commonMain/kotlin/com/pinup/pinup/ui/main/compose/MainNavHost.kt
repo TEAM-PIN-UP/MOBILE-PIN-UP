@@ -265,7 +265,23 @@ fun MainNavHost(
                     contextFactory = contextFactory,
                     onClickDetail = onMovePinlogDetail,
                     onMovePinchWrite = onMovePinchWrite,
-                    onMovePintsDetail = onMovePintsDetail
+                    onMovePintsDetail = onMovePintsDetail,
+                    onClickBottomNav = {
+                        if (it is MainDestination.Upload) {
+                            if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()
+                        } else if (it is MainDestination.My){
+                            navHostController.popBackStack()
+                        } else {
+                            navHostController.navigate(it) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
+                        }
+                    },
+
                 )
             }
 

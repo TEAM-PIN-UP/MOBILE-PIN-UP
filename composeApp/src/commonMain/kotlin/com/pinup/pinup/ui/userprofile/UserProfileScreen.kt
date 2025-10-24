@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -48,6 +49,7 @@ import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.extentions.ScrollToEndCallback
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.ui.component.BottomBar
 import com.pinup.pinup.ui.component.FeedView
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.component.PHorizontalDivider
@@ -56,6 +58,7 @@ import com.pinup.pinup.ui.component.PinBuddyBottomSheet
 import com.pinup.pinup.ui.component.PinchItemView
 import com.pinup.pinup.ui.component.ProfileImageView
 import com.pinup.pinup.ui.component.RoundedBox
+import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
@@ -70,6 +73,7 @@ fun UserProfileScreen(
     photoReviews: List<Review>,
     pinchPageAble: PintsPageAble,
     modifier: Modifier = Modifier,
+    profileUrl: String = "",
     onRequestPinBuddy: () -> Unit = {},
     onAlarmClick: () -> Unit = {},
     onSettingClick: () -> Unit = {},
@@ -81,6 +85,7 @@ fun UserProfileScreen(
     onMovePinchWrite: () -> Unit = {},
     getMorePints: () -> Unit = {},
     onMoveDetail: (Int) -> Unit = {},
+    onClickBottomNav: (MainDestination) -> Unit,
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     var isShowDeleteDialog by remember { mutableStateOf(false) }
@@ -89,6 +94,7 @@ fun UserProfileScreen(
     )
     val pagerState = remember { mutableStateOf(0) }
     val scrollState = rememberLazyListState()
+    var bottomBarHeight by remember { mutableStateOf(0.dp) }
 
     ScrollToEndCallback(scrollState) {
         if (pagerState.value == 1 && !pinchPageAble.last) {
@@ -120,6 +126,7 @@ fun UserProfileScreen(
                 .statusBarsPadding()
                 .navigationBarsPadding()
                 .fillMaxWidth(),
+            contentPadding = PaddingValues(bottom = bottomBarHeight),
             state = scrollState
         ) {
             item {
@@ -369,6 +376,19 @@ fun UserProfileScreen(
                     )
                 }
             }
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            BottomBar(
+                selectedMenu = MainDestination.My,
+                profileImage = profileUrl,
+                onBottomMenuClick = onClickBottomNav,
+                onSizeChanged = { bottomBarHeight = it }
+            )
         }
     }
 
