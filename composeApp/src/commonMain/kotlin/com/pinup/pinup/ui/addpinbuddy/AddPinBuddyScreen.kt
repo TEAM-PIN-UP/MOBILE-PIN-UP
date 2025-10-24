@@ -32,11 +32,17 @@ import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
 import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import com.pinup.pinup.domain.model.RelationType
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.ui.component.BottomBar
+import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Texts
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
@@ -52,8 +58,11 @@ fun AddPinBuddyScreen(
     onBackPressed: () -> Unit = {},
     onProfileClick: (Int) -> Unit = {},
     onSearch: () -> Unit = {},
+    onClickBottomNav: (MainDestination) -> Unit,
+    profileUrl: String = "",
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    var bottomBarHeight by remember { mutableStateOf(0.dp) }
 
     Column(
         modifier = modifier
@@ -221,6 +230,7 @@ fun AddPinBuddyScreen(
                         LazyColumn(
                             modifier = Modifier
                                 .padding(top = 20.dp),
+                            contentPadding = PaddingValues(bottom = bottomBarHeight),
                             verticalArrangement = Arrangement.spacedBy(24.dp)
                         ) {
                             items(it) {
@@ -245,6 +255,19 @@ fun AddPinBuddyScreen(
                 }
             }
         }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        BottomBar(
+            selectedMenu = MainDestination.My,
+            profileImage = profileUrl,
+            onBottomMenuClick = onClickBottomNav,
+            onSizeChanged = { bottomBarHeight = it }
+        )
     }
 }
 

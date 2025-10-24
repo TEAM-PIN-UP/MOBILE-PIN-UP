@@ -19,7 +19,7 @@ class AddPinBuddyViewModel (
     private val getRecentSearchUseCase: GetRecentPinBuddySearchUseCase,
     private val getMyProfileUseCase: GetMyProfileUseCase,
     private val saveRecentSearchUseCase: SaveRecentPinBuddySearchUseCase,
-    private val deleteRecentSearchUseCase: DeleteRecentPinBuddySearchUseCase
+    private val deleteRecentSearchUseCase: DeleteRecentPinBuddySearchUseCase,
 ) : BaseViewModel<AddPinBuddyUiState, UiEvent>(AddPinBuddyUiState()) {
 
     init {
@@ -32,6 +32,7 @@ class AddPinBuddyViewModel (
             .collectLatest {
                 updateState {
                     copy(
+                        profileUrl = it.profileUrl,
                         myMemberId = it.memberId
                     )
                 }
@@ -85,5 +86,6 @@ data class AddPinBuddyUiState(
     val myMemberId: Int = -1,
     val query: String = "",
     val pinBuddies: List<PinBuddy>? = null,
-    val recentSearchList: List<String> = emptyList()
+    val recentSearchList: List<String> = emptyList(),
+    val profileUrl: String = "",
 ) : UiState
