@@ -8,6 +8,7 @@ import com.pinup.pinup.domain.model.getSuccessOrNull
 import com.pinup.pinup.domain.usecase.AcceptPinBuddyUseCase
 import com.pinup.pinup.domain.usecase.DeletePinBuddyUseCase
 import com.pinup.pinup.domain.usecase.DeleteRequestPinBuddyUseCase
+import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetPinBuddiesUseCase
 import com.pinup.pinup.domain.usecase.GetReceivePinBuddyRequestsUseCase
 import com.pinup.pinup.domain.usecase.GetSentPinBuddyRequestsUseCase
@@ -28,12 +29,14 @@ class PinBuddyViewModel (
     private val deleteRequestPinBuddyUseCase: DeleteRequestPinBuddyUseCase,
     private val acceptPinBuddyUseCase: AcceptPinBuddyUseCase,
     private val rejectPinBuddyUseCase: RejectPinBuddyUseCase,
+    private val getMemberInfoUseCase: GetMemberInfoUseCase
 ) : BaseViewModel<PinBuddyUiState, PinBuddyUiEvent>(PinBuddyUiState()) {
     private val pinBuddyPagination = Pagination()
     private val sentPinBuddyPagination = Pagination()
     private val receivePinBuddyPagination = Pagination()
 
     fun initPinBuddies() = viewModelScope.launch {
+        initMyInfo()
         val pinBuddies = getPinBuddiesUseCase(pinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE).getSuccessOrNull() ?: return@launch
         val sentPinBuddyRequests = getSentPinBuddyRequestsUseCase(sentPinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE).getSuccessOrNull() ?: return@launch
         val receivePinBuddyRequests = getReceivePinBuddyRequestsUseCase(receivePinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE).getSuccessOrNull() ?: return@launch
@@ -44,6 +47,15 @@ class PinBuddyViewModel (
                 sentPinBuddyRequests = sentPinBuddyRequests.pinBuddyRequests,
                 receivePinBuddyRequests = receivePinBuddyRequests.pinBuddyRequests,
                 isRefreshing = false
+            )
+        }
+    }
+
+    private fun initMyInfo() = viewModelScope.launch {
+        val memberInfo = getMemberInfoUseCase().getSuccessOrNull() ?: return@launch
+        updateState {
+            copy(
+                profileUrl = memberInfo.profile.profilePictureUrl ?: "",
             )
         }
     }
@@ -144,6 +156,7 @@ data class PinBuddyUiState(
     val isRefreshing: Boolean = false,
     val sentPinBuddyRequests: List<PinBuddyRequest> = emptyList(),
     val receivePinBuddyRequests: List<PinBuddyRequest> = emptyList(),
+    val profileUrl: String = ""
 ) : UiState
 
 sealed interface PinBuddyUiEvent : UiEvent {

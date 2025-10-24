@@ -269,12 +269,6 @@ fun PinUpApp(
                         onMovePinlogDetail = {
                             navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
                         },
-                        onMoveAddPinBuddy = {
-                            navHostController.navigate(PinUpAppDestination.AddPinBuddy)
-                        },
-                        onMovePinBuddy = {
-                            navHostController.navigate(PinUpAppDestination.PinBuddy)
-                        },
                         onMoveSetting = {
                             navHostController.navigate(PinUpAppDestination.Setting)
                         },
@@ -286,9 +280,6 @@ fun PinUpApp(
                         },
                         onClickArticleDetail = {
                             navHostController.navigate(PinUpAppDestination.ArticleDetail(it))
-                        },
-                        onMoveUserProfile = {
-                            navHostController.navigate(PinUpAppDestination.UserProfile(it))
                         },
                         onMovePlaceDetail = {
                             navHostController.navigate(PinUpAppDestination.PlaceDetail(it))
@@ -347,32 +338,6 @@ fun PinUpApp(
                     )
                 }
 
-                composable<PinUpAppDestination.AddPinBuddy> {
-                    AddPinBuddyRoute(
-                        onBackPressed = {
-                            navHostController.popBackStack()
-                        },
-                        onMoveUserProfile = {
-                            navHostController.navigate(PinUpAppDestination.UserProfile(it))
-                        }
-                    )
-                }
-
-                composable<PinUpAppDestination.UserProfile> {
-                    UserProfileRoute(
-                        contextFactory = contextFactory,
-                        onClickDetail = { it ->
-                            navHostController.navigate(PinUpAppDestination.PinlogDetail(it))
-                        },
-                        onMovePinchWrite = {
-                            navHostController.navigate(PinUpAppDestination.PinchWrite(0))
-                        },
-                        onMovePintsDetail = {
-                            navHostController.navigate(PinUpAppDestination.PinchDetail(it))
-                        }
-                    )
-                }
-
                 composable<PinUpAppDestination.PinchDetail> {
                     PinchDetailRoute(
                         onBackPressed = {
@@ -380,20 +345,6 @@ fun PinUpApp(
                         },
                         onClickEdit = {
                             navHostController.navigate(PinUpAppDestination.PinchWrite(it))
-                        }
-                    )
-                }
-
-                composable<PinUpAppDestination.PinBuddy> {
-                    PinBuddyRoute(
-                        onBackPressed = {
-                            navHostController.popBackStack()
-                        },
-                        onMoveUserProfile = {
-                            navHostController.navigate(PinUpAppDestination.UserProfile(it))
-                        },
-                        onClickSearch = {
-                            navHostController.navigate(PinUpAppDestination.AddPinBuddy)
                         }
                     )
                 }

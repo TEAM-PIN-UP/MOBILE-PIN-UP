@@ -4,6 +4,7 @@ import PToastHost
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.theme.Texts
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.collectLatest
@@ -14,6 +15,7 @@ import rememberToastState
 fun PinBuddyRoute(
     onBackPressed: () -> Unit,
     onMoveUserProfile: (Int) -> Unit,
+    onClickBottomNav: (MainDestination) -> Unit,
     onClickSearch: () -> Unit = {},
     pinBuddyViewModel: PinBuddyViewModel = koinViewModel()
 ) {
@@ -57,6 +59,8 @@ fun PinBuddyRoute(
         onRejectClick = pinBuddyViewModel::rejectPinBuddy,
         onClickSearch = onClickSearch,
         onRefresh = pinBuddyViewModel::refreshView,
-        isRefreshing = uiState.value.isRefreshing
+        onClickBottomNav = onClickBottomNav,
+        isRefreshing = uiState.value.isRefreshing,
+        profileUrl = uiState.value.profileUrl
     )
 }

@@ -18,20 +18,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.PinUpAppDestination
-import com.pinup.pinup.domain.model.DetailPlace
-import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.platform.ContextFactory
-import com.pinup.pinup.platform.hLog
+import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
 import com.pinup.pinup.ui.article.ArticleRoute
-import com.pinup.pinup.ui.bookmark.BookmarkRoute
-import com.pinup.pinup.ui.component.BottomBar
-import com.pinup.pinup.ui.component.NotDevelopScreen
 import com.pinup.pinup.ui.feed.FeedRoute
 import com.pinup.pinup.ui.main.MainViewModel
 import com.pinup.pinup.ui.map.MapRoute
 import com.pinup.pinup.ui.my.MyRoute
-import com.pinup.pinup.ui.my.pinch.detail.PinchDetailRoute
 import com.pinup.pinup.ui.my.scrap.ScrapRoute
+import com.pinup.pinup.ui.pinbuddy.PinBuddyRoute
+import com.pinup.pinup.ui.userprofile.UserProfileRoute
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -42,9 +38,6 @@ fun MainNavHost(
     onMoveWriteReview: (Int) -> Unit,
     onMoveNewWriteReview: (String) -> Unit,
     onMovePinlogDetail: (Int) -> Unit,
-    onMoveAddPinBuddy: () -> Unit,
-    onMovePinBuddy: () -> Unit,
-    onMoveUserProfile: (Int) -> Unit,
     onMoveSetting: () -> Unit,
     onClickEdit: (Int) -> Unit = {},
     onClickArticleDetail: (Int) -> Unit = {},
@@ -80,7 +73,7 @@ fun MainNavHost(
                     }
                 }
             } else {
-                onMoveUserProfile(userArgId.intValue)
+                navHostController.navigate(PinUpAppDestination.UserProfile(userArgId.intValue))
             }
             userArgId.intValue = -1
         }
@@ -164,8 +157,18 @@ fun MainNavHost(
             composable<MainDestination.My> {
                 MyRoute(
                     contextFactory = contextFactory,
-                    onAddPinBuddyClick = onMoveAddPinBuddy,
-                    onMovePinBuddy = onMovePinBuddy,
+                    onAddPinBuddyClick = {
+                        navHostController.navigate(PinUpAppDestination.AddPinBuddy)
+                    },
+                    onMovePinBuddy = {
+                        navHostController.navigate(PinUpAppDestination.PinBuddy) {
+                            launchSingleTop = true
+                            restoreState = true
+                            popUpTo(navHostController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                        }
+                    },
                     onMoveSetting = onMoveSetting,
                     onClickBottomNav = {
                         if (it is MainDestination.Upload) {
@@ -195,6 +198,59 @@ fun MainNavHost(
                         }
                     },
                     onMovePlaceDetail = onMovePlaceDetail,
+                    onMovePinchWrite = onMovePinchWrite,
+                    onMovePintsDetail = onMovePintsDetail
+                )
+            }
+
+            composable<PinUpAppDestination.PinBuddy> {
+                PinBuddyRoute(
+                    onClickBottomNav = {
+                        if (it is MainDestination.Upload) {
+                            if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()
+                        } else {
+                            navHostController.navigate(it) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
+                        }
+                    },
+                    onBackPressed = {
+                        navHostController.navigate(MainDestination.My) {
+                            launchSingleTop = true
+                            restoreState = true
+                            popUpTo(navHostController.graph.startDestinationId) {
+                                saveState = true
+                            }
+                        }
+                    },
+                    onMoveUserProfile = {
+                        navHostController.navigate(PinUpAppDestination.UserProfile(it))
+                    },
+                    onClickSearch = {
+                        navHostController.navigate(PinUpAppDestination.AddPinBuddy)
+                    }
+                )
+            }
+
+            composable<PinUpAppDestination.AddPinBuddy> {
+                AddPinBuddyRoute(
+                    onBackPressed = {
+                        navHostController.popBackStack()
+                    },
+                    onMoveUserProfile = {
+                        navHostController.navigate(PinUpAppDestination.UserProfile(it))
+                    }
+                )
+            }
+
+            composable<PinUpAppDestination.UserProfile> {
+                UserProfileRoute(
+                    contextFactory = contextFactory,
+                    onClickDetail = onMovePinlogDetail,
                     onMovePinchWrite = onMovePinchWrite,
                     onMovePintsDetail = onMovePintsDetail
                 )

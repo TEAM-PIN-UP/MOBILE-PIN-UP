@@ -76,7 +76,6 @@ fun ScrapScreen(
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
-    val density = LocalDensity.current
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
 
     ModalBottomSheetLayout(
