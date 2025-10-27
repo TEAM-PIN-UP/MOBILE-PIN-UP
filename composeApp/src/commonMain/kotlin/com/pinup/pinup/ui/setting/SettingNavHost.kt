@@ -71,9 +71,7 @@ fun SettingNavHost(
 
         composable<SettingDestination.Complete> {
             UnRegisterCompleteScreen(
-                onMoveOnboarding = {
-                    onMoveLoginOnboardingScreen
-                }
+                onMoveOnboarding = onMoveLoginOnboardingScreen
             )
         }
     }

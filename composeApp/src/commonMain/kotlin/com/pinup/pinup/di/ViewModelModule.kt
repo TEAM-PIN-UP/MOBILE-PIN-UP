@@ -30,6 +30,7 @@ import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpViewModel
 import com.pinup.pinup.ui.pinlogDetail.PinlogDetailViewModel
 import com.pinup.pinup.ui.placeDetail.PlaceDetailViewModel
 import com.pinup.pinup.ui.profilesetting.ProfileSettingViewModel
+import com.pinup.pinup.ui.setting.unregister.UnRegisterViewModel
 
 val viewModelModule = module {
     viewModelOf(::OnboardingViewModel)
@@ -41,6 +42,7 @@ val viewModelModule = module {
     viewModelOf(::FindIdViewModel)
     viewModelOf(::ChangePasswordViewModel)
     viewModelOf(::SettingViewModel)
+    viewModelOf(::UnRegisterViewModel)
     viewModelOf(::ProfileSettingViewModel)
     viewModelOf(::WriteReviewViewModel)
     viewModelOf(::PinlogDetailViewModel)

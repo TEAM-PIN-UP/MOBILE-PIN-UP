@@ -250,7 +250,11 @@ class SignUpViewModel (
 
     fun signUp() = viewModelScope.launch {
         if(uiState.value.profileUrl.isEmpty()) {
-            return@launch
+            if (uiState.value.snsType == SNSType.PINUP) {
+                emailSignUp("")
+            } else {
+                socialSignUp("")
+            }
         } else {
             resultResponse(
                 response = uploadImageUploadUseCase(ImageUploadType.PROFILES, uiState.value.profileUrl),

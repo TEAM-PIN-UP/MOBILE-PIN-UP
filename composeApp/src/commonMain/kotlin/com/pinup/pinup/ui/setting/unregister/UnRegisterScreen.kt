@@ -106,6 +106,8 @@ fun UnRegisterScreen(
                 )
             }
 
+            Spacer(modifier = Modifier.height(20.dp))
+
             PButton(
                 text = Texts.Word.UNREGISTER,
                 onClick = {
