@@ -45,7 +45,7 @@ class PinchDetailViewModel (
                         latitude = item.latitude,
                         longitude = item.longitude
                     )
-                    updatePlace(place = place, index = index)
+                    updatePlace(place = place)
                 }
             }
         )
@@ -76,7 +76,7 @@ class PinchDetailViewModel (
         )
     }
 
-    fun updatePlace(place: Place, index: Int) {
+    fun updatePlace(place: Place) {
         updateState {
             hLog("latitude: ${place.latitude} longitude: ${place.longitude}")
             copy(
@@ -84,13 +84,7 @@ class PinchDetailViewModel (
                     latitude = place.latitude,
                     longitude = place.longitude
                 ),
-                pinchList = pinchList.mapIndexed { i, p ->
-                    if (i == index) {
-                        place
-                    } else {
-                        p
-                    }
-                }
+                pinchList = pinchList
             )
         }
     }
@@ -100,7 +94,7 @@ data class PinchDetailUiState(
     val title: String = "",
     val description: String = "",
     val createdAt: String = toShortDateXd(currentDate.toString()),
-    val pinchList: List<Place> = List(5) { Place() },
+    val pinchList: List<Place> = emptyList(),
     val currentPosition: Position? = null,
     val cameraPosition: Position? = null,
 ) : UiState
