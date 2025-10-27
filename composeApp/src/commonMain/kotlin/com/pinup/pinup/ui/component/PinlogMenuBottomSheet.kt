@@ -12,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.extentions.clickableWithNoRipple
@@ -36,13 +37,13 @@ fun PinlogMenuBottomSheet(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
                 .clickableWithNoRipple {
                     onClickEdit()
                 },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
+                contentScale = ContentScale.Crop,
                 painter = painterResource(Res.drawable.ic_write),
                 contentDescription = null
             )
@@ -63,13 +64,13 @@ fun PinlogMenuBottomSheet(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
                 .clickableWithNoRipple {
                     onClickDelete()
                 },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
+                contentScale = ContentScale.Crop,
                 painter = painterResource(Res.drawable.ic_delete),
                 contentDescription = null
             )
