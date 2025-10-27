@@ -36,6 +36,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.extentions.ScrollToEndCallback
 import com.pinup.pinup.extentions.clickableWithNoRipple
@@ -193,7 +194,9 @@ fun FeedScreen(
                     PullRefreshIndicator(
                         refreshing = isRefreshing,
                         state = pullRefreshState,
-                        modifier = Modifier.align(Alignment.TopCenter)
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .zIndex(1f)
                     )
                 }
             }

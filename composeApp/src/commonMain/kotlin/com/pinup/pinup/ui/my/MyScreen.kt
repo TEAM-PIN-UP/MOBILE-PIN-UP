@@ -138,6 +138,7 @@ fun MyScreen(
     ) {
         Box(
             Modifier
+                .statusBarsPadding()
                 .pullRefresh(state = pullRefreshState,)
         ) {
             LazyColumn(

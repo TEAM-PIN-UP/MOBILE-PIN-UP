@@ -70,64 +70,63 @@ fun ArticleScreen(
     ScrollToEndCallback(scrollState) {
         getMoreArticle()
     }
-
-    Box(
-        Modifier
-            .pullRefresh(
-                state = pullRefreshState,
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                color = Colors.White
             )
-    ){
-        Column(
+    ) {
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    color = Colors.White
-                )
+                .statusBarsPadding()
+                .padding(horizontal = 20.dp, vertical = 15.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
+            Text(
+                text = Texts.Article.TITLE,
+                style = Typography.T1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray800
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Image(
                 modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(horizontal = 20.dp, vertical = 15.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .clickableWithNoRipple {
+                        onClickSearch()
+                    },
+                painter = painterResource(Res.drawable.ic_search),
+                contentDescription = null,
+            )
+        }
+
+        PHorizontalDivider()
+
+        if (articleList.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = Texts.Article.TITLE,
-                    style = Typography.T1.copy(
+                    text = Texts.FEED.EMPTY_FEED,
+                    color = Colors.Gray400,
+                    style = Typography.B1.copy(
                         fontWeight = FontWeight.SemiBold
-                    ),
-                    color = Colors.Gray800
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Image(
-                    modifier = Modifier
-                        .clickableWithNoRipple {
-                            onClickSearch()
-                        },
-                    painter = painterResource(Res.drawable.ic_search),
-                    contentDescription = null,
+                    )
                 )
             }
-
-            PHorizontalDivider()
-
-            if (articleList.isEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = Texts.FEED.EMPTY_FEED,
-                        color = Colors.Gray400,
-                        style = Typography.B1.copy(
-                            fontWeight = FontWeight.SemiBold
-                        )
+        } else {
+            Box(
+                Modifier
+                    .pullRefresh(
+                        state = pullRefreshState,
                     )
-                }
-            } else {
+            ) {
                 LazyColumn(
                     modifier = Modifier
                         .padding(bottom = bottomBarHeight)
@@ -152,15 +151,16 @@ fun ArticleScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
+
+                PullRefreshIndicator(
+                    refreshing = isRefreshing,
+                    state = pullRefreshState,
+                    modifier = Modifier.align(Alignment.TopCenter)
+                )
             }
         }
-
-        PullRefreshIndicator(
-            refreshing = isRefreshing,
-            state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter)
-        )
     }
+
 
     Column(
         modifier = Modifier
