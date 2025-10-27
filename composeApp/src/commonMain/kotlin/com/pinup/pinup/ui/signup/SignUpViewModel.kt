@@ -100,10 +100,21 @@ class SignUpViewModel (
         updateState {
             copy(
                 emailState = uiState.value.emailState.copy(
-                    verificationCode = code
+                    verificationCode = code,
                 )
             )
         }
+
+        if (code.isEmpty()) {
+            updateState {
+                copy(
+                    emailState = uiState.value.emailState.copy(
+                        emailVerifyType = EmailVerifyType.NONE,
+                    )
+                )
+            }
+        }
+
         if (code.length == 6) {
            verifyEmail()
         }
@@ -304,7 +315,7 @@ class SignUpViewModel (
     private fun startTimer() {
         timer = INIT_TIME
         viewModelScope.launch {
-            while (timer > 0) {
+            while (timer >= 0) {
                 val m = timer / 60
                 val s = timer % 60
                 val textSecond = if(s < 10) "0$s" else "$s"

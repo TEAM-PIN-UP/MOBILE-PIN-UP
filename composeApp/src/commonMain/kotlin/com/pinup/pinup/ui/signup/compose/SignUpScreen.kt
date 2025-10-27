@@ -51,17 +51,7 @@ fun SignUpScreen(
             navController = navHostController,
             startDestination = if(snsType == SNSType.PINUP) SignUpDestination.InputEmail else SignUpDestination.Terms,
         ) {
-            composable<SignUpDestination.InputEmail>(
-                enterTransition = {
-                    slideInHorizontally(initialOffsetX = { it })
-                },
-                popEnterTransition = {
-                    fadeIn(animationSpec = tween(200))
-                },
-                popExitTransition = {
-                    slideOutHorizontally(targetOffsetX = { it })
-                }
-            ) {
+            composable<SignUpDestination.InputEmail> {
                 InputEmailScreen(
                     emailState = emailState,
                     onEmailChanged = onEmailChanged,
@@ -72,38 +62,20 @@ fun SignUpScreen(
                 )
             }
 
-            composable<SignUpDestination.InputPassword>(
-                enterTransition = {
-                    slideInHorizontally(initialOffsetX = { it })
-                },
-                popEnterTransition = {
-                    fadeIn(animationSpec = tween(200))
-                },
-                popExitTransition = {
-                    slideOutHorizontally(targetOffsetX = { it })
-                }
-            ) {
+            composable<SignUpDestination.InputPassword> {
                 InputPasswordScreen(
                     passwordState = passwordState,
                     onPasswordChanged = onPasswordChanged,
                     onPasswordAgainChanged = onPasswordAgainChanged,
                     onClickShowPassword = onClickShowPassword,
                     onClickConfirm = { navHostController.navigate(SignUpDestination.Terms) },
-                    onBackPressed = onBackPressed
+                    onBackPressed = {
+                        navHostController.popBackStack()
+                    }
                 )
             }
 
-            composable<SignUpDestination.Name>(
-                enterTransition = {
-                    slideInHorizontally(initialOffsetX = { it })
-                },
-                popEnterTransition = {
-                    fadeIn(animationSpec = tween(200))
-                },
-                popExitTransition = {
-                    slideOutHorizontally(targetOffsetX = { it })
-                }
-            ) {
+            composable<SignUpDestination.Name> {
                 InputNameScreen(
                     nickname = nicknameState.nickname,
                     isNicknameUsed = nicknameState.isNicknameUsed,
@@ -111,42 +83,26 @@ fun SignUpScreen(
                     onMoveSelectProfileImage = {
                         navHostController.navigate(SignUpDestination.Image)
                     },
-                    onBackPressed = onBackPressed,
+                    onBackPressed = {
+                        navHostController.popBackStack()
+                    },
                     isPassNickname = nicknameState.isPassNickname
                 )
             }
 
-            composable<SignUpDestination.Image>(
-                enterTransition = {
-                    slideInHorizontally(initialOffsetX = { it })
-                },
-                popEnterTransition = {
-                    fadeIn(animationSpec = tween(200))
-                },
-                popExitTransition = {
-                    slideOutHorizontally(targetOffsetX = { it })
-                }
-            ) {
+            composable<SignUpDestination.Image> {
                 SelectProfileImageScreen(
                     profileImage = profileUrl,
                     nickname = nicknameState.nickname,
                     onUpdateProfileImage = onProfileImageChange,
                     onClickSignup = onSignUpClick,
-                    onBackPressed = onBackPressed
+                    onBackPressed = {
+                        navHostController.popBackStack()
+                    }
                 )
             }
 
-            composable<SignUpDestination.Terms>(
-                enterTransition = {
-                    slideInHorizontally(initialOffsetX = { it })
-                },
-                popEnterTransition = {
-                    fadeIn(animationSpec = tween(200))
-                },
-                popExitTransition = {
-                    slideOutHorizontally(targetOffsetX = { it })
-                }
-            ) {
+            composable<SignUpDestination.Terms> {
                 TermsOfServiceScreen(
                     onTermAgreeClick = onTermAgreeClick,
                     onMoveInputName = {
@@ -158,24 +114,16 @@ fun SignUpScreen(
                     isCollectLocationAgree = termsOfServiceState.isCollectLocationAgree,
                     isMarketingAgreeClick = termsOfServiceState.isMarketingAgreeAgree,
                     isPassValidation = termsOfServiceState.isPassValidation,
-                    onBackPressed = onBackPressed,
+                    onBackPressed = {
+                        if(snsType == SNSType.PINUP) onBackPressed() else navHostController.popBackStack()
+                    },
                     onClickDetailTerm = { url ->
                         navHostController.navigate(SignUpDestination.TermDetail(url))
                     }
                 )
             }
 
-            composable<SignUpDestination.TermDetail>(
-                enterTransition = {
-                    slideInVertically(initialOffsetY = { it })
-                },
-                popEnterTransition = {
-                    fadeIn(animationSpec = tween(200))
-                },
-                popExitTransition = {
-                    slideOutVertically(targetOffsetY = { it })
-                }
-            ) {
+            composable<SignUpDestination.TermDetail> {
                 val url = it.arguments?.get("url").toString()
                 DetailTermScreen(
                     onBackPressed = {
@@ -203,6 +151,4 @@ sealed interface SignUpDestination {
     data object Name : SignUpDestination
     @Serializable
     data object Image : SignUpDestination
-    @Serializable
-    data object Complete : SignUpDestination
 }

@@ -32,6 +32,7 @@ import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_password_show_enable
+import pinup.composeapp.generated.resources.ic_password_show_unable
 
 @Composable
 fun InputPasswordScreen(
@@ -78,6 +79,9 @@ fun InputPasswordScreen(
         RoundedTextField(
             modifier = Modifier,
             text = passwordState.password,
+            textStyle = Typography.B2.copy(
+                fontWeight = FontWeight.Medium
+            ),
             onValueChange = {
                 onPasswordChanged(it)
             },
@@ -111,6 +115,9 @@ fun InputPasswordScreen(
             RoundedTextField(
                 modifier = Modifier,
                 text = passwordState.passwordAgain,
+                textStyle = Typography.B2.copy(
+                    fontWeight = FontWeight.Medium
+                ),
                 onValueChange = {
                     onPasswordAgainChanged(it)
                 },
@@ -130,7 +137,7 @@ fun InputPasswordScreen(
                     modifier = Modifier.clickableSingleWithNoRipple {
                         onClickShowPassword()
                     },
-                    painter = painterResource(if(passwordState.isShowPassword) Res.drawable.ic_password_show_enable else Res.drawable.ic_password_show_enable),
+                    painter = painterResource(if(passwordState.isShowPassword) Res.drawable.ic_password_show_enable else Res.drawable.ic_password_show_unable),
                     contentDescription = null,
                 )
 

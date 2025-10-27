@@ -30,7 +30,7 @@ import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_password_show_enable
+import pinup.composeapp.generated.resources.ic_password_show_unable
 
 @Composable
 fun ChangePasswordScreen(
@@ -140,7 +140,7 @@ fun ChangePasswordScreen(
                     modifier = Modifier.clickableSingleWithNoRipple {
                         onClickShowPassword()
                     },
-                    painter = painterResource(if(isShowPassword) Res.drawable.ic_password_show_enable else Res.drawable.ic_password_show_enable),
+                    painter = painterResource(if(isShowPassword) Res.drawable.ic_password_show_unable else Res.drawable.ic_password_show_unable),
                     contentDescription = null,
                 )
 
