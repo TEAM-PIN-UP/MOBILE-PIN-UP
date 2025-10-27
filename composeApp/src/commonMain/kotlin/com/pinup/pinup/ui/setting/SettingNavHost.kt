@@ -18,20 +18,12 @@ fun SettingNavHost(
     onBackPressed: () -> Unit,
     onMoveLoginScreen: () -> Unit,
     onMoveLoginOnboardingScreen: () -> Unit,
+    onChangedPassword: () -> Unit = {},
 ) {
     val navHostController = rememberNavController()
     NavHost(
         navController = navHostController,
         startDestination = SettingDestination.Setting,
-        enterTransition = {
-            slideInHorizontally(initialOffsetX = { it })
-        },
-        popEnterTransition = {
-            fadeIn(animationSpec = tween(200))
-        },
-        popExitTransition = {
-            slideOutHorizontally(targetOffsetX = { it })
-        }
     ) {
         composable<SettingDestination.Setting> {
             SettingRoute(
@@ -42,6 +34,9 @@ fun SettingNavHost(
                 },
                 onMoveUnRegister = {
                     navHostController.navigate(SettingDestination.UnRegister)
+                },
+                onChangedPassword = {
+                    onChangedPassword()
                 }
             )
         }

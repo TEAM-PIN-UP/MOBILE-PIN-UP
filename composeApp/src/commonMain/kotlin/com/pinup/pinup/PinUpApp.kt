@@ -313,6 +313,9 @@ fun PinUpApp(
                                     inclusive = true
                                 }
                             }
+                        },
+                        onChangedPassword = {
+                            navHostController.navigate(PinUpAppDestination.ChangePassword)
                         }
                     )
                 }

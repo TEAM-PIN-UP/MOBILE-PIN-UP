@@ -12,7 +12,8 @@ fun SettingRoute(
     onBackPressed: () -> Unit,
     onMoveLoginScreen: () -> Unit,
     onMoveProfileModify: () -> Unit,
-    onMoveUnRegister: () -> Unit = {}
+    onMoveUnRegister: () -> Unit = {},
+    onChangedPassword: () -> Unit = {},
 ) {
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
@@ -29,6 +30,7 @@ fun SettingRoute(
         onBackPressed = onBackPressed,
         onLogoutClick = viewModel::logout,
         onProfileModifyClick = onMoveProfileModify,
+        onChangedPassword = onChangedPassword,
         onMoveUnRegister = onMoveUnRegister
     )
 }

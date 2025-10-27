@@ -42,12 +42,10 @@ fun SettingScreen(
     onBackPressed: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
     onProfileModifyClick: () -> Unit = {},
+    onChangedPassword: () -> Unit = {},
     onMoveUnRegister: () -> Unit = {}
 ) {
     val context = LocalPlatformContext.current
-//    val packageInfo = remember {
-//        context.packageManager.getPackageInfo(context.packageName, 0)
-//    }
     val isShowLogoutDialog = remember { mutableStateOf(false) }
 
     Column(
@@ -118,7 +116,7 @@ fun SettingScreen(
             MenuBar(
                 text = Texts.Setting.CHANGE_PASSWORD,
                 onClick = {
-                    //onProfileModifyClick()
+                    onChangedPassword()
                 }
             )
 
@@ -192,19 +190,47 @@ fun SettingScreen(
                 }
             )
 
-            MenuBar(
-                text = Texts.Setting.LOGOUT,
-                onClick = {
-                    isShowLogoutDialog.value = true
-                }
-            )
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth()
+                    .clickableSingleWithNoRipple {
+                        isShowLogoutDialog.value = true
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(vertical = 20.dp),
+                    text = Texts.Setting.LOGOUT,
+                    style = Typography.B2.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = Colors.Gray800
+                )
+            }
 
-            MenuBar(
-                text = Texts.Setting.UNREGISTER,
-                onClick = {
-                    onMoveUnRegister()
-                }
-            )
+            PHorizontalDivider()
+
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth()
+                    .clickableSingleWithNoRipple {
+                        onMoveUnRegister()
+                    },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(vertical = 20.dp),
+                    text = Texts.Setting.UNREGISTER,
+                    style = Typography.B2.copy(
+                        fontWeight = FontWeight.SemiBold
+                    ),
+                    color = Colors.Gray800
+                )
+            }
         }
     }
 
@@ -213,7 +239,7 @@ fun SettingScreen(
             titleText = Texts.Setting.LOGOUT_DIALOG_TITLE,
             descriptionText = Texts.Setting.LOGOUT_DIALOG_DESCRIPTION,
             leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_GO,
+            rightButtonText = Texts.Setting.LOGOUT,
             onLeftButtonClick = {
                 isShowLogoutDialog.value = false
             },
