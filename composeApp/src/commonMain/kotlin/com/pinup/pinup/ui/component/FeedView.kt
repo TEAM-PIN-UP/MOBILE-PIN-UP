@@ -2,6 +2,7 @@ package com.pinup.pinup.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,15 +53,16 @@ fun FeedView(
     onClickDetail: (Int) -> Unit = {},
 ) {
     var isOverflow by remember { mutableStateOf(false) }
+    val pagerState = rememberPagerState(pageCount = { item.reviewImageUrls?.size ?: 0})
 
     Column(
         modifier = Modifier
             .background(Colors.White)
             .padding(bottom = 20.dp)
-            .padding(horizontal = 20.dp)
     ) {
         Row(
             modifier = Modifier
+                .padding(horizontal = 20.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -107,6 +111,8 @@ fun FeedView(
         Spacer(modifier = Modifier.height(20.dp))
 
         RoundedBox(
+            modifier = Modifier
+                .padding(start = 20.dp),
             cornerColor = Colors.Main,
         ) {
             Row(
@@ -136,18 +142,39 @@ fun FeedView(
         Spacer(modifier = Modifier.height(8.dp))
 
         if (!item.reviewImageUrls.isNullOrEmpty()) {
-            RoundedBox {
-                AsyncImage(
+            Box {
+                HorizontalPager(
+                    state = pagerState,
+                ) { page ->
+                    RoundedBox(
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                    ) {
+                        AsyncImage(
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .fillMaxWidth()
+                                .clickableWithNoRipple {
+                                    onClickDetail(item.id)
+                                },
+                            model = item.reviewImageUrls[page],
+                            contentScale = ContentScale.Crop,
+                            contentDescription = null
+                        )
+                    }
+                }
+
+                Column(
                     modifier = Modifier
-                        .aspectRatio(1f)
-                        .fillMaxWidth()
-                        .clickableWithNoRipple {
-                            onClickDetail(item.id)
-                        },
-                    model = item.reviewImageUrls[0],
-                    contentScale = ContentScale.Crop,
-                    contentDescription = null
-                )
+                        .align(Alignment.BottomCenter)
+                ) {
+                    PagerIndicator(
+                        page = pagerState.pageCount,
+                        selectedPage = pagerState.currentPage
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -155,6 +182,7 @@ fun FeedView(
 
         Text(
             modifier = Modifier
+                .padding(horizontal = 20.dp)
                 .clickableWithNoRipple {
                     onClickDetail(item.id)
                 },
@@ -173,6 +201,7 @@ fun FeedView(
         if (isOverflow) {
            Text(
                modifier = Modifier
+                   .padding(horizontal = 20.dp)
                    .clickableWithNoRipple {
                        onClickDetail(item.id)
                    },
@@ -188,6 +217,7 @@ fun FeedView(
 
         Row(
             modifier = Modifier
+                .padding(horizontal = 20.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
