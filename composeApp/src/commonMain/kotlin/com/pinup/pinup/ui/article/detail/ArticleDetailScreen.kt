@@ -81,26 +81,15 @@ fun ArticleDetailScreen(
                 .background(Colors.White),
             state = scrollState,
         ) {
-//            item {
-//                Spacer(modifier = Modifier.height(30.dp))
-//
-//                Text(
-//                    modifier = Modifier
-//                        .padding(start = 20.dp),
-//                    text = editorPintsDetail.title,
-//                    color = Colors.Black,
-//                    style = Typography.D1.copy(
-//                        fontWeight = FontWeight.Bold
-//                    )
-//                )
-//
-//                Spacer(modifier = Modifier.height(25.dp))
-//            }
 
             item {
                 WebView(
                     state = webViewState
                 )
+
+                Spacer(modifier = Modifier.height(15.dp))
+
+                PHorizontalDivider()
             }
 
             item {

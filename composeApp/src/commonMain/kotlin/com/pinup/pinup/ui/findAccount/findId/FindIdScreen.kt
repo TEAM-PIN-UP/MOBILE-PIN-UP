@@ -239,10 +239,10 @@ fun FindIdScreen(
                     ) {
                         Text(
                             text = timer,
-                            style = Typography.L3.copy(
-                                fontWeight = FontWeight.SemiBold
+                            style = Typography.L2.copy(
+                                fontWeight = FontWeight.Medium
                             ),
-                            color = Colors.Gray300
+                            color = Colors.Error
                         )
 
                         Spacer(modifier = Modifier.width(17.dp))
