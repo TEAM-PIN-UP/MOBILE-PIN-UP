@@ -286,8 +286,8 @@ struct NaverMap: UIViewRepresentable {
                 let selected = (p.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace.kakaoPlaceId)
                 let iconName: String = {
                     switch p.pintsPlaceCategory {
-                    case .restaurant: return selected ? "ic_food_marker_on" : "ic_food_marker_pinch"
-                    default:          return selected ? "ic_cafe_marker_on" : "ic_cafe_marker_pinch"
+                    case .restaurant: return selected ? "ic_food_marker_on" : "ic_food_marker_pints"
+                    default:          return selected ? "ic_cafe_marker_on" : "ic_cafe_marker_pints"
                     }
                 }()
                 let marker = makeMarker(name: p.name, iconName: iconName, lat: p.latitude, lng: p.longitude)
