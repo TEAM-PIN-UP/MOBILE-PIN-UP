@@ -35,36 +35,19 @@ class PinchDetailViewModel (
                         title = result.title,
                         description = result.content,
                         createdAt = toShortDateXd(result.createdAt),
+                        pinchList = result.placeSummaries.map {
+                            Place(
+                                kakaoPlaceId = it.kakaoPlaceId,
+                                name = it.name,
+                                address = it.address,
+                                latitude = it.latitude,
+                                longitude = it.longitude
+                            )
+                        }
                     )
-                }
-                result.placeSummaries.forEachIndexed { index, item ->
-                    val place = Place(
-                        kakaoPlaceId = item.kakaoPlaceId,
-                        name = item.name,
-                        address = item.address,
-                        latitude = item.latitude,
-                        longitude = item.longitude
-                    )
-                    updatePlace(place = place)
                 }
             }
         )
-    }
-
-    private fun updateCameraPosition(position: Position?) {
-        updateState {
-            copy(
-                cameraPosition = position
-            )
-        }
-    }
-
-    private fun updatePosition(position: Position) {
-        updateState {
-            copy(
-                currentPosition = position
-            )
-        }
     }
 
     fun deletePinch() = viewModelScope.launch {
@@ -74,19 +57,6 @@ class PinchDetailViewModel (
                 emitEvent(PinchDetailUiEvent.SuccessModify)
             }
         )
-    }
-
-    fun updatePlace(place: Place) {
-        updateState {
-            hLog("latitude: ${place.latitude} longitude: ${place.longitude}")
-            copy(
-                cameraPosition = Position(
-                    latitude = place.latitude,
-                    longitude = place.longitude
-                ),
-                pinchList = pinchList
-            )
-        }
     }
 }
 

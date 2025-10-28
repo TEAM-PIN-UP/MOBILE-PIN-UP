@@ -43,9 +43,6 @@ actual fun PlatformNaverMap(
 
     UIKitViewController(
         modifier = modifier
-            .clickableWithNoRipple {
-                print("터치요")
-            }
             .fillMaxSize(),
         factory = {
             factory.createNaverMap(

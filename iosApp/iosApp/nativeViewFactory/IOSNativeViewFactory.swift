@@ -19,6 +19,26 @@ class IOSNativeViewFactory : NativeViewFactory {
             )
         return UIHostingController(rootView: swiftUIView)
     }
+
+    func createPintsNaverMap(
+        placeList: [Place],
+        cameraPosition: Position?
+    ) -> UIViewController {
+        let swiftUIView = PintsMapView(
+            placeList: placeList,
+            cameraPosition: cameraPosition
+        )
+        return PintsHostingController(rootView: swiftUIView)
+    }
+    
+    func updatePintsNaverMap(
+        controller: UIViewController,
+        placeList: [Place],
+        cameraPosition: Position?
+    ) {
+        (controller as? PintsHostingController)?
+            .update(placeList: placeList, cameraPosition: cameraPosition)
+    }
 }
 
 struct MapView: View {
@@ -40,14 +60,152 @@ struct MapView: View {
     }
 }
 
-// NaverMap.swift
-import SwiftUI
-import NMapsMap
-import ComposeApp
-import CoreLocation
+struct PintsMapView: View {
+    var placeList: [Place]
+    var cameraPosition: Position?
+    
+    var body: some View {
+        PintsNaverMap(
+            cameraPosition: cameraPosition,
+            placeList: placeList
+        ).ignoresSafeArea(.all, edges: .top)
+    }
+}
+
+struct PintsNaverMap: UIViewRepresentable{
+    var cameraPosition: Position?
+    var placeList: [Place]
+    
+    func makeCoordinator() -> Coordinator { Coordinator() }
+    
+    func makeUIView(context: Context) -> NMFNaverMapView {
+        let view = NMFNaverMapView(frame: .zero)
+
+        // Android MapUiSettings 대응
+        view.showCompass = false
+        view.showZoomControls = false
+        view.showScaleBar = false
+        view.mapView.minZoomLevel = 5.0
+        view.mapView.isRotateGestureEnabled = false
+        view.mapView.isScrollGestureEnabled = false
+        view.mapView.isZoomGestureEnabled = false
+
+        // 한국 영역 제한 (Android extent 와 동일)
+        let sw = NMGLatLng(lat: 33.0, lng: 124.0)
+        let ne = NMGLatLng(lat: 38.5, lng: 132.0)
+        view.mapView.extent = NMGLatLngBounds(southWest: sw, northEast: ne)
+
+        // 현재 위치 오버레이
+        view.mapView.locationOverlay.hidden = false
+        view.mapView.locationOverlay.icon = NMFOverlayImage(name: "ic_my_location")
+
+        let target = NMGLatLng(lat: 37.5666102, lng: 126.9783881)
+        view.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(target, zoom: 14.0)))
+
+        return view
+    }
+        
+    func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
+        // 1) 유효한 좌표만 필터 (Compose: kakaoPlaceId.isNotEmpty())
+        let filtered = placeList.filter { !$0.kakaoPlaceId.isEmpty }
+        
+        if let pos = cameraPosition {
+            // cameraPosition이 주어지면 그 위치로 스크롤
+            let update = NMFCameraUpdate(scrollTo: NMGLatLng(lat: pos.latitude, lng: pos.longitude))
+            uiView.mapView.moveCamera(update)
+        }
+        
+        let coords = filtered.map { NMGLatLng(lat: $0.latitude, lng: $0.longitude) }
+        if coords.count >= 2 {
+            // 경계 계산
+            var minLat = coords[0].lat, maxLat = coords[0].lat
+            var minLng = coords[0].lng, maxLng = coords[0].lng
+            for c in coords.dropFirst() {
+                if c.lat < minLat { minLat = c.lat }
+                if c.lat > maxLat { maxLat = c.lat }
+                if c.lng < minLng { minLng = c.lng }
+                if c.lng > maxLng { maxLng = c.lng }
+            }
+            let sw = NMGLatLng(lat: minLat, lng: minLng)
+            let ne = NMGLatLng(lat: maxLat, lng: maxLng)
+            let bounds = NMGLatLngBounds(southWest: sw, northEast: ne)
+
+            // Compose: CameraUpdate.fitBounds(bounds, 30)
+            // iOS: bounds 맞춤(패딩 30)
+            let fit = NMFCameraUpdate(fit: bounds, padding: 30)
+            uiView.mapView.moveCamera(fit)
+        } else if coords.count == 1 {
+            // 단일 포인트: 위치로 스크롤 후 줌
+            uiView.mapView.moveCamera(NMFCameraUpdate(scrollTo: coords[0]))
+            uiView.mapView.moveCamera(NMFCameraUpdate(zoomTo: 15.0))
+        }
+
+        // 3) 기존 폴리라인 제거
+        if let prev = context.coordinator.polyline {
+            prev.mapView = nil
+            context.coordinator.polyline = nil
+        }
+
+        // 4) 새 폴리라인 생성 (Compose: PolylineOverlay)
+        let pathPoints = filtered.map { NMGLatLng(lat: $0.latitude, lng: $0.longitude) }
+        if pathPoints.count >= 2 {
+            if let pl = NMFPolylineOverlay(pathPoints) {
+                pl.width = 1                         // Compose: width = 1.dp
+                pl.color = .systemRed                // Compose: Colors.Negative (근사치)
+                // iOS NMFPolylineOverlay는 dash pattern 직접 지원 X (패턴 필요시 NMFPath 사용)
+                pl.mapView = uiView.mapView
+                context.coordinator.polyline = pl
+            }
+        }
+
+        // 5) 기존 마커 모두 제거
+        context.coordinator.markers.forEach { $0.mapView = nil }
+        context.coordinator.markers.removeAll()
+
+        // 6) 마커 재생성 (Compose: MarkerComposable)
+        for p in filtered {
+            let marker = NMFMarker()
+            marker.position = NMGLatLng(lat: p.latitude, lng: p.longitude)
+
+            // Compose: 카테고리에 따라 아이콘 분기
+            // (shared 모델에서 p.pintsPlaceCategory가 있다면 아래 switch 사용)
+            let iconName: String = "ic_food_marker"
+//            switch p.pintsPlaceCategory {
+//            case .restaurant:
+//                iconName = "ic_food_marker"
+//            default:
+//                iconName = "ic_cafe_marker"
+//            }
+
+            if let img = UIImage(named: iconName) {
+                marker.iconImage = NMFOverlayImage(image: img)
+                // Compose anchor(0.5f, 0.25f)에 근접하게 보정
+                marker.anchor = CGPoint(x: 0.5, y: 0.75)
+            }
+
+            // Compose의 라벨 박스는 iOS에선 caption으로 근사
+            marker.captionText = p.name
+            // 필요하면 caption 색/오프셋 등을 추가 설정 가능:
+            // marker.captionColor = .white
+            // marker.captionHaloColor = UIColor(white: 0, alpha: 0.25)
+            // marker.captionOffset = 6
+
+            // Compose의 onClick { true }와 동일하게 소비만 하려면:
+            marker.touchHandler = { _ in true }
+
+            marker.mapView = uiView.mapView
+            context.coordinator.markers.append(marker)
+        }
+    }
+
+    
+    final class Coordinator {
+        var markers: [NMFMarker] = []
+        var polyline: NMFPolylineOverlay?
+    }
+}
 
 struct NaverMap: UIViewRepresentable {
-    // ⬇️ 여기! Position을 옵셔널로 변경
     var position: Position?
     var cameraPosition: Position?
     var searchUiState: SearchUiState
