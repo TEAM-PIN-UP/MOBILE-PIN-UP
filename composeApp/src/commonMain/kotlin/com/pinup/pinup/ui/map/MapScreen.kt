@@ -330,7 +330,6 @@ fun MapScreen(
                             end.linkTo(parent.end)
                         },
                 ) {
-                    // TODO 만약 핀츠가 없다면 해당 컬럼 안보이게
                     Card(
                         modifier = Modifier
                             .clickableWithNoRipple {

@@ -265,6 +265,9 @@ class MapViewModel (
         updateState {
             copy(
                 placeDetailUiState = PlaceDetailUiState(),
+                pinchUiState = pinchUiState.copy(
+                    editorPintsDetail = EditorPintsDetail()
+                ),
                 isDetailClicked = false
             )
         }
@@ -363,6 +366,9 @@ class MapViewModel (
             successCallback = {
                 updateState {
                     copy(
+                        cameraPosition = Position(it.pintsPlaceList[0].latitude - 0.0078, it.pintsPlaceList[0].longitude),
+                        isFocusLocation = false,
+                        isDetailClicked = true,
                         pinchUiState = pinchUiState.copy(
                             editorPintsDetail = it
                         )
