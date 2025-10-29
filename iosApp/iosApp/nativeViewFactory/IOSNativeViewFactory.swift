@@ -262,11 +262,13 @@ struct NaverMap: UIViewRepresentable {
         }
 
         // 외부 카메라 이동 지시 (옵셔널 안전 언래핑)
-        if let cp = cameraPosition, cp.isValid {
+        if let cp = cameraPosition, cp.isValid,
+            context.coordinator.shouldApplyCamera(to: cp, on: uiView.mapView) {
             let pos = NMFCameraPosition(NMGLatLng(lat: cp.latitude, lng: cp.longitude), zoom: 14.0)
             let update = NMFCameraUpdate(position: pos)
             update.animation = .easeIn
             uiView.mapView.moveCamera(update)
+            context.coordinator.lastAppliedCamera = cp
         }
 
         // 기존 오버레이 정리
@@ -335,6 +337,7 @@ struct NaverMap: UIViewRepresentable {
     final class Coordinator: NSObject, NMFMapViewCameraDelegate {
         var onCameraStateChange: (CameraState) -> Void
         var polyline: NMFPolylineOverlay?
+        var lastAppliedCamera: Position?
 
         init(onCameraStateChange: @escaping (CameraState) -> Void) {
             self.onCameraStateChange = onCameraStateChange
@@ -343,6 +346,21 @@ struct NaverMap: UIViewRepresentable {
         func clearPolyline() {
             polyline?.mapView = nil
             polyline = nil
+        }
+        
+        func shouldApplyCamera(to target: Position, on mapView: NMFMapView) -> Bool {
+            // 1) 직전에 같은 타깃을 이미 적용했으면 무시
+            if let last = lastAppliedCamera,
+               abs(last.latitude - target.latitude) < 1e-6,
+               abs(last.longitude - target.longitude) < 1e-6 { return false }
+            
+            // 2) 현재 카메라가 이미 그 위치면 무시
+            let cur = mapView.cameraPosition.target
+            if abs(cur.lat - target.latitude) < 1e-6,
+                abs(cur.lng - target.longitude) < 1e-6 {
+                return false
+            }
+            return true
         }
 
         private func emit(_ mapView: NMFMapView, moving: Bool, reason: Int) {
