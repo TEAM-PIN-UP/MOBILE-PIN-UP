@@ -133,7 +133,7 @@ class PinchWriteViewModel (
             successCallback = { result ->
                 updateState {
                     copy(
-                        searchedList = result.take(4)
+                        searchedList = result
                     )
                 }
             }
