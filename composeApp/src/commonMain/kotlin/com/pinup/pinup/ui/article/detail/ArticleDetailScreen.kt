@@ -2,13 +2,9 @@ package com.pinup.pinup.ui.article.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,29 +14,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PageSize
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.multiplatform.webview.web.WebView
-import com.multiplatform.webview.web.rememberWebViewState
 import com.multiplatform.webview.web.rememberWebViewStateWithHTMLData
-import com.pinup.pinup.domain.model.ArticleDetail
-import com.pinup.pinup.domain.model.ArticlePlace
 import com.pinup.pinup.domain.model.EditorPintsDetail
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.platform.PlatformWebView
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
-import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
@@ -83,9 +70,14 @@ fun ArticleDetailScreen(
         ) {
 
             item {
-                WebView(
-                    state = webViewState
+                PlatformWebView(
+                    modifier = Modifier,
+                    html = editorPintsDetail.content.trimIndent(),
+                    url = ""
                 )
+//                WebView(
+//                    state = webViewState
+//                )
 
                 Spacer(modifier = Modifier.height(15.dp))
 
