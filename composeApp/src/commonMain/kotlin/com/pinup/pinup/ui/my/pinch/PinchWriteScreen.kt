@@ -2,8 +2,6 @@ package com.pinup.pinup.ui.my.pinch
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,20 +27,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ExposedDropdownMenuBox
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -55,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.extentions.longPressDrag
 import com.pinup.pinup.platform.PinchNaverMap
 import com.pinup.pinup.ui.component.IndexedRoundedTextField
 import com.pinup.pinup.ui.component.PButton
@@ -68,8 +63,6 @@ import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import com.pinup.pinup.util.dragModifier
 import com.pinup.pinup.util.rememberDragAndDropListState
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_map_off
@@ -98,8 +91,6 @@ fun PinchWriteScreen(
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
     val keyboard = LocalSoftwareKeyboardController.current
-    val scope = rememberCoroutineScope()
-    var overscrollJob by remember { mutableStateOf<Job?>(null) }
     val lazyListState = rememberLazyListState()
     val dragAndDropListState =
         rememberDragAndDropListState(lazyListState) { from, to ->
@@ -228,38 +219,24 @@ fun PinchWriteScreen(
 
         LazyColumn(
             state = dragAndDropListState.lazyListState,
+            userScrollEnabled = dragAndDropListState.currentIndexOfDraggedItem == null,
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(bottom = bottomBarHeight)
-                .pointerInput(Unit) {
-                    detectDragGesturesAfterLongPress(
-                        onDrag = { change, offset ->
-                            change.consume()
-                            dragAndDropListState.onDrag(offset)
-
-                            if (overscrollJob?.isActive == true) return@detectDragGesturesAfterLongPress
-
-                            dragAndDropListState
-                                .checkOverscroll()
-                                .takeIf { it != 0f }
-                                ?.let {
-                                    overscrollJob = scope.launch {
-                                        dragAndDropListState.lazyListState.scrollBy(it)
-                                    }
-                                } ?: run { overscrollJob?.cancel() }
-                        },
-                        onDragStart = { offset ->
-                            dragAndDropListState.onDragStart(offset)
-                            focusManager.clearFocus()
-                        },
-                        onDragEnd = {
-                            dragAndDropListState.onDragInterrupted()
-                            focusManager.clearFocus()
-                        },
-                        onDragCancel = { dragAndDropListState.onDragInterrupted() }
-                    )
-                },
+                .longPressDrag(
+                    onStart = { offset ->
+                        dragAndDropListState.onDragStart(offset)
+                    },
+                    onDrag = { delta ->
+                        dragAndDropListState.onDrag(delta)
+                        focusManager.clearFocus()
+                    },
+                    onEnd = {
+                        dragAndDropListState.onDragInterrupted()
+                        focusManager.clearFocus()
+                    },
+                ),
         ) {
             itemsIndexed(
                 items = pinchList,
