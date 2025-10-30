@@ -18,10 +18,10 @@ import com.pinup.pinup.domain.usecase.GetPintsUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.domain.usecase.RequestPinBuddyUseCase
 import com.pinup.pinup.platform.ContextFactory
-import com.pinup.pinup.platform.kakaoShare
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
+import com.pinup.pinup.ui.login.sns.KaKaoShareController
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -37,6 +37,7 @@ class UserProfileViewModel (
     private val postReviewLikeChangeUseCase : PostReviewLikeChangeUseCase,
     private val getMyProfileUseCase: GetMyProfileUseCase,
     private val getPintsUseCase: GetPintsUseCase,
+    private val kaKaoShareController: KaKaoShareController
 ) : BaseViewModel<UserProfileUiState, UiEvent>(UserProfileUiState()) {
     val memberId = savedStateHandle.get<Int>(MEMBER_ID) ?: 0
 
@@ -190,7 +191,7 @@ class UserProfileViewModel (
     }
 
     fun shareMyProfile(){
-        kakaoShare(
+        kaKaoShareController.kakaoShare(
             context = contextFactory.getActivity(),
             memberId = uiState.value.member.profile.memberId,
             memberName = uiState.value.member.profile.name,

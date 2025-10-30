@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.UIKitView
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -27,7 +26,6 @@ actual fun PlatformWebView(
     url: String,
     html: String
 ) {
-    val density = LocalDensity.current
     var contentHeight by remember { mutableStateOf(1.dp) } // 웹뷰 실제 높이
     // 네비게이션 완료 시점에 콘텐츠 높이 측정
     val navDelegate = remember {
@@ -47,7 +45,6 @@ actual fun PlatformWebView(
                     val h = (result as? NSNumber)?.doubleValue ?: 0.0
                     if (h > 0.0) {
                         contentHeight = h.dp
-                        hLog("하이" + contentHeight.toString())
                     }
                 }
             }

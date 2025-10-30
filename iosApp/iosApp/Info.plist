@@ -31,7 +31,7 @@
 			<string>KakaoLogin</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao16861d355e1d003cba9138948b8a11f5</string>
+				<string>kakao25ad8729a58b6d767f7e48a2d359d54b</string>
 			</array>
 		</dict>
 		<dict>
@@ -61,6 +61,8 @@
 	<string>260271399045-hju2qsak4evpvic6u4qq77qo0d3k1ggi.apps.googleusercontent.com</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>kakaolink</string>
+		<string>kakaokompassauth</string>
 		<string>naversearchapp</string>
 		<string>naversearchthirdlogin</string>
 	</array>
@@ -68,6 +70,19 @@
 	<true/>
 	<key>NMFClientId</key>
 	<string>9v600b96lo</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>43.200.161.96</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>moko-permissions demo usage</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -104,18 +119,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSExceptionDomains</key>
-        <dict>
-            <key>43.200.161.96</key>
-            <dict>
-                <key>NSExceptionAllowsInsecureHTTPLoads</key>
-                <true/>
-                <key>NSIncludesSubdomains</key>
-                <true/>
-            </dict>
-        </dict>
-    </dict>
 </dict>
 </plist>

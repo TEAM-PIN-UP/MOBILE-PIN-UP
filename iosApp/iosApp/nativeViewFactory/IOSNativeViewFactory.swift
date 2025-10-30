@@ -9,6 +9,9 @@ import ComposeApp
 import UIKit
 import SwiftUI
 import NMapsMap
+import KakaoSDKShare
+import KakaoSDKCommon
+import KakaoSDKTemplate
 
 class IOSNativeViewFactory : NativeViewFactory {
     func createNaverMap(

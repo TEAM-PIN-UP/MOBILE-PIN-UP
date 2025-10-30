@@ -8,6 +8,7 @@ import com.pinup.pinup.di.initKoin
 import com.pinup.pinup.domain.usecase.CheckNickNameUseCase
 import com.pinup.pinup.platform.GoogleLoginController
 import com.pinup.pinup.ui.login.sns.KaKaoLoginController
+import com.pinup.pinup.ui.login.sns.KaKaoShareController
 import com.pinup.pinup.ui.login.sns.NaverLoginController
 import com.pinup.pinup.ui.login.sns.SNSLoginFactory
 import org.koin.android.ext.koin.androidApplication
@@ -29,6 +30,7 @@ class PinUpApplication : Application() {
         initKoin(
             module = module {
                 single<KaKaoLoginController> { AndroidKaKaoLoginController() }
+                single<KaKaoShareController> { AndroidKaKaoShareController() }
                 single<NaverLoginController> { AndroidNaverLoginController() }
                 single<GoogleLoginController> { GoogleLoginController() }
                 single<SNSLoginFactory> { SNSLoginFactory(get(), get(), get()) }

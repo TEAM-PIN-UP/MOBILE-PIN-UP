@@ -42,6 +42,9 @@ kotlin {
 
         pod("NMapsMap")
         pod("GoogleSignIn")
+        pod("KakaoSDKCommon")
+        pod("KakaoSDKShare")
+        pod("KakaoSDKTemplate")
     }
     
     sourceSets {

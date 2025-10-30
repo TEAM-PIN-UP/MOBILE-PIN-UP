@@ -2,39 +2,30 @@ package com.pinup.pinup.ui.my
 
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.data.request.pints.PageAble
-import com.pinup.pinup.data.response.GetBookmarksResponse
 import com.pinup.pinup.domain.model.BookmarkedPlace
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Member
-import com.pinup.pinup.domain.model.Pagination
 import com.pinup.pinup.domain.model.PagingReview
-import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.model.PintsPageAble
 import com.pinup.pinup.domain.model.Profile
 import com.pinup.pinup.domain.model.RelationType
-import com.pinup.pinup.domain.model.Review
 import com.pinup.pinup.domain.model.SortType
 import com.pinup.pinup.domain.model.getSuccessOrNull
 import com.pinup.pinup.domain.usecase.DeletePinlogUseCase
 import com.pinup.pinup.domain.usecase.GetBookmarksUseCase
 import com.pinup.pinup.domain.usecase.GetFeedUseCase
 import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
-import com.pinup.pinup.domain.usecase.GetPhotoReviewsUseCase
 import com.pinup.pinup.domain.usecase.GetPinlogDetailUseCase
 import com.pinup.pinup.domain.usecase.GetPintsUseCase
-import com.pinup.pinup.domain.usecase.GetTextReviewsUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.platform.ContextFactory
-import com.pinup.pinup.platform.hLog
-import com.pinup.pinup.platform.kakaoShare
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
-import com.pinup.pinup.ui.model.ChipState
+import com.pinup.pinup.ui.login.sns.KaKaoShareController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.collections.plus
-import kotlin.text.ifEmpty
 import kotlin.time.Duration.Companion.seconds
 
 
@@ -47,6 +38,7 @@ class MyViewModel (
     private val getBookmarksUseCase: GetBookmarksUseCase,
     private val getPinlogDetailUseCase: GetPinlogDetailUseCase,
     private val getPintsUseCase: GetPintsUseCase,
+    private val kaKaoShareController: KaKaoShareController
 ) : BaseViewModel<MyUiState, UiEvent>(MyUiState()) {
 
     fun initMyInfo() = viewModelScope.launch {
@@ -127,7 +119,7 @@ class MyViewModel (
     }
 
     fun shareMyProfile(){
-        kakaoShare(
+        kaKaoShareController.kakaoShare(
             context = contextFactory.getActivity(),
             memberId = uiState.value.member.profile.memberId,
             memberName = uiState.value.member.profile.nickname

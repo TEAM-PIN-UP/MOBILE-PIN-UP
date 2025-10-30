@@ -11,7 +11,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
       FirebaseApp.configure()
-      KakaoSDK.initSDK(appKey: "16861d355e1d003cba9138948b8a11f5")
+      KakaoSDK.initSDK(appKey: "25ad8729a58b6d767f7e48a2d359d54b")
       NidOAuth.shared.initialize()
     return true
   }
@@ -52,6 +52,7 @@ struct iOSApp: App {
     init() {
         KoinInitializerKt.doInit(
             kaKaoLoginController: IOSKaKaoLoginController(),
+            kaKaoShareController: IOSKaKaoShareController(),
             naverLoginController: IOSNaverLoginController()
         )
     }
