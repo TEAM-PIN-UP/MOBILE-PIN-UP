@@ -41,8 +41,29 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             if (NidOAuth.shared.handleURL(url) == true) { // 네이버앱에서 전달된 Url인 경우
                   return
             }
+            handleKakaoShareUrl(url)
         }
     }
+    
+    private func handleKakaoShareUrl(_ url: URL) {
+            guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+                  let queryItems = components.queryItems else { return }
+
+            // query 파라미터 → [String:String] 딕셔너리
+            var params: [String:String] = [:]
+            for item in queryItems {
+                params[item.name] = item.value ?? ""
+            }
+
+            // KAKAO_USER_ID 값 꺼내보기
+            if let userId = params["userId"] {
+                print("✅ 카카오 공유 링크 userId: \(userId)")
+                // 👉 Kotlin으로 전달 (Compose에서 쓰기 위해)
+                KakaoLinkBridge().onOpenFromKakao(userId: userId)
+            } else {
+                print("⚠️ 카카오 공유 URL이지만 userId 없음")
+            }
+        }
 }
 
 @main

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.usecase.IsLoginUseCase
 import com.pinup.pinup.domain.usecase.LogoutUseCase
 import com.pinup.pinup.event.LogoutEventBus
+import com.pinup.pinup.platform.KakaoDeepLinkStore
 import com.pinup.pinup.platform.hLog
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +25,7 @@ class StartAppViewModel(
 
     init {
         initLogoutEventBus()
+        initGetUserId()
     }
 
 
@@ -44,6 +46,16 @@ class StartAppViewModel(
             }
     }
 
+    private fun initGetUserId() = viewModelScope.launch {
+        KakaoDeepLinkStore.params.collect { id ->
+            _uiState.update {
+                it.copy(
+                    userId = id.toInt(),
+                )
+            }
+        }
+    }
+
     fun dismissAlert() {
         _uiState.update {
             it.copy(
@@ -51,11 +63,20 @@ class StartAppViewModel(
             )
         }
     }
+
+    fun updateUserId(userId: Int) {
+        _uiState.update {
+            it.copy(
+                userId = userId,
+            )
+        }
+    }
 }
 
 data class StartAppUiState(
     val isLogin: Boolean? = null,
-    val alertState: AlertState = AlertState()
+    val alertState: AlertState = AlertState(),
+    val userId: Int = -1,
 )
 
 data class AlertState(

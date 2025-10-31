@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.pinup.pinup.PinUpAppDestination
 import com.pinup.pinup.platform.ContextFactory
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
 import com.pinup.pinup.ui.article.ArticleRoute
 import com.pinup.pinup.ui.feed.FeedRoute
@@ -45,10 +46,10 @@ fun MainNavHost(
     onMovePinchWrite: () -> Unit = {},
     userId: Int = -1,
     onMovePintsDetail: (Int) -> Unit = {},
+    updateUserId: (Int) -> Unit = {},
 ) {
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
     val selectedMenuBar = remember { mutableStateOf<MainDestination>(MainDestination.Map) }
-    val userArgId = rememberSaveable { mutableIntStateOf(userId) }
     val currentDestination = navHostController.currentBackStackEntryAsState().value?.destination
     LaunchedEffect(currentDestination) {
         if (MainDestination.Map::class.qualifiedName == currentDestination?.route) {
@@ -62,21 +63,20 @@ fun MainNavHost(
         }
     }
 
-    if (userArgId.intValue != -1) {
-        LaunchedEffect(userArgId.intValue) {
-            if (userArgId.intValue == uiState.value.myId) {
-                navHostController.navigate(MainDestination.My) {
-                    launchSingleTop = true
-                    restoreState = true
-                    popUpTo(navHostController.graph.startDestinationId) {
-                        saveState = true
-                    }
+    LaunchedEffect(userId) {
+        if (userId == -1) return@LaunchedEffect
+        if (userId== uiState.value.myId) {
+            navHostController.navigate(MainDestination.My) {
+                launchSingleTop = true
+                restoreState = true
+                popUpTo(navHostController.graph.startDestinationId) {
+                    saveState = true
                 }
-            } else {
-                navHostController.navigate(PinUpAppDestination.UserProfile(userArgId.intValue))
             }
-            userArgId.intValue = -1
+        } else {
+            navHostController.navigate(PinUpAppDestination.UserProfile(userId))
         }
+        updateUserId(-1)
     }
 
     Column {

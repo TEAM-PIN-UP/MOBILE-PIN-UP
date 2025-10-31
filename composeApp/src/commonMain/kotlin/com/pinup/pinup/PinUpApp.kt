@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -67,6 +68,12 @@ fun PinUpApp(
             popUpTo(navHostController.graph.id) {
                 inclusive = true
             }
+        }
+    }
+
+    LaunchedEffect(userId) {
+        if(userId != -1){
+            startAppViewModel.updateUserId(userId)
         }
     }
 
@@ -208,7 +215,7 @@ fun PinUpApp(
                 composable<PinUpAppDestination.Main> {
                     MainNavHost(
                         contextFactory = contextFactory,
-                        userId = userId,
+                        userId = uiState.value.userId,
                         onMoveWriteReview = {
                             navHostController.navigate(PinUpAppDestination.WriteReview(it, null))
                         },
@@ -235,6 +242,9 @@ fun PinUpApp(
                         },
                         onMovePintsDetail = {
                             navHostController.navigate(PinUpAppDestination.PinchDetail(it))
+                        },
+                        updateUserId = {
+                            startAppViewModel.updateUserId(it)
                         }
                     )
                 }
