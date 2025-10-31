@@ -8,6 +8,7 @@ data class EditorPintsResponse(
     val id: Int = -1,
     val title: String = "",
     val author: String = "",
+    val description: String = "",
     val exposureYn: Boolean = false,
     val clickCnt: Int = 0,
     val imageUrl: String? = "",
@@ -19,7 +20,7 @@ data class EditorPintsResponse(
             return PinchListItem(
                 id = id,
                 title = title,
-                description = "",
+                description = description,
                 author = author,
                 imageUrl = imageUrl,
                 keywordList = keywordList

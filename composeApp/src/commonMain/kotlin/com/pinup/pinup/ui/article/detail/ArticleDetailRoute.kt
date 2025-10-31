@@ -18,8 +18,9 @@ fun ArticleDetailRoute(
 
     ArticleDetailScreen(
         editorPintsDetail = uiState.editorPintsDetail,
+        articleList = uiState.pintsListItem,
         onClickPlaceDetail = onClickPlaceDetail,
-        onClickScrap = {},
-        onClickBack = onClickBack
+        onClickScrap = viewModel::updateBookmark,
+        onClickBack = onClickBack,
     )
 }
