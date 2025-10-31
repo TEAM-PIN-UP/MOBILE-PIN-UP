@@ -115,7 +115,7 @@ fun SignUpScreen(
                     isMarketingAgreeClick = termsOfServiceState.isMarketingAgreeAgree,
                     isPassValidation = termsOfServiceState.isPassValidation,
                     onBackPressed = {
-                        if(snsType == SNSType.PINUP) onBackPressed() else navHostController.popBackStack()
+                        if(snsType != SNSType.PINUP) onBackPressed() else navHostController.popBackStack()
                     },
                     onClickDetailTerm = { url ->
                         navHostController.navigate(SignUpDestination.TermDetail(url))

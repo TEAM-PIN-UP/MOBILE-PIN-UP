@@ -285,7 +285,7 @@ class SignUpViewModel (
             email = uiState.value.emailState.email,
             socialId = uiState.value.socialId,
             nickname = uiState.value.nicknameState.nickname,
-            name = uiState.value.name,
+            name = uiState.value.nicknameState.nickname,
             loginType = uiState.value.snsType,
             termsOfMarketing = uiState.value.termsOfServiceState.isMarketingAgreeAgree,
             profileImageUrl = profile
