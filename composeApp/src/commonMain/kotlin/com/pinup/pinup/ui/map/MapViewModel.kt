@@ -411,6 +411,12 @@ class MapViewModel (
             }
         )
     }
+
+    fun onProfileClick(name: String) = viewModelScope.launch {
+        getMyProfileUseCase().collectLatest {
+            if(it.name == name) emitEvent(MapUiEvent.OnMoveUserProfile(name))
+        }
+    }
 }
 
 data class SearchUiState(
@@ -448,4 +454,5 @@ data class MapUiState(
 
 sealed interface MapUiEvent : UiEvent {
     data object SuccessDelete : MapUiEvent
+    data class OnMoveUserProfile(val name: String): MapUiEvent
 }

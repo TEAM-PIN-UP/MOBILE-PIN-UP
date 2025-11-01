@@ -109,7 +109,10 @@ fun MainNavHost(
                         onMoveWriteReview(it)
                     },
                     onMovePinlogDetail = onMovePinlogDetail,
-                    onMoveWriteReview = onMoveNewWriteReview
+                    onMoveWriteReview = onMoveNewWriteReview,
+                    onMoveUserProfile = {
+                        navHostController.navigate(PinUpAppDestination.UserProfile(name = it))
+                    }
                 )
             }
 
@@ -133,6 +136,9 @@ fun MainNavHost(
                     },
                     onClickDetail = {
                         onMovePinlogDetail(it)
+                    },
+                    onMoveUserProfile = {
+                        navHostController.navigate(PinUpAppDestination.UserProfile(name = it))
                     }
                 )
             }

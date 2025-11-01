@@ -407,7 +407,8 @@ sealed interface PinUpAppDestination {
     data object AddPinBuddy : PinUpAppDestination
     @Serializable
     data class UserProfile(
-        val memberId: Int,
+        val memberId: Int = -1,
+        val name: String = ""
     ) : PinUpAppDestination
     @Serializable
     data object PinBuddy : PinUpAppDestination

@@ -51,6 +51,7 @@ fun FeedView(
     onClickMenu: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
+    onMoveUserProfile: (String) -> Unit = {}
 ) {
     var isOverflow by remember { mutableStateOf(false) }
     val pagerState = rememberPagerState(pageCount = { item.reviewImageUrls?.size ?: 0})
@@ -67,6 +68,10 @@ fun FeedView(
             verticalAlignment = Alignment.CenterVertically
         ) {
             ProfileImageView(
+                modifier = Modifier
+                    .clickableWithNoRipple{
+                        onMoveUserProfile(item.writerName)
+                    },
                 imgUrl = item.writerProfileImageUrl,
                 size = 36.dp,
             )
@@ -78,6 +83,10 @@ fun FeedView(
                     .weight(1f)
             ) {
                 Text(
+                    modifier = Modifier
+                        .clickableWithNoRipple{
+                            onMoveUserProfile(item.writerName)
+                        },
                     text = item.writerName,
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.SemiBold

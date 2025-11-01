@@ -57,6 +57,7 @@ fun MapBottomSheetDetailScreen(
     onClickMenu: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ ->},
     onMovePinlogDetail: (Int) -> Unit = {},
+    onMoveUserProfile: (String) -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
     var dragOffset by remember {
@@ -218,7 +219,8 @@ fun MapBottomSheetDetailScreen(
                         horizontalPadding = 20.dp,
                         onClickMenu = onClickMenu,
                         onClickLike = onClickLike,
-                        onMovePinlogDetail = onMovePinlogDetail
+                        onMovePinlogDetail = onMovePinlogDetail,
+                        onMoveUserProfile = onMoveUserProfile
                     )
 
                     PHorizontalDivider(

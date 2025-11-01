@@ -68,6 +68,7 @@ fun FeedScreen(
     onClickDetail: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
     onRefresh: () -> Unit = {},
+    onMoveUserProfile: (String) -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -183,6 +184,7 @@ fun FeedScreen(
                                 },
                                 onClickLike = onClickLike,
                                 onClickDetail = onClickDetail,
+                                onMoveUserProfile = onMoveUserProfile
                             )
 
                             PHorizontalDivider(modifier = Modifier.height(10.dp))

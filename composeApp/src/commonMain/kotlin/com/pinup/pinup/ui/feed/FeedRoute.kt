@@ -10,7 +10,9 @@ import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.feed.search.FeedSearchScreen
 import com.pinup.pinup.ui.main.compose.MainDestination
+import com.pinup.pinup.ui.map.MapUiEvent
 import com.pinup.pinup.ui.theme.Texts
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -19,6 +21,7 @@ fun FeedRoute(
     viewModel: FeedViewModel = koinViewModel(),
     onClickEdit: (Int) -> Unit = {},
     onClickDetail: (Int) -> Unit = {},
+    onMoveUserProfile: (String) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
@@ -26,6 +29,16 @@ fun FeedRoute(
 
     LaunchedEffect(Unit) {
         viewModel.getFeedList()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collectLatest {
+            when(it) {
+                is FeedUiEvent.OnMoveUserProfile -> {
+                    onMoveUserProfile(it.name)
+                }
+            }
+        }
     }
 
     if (isShowDeleteDialog.value) {
@@ -81,6 +94,7 @@ fun FeedRoute(
             onClickDetail = onClickDetail,
             onClickLike = viewModel::likeChanged,
             onRefresh = viewModel::refreshView,
+            onMoveUserProfile = viewModel::onProfileClick
         )
     }
 }

@@ -17,6 +17,7 @@ import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.pinup.domain.usecase.GetPintsUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.pinup.domain.usecase.RequestPinBuddyUseCase
+import com.pinup.pinup.domain.usecase.SearchUserUseCase
 import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
@@ -30,6 +31,7 @@ class UserProfileViewModel (
     savedStateHandle: SavedStateHandle,
     private val contextFactory: ContextFactory,
     private val getMemberInfoUseCase: GetMemberInfoUseCase,
+    private val searchUserUseCase: SearchUserUseCase,
     private val requestPinBuddyUseCase: RequestPinBuddyUseCase,
     private val getFeedUseCase: GetFeedUseCase,
     private val deleteRequestPinBuddyUseCase: DeleteRequestPinBuddyUseCase,
@@ -39,15 +41,16 @@ class UserProfileViewModel (
     private val getPintsUseCase: GetPintsUseCase,
     private val kaKaoShareController: KaKaoShareController
 ) : BaseViewModel<UserProfileUiState, UiEvent>(UserProfileUiState()) {
-    val memberId = savedStateHandle.get<Int>(MEMBER_ID) ?: 0
+    val memberId = savedStateHandle.get<Int>(MEMBER_ID) ?: -1
+    val memberName = savedStateHandle.get<String>(MEMBER_NAME) ?: ""
 
     init {
-        initUserProfile()
+        if(memberId != -1) initUserProfile(memberId) else getUserId()
         getPintsList()
         getMyInfo()
     }
 
-    private fun initUserProfile() = viewModelScope.launch {
+    private fun initUserProfile(memberId: Int) = viewModelScope.launch {
         val memberInfo = getMemberInfoUseCase(memberId).getSuccessOrNull() ?: return@launch
         getFeedList(memberId = memberId)
         updateState {
@@ -55,6 +58,15 @@ class UserProfileViewModel (
                 member = memberInfo,
             )
         }
+    }
+
+    private fun getUserId() = viewModelScope.launch {
+        resultResponse(
+            response = searchUserUseCase(memberName),
+            successCallback = {
+                initUserProfile(it[0].profile.memberId)
+            }
+        )
     }
 
     private fun getMyInfo() = viewModelScope.launch {
@@ -200,6 +212,7 @@ class UserProfileViewModel (
 
     companion object {
         private const val MEMBER_ID = "memberId"
+        private const val MEMBER_NAME = "name"
         private const val PAGE_SIZE = 20
 
     }

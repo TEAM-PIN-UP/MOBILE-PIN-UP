@@ -29,6 +29,7 @@ fun MapRoute(
     onClickEdit: (Int) -> Unit = {},
     onMovePinlogDetail: (Int) -> Unit = {},
     onMoveWriteReview: (String) -> Unit = {},
+    onMoveUserProfile: (String) -> Unit = {},
 ) {
     val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
         accuracy = LocationTrackerAccuracy.Best
@@ -44,6 +45,9 @@ fun MapRoute(
             when(it) {
                 MapUiEvent.SuccessDelete -> {
                     toast.show(Texts.Toast.DELETE_PINLOG)
+                }
+                is MapUiEvent.OnMoveUserProfile -> {
+                    onMoveUserProfile(it.name)
                 }
             }
         }
@@ -101,6 +105,7 @@ fun MapRoute(
         },
         onMovePinlogDetail = onMovePinlogDetail,
         onClickLike = mapViewModel::likeChanged,
-        onMoveWriteReview = onMoveWriteReview
+        onMoveWriteReview = onMoveWriteReview,
+        onMoveUserProfile = mapViewModel::onProfileClick
     )
 }

@@ -35,6 +35,7 @@ fun ReviewCard(
     onClickMenu: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onMovePinlogDetail: (Int) -> Unit = {},
+    onMoveUserProfile: (String) -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -45,6 +46,9 @@ fun ReviewCard(
                 .padding(start = horizontalPadding)
         ) {
             ReviewedProfileImageView(
+                modifier = Modifier.clickableWithNoRipple {
+                    onMoveUserProfile(placeReview.writerName)
+                },
                 imgUrl = placeReview.writerProfileImageUrl,
                 size = 33.dp
             )
@@ -56,6 +60,10 @@ fun ReviewCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
+                        modifier = Modifier
+                            .clickableWithNoRipple {
+                                onMoveUserProfile(placeReview.writerName)
+                            },
                         text = placeReview.writerName,
                         style = Typography.B2.copy(
                             fontWeight = FontWeight.SemiBold

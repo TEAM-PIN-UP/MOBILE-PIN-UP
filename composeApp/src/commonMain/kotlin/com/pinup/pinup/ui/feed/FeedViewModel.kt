@@ -13,6 +13,7 @@ import com.pinup.pinup.domain.usecase.SaveRecentSearchUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
+import com.pinup.pinup.ui.map.MapUiEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -27,7 +28,7 @@ class FeedViewModel(
     private val saveRecentSearchUseCase: SaveRecentSearchUseCase,
     private val deleteRecentSearchUseCase: DeleteRecentSearchUseCase,
     private val getPinlogDetailUseCase: GetPinlogDetailUseCase,
-) : BaseViewModel<FeedUiState, UiEvent>(FeedUiState()) {
+) : BaseViewModel<FeedUiState, FeedUiEvent>(FeedUiState()) {
 
     init {
         getMyProfile()
@@ -173,6 +174,12 @@ class FeedViewModel(
         delay(1.seconds)
         getFeedList()
     }
+
+    fun onProfileClick(name: String) = viewModelScope.launch {
+        getMyProfileUseCase().collectLatest {
+            if(it.name == name) emitEvent(FeedUiEvent.OnMoveUserProfile(name))
+        }
+    }
 }
 
 data class FeedUiState(
@@ -184,3 +191,7 @@ data class FeedUiState(
     val profileUrl: String = "",
     val recentSearchList: List<String> = emptyList()
 ): UiState
+
+sealed interface FeedUiEvent : UiEvent {
+    data class OnMoveUserProfile(val name: String): FeedUiEvent
+}
