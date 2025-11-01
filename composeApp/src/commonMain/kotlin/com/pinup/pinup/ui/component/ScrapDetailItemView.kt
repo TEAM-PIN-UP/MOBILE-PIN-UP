@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
@@ -23,6 +24,7 @@ import com.pinup.pinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_cafe
+import pinup.composeapp.generated.resources.ic_empty_scrap
 import pinup.composeapp.generated.resources.ic_food
 import pinup.composeapp.generated.resources.ic_plus
 
@@ -37,6 +39,25 @@ fun ScrapDetailItemView(
         else -> Res.drawable.ic_plus
     }
     Column {
+        if (place.placeFirstReviewImageUrl.isEmpty()) {
+            RoundedBox(
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .clickableWithNoRipple {
+                        onMovePlaceDetail(place.kakaoPlaceId)
+                    },
+                backgroundColor = Colors.Gray50,
+                cornerRounded = 12
+            ) {
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center),
+                    painter = painterResource(Res.drawable.ic_empty_scrap),
+                    contentDescription = null
+                )
+            }
+        } else {
         RoundedBox(
             modifier = Modifier
                 .clickableWithNoRipple {
@@ -52,6 +73,7 @@ fun ScrapDetailItemView(
                 contentDescription = null
             )
         }
+            }
 
         Spacer(modifier = Modifier.height(8.dp))
 
