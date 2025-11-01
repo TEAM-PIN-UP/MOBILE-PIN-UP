@@ -2,8 +2,6 @@ package com.pinup.pinup.ui.map
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,23 +25,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-//import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.DetailPlace
-import com.pinup.pinup.domain.model.ReviewedPlace
+import com.pinup.pinup.domain.model.ReviewedPlace.Companion.MapToPlace
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.PHorizontalDivider
-import com.pinup.pinup.ui.component.RatingGraphView
 import com.pinup.pinup.ui.component.ReviewCard
 import com.pinup.pinup.ui.component.ReviewedPlaceCard
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 
@@ -146,7 +143,7 @@ fun MapBottomSheetDetailScreen(
                 RoundedBox(
                     modifier = Modifier
                         .clickableSingleWithNoRipple {
-                            onMoveWriteReview(detailPlace.mapPlace.kakaoPlaceId)
+                            onMoveWriteReview(Json.encodeToString(value = detailPlace.mapPlace.MapToPlace()))
                         },
                     backgroundColor = Colors.Neutral50,
                     cornerRounded = 100

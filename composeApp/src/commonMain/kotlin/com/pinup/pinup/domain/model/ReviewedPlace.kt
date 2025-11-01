@@ -1,6 +1,7 @@
 package com.pinup.pinup.domain.model
 
 import kotlinx.serialization.Serializable
+import kotlin.String
 
 @Serializable
 data class ReviewedPlace(
@@ -16,4 +17,24 @@ data class ReviewedPlace(
     val reviewCount: Int = 0,
     val reviewImageUrls: List<String> = emptyList(),
     val reviewerProfileImageUrls: List<String?> = emptyList(),
-)
+) {
+    companion object {
+        fun ReviewedPlace.MapToPlace() : Place {
+            return Place(
+                address = roadAddress,
+                averageStarRating = averageStarRating,
+                categoryCode = placeCategory.name,
+                description = "",
+                kakaoPlaceId = kakaoPlaceId,
+                latitude = latitude,
+                longitude = longitude,
+                name = name,
+                placeCategory = placeCategory.name,
+                reviewCount = reviewCount,
+                roadAddress = roadAddress,
+                image = "",
+                hasMyReview = false
+            )
+        }
+    }
+}

@@ -7,7 +7,6 @@ import com.pinup.pinup.data.request.ReviewRequest
 import com.pinup.pinup.data.request.pinlog.AddReviewRequest
 import com.pinup.pinup.domain.model.ImageUploadType
 import com.pinup.pinup.domain.model.Place
-import com.pinup.pinup.domain.model.ReviewedPlace
 import com.pinup.pinup.domain.usecase.EditPinlogUseCase
 import com.pinup.pinup.domain.usecase.GetDetailPlaceUseCase
 import com.pinup.pinup.domain.usecase.GetPinlogDetailUseCase
@@ -17,6 +16,7 @@ import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import kotlin.Double
 import kotlin.String
 
@@ -31,13 +31,14 @@ class WriteReviewViewModel (
 
     companion object {
         private const val REVIEW_ID = "reviewId"
-        private const val PLACE_ID = "placeId"
+        private const val SELECT_PLACE = "selectPlace"
 
     }
 
     val reviewId = savedStateHandle.get<Int>(REVIEW_ID) ?: 0
-    val placeId = savedStateHandle.get<String>(PLACE_ID)
-
+    val selectPlace: Place? = savedStateHandle.get<String>(SELECT_PLACE)?.let {
+        Json.decodeFromString(it)
+    }
     var writeReviewId: Int? = null
 
     init {
@@ -45,32 +46,9 @@ class WriteReviewViewModel (
             getPinlogDetail()
         }
 
-        if (placeId != null) {
-            getSelectPlaceDetail(placeId)
+        if (selectPlace != null) {
+            selectPlace(selectPlace)
         }
-    }
-
-    private fun getSelectPlaceDetail(id: String) = viewModelScope.launch {
-        resultResponse(
-            response = getDetailPlaceUseCase(id, null, null),
-            successCallback = {
-                selectPlace(
-                    Place(
-                        name = it.mapPlace.name,
-                        address = it.mapPlace.roadAddress,
-                        averageStarRating = it.mapPlace.averageStarRating,
-                        categoryCode = "",
-                        description = "",
-                        kakaoPlaceId = id,
-                        latitude = it.mapPlace.longitude,
-                        longitude = it.mapPlace.latitude,
-                        placeCategory = it.mapPlace.placeCategory.name,
-                        reviewCount = it.mapPlace.reviewCount,
-                        roadAddress = it.mapPlace.roadAddress
-                    )
-                )
-            }
-        )
     }
 
     private fun getDetailPlace(id: String) = viewModelScope.launch {
@@ -132,7 +110,6 @@ class WriteReviewViewModel (
                 selectedPlace = place
             )
         }
-        emitEvent(WriteReviewUiEvent.MoveSelectDate)
     }
 
     fun selectDate(visitedDate: String) = viewModelScope.launch {
@@ -248,7 +225,6 @@ data class WriteReviewUiState(
 }
 
 sealed interface WriteReviewUiEvent : UiEvent {
-    data object MoveSelectDate : WriteReviewUiEvent
     data object MoveWriteReview : WriteReviewUiEvent
     data object SuccessWriteReview : WriteReviewUiEvent
     data object SuccessEditReview : WriteReviewUiEvent

@@ -84,7 +84,7 @@ fun PinchWriteScreen(
     onClickDelete: (Int) -> Unit = {},
     moveItem: (Int, Int) -> Unit = { _, _ -> },
     onPlaceClick: (Place, Int) -> Unit = { _, _ -> },
-    onMoveWriteReview: (String) -> Unit = {},
+    onMoveWriteReview: (Place) -> Unit = {},
     registerPints: () -> Unit = {},
 ) {
 
@@ -102,7 +102,7 @@ fun PinchWriteScreen(
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
     val isShowWritePinlogDialog = remember { mutableStateOf(false) }
-    val clickedKakaoPlaceId = remember { mutableStateOf("") }
+    val clickedKakaoPlace = remember { mutableStateOf(Place()) }
 
     Column(
         modifier = Modifier
@@ -336,7 +336,7 @@ fun PinchWriteScreen(
                                                 onPlaceClick(place, index)
                                             } else {
                                                 isShowWritePinlogDialog.value = true
-                                                clickedKakaoPlaceId.value = place.kakaoPlaceId
+                                                clickedKakaoPlace.value = place
                                             }
                                             expandedIndex = null
                                         }
@@ -412,7 +412,7 @@ fun PinchWriteScreen(
             },
             onRightButtonClick = {
                 isShowWritePinlogDialog.value = false
-                onMoveWriteReview(clickedKakaoPlaceId.value)
+                onMoveWriteReview(clickedKakaoPlace.value)
             },
         )
     }

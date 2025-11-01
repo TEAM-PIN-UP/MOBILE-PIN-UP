@@ -18,7 +18,6 @@ import com.pinup.pinup.ui.reviewwrite.WriteReviewViewModel
 import com.pinup.pinup.ui.reviewwrite.searchplace.SearchPlaceRoute
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -33,13 +32,8 @@ fun WriteReviewNavHost(
     val isShowCompleteDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        writeReviewViewModel.uiEvent
-            .collectLatest {
+        writeReviewViewModel.uiEvent.collect{
                 when (it) {
-                    WriteReviewUiEvent.MoveSelectDate -> {
-                        navHostController.navigate(WriteReviewDestination.SelectDate)
-                    }
-
                     WriteReviewUiEvent.MoveWriteReview -> {
                         navHostController.navigate(WriteReviewDestination.WriteReview)
                     }
@@ -51,6 +45,10 @@ fun WriteReviewNavHost(
                     WriteReviewUiEvent.SuccessEditReview -> onBackPressed()
                 }
             }
+    }
+
+    LaunchedEffect(writeReviewViewModel.selectPlace){
+        if(writeReviewViewModel.selectPlace != null) navHostController.navigate(WriteReviewDestination.SelectDate)
     }
     Column(
         modifier = Modifier

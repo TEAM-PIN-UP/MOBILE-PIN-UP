@@ -3,6 +3,7 @@ package com.pinup.pinup.ui.my.pinch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.map.MapUiEvent
@@ -19,7 +20,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun PinchWriteRoute(
     onBackPressed: () -> Unit = {},
-    onMoveWriteReview: (String) -> Unit = {},
+    onMoveWriteReview: (Place) -> Unit = {},
 ) {
     val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
         accuracy = LocationTrackerAccuracy.Best

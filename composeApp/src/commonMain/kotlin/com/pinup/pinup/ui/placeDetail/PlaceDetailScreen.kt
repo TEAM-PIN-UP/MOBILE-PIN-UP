@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.DetailPlace
+import com.pinup.pinup.domain.model.ReviewedPlace.Companion.MapToPlace
 import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.PHorizontalDivider
@@ -43,6 +44,8 @@ import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_back
@@ -134,7 +137,7 @@ fun PlaceDetailScreen(
                     modifier = Modifier
                         .size(24.dp)
                         .clickableSingleWithNoRipple {
-                            onMoveWriteReview(detailPlace.mapPlace.kakaoPlaceId)
+                            onMoveWriteReview(Json.encodeToString(value = detailPlace.mapPlace.MapToPlace()))
                         },
                     painter = painterResource(Res.drawable.ic_write_pinlog),
                     contentDescription = "pinlog"

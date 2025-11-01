@@ -20,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.extentions.jsonToArg
 import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
@@ -353,7 +354,7 @@ fun PinUpApp(
                             navHostController.popBackStack()
                         },
                         onMoveWriteReview = {
-                            navHostController.navigate(PinUpAppDestination.WriteReview(0, it))
+                            navHostController.navigate(PinUpAppDestination.WriteReview(0, selectPlace = Json.encodeToString(it)))
                         },
                     )
                 }
@@ -388,7 +389,7 @@ sealed interface PinUpAppDestination {
     @Serializable
     data class WriteReview(
         val reviewId: Int?,
-        val placeId: String?
+        val selectPlace: String? = null
     ) : PinUpAppDestination
     @Serializable
     data class WriteReviewDetail(
