@@ -72,8 +72,6 @@ fun PinBuddyScreen(
     scope: CoroutineScope = rememberCoroutineScope(),
     onRefresh: () -> Unit = {},
     isRefreshing: Boolean = false,
-    onClickBottomNav: (MainDestination) -> Unit,
-    profileUrl: String = "",
 ) {
     val isShowCompleteDialog = remember { mutableStateOf<Pair<Boolean, Int?>>(false to null) }
     val pages = remember { listOf(Texts.Word.PIN_BUDDY, Texts.PROFILE.RECEIVE_REQUEST , Texts.PROFILE.SENT_REQUEST) }
@@ -83,7 +81,6 @@ fun PinBuddyScreen(
         refreshing = isRefreshing,
         onRefresh = onRefresh
     )
-    var bottomBarHeight by remember { mutableStateOf(0.dp) }
 
     Box(
         Modifier
@@ -175,7 +172,6 @@ fun PinBuddyScreen(
                             onDeletePinBuddy = { memberId ->
                                 isShowCompleteDialog.value = true to memberId
                             },
-                            bottomBarHeight = bottomBarHeight
                         )
                     }
                     1 -> {
@@ -184,7 +180,6 @@ fun PinBuddyScreen(
                             onProfileClick = onProfileClick,
                             onAcceptClick = onAcceptClick,
                             onRejectClick = onRejectClick,
-                            bottomBarHeight = bottomBarHeight
                         )
                     }
                     else -> {
@@ -192,24 +187,10 @@ fun PinBuddyScreen(
                             sentPinBuddyRequests = sentPinBuddyRequests,
                             onProfileClick = onProfileClick,
                             onDeletePinBuddyRequest = onDeletePinBuddyRequest,
-                            bottomBarHeight = bottomBarHeight
                         )
                     }
                 }
             }
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            BottomBar(
-                selectedMenu = MainDestination.My,
-                profileImage = profileUrl,
-                onBottomMenuClick = onClickBottomNav,
-                onSizeChanged = { bottomBarHeight = it }
-            )
         }
 
         PullRefreshIndicator(
@@ -243,7 +224,6 @@ private fun PinBuddyList(
     pinBuddies: PersistentList<Profile>,
     onProfileClick: (Int) -> Unit,
     onDeletePinBuddy: (Int) -> Unit,
-    bottomBarHeight: Dp,
 ) {
     if (pinBuddies.isEmpty()) {
         Column(
@@ -273,7 +253,6 @@ private fun PinBuddyList(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .padding(top = 24.dp),
-            contentPadding = PaddingValues(bottom = bottomBarHeight),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             items(pinBuddies) {
@@ -315,7 +294,6 @@ private fun SentPinBuddyRequestList(
     sentPinBuddyRequests: PersistentList<PinBuddyRequest>,
     onProfileClick: (Int) -> Unit,
     onDeletePinBuddyRequest: (Int) -> Unit,
-    bottomBarHeight: Dp,
 ) {
     if (sentPinBuddyRequests.isEmpty()) {
         Column(
@@ -345,7 +323,6 @@ private fun SentPinBuddyRequestList(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .padding(top = 24.dp),
-            contentPadding = PaddingValues(bottom = bottomBarHeight),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             items(sentPinBuddyRequests) {
@@ -388,7 +365,6 @@ private fun ReceivePinBuddyRequestList(
     onProfileClick: (Int) -> Unit,
     onRejectClick: (Int) -> Unit,
     onAcceptClick: (Int) -> Unit,
-    bottomBarHeight: Dp,
 ) {
     if (receivePinBuddyRequests.isEmpty()) {
         Column(
@@ -418,7 +394,6 @@ private fun ReceivePinBuddyRequestList(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .padding(top = 24.dp),
-            contentPadding = PaddingValues(bottom = bottomBarHeight),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             items(receivePinBuddyRequests) {

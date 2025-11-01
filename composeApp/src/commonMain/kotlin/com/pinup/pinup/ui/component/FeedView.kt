@@ -64,14 +64,14 @@ fun FeedView(
         Row(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .clickableWithNoRipple{
+                    onMoveUserProfile(item.writerName)
+                },
             verticalAlignment = Alignment.CenterVertically
         ) {
             ProfileImageView(
-                modifier = Modifier
-                    .clickableWithNoRipple{
-                        onMoveUserProfile(item.writerName)
-                    },
+                modifier = Modifier,
                 imgUrl = item.writerProfileImageUrl,
                 size = 36.dp,
             )
@@ -83,10 +83,7 @@ fun FeedView(
                     .weight(1f)
             ) {
                 Text(
-                    modifier = Modifier
-                        .clickableWithNoRipple{
-                            onMoveUserProfile(item.writerName)
-                        },
+                    modifier = Modifier,
                     text = item.writerName,
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.SemiBold

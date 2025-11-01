@@ -15,7 +15,6 @@ import rememberToastState
 fun PinBuddyRoute(
     onBackPressed: () -> Unit,
     onMoveUserProfile: (Int) -> Unit,
-    onClickBottomNav: (MainDestination) -> Unit,
     onClickSearch: () -> Unit = {},
     pinBuddyViewModel: PinBuddyViewModel = koinViewModel()
 ) {
@@ -59,8 +58,6 @@ fun PinBuddyRoute(
         onRejectClick = pinBuddyViewModel::rejectPinBuddy,
         onClickSearch = onClickSearch,
         onRefresh = pinBuddyViewModel::refreshView,
-        onClickBottomNav = onClickBottomNav,
         isRefreshing = uiState.value.isRefreshing,
-        profileUrl = uiState.value.profileUrl
     )
 }

@@ -7,20 +7,16 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.extentions.jsonToArg
 import com.pinup.pinup.platform.ContextFactory
 import com.pinup.pinup.ui.addpinbuddy.AddPinBuddyRoute
@@ -36,6 +32,7 @@ import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.main.compose.MainNavHost
 import com.pinup.pinup.ui.my.pinch.PinchWriteRoute
 import com.pinup.pinup.ui.my.pinch.detail.PinchDetailRoute
+import com.pinup.pinup.ui.my.scrap.ScrapRoute
 import com.pinup.pinup.ui.onboarding.OnboardingRoute
 import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpRoute
 import com.pinup.pinup.ui.pinbuddy.PinBuddyRoute
@@ -244,20 +241,36 @@ fun PinUpApp(
                         onMovePintsDetail = {
                             navHostController.navigate(PinUpAppDestination.PinchDetail(it))
                         },
+                        onMovePinBuddy = {
+                            navHostController.navigate(PinUpAppDestination.PinBuddy) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
+                        },
+                        onMoveAddPinBuddy = {
+                            navHostController.navigate(PinUpAppDestination.AddPinBuddy)
+                        },
+                        onMoveScrap = {
+                            navHostController.navigate(PinUpAppDestination.Scrap) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
+                        },
+                        onMoveUserProfileWithName = {
+                            navHostController.navigate(PinUpAppDestination.UserProfile(name = it))
+                        },
+                        onMoveUserProfileWithId = {
+                            navHostController.navigate(PinUpAppDestination.UserProfile(memberId = it))
+                        },
                         updateUserId = {
                             startAppViewModel.updateUserId(it)
                         }
-                    )
-                }
-
-                composable<PinUpAppDestination.ArticleDetail> {
-                    ArticleDetailRoute(
-                        onClickBack = {
-                            navHostController.popBackStack()
-                        },
-                        onClickPlaceDetail = {
-
-                        },
                     )
                 }
 
@@ -281,6 +294,17 @@ fun PinUpApp(
                     )
                 }
 
+                composable<PinUpAppDestination.ArticleDetail> {
+                    ArticleDetailRoute(
+                        onClickBack = {
+                            navHostController.popBackStack()
+                        },
+                        onClickPlaceDetail = {
+
+                        },
+                    )
+                }
+
                 composable<PinUpAppDestination.PinlogDetail> {
                     PinlogDetailRoute(
                         onBackPressed = {
@@ -291,6 +315,9 @@ fun PinUpApp(
                         },
                         onMovePlaceDetail = {
                             navHostController.navigate(PinUpAppDestination.PlaceDetail(it))
+                        },
+                        onMoveUserProfile = {
+                            navHostController.navigate(PinUpAppDestination.UserProfile(name = it))
                         }
                     )
                 }
@@ -356,6 +383,54 @@ fun PinUpApp(
                         onMoveWriteReview = {
                             navHostController.navigate(PinUpAppDestination.WriteReview(0, selectPlace = Json.encodeToString(it)))
                         },
+                    )
+                }
+
+
+                composable<PinUpAppDestination.PinBuddy> {
+                    PinBuddyRoute(
+                        onBackPressed = {
+                            navHostController.navigate(MainDestination.My) {
+                                launchSingleTop = true
+                                restoreState = true
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                            }
+                        },
+                        onMoveUserProfile = {
+                            navHostController.navigate(PinUpAppDestination.UserProfile(it))
+                        },
+                        onClickSearch = {
+                            navHostController.navigate(PinUpAppDestination.AddPinBuddy)
+                        }
+                    )
+                }
+
+                composable<PinUpAppDestination.AddPinBuddy> {
+                    AddPinBuddyRoute(
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
+                        onMoveUserProfile = {
+                            navHostController.navigate(PinUpAppDestination.UserProfile(it))
+                        }
+                    )
+                }
+
+                composable<PinUpAppDestination.UserProfile> {
+                    UserProfileRoute(
+                        contextFactory = contextFactory,
+                        onClickDetail = { navHostController.navigate(PinUpAppDestination.PinlogDetail(it)) },
+                        onMovePinchWrite = { navHostController.navigate(PinUpAppDestination.PinchWrite(0)) },
+                        onMovePintsDetail = { navHostController.navigate(PinUpAppDestination.PinchDetail(it)) }
+                    )
+                }
+
+                composable<PinUpAppDestination.Scrap> {
+                    ScrapRoute(
+                        onMovePlaceDetail = { navHostController.navigate(PinUpAppDestination.PlaceDetail(it)) },
+                        onSettingClick = { navHostController.navigate(PinUpAppDestination.Setting) }
                     )
                 }
             }

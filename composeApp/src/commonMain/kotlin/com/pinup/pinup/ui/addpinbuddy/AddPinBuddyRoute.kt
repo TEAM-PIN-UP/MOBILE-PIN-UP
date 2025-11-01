@@ -11,7 +11,6 @@ fun AddPinBuddyRoute(
     onBackPressed: () -> Unit,
     onMoveUserProfile: (Int) -> Unit,
     viewModel: AddPinBuddyViewModel = koinViewModel(),
-    onClickBottomNav: (MainDestination) -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     AddPinBuddyScreen(
@@ -23,7 +22,5 @@ fun AddPinBuddyRoute(
         onProfileClick = onMoveUserProfile,
         recentSearchList = uiState.value.recentSearchList,
         onClickDeleteRecentSearch = viewModel::deleteRecentSearch,
-        profileUrl = uiState.value.profileUrl,
-        onClickBottomNav = onClickBottomNav
     )
 }

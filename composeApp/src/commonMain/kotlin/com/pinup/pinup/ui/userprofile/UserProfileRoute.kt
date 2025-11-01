@@ -13,7 +13,6 @@ fun UserProfileRoute(
     onClickDetail: (Int) -> Unit = {},
     onMovePinchWrite: () -> Unit = {},
     onMovePintsDetail: (Int) -> Unit = {},
-    onClickBottomNav: (MainDestination) -> Unit,
     viewModel: UserProfileViewModel = koinViewModel(parameters = { parametersOf(contextFactory) })
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -21,7 +20,6 @@ fun UserProfileRoute(
         member = uiState.value.member,
         photoReviews = uiState.value.pagingReview.reviews,
         pinchPageAble = uiState.value.pinchPageAble,
-        profileUrl = uiState.value.profileUrl,
         onRequestCancel = viewModel::deleteRequestPinBuddy,
         onRemovePinBuddy = viewModel::deletePinBuddy,
         onRequestPinBuddy = viewModel::requestPinBuddy,
@@ -31,6 +29,5 @@ fun UserProfileRoute(
         onClickShare = viewModel::shareMyProfile,
         onMoveDetail = onMovePintsDetail,
         getMorePints = viewModel::getMorePints,
-        onClickBottomNav = onClickBottomNav
     )
 }

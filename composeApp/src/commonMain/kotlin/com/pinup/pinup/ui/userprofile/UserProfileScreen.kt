@@ -73,7 +73,6 @@ fun UserProfileScreen(
     photoReviews: List<Review>,
     pinchPageAble: PintsPageAble,
     modifier: Modifier = Modifier,
-    profileUrl: String = "",
     onRequestPinBuddy: () -> Unit = {},
     onAlarmClick: () -> Unit = {},
     onSettingClick: () -> Unit = {},
@@ -85,7 +84,6 @@ fun UserProfileScreen(
     onMovePinchWrite: () -> Unit = {},
     getMorePints: () -> Unit = {},
     onMoveDetail: (Int) -> Unit = {},
-    onClickBottomNav: (MainDestination) -> Unit,
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     var isShowDeleteDialog by remember { mutableStateOf(false) }
@@ -94,7 +92,6 @@ fun UserProfileScreen(
     )
     val pagerState = remember { mutableStateOf(0) }
     val scrollState = rememberLazyListState()
-    var bottomBarHeight by remember { mutableStateOf(0.dp) }
 
     ScrollToEndCallback(scrollState) {
         if (pagerState.value == 1 && !pinchPageAble.last) {
@@ -126,7 +123,6 @@ fun UserProfileScreen(
                 .statusBarsPadding()
                 .navigationBarsPadding()
                 .fillMaxWidth(),
-            contentPadding = PaddingValues(bottom = bottomBarHeight),
             state = scrollState
         ) {
             item {
@@ -376,19 +372,6 @@ fun UserProfileScreen(
                     )
                 }
             }
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            BottomBar(
-                selectedMenu = MainDestination.My,
-                profileImage = profileUrl,
-                onBottomMenuClick = onClickBottomNav,
-                onSizeChanged = { bottomBarHeight = it }
-            )
         }
     }
 

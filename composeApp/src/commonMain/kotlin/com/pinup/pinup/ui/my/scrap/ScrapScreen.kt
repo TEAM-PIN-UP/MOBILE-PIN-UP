@@ -64,19 +64,16 @@ fun ScrapScreen(
     scrapList: List<BookmarkedPlace>,
     chipStates: PersistentList<ChipState>,
     sortType: SortType,
-    profileUrl: String = "",
     onUpdateSortType: (SortType) -> Unit = {},
     onAlarmClick: () -> Unit = {},
     onSettingClick: () -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
-    onClickBottomNav: (MainDestination) -> Unit,
     onMovePlaceDetail: (String) -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
-    var bottomBarHeight by remember { mutableStateOf(0.dp) }
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -186,7 +183,6 @@ fun ScrapScreen(
                 columns = GridCells.Fixed(2),
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 verticalArrangement = Arrangement.spacedBy(13.dp),
-                contentPadding = PaddingValues(bottom = bottomBarHeight)
             ) {
                 items(scrapList) { it ->
                     ScrapDetailItemView(
@@ -195,19 +191,6 @@ fun ScrapScreen(
                     )
                 }
             }
-        }
-
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Bottom
-        ) {
-            BottomBar(
-                selectedMenu = MainDestination.My,
-                profileImage = profileUrl,
-                onBottomMenuClick = onClickBottomNav,
-                onSizeChanged = { bottomBarHeight = it }
-            )
         }
     }
 }

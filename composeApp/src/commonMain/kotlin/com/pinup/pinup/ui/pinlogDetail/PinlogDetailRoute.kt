@@ -21,6 +21,7 @@ fun PinlogDetailRoute(
     onBackPressed: () -> Unit = {},
     onClickEdit: (Int) -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
+    onMoveUserProfile: (String) -> Unit = {},
 ) {
     val toast = rememberToastState()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -34,6 +35,10 @@ fun PinlogDetailRoute(
                 PinlogUiEvent.SuccessDelete -> {
                     toast.show(Texts.Toast.DELETE_PINLOG)
                     onBackPressed()
+                }
+
+                is PinlogUiEvent.OnMoveUserProfile -> {
+                    onMoveUserProfile(it.name)
                 }
             }
         }
@@ -92,6 +97,7 @@ fun PinlogDetailRoute(
             clickedCommentId = it
             isShowDeleteCommentDialog.value = true
         },
+        onClickProfile = viewModel::onProfileClick,
         updateNonFocusMode = {
             if(uiState.isEditComment || uiState.clickedReplyId != null) viewModel::updateNormalMode
         },

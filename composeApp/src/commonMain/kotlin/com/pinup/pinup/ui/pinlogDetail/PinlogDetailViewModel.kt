@@ -15,6 +15,7 @@ import com.pinup.pinup.domain.usecase.PostCommentUseCase
 import com.pinup.pinup.ui.base.BaseViewModel
 import com.pinup.pinup.ui.base.UiEvent
 import com.pinup.pinup.ui.base.UiState
+import com.pinup.pinup.ui.feed.FeedUiEvent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
@@ -159,6 +160,12 @@ class PinlogDetailViewModel(
         delay(1.seconds)
         getPinlogDetail()
     }
+
+    fun onProfileClick(name: String) = viewModelScope.launch {
+        getMyProfileUseCase().collectLatest {
+            emitEvent(PinlogUiEvent.OnMoveUserProfile(name))
+        }
+    }
 }
 
 
@@ -174,4 +181,5 @@ data class PinlogUiState(
 
 sealed interface PinlogUiEvent : UiEvent {
     data object SuccessDelete : PinlogUiEvent
+    data class OnMoveUserProfile(val name: String): PinlogUiEvent
 }

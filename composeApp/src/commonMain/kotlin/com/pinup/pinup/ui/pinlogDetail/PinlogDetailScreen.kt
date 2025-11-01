@@ -54,6 +54,7 @@ import com.pinup.pinup.domain.model.Comment
 import com.pinup.pinup.domain.model.PinlogDetail
 import com.pinup.pinup.domain.model.ReplyComment
 import com.pinup.pinup.domain.model.UserInfo
+import com.pinup.pinup.extentions.clickableSingleWithNoRipple
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.ui.component.CommentMenuBottomSheet
 import com.pinup.pinup.ui.component.CommentView
@@ -98,6 +99,7 @@ fun PinlogDetailScreen(
     onClickUploadComment: () -> Unit = {},
     onClickEditComment: (Int, String) -> Unit = {_, _ -> },
     onClickDeleteComment: (Int) -> Unit = {},
+    onClickProfile: (String) -> Unit = {},
     updateNonFocusMode: () -> Unit = {},
     updateReplyCommentId: (Int) -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
@@ -241,7 +243,10 @@ fun PinlogDetailScreen(
                             Row(
                                 modifier = Modifier
                                     .padding(horizontal = 20.dp)
-                                    .fillMaxWidth(),
+                                    .fillMaxWidth()
+                                    .clickableSingleWithNoRipple {
+                                        onClickProfile(pinlogDetail.writerName)
+                                    },
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 ProfileImageView(

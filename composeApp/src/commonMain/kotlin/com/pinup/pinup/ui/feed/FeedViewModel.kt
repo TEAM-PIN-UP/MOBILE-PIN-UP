@@ -177,7 +177,7 @@ class FeedViewModel(
 
     fun onProfileClick(name: String) = viewModelScope.launch {
         getMyProfileUseCase().collectLatest {
-            if(it.name == name) emitEvent(FeedUiEvent.OnMoveUserProfile(name))
+           emitEvent(FeedUiEvent.OnMoveUserProfile(name))
         }
     }
 }

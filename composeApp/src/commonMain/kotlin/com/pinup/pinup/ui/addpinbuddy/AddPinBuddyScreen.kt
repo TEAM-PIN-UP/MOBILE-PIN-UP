@@ -58,11 +58,8 @@ fun AddPinBuddyScreen(
     onBackPressed: () -> Unit = {},
     onProfileClick: (Int) -> Unit = {},
     onSearch: () -> Unit = {},
-    onClickBottomNav: (MainDestination) -> Unit,
-    profileUrl: String = "",
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    var bottomBarHeight by remember { mutableStateOf(0.dp) }
 
     Column(
         modifier = modifier
@@ -230,7 +227,6 @@ fun AddPinBuddyScreen(
                         LazyColumn(
                             modifier = Modifier
                                 .padding(top = 20.dp),
-                            contentPadding = PaddingValues(bottom = bottomBarHeight),
                             verticalArrangement = Arrangement.spacedBy(24.dp)
                         ) {
                             items(it) {
@@ -255,19 +251,6 @@ fun AddPinBuddyScreen(
                 }
             }
         }
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Bottom
-    ) {
-        BottomBar(
-            selectedMenu = MainDestination.My,
-            profileImage = profileUrl,
-            onBottomMenuClick = onClickBottomNav,
-            onSizeChanged = { bottomBarHeight = it }
-        )
     }
 }
 

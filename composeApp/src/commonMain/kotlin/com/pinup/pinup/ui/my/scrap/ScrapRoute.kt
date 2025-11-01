@@ -11,7 +11,6 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun ScrapRoute(
     viewModel: ScrapViewModel = koinViewModel(),
-    onClickBottomNav: (MainDestination) -> Unit,
     onMovePlaceDetail: (String) -> Unit = {},
     onSettingClick: () -> Unit = {},
 ) {
@@ -21,8 +20,6 @@ fun ScrapRoute(
         scrapList = uiState.value.scrapList,
         chipStates = uiState.value.chipStates.toPersistentList(),
         sortType = uiState.value.sortType,
-        profileUrl = uiState.value.profileUrl,
-        onClickBottomNav = onClickBottomNav,
         onMovePlaceDetail = onMovePlaceDetail,
         onChipClick = viewModel::updateChipState,
         onUpdateSortType = viewModel::updateSortType,
