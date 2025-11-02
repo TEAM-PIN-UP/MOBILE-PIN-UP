@@ -300,7 +300,7 @@ fun PinUpApp(
                             navHostController.popBackStack()
                         },
                         onClickPlaceDetail = {
-
+                            navHostController.navigate(PinUpAppDestination.PlaceDetail(it))
                         },
                     )
                 }
