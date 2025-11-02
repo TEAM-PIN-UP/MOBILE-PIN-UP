@@ -97,7 +97,7 @@ fun PinchDetailScreen(
                 .padding(horizontal = 20.dp)
         ) {
             TitleBar(
-                title = Texts.Pinch.PINCH_WRITE,
+                title = Texts.Pinch.PINCH_DETAIL,
                 onLeftButtonClick = onBackPressed,
                 rightIcon = painterResource(Res.drawable.ic_menu_dot),
                 onRightButtonClick = {

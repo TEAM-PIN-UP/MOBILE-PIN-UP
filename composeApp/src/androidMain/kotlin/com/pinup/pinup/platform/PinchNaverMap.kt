@@ -54,7 +54,7 @@ actual fun PinchNaverMap(
 ) {
     val cameraPositionState = rememberCameraPositionState()
 
-    LaunchedEffect(cameraPosition) {
+    LaunchedEffect(cameraPosition, placeList) {
         cameraPosition?.let { target ->
             val now = cameraPositionState.position.target
             if (target.latitude != now.latitude || target.longitude != now.longitude) {
@@ -72,7 +72,7 @@ actual fun PinchNaverMap(
                 val bounds = LatLngBounds(sw, ne)
 
                 cameraPositionState.animate(
-                    CameraUpdate.fitBounds(bounds, 30)
+                    CameraUpdate.fitBounds(bounds, 50)
                 )
             }
             coords.size == 1 -> {
