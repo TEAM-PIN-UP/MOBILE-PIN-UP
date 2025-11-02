@@ -390,13 +390,7 @@ fun PinUpApp(
                 composable<PinUpAppDestination.PinBuddy> {
                     PinBuddyRoute(
                         onBackPressed = {
-                            navHostController.navigate(MainDestination.My) {
-                                launchSingleTop = true
-                                restoreState = true
-                                popUpTo(navHostController.graph.startDestinationId) {
-                                    saveState = true
-                                }
-                            }
+                            navHostController.popBackStack()
                         },
                         onMoveUserProfile = {
                             navHostController.navigate(PinUpAppDestination.UserProfile(it))
@@ -423,7 +417,10 @@ fun PinUpApp(
                         contextFactory = contextFactory,
                         onClickDetail = { navHostController.navigate(PinUpAppDestination.PinlogDetail(it)) },
                         onMovePinchWrite = { navHostController.navigate(PinUpAppDestination.PinchWrite(0)) },
-                        onMovePintsDetail = { navHostController.navigate(PinUpAppDestination.PinchDetail(it)) }
+                        onMovePintsDetail = { navHostController.navigate(PinUpAppDestination.PinchDetail(it)) },
+                        onClickBack = {
+                            navHostController.popBackStack()
+                        }
                     )
                 }
 

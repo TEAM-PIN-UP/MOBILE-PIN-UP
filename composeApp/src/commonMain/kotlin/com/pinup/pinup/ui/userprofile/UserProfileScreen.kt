@@ -84,6 +84,7 @@ fun UserProfileScreen(
     onMovePinchWrite: () -> Unit = {},
     getMorePints: () -> Unit = {},
     onMoveDetail: (Int) -> Unit = {},
+    onClickBack: () -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     var isShowDeleteDialog by remember { mutableStateOf(false) }
@@ -132,13 +133,21 @@ fun UserProfileScreen(
                         .padding(vertical = 15.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = member.profile.nickname,
-                        style = Typography.T1.copy(
-                            fontWeight = FontWeight.SemiBold
-                        ),
-                        color = Colors.Gray800
+
+                    Image(
+                        modifier = Modifier
+                            .clickableWithNoRipple { onClickBack() },
+                        painter = painterResource(Res.drawable.ic_back),
+                        contentDescription = null
                     )
+
+//                    Text(
+//                        text = member.profile.nickname,
+//                        style = Typography.T1.copy(
+//                            fontWeight = FontWeight.SemiBold
+//                        ),
+//                        color = Colors.Gray800
+//                    )
 
                     Spacer(Modifier.weight(1f))
 
