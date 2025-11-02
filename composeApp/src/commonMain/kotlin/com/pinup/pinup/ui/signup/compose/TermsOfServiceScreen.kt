@@ -15,7 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil3.compose.LocalPlatformContext
 import com.pinup.pinup.extentions.clickableWithNoRipple
+import com.pinup.pinup.platform.openBrowser
 import com.pinup.pinup.ui.component.PButton
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.TitleBar
@@ -41,6 +43,8 @@ fun TermsOfServiceScreen(
     onBackPressed: () -> Unit,
     onClickDetailTerm: (String) -> Unit
 ) {
+    val context = LocalPlatformContext.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -86,7 +90,12 @@ fun TermsOfServiceScreen(
                 onTermAgreeClick(TermsOfService.USING_SERVICE)
             },
             isClick = isUsingServiceAgree,
-            onClickDetail = onClickDetailTerm
+            onClickDetail = {
+                openBrowser(
+                    context = context,
+                    url = it
+                )
+            }
         )
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -97,7 +106,12 @@ fun TermsOfServiceScreen(
                 onTermAgreeClick(TermsOfService.COLLECT_DATA)
             },
             isClick = isCollectDataAgree,
-            onClickDetail = onClickDetailTerm
+            onClickDetail = {
+                openBrowser(
+                    context = context,
+                    url = it
+                )
+            }
         )
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -108,7 +122,12 @@ fun TermsOfServiceScreen(
                 onTermAgreeClick(TermsOfService.COLLECT_LOCATION)
             },
             isClick = isCollectLocationAgree,
-            onClickDetail = onClickDetailTerm
+            onClickDetail = {
+                openBrowser(
+                    context = context,
+                    url = it
+                )
+            }
         )
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -119,7 +138,12 @@ fun TermsOfServiceScreen(
                 onTermAgreeClick(TermsOfService.MARKETING)
             },
             isClick = isMarketingAgreeClick,
-            onClickDetail = onClickDetailTerm
+            onClickDetail = {
+                openBrowser(
+                    context = context,
+                    url = it
+                )
+            }
         )
 
         Spacer(Modifier.weight(1f))
@@ -153,10 +177,10 @@ fun TermRow(
 
     val url = when (type) {
         TermsOfService.ALL -> ""
-        TermsOfService.USING_SERVICE -> Const.Url.TERM_SERVICE
-        TermsOfService.COLLECT_DATA -> Const.Url.TERM_PRIVATE
-        TermsOfService.COLLECT_LOCATION -> Const.Url.TERM_LOCATION
-        TermsOfService.MARKETING -> Const.Url.TERM_MARKETING
+        TermsOfService.USING_SERVICE -> Const.Url.SERVICE_TERM
+        TermsOfService.COLLECT_DATA -> Const.Url.PERSONAL_TERM
+        TermsOfService.COLLECT_LOCATION -> Const.Url.LOCATION_TERM
+        TermsOfService.MARKETING -> Const.Url.MARKETING_TERM
     }
 
     Row(

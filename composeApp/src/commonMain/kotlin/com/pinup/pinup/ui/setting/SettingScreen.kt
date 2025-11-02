@@ -154,12 +154,22 @@ fun SettingScreen(
 
             MenuBar(
                 text = Texts.Setting.SERVICE_TERM,
-                onClick = {}
+                onClick = {
+                    openBrowser(
+                        context = context,
+                        url = Const.Url.SERVICE_TERM
+                    )
+                }
             )
 
             MenuBar(
                 text = Texts.Setting.PERSONAL_TERM,
-                onClick = {}
+                onClick = {
+                    openBrowser(
+                        context = context,
+                        url = Const.Url.PERSONAL_TERM
+                    )
+                }
             )
 
             Spacer(modifier = Modifier.height(28.dp))

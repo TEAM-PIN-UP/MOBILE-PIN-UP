@@ -2,10 +2,10 @@ package com.pinup.pinup.util
 
 object Const {
     object Url {
-        const val TERM_SERVICE = "https://www.google.com"
-        const val TERM_PRIVATE = "https://www.google.com"
-        const val TERM_LOCATION = "https://www.google.com"
-        const val TERM_MARKETING = "https://www.google.com"
+        const val SERVICE_TERM = "https://www.notion.so/29ecbe66576180ae8abcf3cdf8e6c9d1?source=copy_link"
+        const val PERSONAL_TERM = "https://www.notion.so/29ecbe66576180f5b710fb6074483fcd?source=copy_link"
+        const val LOCATION_TERM = "https://www.notion.so/29ecbe665761806c9c45f85c4e6443e9?source=copy_link"
+        const val MARKETING_TERM = "https://www.notion.so/29ecbe66576180b9b104f5cd76bff6fa"
         const val CONTACT_US_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeK6a5W9HdN4tD9C-TQ3G-jMe0KoaoUvKgQ0nn8h79oUdAqtg/viewform"
         const val SUGGESTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfY1WnZg-hPhwxW-7AYmF4X6-fwU0pDWyUilAvcGFFvvJfzaw/viewform"
     }

@@ -19,9 +19,13 @@ class IOSPlatform: Platform {
 
 
 actual fun openBrowser(url: String, context: PlatformContext) {
-    val nsUrl = NSURL.URLWithString(url)
-    if (nsUrl != null) {
-        UIApplication.sharedApplication.openURL(nsUrl)
+    val nsUrl = NSURL(string = url)
+    if (UIApplication.sharedApplication.canOpenURL(nsUrl)) {
+        UIApplication.sharedApplication.openURL(
+            url = nsUrl,
+            options = emptyMap<Any?, Any>(),
+            completionHandler = null
+        )
     }
 }
 
