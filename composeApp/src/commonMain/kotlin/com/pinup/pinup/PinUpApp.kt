@@ -420,7 +420,8 @@ fun PinUpApp(
                         onMovePintsDetail = { navHostController.navigate(PinUpAppDestination.PinchDetail(it)) },
                         onClickBack = {
                             navHostController.popBackStack()
-                        }
+                        },
+                        onSettingClick = { navHostController.navigate(PinUpAppDestination.Setting) }
                     )
                 }
 
