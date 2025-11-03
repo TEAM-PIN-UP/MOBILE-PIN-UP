@@ -9,9 +9,9 @@ data class RatingGraph(
 ) {
     companion object {
         fun toModel(jsonObject: JsonObject): RatingGraph {
-            val ratingArray = Array(5) { 0 }.toMutableList()
+            val ratingArray = Array(6) { 0 }.toMutableList()
             jsonObject.keys.forEach {
-                ratingArray[it.toInt()-1] = jsonObject[it]?.jsonPrimitive?.int ?: 0
+                ratingArray[it.toInt()] = jsonObject[it]?.jsonPrimitive?.int ?: 0
             }
             return RatingGraph(
                 ratingArray = ratingArray
