@@ -516,6 +516,8 @@ fun PinlogDetailScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     ProfileImageView(
+                        modifier = Modifier
+                            .align(Alignment.Top),
                         imgUrl = userInfo.profileUrl,
                         size = 35.dp
                     )
@@ -538,6 +540,7 @@ fun PinlogDetailScreen(
                         placeholderTextColor = Colors.Gray500,
                         cornerRounded = 24,
                         tailIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_comment_upload) else null,
+                        tailIconPos = Alignment.Bottom,
                         tailIconSize = 38,
                         onTailIconClick = {
                             onClickUploadComment()

@@ -59,6 +59,7 @@ fun RoundedTextField(
     readOnly: Boolean = false,
     enabled: Boolean = true,
     tailIcon: Painter? = null,
+    tailIconPos: Alignment.Vertical = Alignment.CenterVertically,
     isTrailIconAlwaysShow: Boolean = false,
     leadingIcon: Painter? = null,
     tailIconSize: Int = 24,
@@ -175,6 +176,7 @@ fun RoundedTextField(
                                 Image(
                                     modifier = Modifier
                                         .size(tailIconSize.dp)
+                                        .align(tailIconPos)
                                         .clickableSingleWithNoRipple {
                                             onTailIconClick.invoke()
                                         },
