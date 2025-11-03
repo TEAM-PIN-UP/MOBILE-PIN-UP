@@ -14,8 +14,8 @@ interface PintsRepository {
     suspend fun getPints(memberId: Int, pageAble: PageAble): PResult<PintsPageAble>
     suspend fun getPintsDetail(pintsId: Int): PResult<PintsDetail>
     suspend fun deletePints(pintsId: Int): PResult<Unit>
-    suspend fun registerPints(request: ModifyPintsRequest): PResult<Unit>
-    suspend fun editPints(pintsId: Int, request: ModifyPintsRequest): PResult<Unit>
+    suspend fun registerPints(request: ModifyPintsRequest): PResult<Int>
+    suspend fun editPints(pintsId: Int, request: ModifyPintsRequest): PResult<Int>
     suspend fun getEditorPints(request: GetEditorPintsRequest): PResult<List<PinchListItem>>
     suspend fun getEditorPintsDetail(pintsId: Int): PResult<EditorPintsDetail>
     suspend fun getEditorPintsCategory(): PResult<List<PintsCategory>>

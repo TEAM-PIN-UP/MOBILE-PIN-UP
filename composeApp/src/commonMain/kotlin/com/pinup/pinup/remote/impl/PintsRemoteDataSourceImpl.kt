@@ -9,6 +9,7 @@ import com.pinup.pinup.data.response.EditorPintsDetailResponse
 import com.pinup.pinup.data.response.EditorPintsResponse
 import com.pinup.pinup.data.response.PintsDetailResponse
 import com.pinup.pinup.data.response.PintsListResponse
+import com.pinup.pinup.data.response.UserPintsEditResponse
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.mapSuccessData
 import com.pinup.pinup.remote.api.PintsApi
@@ -32,11 +33,11 @@ class PintsRemoteDataSourceImpl (
         return pintsApi.deletePints(pintsId).mapSuccessData()
     }
 
-    override suspend fun registerPints(request: ModifyPintsRequest): PResult<Unit> {
+    override suspend fun registerPints(request: ModifyPintsRequest): PResult<UserPintsEditResponse> {
         return pintsApi.registerPints(request).mapSuccessData()
     }
 
-    override suspend fun editPints(pintsId: Int, request: ModifyPintsRequest): PResult<Unit> {
+    override suspend fun editPints(pintsId: Int, request: ModifyPintsRequest): PResult<UserPintsEditResponse> {
         return pintsApi.editPints(pintsId, request).mapSuccessData()
     }
 

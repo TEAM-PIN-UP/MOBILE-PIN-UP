@@ -164,7 +164,7 @@ class PinchWriteViewModel (
         resultResponse(
             response = if (pintsId != 0) editPintsUseCase(pintsId, request) else registerPintsUseCase(request),
             successCallback = {
-                emitEvent(PinchWriteUiEvent.SuccessModify(pintsId))
+                emitEvent(PinchWriteUiEvent.SuccessModify(it))
             }
         )
     }

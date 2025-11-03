@@ -7,6 +7,7 @@ import com.pinup.pinup.data.response.EditorPintsResponse
 import com.pinup.pinup.data.response.PResponse
 import com.pinup.pinup.data.response.PintsDetailResponse
 import com.pinup.pinup.data.response.PintsListResponse
+import com.pinup.pinup.data.response.UserPintsEditResponse
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.PintsCategory
@@ -29,7 +30,7 @@ interface PintsApi {
     @POST(ApiPath.Pints.PINTS)
     suspend fun registerPints(
         @Body request: ModifyPintsRequest
-    ): PResult<PResponse<Unit>>
+    ): PResult<PResponse<UserPintsEditResponse>>
 
     @GET(ApiPath.Pints.PINTS)
     suspend fun getPints(
@@ -46,7 +47,7 @@ interface PintsApi {
     suspend fun editPints(
         @Path(PATH_PINTS_ID) pintsId: Int,
         @Body request: ModifyPintsRequest
-    ): PResult<PResponse<Unit>>
+    ): PResult<PResponse<UserPintsEditResponse>>
 
     @GET(ApiPath.Pints.PINTS_MODIFY)
     suspend fun getPintsDetail(

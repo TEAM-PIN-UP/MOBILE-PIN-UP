@@ -7,7 +7,7 @@ import com.pinup.pinup.domain.repository.PintsRepository
 class EditPintsUseCase (
     private val pintsRepository: PintsRepository,
 ) {
-    suspend operator fun invoke(pintsId: Int, request: ModifyPintsRequest): PResult<Unit> {
+    suspend operator fun invoke(pintsId: Int, request: ModifyPintsRequest): PResult<Int> {
         return pintsRepository.editPints(pintsId, request)
     }
 }

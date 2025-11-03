@@ -40,15 +40,19 @@ class PintsRepositoryImpl (
         return pintsRemoteDataSource.deletePints(pintsId)
     }
 
-    override suspend fun registerPints(request: ModifyPintsRequest): PResult<Unit> {
-        return pintsRemoteDataSource.registerPints(request)
+    override suspend fun registerPints(request: ModifyPintsRequest): PResult<Int> {
+        return pintsRemoteDataSource.registerPints(request).map {
+            it.pintsId
+        }
     }
 
     override suspend fun editPints(
         pintsId: Int,
         request: ModifyPintsRequest
-    ): PResult<Unit> {
-        return pintsRemoteDataSource.editPints(pintsId, request)
+    ): PResult<Int> {
+        return pintsRemoteDataSource.editPints(pintsId, request).map {
+            it.pintsId
+        }
     }
 
     override suspend fun getEditorPints(request: GetEditorPintsRequest): PResult<List<PinchListItem>> {

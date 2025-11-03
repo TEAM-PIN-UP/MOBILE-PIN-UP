@@ -7,7 +7,7 @@ import com.pinup.pinup.domain.repository.PintsRepository
 class RegisterPintsUseCase (
     private val pintsRepository: PintsRepository,
 ) {
-    suspend operator fun invoke(request: ModifyPintsRequest): PResult<Unit> {
+    suspend operator fun invoke(request: ModifyPintsRequest): PResult<Int> {
         return pintsRepository.registerPints(request)
     }
 }

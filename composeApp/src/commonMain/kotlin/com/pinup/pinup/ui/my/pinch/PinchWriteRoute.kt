@@ -37,8 +37,7 @@ fun PinchWriteRoute(
         viewModel.uiEvent.collectLatest {
             when(it) {
                 is PinchWriteUiEvent.SuccessModify -> {
-                    onBackPressed()
-                    //isShowCompleteDialog.value = true to it.id
+                    isShowCompleteDialog.value = true to it.id
                 }
             }
         }
