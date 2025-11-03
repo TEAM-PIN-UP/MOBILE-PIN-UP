@@ -6,6 +6,7 @@ import com.pinup.pinup.data.request.pints.PageAble
 import com.pinup.pinup.domain.model.EditorPintsDetail
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.PinchListItem
+import com.pinup.pinup.domain.model.PintsCategory
 import com.pinup.pinup.domain.model.PintsDetail
 import com.pinup.pinup.domain.model.PintsPageAble
 
@@ -17,4 +18,5 @@ interface PintsRepository {
     suspend fun editPints(pintsId: Int, request: ModifyPintsRequest): PResult<Unit>
     suspend fun getEditorPints(request: GetReviewedPlacesRequest): PResult<List<PinchListItem>>
     suspend fun getEditorPintsDetail(pintsId: Int): PResult<EditorPintsDetail>
+    suspend fun getEditorPintsCategory(): PResult<List<PintsCategory>>
 }

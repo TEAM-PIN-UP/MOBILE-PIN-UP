@@ -11,6 +11,7 @@ import com.pinup.pinup.data.response.PintsListResponse.Companion.toModel
 import com.pinup.pinup.domain.model.EditorPintsDetail
 import com.pinup.pinup.domain.model.PResult
 import com.pinup.pinup.domain.model.PinchListItem
+import com.pinup.pinup.domain.model.PintsCategory
 import com.pinup.pinup.domain.model.PintsDetail
 import com.pinup.pinup.domain.model.PintsPageAble
 import com.pinup.pinup.domain.model.map
@@ -58,6 +59,14 @@ class PintsRepositoryImpl (
     override suspend fun getEditorPintsDetail(pintsId: Int): PResult<EditorPintsDetail> {
         return pintsRemoteDataSource.getEditorPintsDetail(pintsId).map {
             it.toModel()
+        }
+    }
+
+    override suspend fun getEditorPintsCategory(): PResult<List<PintsCategory>> {
+        return pintsRemoteDataSource.getEditorPintsCategory().map {
+            it.map { category ->
+                PintsCategory.of(category)
+            }
         }
     }
 }

@@ -65,4 +65,7 @@ interface PintsApi {
     suspend fun getEditorPintsDetail(
         @Path(PATH_PINTS_ID) pintsId: Int,
     ): PResult<PResponse<EditorPintsDetailResponse>>
+
+    @GET(ApiPath.Pints.EDITOR_CATEGORY)
+    suspend fun getEditorPintsCategory(): PResult<PResponse<List<String>>>
 }

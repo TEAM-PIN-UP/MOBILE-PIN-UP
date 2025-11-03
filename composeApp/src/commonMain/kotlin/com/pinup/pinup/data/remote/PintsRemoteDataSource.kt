@@ -17,4 +17,5 @@ interface PintsRemoteDataSource {
     suspend fun editPints(pintsId: Int, request: ModifyPintsRequest): PResult<Unit>
     suspend fun getEditorPints(request: GetReviewedPlacesRequest): PResult<List<EditorPintsResponse>>
     suspend fun getEditorPintsDetail(pintsId: Int): PResult<EditorPintsDetailResponse>
+    suspend fun getEditorPintsCategory(): PResult<List<String>>
 }

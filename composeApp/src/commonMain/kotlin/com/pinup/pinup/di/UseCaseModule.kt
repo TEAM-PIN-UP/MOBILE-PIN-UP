@@ -22,6 +22,7 @@ val useCaseModule = module {
     single<GetBookmarksUseCase> { GetBookmarksUseCase(get()) }
     single<GetDetailPlaceUseCase> { GetDetailPlaceUseCase(get()) }
     single<GetEditorPintsUseCase> { GetEditorPintsUseCase(get()) }
+    single<GetEditorPintsCategoryUseCase> { GetEditorPintsCategoryUseCase(get()) }
     single<GetEditorPintsDetailUseCase> { GetEditorPintsDetailUseCase(get()) }
     single<GetFeedUseCase> { GetFeedUseCase(get()) }
     single<GetFindIdByEmailUseCase> { GetFindIdByEmailUseCase(get()) }

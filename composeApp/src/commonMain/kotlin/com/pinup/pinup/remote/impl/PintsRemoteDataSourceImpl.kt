@@ -52,4 +52,8 @@ class PintsRemoteDataSourceImpl (
     override suspend fun getEditorPintsDetail(pintsId: Int): PResult<EditorPintsDetailResponse> {
         return pintsApi.getEditorPintsDetail(pintsId).mapSuccessData()
     }
+
+    override suspend fun getEditorPintsCategory(): PResult<List<String>> {
+        return pintsApi.getEditorPintsCategory().mapSuccessData()
+    }
 }
