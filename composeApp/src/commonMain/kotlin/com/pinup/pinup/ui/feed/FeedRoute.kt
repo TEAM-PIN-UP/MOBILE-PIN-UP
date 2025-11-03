@@ -61,7 +61,7 @@ fun FeedRoute(
         FeedSearchScreen(
             query = uiState.searchText,
             profile = uiState.profileUrl,
-            reviewList = uiState.pagingReview.reviews,
+            reviewList = uiState.searchedPagingReview.reviews,
             recentSearchList = uiState.recentSearchList,
             onValueChange = viewModel::updateSearchText,
             onClickSearch = viewModel::onClickSearch,
@@ -75,6 +75,7 @@ fun FeedRoute(
             onClickDelete = viewModel::deleteReview,
             onClickDetail = onClickDetail,
             onClickLike = viewModel::likeChanged,
+            onMoveUserProfile = viewModel::onProfileClick
         )
     } else {
         FeedScreen(

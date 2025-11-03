@@ -37,11 +37,25 @@ class FeedViewModel(
 
     fun getFeedList() = viewModelScope.launch {
         resultResponse(
-            response = getFeedUseCase(null, memberId = null, keyword = uiState.value.searchText.ifEmpty { null }),
+            response = getFeedUseCase(null, memberId = null, keyword = null),
             successCallback = {
                 updateState {
                     copy(
                         pagingReview = it,
+                        isRefreshing = false
+                    )
+                }
+            }
+        )
+    }
+
+    fun getSearchedFeedList() = viewModelScope.launch {
+        resultResponse(
+            response = getFeedUseCase(null, memberId = null, keyword = uiState.value.searchText.ifEmpty { null }),
+            successCallback = {
+                updateState {
+                    copy(
+                        searchedPagingReview = it,
                         isRefreshing = false
                     )
                 }
@@ -125,13 +139,14 @@ class FeedViewModel(
     fun updateSearchText(text: String) {
         updateState {
             copy(
-                searchText = text
+                searchText = text,
+                searchedPagingReview = PagingReview()
             )
         }
     }
 
     fun onClickSearch() {
-        getFeedList()
+        getSearchedFeedList()
         saveRecentSearch()
     }
 
@@ -184,6 +199,7 @@ class FeedViewModel(
 
 data class FeedUiState(
     val pagingReview: PagingReview = PagingReview(),
+    val searchedPagingReview: PagingReview = PagingReview(),
     val isRefreshing: Boolean = false,
     val prevCursor: Int? = null,
     val searchMode: Boolean = false,

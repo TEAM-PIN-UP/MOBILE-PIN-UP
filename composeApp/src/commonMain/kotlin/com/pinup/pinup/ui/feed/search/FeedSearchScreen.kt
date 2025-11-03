@@ -73,6 +73,7 @@ fun FeedSearchScreen(
     onClickDelete: (Int) -> Unit = {},
     onClickDetail: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
+    onMoveUserProfile: (String) -> Unit = {},
 ) {
 
     val scope: CoroutineScope = rememberCoroutineScope()
@@ -82,6 +83,7 @@ fun FeedSearchScreen(
     var clickedReviewId by remember { mutableStateOf(0) }
     val scrollState = rememberLazyListState()
     val keyboardController = LocalSoftwareKeyboardController.current
+    var bottomBarHeight by remember { mutableStateOf(0.dp) }
 
     ScrollToEndCallback(scrollState) {
         getMoreFeed()
@@ -106,13 +108,13 @@ fun FeedSearchScreen(
     ) {
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .background(color = Colors.White)
-                .padding(horizontal = 20.dp)
                 .statusBarsPadding(),
         ) {
             Row(
                 modifier = Modifier
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 8.dp, horizontal = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -168,10 +170,12 @@ fun FeedSearchScreen(
 
             PHorizontalDivider()
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             if (query.isEmpty()) {
-                Column {
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Column(
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                ) {
                     Text(
                         text = Texts.FEED.RECENT_SEARCH,
                         color = Colors.Gray800,
@@ -220,23 +224,32 @@ fun FeedSearchScreen(
             } else {
                 LazyColumn(
                     modifier = Modifier
-                        .background(Colors.Gray50),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    state = scrollState
+                        .padding(bottom = bottomBarHeight)
+                        .background(Colors.White),
+                    state = scrollState,
                 ) {
-                    items(reviewList){
+                    item {
+                        Spacer(
+                            modifier = Modifier
+                                .height(16.dp)
+                        )
+                    }
+
+                    items(reviewList) {
                         FeedView(
                             item = it,
-                            searchKeyWord = query,
                             onClickMenu = {
                                 clickedReviewId = it
                                 scope.launch { sheetState.show() }
                             },
                             onClickLike = onClickLike,
                             onClickDetail = onClickDetail,
+                            onMoveUserProfile = onMoveUserProfile
                         )
 
-                        PHorizontalDivider()
+                        PHorizontalDivider(modifier = Modifier.height(10.dp))
+
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }
@@ -251,7 +264,8 @@ fun FeedSearchScreen(
         BottomBar(
             selectedMenu = MainDestination.Feed,
             profileImage = profile,
-            onBottomMenuClick = onClickBottomNav
+            onBottomMenuClick = onClickBottomNav,
+            onSizeChanged = { bottomBarHeight = it }
         )
     }
 }
