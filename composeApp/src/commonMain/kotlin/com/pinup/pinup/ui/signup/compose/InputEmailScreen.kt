@@ -161,6 +161,9 @@ fun InputEmailScreen(
             if (emailState.emailVerifyType == EmailVerifyType.NOT_VERIFIED) {
                 Spacer(modifier = Modifier.height(8.dp))
                 ErrorText(Texts.SignupEmail.CODE_INVALID)
+            } else if (emailState.emailVerifyType == EmailVerifyType.VERIFIED){
+                Spacer(modifier = Modifier.height(8.dp))
+                ErrorText(Texts.SignupEmail.CODE_VALID, isNotError = true)
             }
         }
 

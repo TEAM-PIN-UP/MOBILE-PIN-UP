@@ -137,6 +137,7 @@ object Texts {
         const val DUPLICATE = "동일한 이메일 주소로 가입된 계정이 있습니다.\n기존 계정을 확인해주세요."
         const val CODE_HINT = "인증번호를 입력해주세요."
         const val CODE_INVALID = "인증번호가 일치하지 않습니다."
+        const val CODE_VALID = "인증번호가 일치합니다."
         const val SEND_CODE = "인증번호가 전송되었습니다."
     }
 
