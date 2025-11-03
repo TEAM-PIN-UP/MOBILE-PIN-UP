@@ -12,6 +12,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.reviewwrite.WriteReviewUiEvent
 import com.pinup.pinup.ui.reviewwrite.WriteReviewViewModel
@@ -63,7 +64,10 @@ fun WriteReviewNavHost(
         ) {
             composable<WriteReviewDestination.SearchPlace> {
                 SearchPlaceRoute(
-                    onPlaceClick = writeReviewViewModel::selectPlace,
+                    onPlaceClick = {
+                        writeReviewViewModel.selectPlace(it)
+                        navHostController.navigate(WriteReviewDestination.SelectDate)
+                    },
                     onBackPressed = onBackPressed,
                 )
             }

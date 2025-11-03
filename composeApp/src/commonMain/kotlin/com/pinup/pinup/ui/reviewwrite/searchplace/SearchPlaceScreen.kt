@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.Place
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.RoundedTextField
 import com.pinup.pinup.ui.component.SearchedPlaceCard
 import com.pinup.pinup.ui.component.TitleBar
