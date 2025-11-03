@@ -695,13 +695,13 @@ fun LazyListScope.MyScrapList(
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(top = 16.dp, bottom = 15.dp)
+                        .padding(top = 16.dp, bottom = 14.dp)
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = Texts.PROFILE.EMPTY_SCRAP,
-                        style = Typography.L2.copy(
+                        style = Typography.B3.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
                         color = Colors.Gray400,
@@ -710,23 +710,28 @@ fun LazyListScope.MyScrapList(
 
                     Spacer(modifier = Modifier.height(11.dp))
 
-                    RoundedBox(
+                    Row(
                         modifier = Modifier
                             .clickableWithNoRipple {
                                 onClickGoFeed()
                             },
-                        backgroundColor = Colors.Main99,
-                        cornerRounded = 5
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            modifier = Modifier
-                                .padding(horizontal = 19.dp, vertical = 4.dp)
-                                .background(color = Colors.Main99),
                             text = Texts.PROFILE.GO_PINLOG,
-                            style = Typography.L3.copy(
-                                fontWeight = FontWeight.Medium
+                            style = Typography.L1.copy(
+                                fontWeight = FontWeight.SemiBold
                             ),
                             color = Colors.Main
+                        )
+
+                        Spacer(modifier = Modifier.width(2.dp))
+
+                        Image(
+                            modifier = Modifier.size(14.dp),
+                            painter = painterResource(Res.drawable.ic_right_arrow),
+                            colorFilter = ColorFilter.tint(Colors.Main),
+                            contentDescription = null
                         )
                     }
                 }
@@ -828,7 +833,7 @@ fun LazyListScope.MyScrapList(
                 ) {
                     Text(
                         text = Texts.PROFILE.EMPTY_PINCH(member.profile.name),
-                        style = Typography.L2.copy(
+                        style = Typography.B3.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
                         color = Colors.Gray400,
@@ -837,22 +842,28 @@ fun LazyListScope.MyScrapList(
 
                     Spacer(modifier = Modifier.height(11.dp))
 
-                    RoundedBox(
-                        backgroundColor = Colors.Main99,
-                        cornerRounded = 5
+                    Row(
+                        modifier = Modifier
+                            .clickableWithNoRipple {
+                                onClickGoCreatePinch()
+                            },
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            modifier = Modifier
-                                .padding(horizontal = 18.dp, vertical = 4.dp)
-                                .background(color = Colors.Main99)
-                                .clickableWithNoRipple {
-                                    onClickGoCreatePinch()
-                                },
                             text = Texts.PROFILE.GO_PINCH_CREATE,
-                            style = Typography.L3.copy(
-                                fontWeight = FontWeight.Medium
+                            style = Typography.L1.copy(
+                                fontWeight = FontWeight.SemiBold
                             ),
                             color = Colors.Main
+                        )
+
+                        Spacer(modifier = Modifier.width(2.dp))
+
+                        Image(
+                            modifier = Modifier.size(14.dp),
+                            painter = painterResource(Res.drawable.ic_right_arrow),
+                            colorFilter = ColorFilter.tint(Colors.Main),
+                            contentDescription = null
                         )
                     }
                 }
