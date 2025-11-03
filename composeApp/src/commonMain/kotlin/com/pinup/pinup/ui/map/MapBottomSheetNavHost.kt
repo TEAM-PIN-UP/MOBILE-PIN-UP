@@ -27,6 +27,7 @@ fun MapBottomSheetNavHost(
     isScrollable: Boolean,
     onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
+    onPintsChipClick: (ChipState) -> Unit = {},
     onPlaceClick: (String) -> Unit = {},
     onPinchListClick: (Int) -> Unit = {},
     onClearDetailPlace: () -> Unit = {},
@@ -123,28 +124,9 @@ fun MapBottomSheetNavHost(
 
         composable<MapBottomSheetDestination.Pinch> {
             MapBottomSheetPinchScreen(
-                //TODO 여기도 임시, 테스트용 더미
-                chipStates = listOf(
-                    ChipState(
-                        icon = null,
-                        text = "더미1",
-                        isSelected = true,
-                        type = Category.NONE
-                    ),
-                    ChipState(
-                        icon = null,
-                        text = "더미2",
-                        isSelected = false,
-                        type = Category.NONE
-                    ),
-                    ChipState(
-                        icon = null,
-                        text = "더미3",
-                        isSelected = false,
-                        type = Category.NONE
-                    ),
-                ),
+                chipStates = pinchUiState.pintsCategoryList,
                 pinchList = pinchUiState.pinchList,
+                onClick = onPintsChipClick,
                 onClickPinch = { id ->
                     onPinchListClick(id)
                     navHostController.navigate(MapBottomSheetDestination.PinchDetail)

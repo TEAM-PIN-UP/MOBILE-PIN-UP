@@ -11,5 +11,9 @@ enum class PintsCategory(val kor: String) {
                 NONE
             }
         }
+
+        fun valuesOf(kor: String): PintsCategory {
+            return entries.find { it.kor == kor } ?: ALL
+        }
     }
 }

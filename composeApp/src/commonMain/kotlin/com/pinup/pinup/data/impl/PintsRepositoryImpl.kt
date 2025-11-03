@@ -2,6 +2,7 @@ package com.pinup.pinup.data.impl
 
 import com.pinup.pinup.data.remote.PintsRemoteDataSource
 import com.pinup.pinup.data.request.GetReviewedPlacesRequest
+import com.pinup.pinup.data.request.pints.GetEditorPintsRequest
 import com.pinup.pinup.data.request.pints.ModifyPintsRequest
 import com.pinup.pinup.data.request.pints.PageAble
 import com.pinup.pinup.data.response.EditorPintsDetailResponse.Companion.toModel
@@ -50,7 +51,7 @@ class PintsRepositoryImpl (
         return pintsRemoteDataSource.editPints(pintsId, request)
     }
 
-    override suspend fun getEditorPints(request: GetReviewedPlacesRequest): PResult<List<PinchListItem>> {
+    override suspend fun getEditorPints(request: GetEditorPintsRequest): PResult<List<PinchListItem>> {
         return pintsRemoteDataSource.getEditorPints(request).map {
             it.map { item -> item.toModel() }
         }

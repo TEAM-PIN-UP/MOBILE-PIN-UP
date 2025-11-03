@@ -9,6 +9,7 @@ import com.pinup.pinup.data.response.PintsDetailResponse
 import com.pinup.pinup.data.response.PintsListResponse
 import com.pinup.pinup.domain.model.Category
 import com.pinup.pinup.domain.model.PResult
+import com.pinup.pinup.domain.model.PintsCategory
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -54,7 +55,7 @@ interface PintsApi {
 
     @GET(ApiPath.Pints.EDITOR)
     suspend fun getEditorPints(
-        @Query("category") category: Category,
+        @Query("category") category: PintsCategory,
         @Query("swLatitude") swLatitude: String,
         @Query("swLongitude") swLongitude: String,
         @Query("neLatitude") neLatitude: String,

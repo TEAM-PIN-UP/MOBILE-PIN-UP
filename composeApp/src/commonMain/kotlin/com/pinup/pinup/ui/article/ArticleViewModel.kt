@@ -2,6 +2,7 @@ package com.pinup.pinup.ui.article
 
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.data.request.GetReviewedPlacesRequest
+import com.pinup.pinup.data.request.pints.GetEditorPintsRequest
 import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.domain.usecase.GetEditorPintsUseCase
 import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
@@ -23,7 +24,7 @@ class ArticleViewModel(
     }
 
     fun getArticleList() = viewModelScope.launch {
-        val request = GetReviewedPlacesRequest(
+        val request = GetEditorPintsRequest(
             swLatitude = "0.0",
             swLongitude = "0.0",
             neLatitude = "0.0",

@@ -1,6 +1,7 @@
 package com.pinup.pinup.data.remote
 
 import com.pinup.pinup.data.request.GetReviewedPlacesRequest
+import com.pinup.pinup.data.request.pints.GetEditorPintsRequest
 import com.pinup.pinup.data.request.pints.ModifyPintsRequest
 import com.pinup.pinup.data.request.pints.PageAble
 import com.pinup.pinup.data.response.EditorPintsDetailResponse
@@ -15,7 +16,7 @@ interface PintsRemoteDataSource {
     suspend fun deletePints(pintsId: Int): PResult<Unit>
     suspend fun registerPints(request: ModifyPintsRequest): PResult<Unit>
     suspend fun editPints(pintsId: Int, request: ModifyPintsRequest): PResult<Unit>
-    suspend fun getEditorPints(request: GetReviewedPlacesRequest): PResult<List<EditorPintsResponse>>
+    suspend fun getEditorPints(request: GetEditorPintsRequest): PResult<List<EditorPintsResponse>>
     suspend fun getEditorPintsDetail(pintsId: Int): PResult<EditorPintsDetailResponse>
     suspend fun getEditorPintsCategory(): PResult<List<String>>
 }

@@ -86,6 +86,7 @@ fun MapRoute(
         onClickBottomNav = onBottomMenuClick,
         onCameraStateChange = mapViewModel::updateCameraState,
         onChipClick = mapViewModel::updateChipState,
+        onPintsChipClick = mapViewModel::updatePintsChipState,
         onValueChange = mapViewModel::updateSearchText,
         onPlaceClick = mapViewModel::getDetailPlace,
         onClearDetailPlace = mapViewModel::clearDetailPlace,

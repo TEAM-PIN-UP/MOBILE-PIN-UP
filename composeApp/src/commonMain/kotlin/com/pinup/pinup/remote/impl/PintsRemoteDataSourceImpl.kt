@@ -2,6 +2,7 @@ package com.pinup.pinup.remote.impl
 
 import com.pinup.pinup.data.remote.PintsRemoteDataSource
 import com.pinup.pinup.data.request.GetReviewedPlacesRequest
+import com.pinup.pinup.data.request.pints.GetEditorPintsRequest
 import com.pinup.pinup.data.request.pints.ModifyPintsRequest
 import com.pinup.pinup.data.request.pints.PageAble
 import com.pinup.pinup.data.response.EditorPintsDetailResponse
@@ -39,7 +40,7 @@ class PintsRemoteDataSourceImpl (
         return pintsApi.editPints(pintsId, request).mapSuccessData()
     }
 
-    override suspend fun getEditorPints(request: GetReviewedPlacesRequest): PResult<List<EditorPintsResponse>> {
+    override suspend fun getEditorPints(request: GetEditorPintsRequest): PResult<List<EditorPintsResponse>> {
         return pintsApi.getEditorPints(
             category = request.category,
             swLatitude = request.swLatitude,
