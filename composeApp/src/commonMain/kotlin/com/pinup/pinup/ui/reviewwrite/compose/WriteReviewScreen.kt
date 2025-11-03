@@ -245,7 +245,8 @@ fun WriteReviewScreen(
                     )
 
                     LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(2.dp)
+                        horizontalArrangement = Arrangement.spacedBy(2.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         items(imagePaths) {
                             Box {
@@ -275,36 +276,44 @@ fun WriteReviewScreen(
 
                         if (imagePaths.size < maxImageSize) {
                             item {
-                                RoundedBox(
-                                    modifier = modifier
-                                        .padding(top = 7.dp)
-                                        .size(100.dp)
-                                        .clickableSingleWithNoRipple {
-                                            singleImagePicker.launch()
-                                        },
-                                    cornerRounded = 8,
-                                    backgroundColor = Colors.Gray50,
-                                ) {
-                                    Column(
+                                Box {
+                                    RoundedBox(
                                         modifier = Modifier
-                                            .align(Alignment.Center)
+                                            .size(100.dp)
+                                            .padding(top = 8.dp, end = 7.dp)
+                                            .clickableSingleWithNoRipple {
+                                                singleImagePicker.launch()
+                                            },
+                                        cornerRounded = 8,
+                                        backgroundColor = Colors.Gray50,
                                     ) {
-                                        Image(
-                                            painter = painterResource(Res.drawable.ic_camera_gray),
-                                            contentDescription = "select image",
-                                        )
+                                        Column(
+                                            modifier = Modifier
+                                                .align(Alignment.Center)
+                                        ) {
+                                            Image(
+                                                painter = painterResource(Res.drawable.ic_camera_gray),
+                                                contentDescription = "select image",
+                                            )
 
-                                        Spacer(modifier = Modifier.height(5.dp))
+                                            Spacer(modifier = Modifier.height(5.dp))
 
-                                        Text(
-                                            text = "${imagePaths.size}/$maxImageSize",
-                                            style = Typography.L1.copy(
-                                                fontWeight = FontWeight.Bold
-                                            ),
-                                            color = Colors.Gray300,
-                                            textAlign = TextAlign.Center
-                                        )
+                                            Text(
+                                                text = "${imagePaths.size}/$maxImageSize",
+                                                style = Typography.L1.copy(
+                                                    fontWeight = FontWeight.Bold
+                                                ),
+                                                color = Colors.Gray300,
+                                                textAlign = TextAlign.Center
+                                            )
+                                        }
                                     }
+
+                                    Box(
+                                        modifier = Modifier
+                                            .size(20.dp)
+                                            .align(Alignment.TopEnd)
+                                    )
                                 }
                             }
                         }
