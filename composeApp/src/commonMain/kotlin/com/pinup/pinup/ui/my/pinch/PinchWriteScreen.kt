@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ExposedDropdownMenuBox
@@ -46,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.PopupProperties
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.extentions.clickableWithNoRipple
@@ -313,14 +315,15 @@ fun PinchWriteScreen(
                             }
                         }
 
-                        ExposedDropdownMenu(
+                        DropdownMenu(
                             expanded = expandedIndex == index && searchedList.isNotEmpty() && pinchList[index].name.isNotEmpty(),
                             onDismissRequest = { if (expandedIndex == index) expandedIndex = null },
                             modifier = Modifier
                                 .widthIn(
                                     min = with(LocalDensity.current) { textFieldSize.width.toDp() },
                                     max = with(LocalDensity.current) { textFieldSize.width.toDp() }
-                                )
+                                ),
+                            properties = PopupProperties(focusable = false)
                         ) {
                             Column(
                                 modifier = Modifier
