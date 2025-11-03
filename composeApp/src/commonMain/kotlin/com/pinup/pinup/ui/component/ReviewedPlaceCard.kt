@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -48,18 +50,31 @@ fun ReviewedPlaceCard(
                 onItemClick()
             }
     ) {
-        LazyRow(
-            modifier = Modifier
-                .padding(top = 20.dp),
-            contentPadding = PaddingValues(horizontal = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(reviewImageUrls) {
-                ReviewImage(
-                    imgUrl = it,
-                    modifier = Modifier
-                        .size(width = 300.dp, height = 170.dp)
-                )
+        if(reviewImageUrls.size == 1) {
+            Spacer(modifier = Modifier.height(20.dp))
+
+            ReviewImage(
+                imgUrl = reviewImageUrls[0],
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth()
+                    .aspectRatio(335f/170f)
+            )
+        }
+        else {
+            LazyRow(
+                modifier = Modifier
+                    .padding(top = 20.dp),
+                contentPadding = PaddingValues(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(reviewImageUrls) {
+                    ReviewImage(
+                        imgUrl = it,
+                        modifier = Modifier
+                            .size(width = 300.dp, height = 170.dp)
+                    )
+                }
             }
         }
 
