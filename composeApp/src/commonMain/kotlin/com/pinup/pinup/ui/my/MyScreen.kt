@@ -85,7 +85,6 @@ fun MyScreen(
     isRefreshing: Boolean,
     onAlarmClick: () -> Unit = {},
     onSettingClick: () -> Unit = {},
-    onAddPinBuddyClick: () -> Unit = {},
     onMovePinBuddy: () -> Unit = {},
     onClickEdit: (Int) -> Unit = {},
     onClickDelete: (Int) -> Unit = {},
@@ -99,6 +98,7 @@ fun MyScreen(
     getMorePints: () -> Unit = {},
     onMoveDetail: (Int) -> Unit = {},
     onRefresh: () -> Unit = {},
+    onProfileModifyClick: () -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -164,7 +164,7 @@ fun MyScreen(
                         member = member,
                         onMovePinBuddy = onMovePinBuddy,
                         onClickShare = onClickShare,
-                        onAddPinBuddyClick = onAddPinBuddyClick
+                        onProfileModifyClick = onProfileModifyClick
                     )
                 }
 
@@ -274,7 +274,7 @@ private fun ProfileItem(
     member: Member,
     onMovePinBuddy: () -> Unit,
     onClickShare: () -> Unit,
-    onAddPinBuddyClick: () -> Unit,
+    onProfileModifyClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -444,7 +444,7 @@ private fun ProfileItem(
                 modifier = Modifier
                     .weight(1f)
                     .clickableSingleWithNoRipple {
-                        onAddPinBuddyClick()
+                        onProfileModifyClick()
                     },
                 cornerRounded = 8,
                 backgroundColor = Colors.Gray100,
@@ -463,7 +463,7 @@ private fun ProfileItem(
                     Text(
                         modifier = Modifier
                             .padding(start = 6.dp),
-                        text = Texts.PROFILE.ADD_PIN_BUDDY,
+                        text = Texts.Setting.PROFILE_SETTING,
                         style = Typography.L1.copy(
                             fontWeight = FontWeight.SemiBold
                         ),

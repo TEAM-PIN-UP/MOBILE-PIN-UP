@@ -16,7 +16,7 @@ import org.koin.core.parameter.parametersOf
 fun MyRoute(
     contextFactory: ContextFactory,
     myViewModel: MyViewModel = koinViewModel(parameters = { parametersOf(contextFactory) }),
-    onAddPinBuddyClick: () -> Unit,
+    onProfileModifyClick: () -> Unit,
     onMovePinBuddy: () -> Unit,
     onMoveSetting: () -> Unit,
     onClickBottomNav: (MainDestination) -> Unit,
@@ -59,7 +59,7 @@ fun MyRoute(
         scrapList = uiState.value.scrapList,
         pinchPageAble = uiState.value.pinchPageAble,
         isRefreshing = uiState.value.isRefreshing,
-        onAddPinBuddyClick = onAddPinBuddyClick,
+        onProfileModifyClick = onProfileModifyClick,
         onMovePinBuddy = onMovePinBuddy,
         onSettingClick = onMoveSetting,
         onClickBottomNav = onClickBottomNav,

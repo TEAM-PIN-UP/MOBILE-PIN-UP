@@ -29,23 +29,12 @@ fun SettingNavHost(
             SettingRoute(
                 onBackPressed = onBackPressed,
                 onMoveLoginScreen = onMoveLoginScreen,
-                onMoveProfileModify = {
-                    navHostController.navigate(SettingDestination.ProfileSetting)
-                },
                 onMoveUnRegister = {
                     navHostController.navigate(SettingDestination.UnRegister)
                 },
                 onChangedPassword = {
                     onChangedPassword()
                 }
-            )
-        }
-
-        composable<SettingDestination.ProfileSetting> {
-            ProfileSettingRoute(
-                onBackPressed = {
-                    navHostController.popBackStack()
-                },
             )
         }
 
@@ -75,8 +64,6 @@ fun SettingNavHost(
 sealed interface SettingDestination {
     @Serializable
     data object Setting : SettingDestination
-    @Serializable
-    data object ProfileSetting : SettingDestination
     @Serializable
     data object UnRegister : SettingDestination
     @Serializable

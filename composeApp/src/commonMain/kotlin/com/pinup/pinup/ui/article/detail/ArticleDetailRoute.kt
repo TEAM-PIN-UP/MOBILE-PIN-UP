@@ -13,6 +13,7 @@ fun ArticleDetailRoute(
     viewModel: ArticleDetailViewModel = koinViewModel(),
     onClickPlaceDetail: (String) -> Unit = {},
     onClickBack: () -> Unit = {},
+    onClickArticle: (Int) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -22,5 +23,6 @@ fun ArticleDetailRoute(
         onClickPlaceDetail = onClickPlaceDetail,
         onClickScrap = viewModel::updateBookmark,
         onClickBack = onClickBack,
+        onClickArticle = onClickArticle
     )
 }

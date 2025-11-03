@@ -11,7 +11,6 @@ fun SettingRoute(
     viewModel: SettingViewModel = koinViewModel(),
     onBackPressed: () -> Unit,
     onMoveLoginScreen: () -> Unit,
-    onMoveProfileModify: () -> Unit,
     onMoveUnRegister: () -> Unit = {},
     onChangedPassword: () -> Unit = {},
 ) {
@@ -29,7 +28,6 @@ fun SettingRoute(
         snsType = uiState.value.snsType,
         onBackPressed = onBackPressed,
         onLogoutClick = viewModel::logout,
-        onProfileModifyClick = onMoveProfileModify,
         onChangedPassword = onChangedPassword,
         onMoveUnRegister = onMoveUnRegister
     )

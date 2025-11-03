@@ -38,7 +38,7 @@ fun MainNavHost(
     onMovePinchWrite: () -> Unit = {},
     onMoveUserProfileWithName: (String) -> Unit = {},
     onMoveUserProfileWithId: (Int) -> Unit = {},
-    onMoveAddPinBuddy: () -> Unit = {},
+    onProfileModifyClick: () -> Unit = {},
     onMovePinBuddy: () -> Unit = {},
     onMoveScrap: () -> Unit = {},
     userId: Int = -1,
@@ -162,8 +162,8 @@ fun MainNavHost(
             composable<MainDestination.My> {
                 MyRoute(
                     contextFactory = contextFactory,
-                    onAddPinBuddyClick = {
-                        onMoveAddPinBuddy()
+                    onProfileModifyClick = {
+                        onProfileModifyClick()
                     },
                     onMovePinBuddy = {
                         onMovePinBuddy()

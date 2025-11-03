@@ -49,6 +49,7 @@ fun ArticleDetailScreen(
     articleList: List<PinchListItem>,
     onClickPlaceDetail: (String) -> Unit = {},
     onClickScrap: (String, Boolean) -> Unit = {_, _ -> },
+    onClickArticle: (Int) -> Unit = {},
     onClickBack: () -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
@@ -196,6 +197,9 @@ fun ArticleDetailScreen(
                             ) { page ->
                                 AsyncImage(
                                     modifier = Modifier
+                                        .clickableWithNoRipple {
+                                            onClickArticle(articleList[pagerState.currentPage].id)
+                                        }
                                         .fillMaxWidth()
                                         .height(300.dp),
                                     model = articleList[page].imageUrl,

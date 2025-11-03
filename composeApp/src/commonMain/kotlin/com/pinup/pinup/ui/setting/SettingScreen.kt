@@ -41,7 +41,6 @@ fun SettingScreen(
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
-    onProfileModifyClick: () -> Unit = {},
     onChangedPassword: () -> Unit = {},
     onMoveUnRegister: () -> Unit = {}
 ) {
@@ -76,13 +75,6 @@ fun SettingScreen(
                     fontWeight = FontWeight.SemiBold
                 ),
                 color = Colors.Gray400
-            )
-
-            MenuBar(
-                text = Texts.Setting.PROFILE_SETTING,
-                onClick = {
-                    onProfileModifyClick()
-                }
             )
 
             MenuBar(

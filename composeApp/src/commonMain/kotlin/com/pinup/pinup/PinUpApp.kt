@@ -38,8 +38,10 @@ import com.pinup.pinup.ui.onboarding.choiceSignup.ChoiceSignUpRoute
 import com.pinup.pinup.ui.pinbuddy.PinBuddyRoute
 import com.pinup.pinup.ui.pinlogDetail.PinlogDetailRoute
 import com.pinup.pinup.ui.placeDetail.PlaceDetailRoute
+import com.pinup.pinup.ui.profilesetting.ProfileSettingRoute
 import com.pinup.pinup.ui.reviewwrite.compose.WriteReviewNavHost
 import com.pinup.pinup.ui.reviewwrite.successWriteReview.WriteReviewDetailRoute
+import com.pinup.pinup.ui.setting.SettingDestination
 import com.pinup.pinup.ui.setting.SettingNavHost
 import com.pinup.pinup.ui.signup.compose.SignUpRoute
 import com.pinup.pinup.ui.userprofile.UserProfileRoute
@@ -250,8 +252,8 @@ fun PinUpApp(
                                 }
                             }
                         },
-                        onMoveAddPinBuddy = {
-                            navHostController.navigate(PinUpAppDestination.AddPinBuddy)
+                        onProfileModifyClick = {
+                            navHostController.navigate(PinUpAppDestination.ProfileSetting)
                         },
                         onMoveScrap = {
                             navHostController.navigate(PinUpAppDestination.Scrap) {
@@ -302,6 +304,9 @@ fun PinUpApp(
                         onClickPlaceDetail = {
                             navHostController.navigate(PinUpAppDestination.PlaceDetail(it))
                         },
+                        onClickArticle = {
+                            navHostController.navigate(PinUpAppDestination.ArticleDetail(it))
+                        }
                     )
                 }
 
@@ -330,6 +335,14 @@ fun PinUpApp(
                         onClickEdit = {
                             navHostController.navigate(PinUpAppDestination.PinchWrite(it))
                         }
+                    )
+                }
+
+                composable<PinUpAppDestination.ProfileSetting> {
+                    ProfileSettingRoute(
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
                     )
                 }
 
@@ -514,4 +527,6 @@ sealed interface PinUpAppDestination {
     data class PlaceDetail(
         val kakaoPlaceId: String
     ) : PinUpAppDestination
+    @Serializable
+    data object ProfileSetting : PinUpAppDestination
 }
