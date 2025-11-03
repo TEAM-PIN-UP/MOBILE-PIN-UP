@@ -41,7 +41,7 @@ fun ArticleView(
             )
         }
 
-        Spacer(modifier = Modifier.height(7.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
         Text(
             text = item.title,

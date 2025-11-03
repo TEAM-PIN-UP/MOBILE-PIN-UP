@@ -164,7 +164,7 @@ class PinchWriteViewModel (
         resultResponse(
             response = if (pintsId != 0) editPintsUseCase(pintsId, request) else registerPintsUseCase(request),
             successCallback = {
-                emitEvent(PinchWriteUiEvent.SuccessModify)
+                emitEvent(PinchWriteUiEvent.SuccessModify(pintsId))
             }
         )
     }
@@ -209,5 +209,5 @@ data class PinchWriteUiState(
 ) : UiState
 
 sealed interface PinchWriteUiEvent : UiEvent {
-    data object SuccessModify : PinchWriteUiEvent
+    data class SuccessModify(val id: Int) : PinchWriteUiEvent
 }

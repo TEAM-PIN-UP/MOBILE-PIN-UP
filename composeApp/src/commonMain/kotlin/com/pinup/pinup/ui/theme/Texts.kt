@@ -296,6 +296,8 @@ object Texts {
         const val NO_PINLOG_DIALOG_CONTENT = "핀로그 작성한 장소만 핀츠에 등록 할 수 있어요.\n핀로그를 등록할까요?"
         const val PINCH_DELETE_DIALOG_TITLE = "핀츠를 정말 삭제할건가요?"
         const val PINCH_DELETE_DIALOG_CONTENT = "한 번 삭제하면 되돌릴 수 없어요.\n삭제하시겠습니까?"
+        const val PINTS_WRITE_COMPLETE_DIALOG_TITLE = "마이핀츠 작성 완료!"
+        const val PINTS_WRITE_COMPLETE_DIALOG_CONTENT = "등록한 마이핀츠를\n확인하시겠어요?"
     }
 
     object Toast {

@@ -103,8 +103,7 @@ fun PinchWriteScreen(
     var textFieldSize by remember { mutableStateOf(IntSize.Zero) }
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
-    val isShowWritePinlogDialog = remember { mutableStateOf(false) }
-    val clickedKakaoPlace = remember { mutableStateOf(Place()) }
+    val isShowWritePinlogDialog = remember { mutableStateOf(false to Place()) }
 
     Column(
         modifier = Modifier
@@ -338,8 +337,7 @@ fun PinchWriteScreen(
                                             if (place.hasMyReview) {
                                                 onPlaceClick(place, index)
                                             } else {
-                                                isShowWritePinlogDialog.value = true
-                                                clickedKakaoPlace.value = place
+                                                isShowWritePinlogDialog.value = true to place
                                             }
                                             expandedIndex = null
                                         }
@@ -404,18 +402,18 @@ fun PinchWriteScreen(
 
     }
 
-    if (isShowWritePinlogDialog.value) {
+    if (isShowWritePinlogDialog.value.first) {
         PDialog(
             titleText = Texts.Pinch.NO_PINLOG_DIALOG_TITLE,
             descriptionText = Texts.Pinch.NO_PINLOG_DIALOG_CONTENT,
             leftButtonText = Texts.Word.DO_RETURN,
             rightButtonText = Texts.Word.DO_REGISTER,
             onLeftButtonClick = {
-                isShowWritePinlogDialog.value = false
+                isShowWritePinlogDialog.value = false to isShowWritePinlogDialog.value.second
             },
             onRightButtonClick = {
-                isShowWritePinlogDialog.value = false
-                onMoveWriteReview(clickedKakaoPlace.value)
+                isShowWritePinlogDialog.value = false to isShowWritePinlogDialog.value.second
+                onMoveWriteReview(isShowWritePinlogDialog.value.second)
             },
         )
     }

@@ -396,6 +396,9 @@ fun PinUpApp(
                         onMoveWriteReview = {
                             navHostController.navigate(PinUpAppDestination.WriteReview(0, selectPlace = Json.encodeToString(it)))
                         },
+                        onMovePintsDetail = {
+                            navHostController.navigate(PinUpAppDestination.PinchDetail(it))
+                        }
                     )
                 }
 
