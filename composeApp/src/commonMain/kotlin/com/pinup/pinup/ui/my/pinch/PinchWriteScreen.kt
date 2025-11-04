@@ -257,7 +257,6 @@ fun PinchWriteScreen(
                         expanded = (expandedIndex == index) && searchedList.isNotEmpty(),
                         onExpandedChange = { isExpanded ->
                             if(isExpanded) expandedIndex = index
-                            hLog("하이이이이 $expandedIndex")
                         },
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -273,12 +272,9 @@ fun PinchWriteScreen(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .onFocusChanged { focusState ->
-                                            hLog("하이" + focusState.isFocused.toString() + "인덱스 : $index")
                                             if (focusState.isFocused) {
-                                                // 해당 인덱스의 드롭다운 열기
                                                 expandedIndex = index
                                             } else {
-                                                // 포커스 잃으면 닫기
                                                 expandedIndex = null
                                             }
                                         },

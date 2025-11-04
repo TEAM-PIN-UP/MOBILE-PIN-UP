@@ -14,15 +14,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.changedToUpIgnoreConsumed
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.semantics.Role
 import com.pinup.pinup.platform.hLog
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 
 fun Modifier.clickableWithNoRipple(
@@ -152,11 +148,9 @@ fun Modifier.longPressDrag(
         val wasTapBeforeLongPress = withTimeoutOrNull(viewConfiguration.longPressTimeoutMillis) {
             while (true) {
                 val event = awaitPointerEvent(pass = PointerEventPass.Initial)
+                hLog(event.changes.firstOrNull { it.id == down.id }.toString())
                 val change = event.changes.firstOrNull { it.id == down.id } ?: return@withTimeoutOrNull true
                 if (change.changedToUpIgnoreConsumed()) return@withTimeoutOrNull true
-                if (change.positionChanged()) {
-                    change.consume()
-                }
             }
         } != null
 
