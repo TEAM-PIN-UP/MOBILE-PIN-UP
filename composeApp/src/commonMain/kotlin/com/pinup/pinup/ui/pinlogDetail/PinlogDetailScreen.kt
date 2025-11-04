@@ -519,7 +519,7 @@ fun PinlogDetailScreen(
                         modifier = Modifier
                             .align(Alignment.Top),
                         imgUrl = userInfo.profileUrl,
-                        size = 35.dp
+                        size = 34.dp
                     )
 
                     Spacer(modifier = Modifier.width(4.dp))
@@ -539,15 +539,16 @@ fun PinlogDetailScreen(
                         ),
                         placeholderTextColor = Colors.Gray500,
                         cornerRounded = 24,
-                        tailIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_comment_upload) else null,
+                        isTrailIconAlwaysShow = true,
+                        tailIcon = painterResource(Res.drawable.ic_comment_upload),
                         tailIconPos = Alignment.Bottom,
-                        tailIconSize = 38,
+                        tailIconSize = 28,
                         onTailIconClick = {
                             onClickUploadComment()
                         },
                         fixedBorderColor = Colors.Gray300,
                         backgroundColor = Colors.White,
-                        contentPadding = PaddingValues(12.dp),
+                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
                         focusRequester = focusRequester
                     )
                 }

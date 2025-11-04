@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,15 +55,20 @@ actual fun PinchNaverMap(
     onCameraStateChange: (CameraState) -> Unit
 ) {
     val cameraPositionState = rememberCameraPositionState()
+    val myLocationInit = remember { mutableStateOf(false) }
 
-    LaunchedEffect(cameraPosition, placeList) {
+    LaunchedEffect(cameraPosition) {
+        if(myLocationInit.value) return@LaunchedEffect
         cameraPosition?.let { target ->
             val now = cameraPositionState.position.target
             if (target.latitude != now.latitude || target.longitude != now.longitude) {
                 cameraPositionState.animate(CameraUpdate.scrollTo(target.toLatLng()))
             }
+            myLocationInit.value = true
         }
+    }
 
+    LaunchedEffect(placeList) {
         val filtered = placeList.filter { it.kakaoPlaceId.isNotEmpty() }
         val coords = filtered.map { LatLng(it.latitude, it.longitude) }
 
@@ -76,9 +83,7 @@ actual fun PinchNaverMap(
                 )
             }
             coords.size == 1 -> {
-                if (cameraPosition == null) {
-                    cameraPositionState.animate(CameraUpdate.scrollTo(coords.first()))
-                }
+                cameraPositionState.animate(CameraUpdate.scrollTo(coords.first()))
                 cameraPositionState.animate(CameraUpdate.zoomTo(15.0))
             }
             else -> {

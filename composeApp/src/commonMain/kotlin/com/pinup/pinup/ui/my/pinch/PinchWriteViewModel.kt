@@ -49,7 +49,6 @@ class PinchWriteViewModel (
             .distinctUntilChanged()
             .collectLatest {
                 val myLocation = Position(it.latitude, it.longitude)
-                hLog(myLocation.toString())
                 updateCameraPosition(myLocation)
                 updatePosition(myLocation)
             }

@@ -2,6 +2,7 @@ package com.pinup.pinup.ui.my.pinch
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -53,6 +56,7 @@ import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.extentions.longPressDrag
 import com.pinup.pinup.platform.PinchNaverMap
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.IndexedRoundedTextField
 import com.pinup.pinup.ui.component.PButton
 import com.pinup.pinup.ui.component.PDialog
@@ -110,6 +114,9 @@ fun PinchWriteScreen(
             .background(
                 color = Colors.White
             )
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = { focusManager.clearFocus() })
+            }
             .statusBarsPadding()
             .fillMaxSize()
             .padding(horizontal = 20.dp)
@@ -244,18 +251,16 @@ fun PinchWriteScreen(
             ) { index, item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     ExposedDropdownMenuBox(
-                        expanded = expandedIndex == index,
-                        onExpandedChange = {
-                            expandedIndex = if (expandedIndex == index) null else index
+                        expanded = (expandedIndex == index) && searchedList.isNotEmpty(),
+                        onExpandedChange = { isExpanded ->
+                            if(isExpanded) expandedIndex = index
+                            hLog("하이이이이 $expandedIndex")
                         },
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
@@ -266,11 +271,19 @@ fun PinchWriteScreen(
                             ) {
                                 IndexedRoundedTextField(
                                     modifier = Modifier
-                                        .fillMaxWidth(),
+                                        .fillMaxWidth()
+                                        .onFocusChanged { focusState ->
+                                            hLog("하이" + focusState.isFocused.toString() + "인덱스 : $index")
+                                            if (focusState.isFocused) {
+                                                // 해당 인덱스의 드롭다운 열기
+                                                expandedIndex = index
+                                            } else {
+                                                // 포커스 잃으면 닫기
+                                                expandedIndex = null
+                                            }
+                                        },
                                     text = item.name,
-                                    onValueChange = {
-                                        onNameChanged(index, it)
-                                    },
+                                    onValueChange = { onNameChanged(index, it) },
                                     index = index,
                                     placeholder = "${index + 1}. 장소명",
                                     placeholderStyle = Typography.B2.copy(
@@ -294,34 +307,29 @@ fun PinchWriteScreen(
                             Spacer(modifier = Modifier.width(9.dp))
 
                             RoundedBox(
-                                modifier = Modifier
-                                    .clickableWithNoRipple {
-                                        onClickDelete(index)
-                                    },
+                                modifier = Modifier.clickableWithNoRipple { onClickDelete(index) },
                                 cornerRounded = 999,
                                 backgroundColor = Colors.Gray900,
                             ) {
                                 Text(
-                                    modifier = Modifier
-                                        .padding(vertical = 7.dp, horizontal = 17.dp),
+                                    modifier = Modifier.padding(vertical = 7.dp, horizontal = 17.dp),
                                     text = Texts.Word.DELETE,
                                     color = Colors.White,
-                                    style = Typography.L3.copy(
-                                        fontWeight = FontWeight.SemiBold
-                                    ),
+                                    style = Typography.L3.copy(fontWeight = FontWeight.SemiBold),
                                     textAlign = TextAlign.Center
                                 )
                             }
                         }
 
                         DropdownMenu(
-                            expanded = expandedIndex == index && searchedList.isNotEmpty() && pinchList[index].name.isNotEmpty(),
-                            onDismissRequest = { if (expandedIndex == index) expandedIndex = null },
-                            modifier = Modifier
-                                .widthIn(
-                                    min = with(LocalDensity.current) { textFieldSize.width.toDp() },
-                                    max = with(LocalDensity.current) { textFieldSize.width.toDp() }
-                                ),
+                            expanded = (expandedIndex == index) && searchedList.isNotEmpty() && pinchList[index].name.isNotEmpty(),
+                            onDismissRequest = {
+                                //if (expandedIndex == index) expandedIndex = null
+                            },
+                            modifier = Modifier.widthIn(
+                                min = with(LocalDensity.current) { textFieldSize.width.toDp() },
+                                max = with(LocalDensity.current) { textFieldSize.width.toDp() }
+                            ),
                             properties = PopupProperties(focusable = false)
                         ) {
                             Column(
@@ -329,7 +337,7 @@ fun PinchWriteScreen(
                                     .fillMaxWidth()
                                     .heightIn(max = 226.dp)
                                     .verticalScroll(rememberScrollState())
-                            ){
+                            ) {
                                 searchedList.forEach { place ->
                                     DropdownMenuItem(
                                         modifier = Modifier.fillMaxWidth(),
@@ -346,17 +354,13 @@ fun PinchWriteScreen(
                                             Text(
                                                 text = place.name,
                                                 color = Colors.Gray800,
-                                                style = Typography.L1.copy(
-                                                    fontWeight = FontWeight.Medium
-                                                )
+                                                style = Typography.L1.copy(fontWeight = FontWeight.Medium)
                                             )
                                             Spacer(modifier = Modifier.height(2.dp))
                                             Text(
                                                 text = place.roadAddress,
                                                 color = Colors.Gray600,
-                                                style = Typography.L3.copy(
-                                                    fontWeight = FontWeight.Medium
-                                                )
+                                                style = Typography.L3.copy(fontWeight = FontWeight.Medium)
                                             )
                                             Spacer(modifier = Modifier.height(5.dp))
                                             PHorizontalDivider()

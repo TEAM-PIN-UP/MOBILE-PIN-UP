@@ -167,9 +167,33 @@ fun RoundedTextField(
                                 innerTextField()
                             }
 
-                            if (tailIcon != null &&
+                            if (isTrailIconAlwaysShow) {
+                                Spacer(modifier = Modifier.width(12.dp))
+
+                                if (textFieldValue.text.isNotEmpty() && tailIcon != null) {
+                                    Image(
+                                        modifier = Modifier
+                                            .size(tailIconSize.dp)
+                                            .align(tailIconPos)
+                                            .clickableSingleWithNoRipple {
+                                                onTailIconClick.invoke()
+                                            },
+                                        painter = tailIcon,
+                                        contentDescription = null
+                                    )
+                                } else {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(tailIconSize.dp)
+                                            .align(tailIconPos)
+                                            .clickableSingleWithNoRipple {
+                                                onTailIconClick.invoke()
+                                            },
+                                    )
+                                }
+                            } else if (tailIcon != null &&
                                 textFieldValue.text.isNotEmpty() &&
-                                (isFocused || isTrailIconAlwaysShow) && readOnly.not()
+                                isFocused && readOnly.not()
                             ) {
                                 Spacer(modifier = Modifier.width(12.dp))
 
