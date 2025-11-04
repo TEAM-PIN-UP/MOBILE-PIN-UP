@@ -20,6 +20,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -52,7 +54,7 @@ fun ArticleDetailScreen(
     onClickArticle: (Int) -> Unit = {},
     onClickBack: () -> Unit = {},
 ) {
-    val scrollState = rememberLazyListState()
+    val scrollState = rememberScrollState()
     val pagerState = rememberPagerState(pageCount = { articleList.size })
     Column(
         modifier = Modifier
@@ -71,89 +73,84 @@ fun ArticleDetailScreen(
 
         PHorizontalDivider()
 
-        LazyColumn(
+        Column(
             modifier = Modifier
-                .background(Colors.White),
-            state = scrollState,
+                .fillMaxSize()
+                .background(Colors.White)
+                .verticalScroll(scrollState)
         ) {
+            PlatformWebView(
+                modifier = Modifier,
+                html = editorPintsDetail.content.trimIndent(),
+                url = ""
+            )
 
-            item {
-                PlatformWebView(
-                    modifier = Modifier,
-                    html = editorPintsDetail.content.trimIndent(),
-                    url = ""
-                )
+            Spacer(modifier = Modifier.height(15.dp))
+
+            PHorizontalDivider()
+
+            editorPintsDetail.pintsPlaceList.forEach {
+                Spacer(modifier = Modifier.height(15.dp))
+
+                Row(
+                    modifier = Modifier
+                        .clickableWithNoRipple {
+                            onClickPlaceDetail(it.kakaoPlaceId)
+                        }
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                ) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .size(91.dp),
+                        model = it.reviewImages[0].url,
+                        contentScale = ContentScale.Crop,
+                        contentDescription = null
+                    )
+
+                    Spacer(modifier = Modifier.width(19.dp))
+
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                    ) {
+                        Spacer(modifier = Modifier.height(21.dp))
+
+                        Text(
+                            text = it.name,
+                            color = Colors.Black,
+                            style = Typography.T1.copy(
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Text(
+                            text = it.address,
+                            color = Colors.Gray500,
+                            style = Typography.B2.copy(
+                                fontWeight = FontWeight.Normal
+                            )
+                        )
+                    }
+
+                    Image(
+                        modifier = Modifier
+                            .clickableWithNoRipple {
+                                onClickScrap(it.kakaoPlaceId, it.bookmark)
+                            },
+                        painter = if(it.bookmark) painterResource(Res.drawable.ic_bookmark_on) else painterResource(Res.drawable.ic_bookmark_off),
+                        contentDescription = null
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(15.dp))
 
                 PHorizontalDivider()
             }
 
-            item {
-                editorPintsDetail.pintsPlaceList.forEach {
-                    Spacer(modifier = Modifier.height(15.dp))
-
-                    Row(
-                        modifier = Modifier
-                            .clickableWithNoRipple {
-                                onClickPlaceDetail(it.kakaoPlaceId)
-                            }
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp)
-                    ) {
-                        AsyncImage(
-                            modifier = Modifier
-                                .size(91.dp),
-                            model = it.reviewImages[0].url,
-                            contentScale = ContentScale.Crop,
-                            contentDescription = null
-                        )
-
-                        Spacer(modifier = Modifier.width(19.dp))
-
-                        Column(
-                            modifier = Modifier
-                                .weight(1f)
-                        ) {
-                            Spacer(modifier = Modifier.height(21.dp))
-
-                            Text(
-                                text = it.name,
-                                color = Colors.Black,
-                                style = Typography.T1.copy(
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                            )
-
-                            Spacer(modifier = Modifier.height(4.dp))
-
-                            Text(
-                                text = it.address,
-                                color = Colors.Gray500,
-                                style = Typography.B2.copy(
-                                    fontWeight = FontWeight.Normal
-                                )
-                            )
-                        }
-
-                        Image(
-                            modifier = Modifier
-                                .clickableWithNoRipple {
-                                    onClickScrap(it.kakaoPlaceId, it.bookmark)
-                                },
-                            painter = if(it.bookmark) painterResource(Res.drawable.ic_bookmark_on) else painterResource(Res.drawable.ic_bookmark_off),
-                            contentDescription = null
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(15.dp))
-
-                    PHorizontalDivider()
-                }
-            }
-
-            item {
-                if(articleList.isEmpty()) return@item
+            if (articleList.isNotEmpty()) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
