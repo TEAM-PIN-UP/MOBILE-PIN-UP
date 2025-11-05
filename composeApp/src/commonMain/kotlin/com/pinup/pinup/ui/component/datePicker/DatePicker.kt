@@ -209,7 +209,9 @@ fun DatePicker(
                                 .clip(shape = RoundedCornerShape(100))
                                 .datePickerBoxToday(calendarDate, dateTimePickerColors)
                                 .datePickerBoxSelected(calendarDate, dateTimePickerColors)
-                                .clickableWithNoRipple(enabled = !calendarDate.isDisabled && clickable) {
+                                .clickableWithNoRipple(enabled =
+                                    !calendarDate.isDisabled && clickable && calendarDate.date <= getLocalDate()
+                                ) {
                                     if (selectedDate == null) {
                                         selectedDate = calendarDate
                                     } else if (selectedSecondDate == null && range) {
