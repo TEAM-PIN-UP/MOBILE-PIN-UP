@@ -7,6 +7,7 @@ import com.pinup.pinup.domain.usecase.LogoutUseCase
 import com.pinup.pinup.event.LogoutEventBus
 import com.pinup.pinup.platform.KakaoDeepLinkStore
 import com.pinup.pinup.platform.hLog
+import com.pinup.pinup.util.ScreenState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,6 +27,7 @@ class StartAppViewModel(
     init {
         initLogoutEventBus()
         initGetUserId()
+        initGetErrorMessage()
     }
 
 
@@ -56,6 +58,16 @@ class StartAppViewModel(
         }
     }
 
+    private fun initGetErrorMessage() = viewModelScope.launch {
+        ScreenState.errorMessage.collect { error ->
+            _uiState.update {
+                it.copy(
+                    errorMessage = error,
+                )
+            }
+        }
+    }
+
     fun dismissAlert() {
         _uiState.update {
             it.copy(
@@ -77,6 +89,7 @@ data class StartAppUiState(
     val isLogin: Boolean? = null,
     val alertState: AlertState = AlertState(),
     val userId: Int = -1,
+    val errorMessage: String = "",
 )
 
 data class AlertState(

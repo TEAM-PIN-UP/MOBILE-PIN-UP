@@ -3,6 +3,7 @@ package com.pinup.pinup.ui.base
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pinup.pinup.domain.model.PResult
+import com.pinup.pinup.util.ScreenState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -38,6 +39,7 @@ abstract class BaseViewModel<STATE: UiState, EVENT : UiEvent>(
     protected fun<D> resultResponse(response: PResult<D>, successCallback : (D) -> Unit, errorCallback : ((String) -> Unit)? = null){
         when(response){
             is PResult.Fail -> {
+                ScreenState.updateError(response.failState.message)
                 errorCallback?.invoke(response.failState.code)
             }
             is PResult.Success -> {
