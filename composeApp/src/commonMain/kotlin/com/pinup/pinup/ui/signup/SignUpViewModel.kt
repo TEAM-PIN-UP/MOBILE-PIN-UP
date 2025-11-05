@@ -200,6 +200,17 @@ class SignUpViewModel (
         }
     }
 
+    fun onClickShowFirstPassword() = viewModelScope.launch {
+        updateState {
+            copy(
+                passwordState = uiState.value.passwordState.copy(
+                    isShowFirstPassword = !uiState.value.passwordState.isShowFirstPassword,
+                )
+            )
+        }
+    }
+
+
     fun onClickShowPassword() = viewModelScope.launch {
         updateState {
             copy(
@@ -382,6 +393,7 @@ data class PasswordState(
     val passwordAgain : String = "",
     val isPasswordValid: Boolean = true,
     val isPasswordMatched: Boolean = true,
+    val isShowFirstPassword: Boolean = false,
     val isShowPassword: Boolean = false,
 ) {
     val isPassValidation = isPasswordValid && isPasswordMatched && password.isNotEmpty() && passwordAgain.isNotEmpty()

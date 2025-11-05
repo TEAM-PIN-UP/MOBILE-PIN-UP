@@ -36,6 +36,7 @@ fun SignUpScreen(
     onClickVerify : () -> Unit,
     onPasswordChanged : (String) -> Unit,
     onPasswordAgainChanged : (String) -> Unit,
+    onClickShowFirstPassword : () -> Unit,
     onClickShowPassword : () -> Unit,
     onValueChange: (String) -> Unit,
     onProfileImageChange: (ByteArray) -> Unit,
@@ -67,6 +68,7 @@ fun SignUpScreen(
                     passwordState = passwordState,
                     onPasswordChanged = onPasswordChanged,
                     onPasswordAgainChanged = onPasswordAgainChanged,
+                    onClickShowFirstPassword = onClickShowFirstPassword,
                     onClickShowPassword = onClickShowPassword,
                     onClickConfirm = { navHostController.navigate(SignUpDestination.Terms) },
                     onBackPressed = {

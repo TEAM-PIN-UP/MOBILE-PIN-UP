@@ -41,6 +41,7 @@ fun SignUpRoute(
         onCodeChanged = signUpViewModel::updateVerificationCode,
         onPasswordChanged = signUpViewModel::updatePassword,
         onPasswordAgainChanged = signUpViewModel::updatePasswordAgain,
+        onClickShowFirstPassword = signUpViewModel::onClickShowFirstPassword,
         onClickShowPassword = signUpViewModel::onClickShowPassword,
         onClickVerify = signUpViewModel::onClickVerify,
         onValueChange = signUpViewModel::updateNickName,

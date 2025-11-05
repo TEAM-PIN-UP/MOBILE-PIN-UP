@@ -39,6 +39,7 @@ fun InputPasswordScreen(
     passwordState: PasswordState,
     onPasswordChanged: (String) -> Unit,
     onPasswordAgainChanged: (String) -> Unit,
+    onClickShowFirstPassword : () -> Unit,
     onClickShowPassword : () -> Unit,
     onClickConfirm: () -> Unit,
     onBackPressed : () -> Unit ={},
@@ -76,19 +77,40 @@ fun InputPasswordScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        RoundedTextField(
-            modifier = Modifier,
-            text = passwordState.password,
-            textStyle = Typography.B2.copy(
-                fontWeight = FontWeight.Medium
-            ),
-            onValueChange = {
-                onPasswordChanged(it)
-            },
-            cornerRounded = 100,
-            placeholder = Texts.SignupPassword.HINT,
-            isError = !passwordState.isPasswordValid,
-        )
+        Box{
+            RoundedTextField(
+                modifier = Modifier,
+                text = passwordState.password,
+                textStyle = Typography.B2.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                onValueChange = {
+                    onPasswordChanged(it)
+                },
+                cornerRounded = 100,
+                visualTransformation = if(passwordState.isShowFirstPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                placeholder = Texts.SignupPassword.HINT,
+                isError = !passwordState.isPasswordValid,
+            )
+
+            Row(
+                modifier = Modifier
+                    .padding(top = 14.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier.clickableSingleWithNoRipple {
+                        onClickShowFirstPassword()
+                    },
+                    painter = painterResource(if(passwordState.isShowFirstPassword) Res.drawable.ic_password_show_enable else Res.drawable.ic_password_show_unable),
+                    contentDescription = null,
+                )
+
+                Spacer(modifier = Modifier.width(17.dp))
+            }
+        }
 
         if(!passwordState.isPasswordValid){
             Spacer(modifier = Modifier.height(8.dp))
@@ -143,7 +165,6 @@ fun InputPasswordScreen(
 
                 Spacer(modifier = Modifier.width(17.dp))
             }
-
         }
 
         if(!passwordState.isPasswordMatched){

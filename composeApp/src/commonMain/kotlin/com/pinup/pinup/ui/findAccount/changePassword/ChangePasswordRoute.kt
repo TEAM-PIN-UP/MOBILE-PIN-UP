@@ -27,9 +27,11 @@ fun ChangePasswordRoute(
         passwordAgain = uiState.passwordAgain,
         isPasswordValid = uiState.isPasswordValid,
         isPasswordMatched = uiState.isPasswordMatched,
+        isShowFirstPassword = uiState.isShowFirstPassword,
         isShowPassword = uiState.isShowPassword,
         onPasswordChanged = viewModel::updatePassword,
         onPasswordAgainChanged = viewModel::updatePasswordAgain,
+        onClickShowFirstPassword = viewModel::onClickShowFirstPassword,
         onClickShowPassword = viewModel::onClickShowPassword,
         onClickConfirm = viewModel::changePassword,
         onBackPressed = onBackPressed

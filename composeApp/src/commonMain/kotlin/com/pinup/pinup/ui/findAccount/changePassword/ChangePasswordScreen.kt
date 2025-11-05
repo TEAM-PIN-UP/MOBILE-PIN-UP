@@ -38,10 +38,12 @@ fun ChangePasswordScreen(
     password: String = "",
     passwordAgain: String = "",
     isPasswordValid: Boolean = true,
+    isShowFirstPassword: Boolean = false,
     isShowPassword: Boolean = false,
     isPasswordMatched: Boolean = true,
     onPasswordChanged: (String) -> Unit,
     onPasswordAgainChanged: (String) -> Unit,
+    onClickShowFirstPassword : () -> Unit,
     onClickShowPassword : () -> Unit,
     onClickConfirm: () -> Unit,
     onBackPressed: () -> Unit
@@ -88,17 +90,39 @@ fun ChangePasswordScreen(
 
         Spacer(modifier = Modifier.height(3.dp))
 
-        RoundedTextField(
-            modifier = Modifier,
-            text = password,
-            onValueChange = {
-                onPasswordChanged(it)
-            },
-            cornerRounded = 100,
-            placeholder = Texts.FindPassword.PASSWORD_HINT,
-            textStyle = Typography.B3,
-            isError = !isPasswordValid,
-        )
+        Box{
+            RoundedTextField(
+                modifier = Modifier,
+                text = password,
+                onValueChange = {
+                    onPasswordChanged(it)
+                },
+                cornerRounded = 100,
+                visualTransformation = if(isShowFirstPassword) VisualTransformation.None else PasswordVisualTransformation(),
+                placeholder = Texts.FindPassword.PASSWORD_HINT,
+                textStyle = Typography.B3,
+                isError = !isPasswordValid,
+            )
+
+            Row(
+                modifier = Modifier
+                    .padding(top = 14.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier.clickableSingleWithNoRipple {
+                        onClickShowFirstPassword()
+                    },
+                    painter = painterResource(if(isShowFirstPassword) Res.drawable.ic_password_show_enable else Res.drawable.ic_password_show_unable),
+                    contentDescription = null,
+                )
+
+                Spacer(modifier = Modifier.width(17.dp))
+            }
+
+        }
 
         if(!isPasswordValid){
             Spacer(modifier = Modifier.height(8.dp))
