@@ -290,6 +290,7 @@ object Texts {
         const val DESCRIPTION_HINT = "핀츠의 설명을 적어주세요(0/120)"
         const val CREATE_PINCH = "핀츠 등록하기"
         const val CREATE_MY_PINCH = "마이핀츠 작성"
+        const val PLACE_LIST = "장소목록"
         const val EDIT_PINTS = "핀츠 수정"
         const val DELETE_PINTS = "핀츠 삭제"
         const val NO_PINLOG_DIALOG_TITLE = "핀로그가 작성되지 않은 장소입니다."

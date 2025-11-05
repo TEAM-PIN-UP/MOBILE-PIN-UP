@@ -170,7 +170,7 @@ fun PinchDetailScreen(
                         Spacer(modifier = Modifier.width(9.dp))
 
                         Text(
-                            text = "$title 장소목록",
+                            text = Texts.Pinch.PLACE_LIST,
                             style = Typography.T1.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
