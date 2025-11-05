@@ -88,15 +88,10 @@ struct PintsNaverMap: UIViewRepresentable{
         view.showCompass = false
         view.showZoomControls = false
         view.showScaleBar = false
-        view.mapView.minZoomLevel = 5.0
+        view.mapView.minZoomLevel = 3.0
         view.mapView.isRotateGestureEnabled = false
         view.mapView.isScrollGestureEnabled = false
         view.mapView.isZoomGestureEnabled = false
-
-        // 한국 영역 제한 (Android extent 와 동일)
-        let sw = NMGLatLng(lat: 33.0, lng: 124.0)
-        let ne = NMGLatLng(lat: 38.5, lng: 132.0)
-        view.mapView.extent = NMGLatLngBounds(southWest: sw, northEast: ne)
 
         // 현재 위치 오버레이
         view.mapView.locationOverlay.hidden = false
