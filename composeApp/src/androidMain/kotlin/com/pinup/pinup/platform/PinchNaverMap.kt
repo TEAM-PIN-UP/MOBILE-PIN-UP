@@ -100,11 +100,7 @@ actual fun PinchNaverMap(
             .fillMaxWidth(),
         cameraPositionState = cameraPositionState,
         properties = MapProperties(
-            extent = LatLngBounds(
-                LatLng(33.0, 124.0),
-                LatLng(38.5, 132.0)
-            ),
-            minZoom = 8.0,
+            minZoom = 3.0,
             locationTrackingMode = LocationTrackingMode.None
         ),
         uiSettings = MapUiSettings(
