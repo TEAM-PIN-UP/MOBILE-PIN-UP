@@ -312,10 +312,14 @@ fun PinUpApp(
                             navHostController.popBackStack()
                         },
                         onClickPlaceDetail = {
-                            navHostController.navigate(PinUpAppDestination.PlaceDetail(it))
+                            navHostController.navigate(PinUpAppDestination.PlaceDetail(it)) {
+                                restoreState = true
+                            }
                         },
                         onClickArticle = {
-                            navHostController.navigate(PinUpAppDestination.ArticleDetail(it))
+                            navHostController.navigate(PinUpAppDestination.ArticleDetail(it)) {
+                                restoreState = true
+                            }
                         }
                     )
                 }

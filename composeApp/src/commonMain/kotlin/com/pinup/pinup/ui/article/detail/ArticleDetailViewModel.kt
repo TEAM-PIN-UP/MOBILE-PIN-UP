@@ -34,6 +34,7 @@ class ArticleDetailViewModel(
     }
 
     val pintsId = savedStateHandle.get<Int>(PINTS_ID) ?: 0
+    var savedScrollPosition = 0
 
     init {
         getArticleDetail()

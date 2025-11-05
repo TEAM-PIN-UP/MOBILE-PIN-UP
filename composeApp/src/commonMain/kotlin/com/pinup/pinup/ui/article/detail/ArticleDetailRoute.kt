@@ -20,9 +20,13 @@ fun ArticleDetailRoute(
     ArticleDetailScreen(
         editorPintsDetail = uiState.editorPintsDetail,
         articleList = uiState.pintsListItem,
+        savedScrollPosition = viewModel.savedScrollPosition,
         onClickPlaceDetail = onClickPlaceDetail,
         onClickScrap = viewModel::updateBookmark,
         onClickBack = onClickBack,
-        onClickArticle = onClickArticle
+        onClickArticle = onClickArticle,
+        onSaveLastScrollPosition = {
+            viewModel.savedScrollPosition = it
+        }
     )
 }

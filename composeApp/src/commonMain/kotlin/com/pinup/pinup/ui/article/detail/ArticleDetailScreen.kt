@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
@@ -24,13 +22,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.multiplatform.webview.web.rememberWebViewStateWithHTMLData
 import com.pinup.pinup.domain.model.EditorPintsDetail
 import com.pinup.pinup.domain.model.PinchListItem
 import com.pinup.pinup.extentions.clickableWithNoRipple
@@ -40,6 +40,7 @@ import com.pinup.pinup.ui.component.TitleBar
 import com.pinup.pinup.ui.theme.Colors
 import com.pinup.pinup.ui.theme.Texts
 import com.pinup.pinup.ui.theme.Typography
+import kotlinx.coroutines.flow.first
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_bookmark_off
@@ -49,12 +50,27 @@ import pinup.composeapp.generated.resources.ic_bookmark_on
 fun ArticleDetailScreen(
     editorPintsDetail: EditorPintsDetail,
     articleList: List<PinchListItem>,
+    savedScrollPosition: Int = 0,
     onClickPlaceDetail: (String) -> Unit = {},
     onClickScrap: (String, Boolean) -> Unit = {_, _ -> },
     onClickArticle: (Int) -> Unit = {},
     onClickBack: () -> Unit = {},
+    onSaveLastScrollPosition: (Int) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { scrollState.maxValue }
+            .first { it >= savedScrollPosition }
+        scrollState.scrollTo(savedScrollPosition)
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            onSaveLastScrollPosition(scrollState.value)
+        }
+    }
+
     val pagerState = rememberPagerState(pageCount = { articleList.size })
     Column(
         modifier = Modifier
