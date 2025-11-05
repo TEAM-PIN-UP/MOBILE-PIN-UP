@@ -45,6 +45,7 @@ import com.pinup.pinup.ui.setting.SettingDestination
 import com.pinup.pinup.ui.setting.SettingNavHost
 import com.pinup.pinup.ui.signup.compose.SignUpRoute
 import com.pinup.pinup.ui.userprofile.UserProfileRoute
+import com.pinup.pinup.util.Const.NavKey.PINLOG_WRITE_RESULT
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -281,6 +282,12 @@ fun PinUpApp(
                         onBackPressed = {
                             navHostController.popBackStack()
                         },
+                        onCompleteAndBackPressed = {
+                            navHostController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set(PINLOG_WRITE_RESULT, true)
+                            navHostController.popBackStack()
+                        },
                         onMoveDetailPlace = {
                             navHostController.popBackStack()
                             navHostController.navigate(PinUpAppDestination.WriteReviewDetail(it))
@@ -291,6 +298,9 @@ fun PinUpApp(
                 composable<PinUpAppDestination.WriteReviewDetail> {
                     WriteReviewDetailRoute(
                         onBackPressed = {
+                            navHostController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set(PINLOG_WRITE_RESULT, true)
                             navHostController.popBackStack()
                         },
                     )
@@ -390,6 +400,7 @@ fun PinUpApp(
 
                 composable<PinUpAppDestination.PinchWrite> {
                     PinchWriteRoute(
+                        navHostController = navHostController,
                         onBackPressed = {
                             navHostController.popBackStack()
                         },

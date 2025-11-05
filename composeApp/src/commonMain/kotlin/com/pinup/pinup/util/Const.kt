@@ -34,4 +34,8 @@ object Const {
         const val KAKAO_USER_ID = "userId"
         const val WEB_LINK = "https://www.youtube.com/watch?v=yWP--1gsr20&list=RDyWP--1gsr20&start_radio=1"
     }
+
+    object NavKey {
+        const val PINLOG_WRITE_RESULT = "pinlog_result"
+    }
 }

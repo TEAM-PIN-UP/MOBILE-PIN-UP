@@ -34,6 +34,8 @@ class PinchWriteViewModel (
     }
 
     val pintsId = savedStateHandle.get<Int>(PINTS_ID) ?: 0
+    var selectPlace = Place()
+    var selectIndex = -1
 
     init {
         if (pintsId != 0) {
@@ -194,6 +196,8 @@ class PinchWriteViewModel (
                 }
             )
         }
+        selectPlace = Place()
+        selectIndex = -1
     }
 }
 

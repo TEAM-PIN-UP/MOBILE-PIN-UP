@@ -26,6 +26,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun WriteReviewNavHost(
     writeReviewViewModel: WriteReviewViewModel = koinViewModel(),
     onBackPressed: () -> Unit,
+    onCompleteAndBackPressed: () -> Unit = {},
     onMoveDetailPlace: (Int) -> Unit,
 ) {
     val uiState = writeReviewViewModel.uiState.collectAsStateWithLifecycle()
@@ -123,7 +124,7 @@ fun WriteReviewNavHost(
             rightButtonText = Texts.Word.DO_CONFiRM,
             onLeftButtonClick = {
                 isShowCompleteDialog.value = false
-                onBackPressed()
+                onCompleteAndBackPressed()
             },
             onRightButtonClick = {
                 isShowCompleteDialog.value = false

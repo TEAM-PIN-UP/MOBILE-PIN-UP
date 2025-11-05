@@ -5,12 +5,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.pinup.pinup.domain.model.Place
 import com.pinup.pinup.domain.model.Position
+import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.main.compose.MainDestination
 import com.pinup.pinup.ui.map.MapUiEvent
 import com.pinup.pinup.ui.theme.Texts
+import com.pinup.pinup.util.Const
 import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
 import dev.icerock.moko.geo.compose.LocationTrackerAccuracy
 import dev.icerock.moko.geo.compose.LocationTrackerFactory
@@ -22,16 +25,29 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun PinchWriteRoute(
+    navHostController: NavHostController,
     onBackPressed: () -> Unit = {},
     onMoveWriteReview: (Place) -> Unit = {},
     onMovePintsDetail: (Int) -> Unit = {},
 ) {
+    val navBackStackEntry = remember { navHostController.currentBackStackEntry }
+    val savedStateHandle = navBackStackEntry?.savedStateHandle
     val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
         accuracy = LocationTrackerAccuracy.Best
     )
     val viewModel: PinchWriteViewModel = koinViewModel(parameters = { parametersOf(locationTrackerFactory.createLocationTracker()) })
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val isShowCompleteDialog = remember { mutableStateOf(false to 0) }
+    val isShowWritePinlogDialog = remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        savedStateHandle?.getStateFlow(Const.NavKey.PINLOG_WRITE_RESULT, false)?.collect { result ->
+            if (result) {
+                savedStateHandle[Const.NavKey.PINLOG_WRITE_RESULT] = false
+                viewModel.updatePlace(viewModel.selectPlace, viewModel.selectIndex)
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
@@ -59,7 +75,11 @@ fun PinchWriteRoute(
         moveItem = viewModel::moveItem,
         onClickDelete = viewModel::deletePinch,
         onPlaceClick = viewModel::updatePlace,
-        onMoveWriteReview = onMoveWriteReview,
+        onClickShowDialog = { place, index ->
+            isShowWritePinlogDialog.value = true
+            viewModel.selectPlace = place
+            viewModel.selectIndex = index
+        },
         registerPints = viewModel::registerPints
     )
 
@@ -76,6 +96,22 @@ fun PinchWriteRoute(
             onRightButtonClick = {
                 isShowCompleteDialog.value = false to isShowCompleteDialog.value.second
                 onMovePintsDetail(isShowCompleteDialog.value.second)
+            },
+        )
+    }
+
+    if (isShowWritePinlogDialog.value) {
+        PDialog(
+            titleText = Texts.Pinch.NO_PINLOG_DIALOG_TITLE,
+            descriptionText = Texts.Pinch.NO_PINLOG_DIALOG_CONTENT,
+            leftButtonText = Texts.Word.DO_RETURN,
+            rightButtonText = Texts.Word.DO_REGISTER,
+            onLeftButtonClick = {
+                isShowWritePinlogDialog.value = false
+            },
+            onRightButtonClick = {
+                isShowWritePinlogDialog.value = false
+                onMoveWriteReview(viewModel.selectPlace)
             },
         )
     }

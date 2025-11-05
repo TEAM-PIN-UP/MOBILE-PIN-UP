@@ -56,10 +56,8 @@ import com.pinup.pinup.domain.model.Position
 import com.pinup.pinup.extentions.clickableWithNoRipple
 import com.pinup.pinup.extentions.longPressDrag
 import com.pinup.pinup.platform.PinchNaverMap
-import com.pinup.pinup.platform.hLog
 import com.pinup.pinup.ui.component.IndexedRoundedTextField
 import com.pinup.pinup.ui.component.PButton
-import com.pinup.pinup.ui.component.PDialog
 import com.pinup.pinup.ui.component.PHorizontalDivider
 import com.pinup.pinup.ui.component.RoundedBox
 import com.pinup.pinup.ui.component.RoundedTextField
@@ -90,7 +88,7 @@ fun PinchWriteScreen(
     onClickDelete: (Int) -> Unit = {},
     moveItem: (Int, Int) -> Unit = { _, _ -> },
     onPlaceClick: (Place, Int) -> Unit = { _, _ -> },
-    onMoveWriteReview: (Place) -> Unit = {},
+    onClickShowDialog: (Place, Int) -> Unit = {_, _ -> },
     registerPints: () -> Unit = {},
 ) {
 
@@ -107,7 +105,6 @@ fun PinchWriteScreen(
     var textFieldSize by remember { mutableStateOf(IntSize.Zero) }
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
-    val isShowWritePinlogDialog = remember { mutableStateOf(false to Place()) }
 
     Column(
         modifier = Modifier
@@ -341,7 +338,7 @@ fun PinchWriteScreen(
                                             if (place.hasMyReview) {
                                                 onPlaceClick(place, index)
                                             } else {
-                                                isShowWritePinlogDialog.value = true to place
+                                                onClickShowDialog(place, index)
                                             }
                                             expandedIndex = null
                                         }
@@ -400,21 +397,5 @@ fun PinchWriteScreen(
             Spacer(modifier = Modifier.height(39.dp))
         }
 
-    }
-
-    if (isShowWritePinlogDialog.value.first) {
-        PDialog(
-            titleText = Texts.Pinch.NO_PINLOG_DIALOG_TITLE,
-            descriptionText = Texts.Pinch.NO_PINLOG_DIALOG_CONTENT,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_REGISTER,
-            onLeftButtonClick = {
-                isShowWritePinlogDialog.value = false to isShowWritePinlogDialog.value.second
-            },
-            onRightButtonClick = {
-                isShowWritePinlogDialog.value = false to isShowWritePinlogDialog.value.second
-                onMoveWriteReview(isShowWritePinlogDialog.value.second)
-            },
-        )
     }
 }
