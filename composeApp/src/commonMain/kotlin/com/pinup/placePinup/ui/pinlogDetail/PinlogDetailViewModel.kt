@@ -161,7 +161,7 @@ class PinlogDetailViewModel(
 
     fun onProfileClick(name: String) = viewModelScope.launch {
         getMyProfileUseCase().collectLatest {
-            emitEvent(PinlogUiEvent.OnMoveUserProfile(name))
+            if(it.nickname != name) emitEvent(PinlogUiEvent.OnMoveUserProfile(name))
         }
     }
 }

@@ -122,10 +122,10 @@ fun ReviewCard(
                         ReviewImage(
                             imgUrl = it,
                             modifier = Modifier
-                                .size(143.dp)
-                                .clickableWithNoRipple {
-                                    onMovePinlogDetail(placeReview.reviewId)
-                                }
+                                .size(143.dp),
+                            onClickImage = {
+                                onMovePinlogDetail(placeReview.reviewId)
+                            }
                         )
                     }
                 }

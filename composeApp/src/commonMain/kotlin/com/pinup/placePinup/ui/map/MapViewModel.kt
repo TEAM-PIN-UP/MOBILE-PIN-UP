@@ -455,7 +455,7 @@ class MapViewModel (
 
     fun onProfileClick(name: String) = viewModelScope.launch {
         getMyProfileUseCase().collectLatest {
-            if(it.name == name) emitEvent(MapUiEvent.OnMoveUserProfile(name))
+            if(it.nickname != name) emitEvent(MapUiEvent.OnMoveUserProfile(name))
         }
     }
 }
