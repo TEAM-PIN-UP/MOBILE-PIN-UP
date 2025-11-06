@@ -10,5 +10,5 @@ data class SignUpInfo(
     val socialId: String = "",
     val loginType: SNSType,
     val termsOfMarketing: Boolean,
-    val profileImageUrl: String = ""
+    val profileImageUrl: String? = ""
 )

@@ -272,9 +272,9 @@ class SignUpViewModel (
     fun signUp() = viewModelScope.launch {
         if(uiState.value.profileUrl.isEmpty()) {
             if (uiState.value.snsType == SNSType.PINUP) {
-                emailSignUp("")
+                emailSignUp(null)
             } else {
-                socialSignUp("")
+                socialSignUp(null)
             }
         } else {
             resultResponse(
@@ -290,7 +290,7 @@ class SignUpViewModel (
         }
     }
 
-    private fun socialSignUp(profile: String) = viewModelScope.launch {
+    private fun socialSignUp(profile: String?) = viewModelScope.launch {
         val request = SignUpInfo(
             email = uiState.value.emailState.email,
             socialId = uiState.value.socialId,
@@ -306,7 +306,7 @@ class SignUpViewModel (
         )
     }
 
-    private fun emailSignUp(profile: String) = viewModelScope.launch {
+    private fun emailSignUp(profile: String?) = viewModelScope.launch {
         val request = SignUpInfo(
             email = uiState.value.emailState.email,
             nickname = uiState.value.nicknameState.nickname,

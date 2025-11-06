@@ -37,7 +37,7 @@ fun ReviewedProfileImageView(
     modifier: Modifier = Modifier,
     size: Dp = 26.dp,
 ) {
-    if (imgUrl.isNullOrEmpty()) {
+    if (imgUrl.isNullOrEmpty() || !imgUrl.startsWith("http")) {
         RoundedBox(
             modifier = modifier
                 .size(size),
@@ -72,7 +72,7 @@ fun ProfileImageView(
     size: Dp = 26.dp,
     cornerColor: Color = Colors.Transparency,
 ) {
-    if (imgUrl.isNullOrEmpty()) {
+    if (imgUrl.isNullOrEmpty() || !imgUrl.startsWith("http")) {
         RoundedBox(
             modifier = modifier
                 .size(size),
