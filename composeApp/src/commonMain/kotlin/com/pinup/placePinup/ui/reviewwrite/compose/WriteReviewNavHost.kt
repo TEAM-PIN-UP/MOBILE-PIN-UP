@@ -1,5 +1,7 @@
 package com.pinup.placePinup.ui.reviewwrite.compose
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,7 +62,11 @@ fun WriteReviewNavHost(
     ) {
         NavHost(
             navController = navHostController,
-            startDestination = if(writeReviewViewModel.reviewId == 0) WriteReviewDestination.SearchPlace else WriteReviewDestination.WriteReview
+            startDestination = if(writeReviewViewModel.reviewId == 0) WriteReviewDestination.SearchPlace else WriteReviewDestination.WriteReview,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None },
         ) {
             composable<WriteReviewDestination.SearchPlace> {
                 SearchPlaceRoute(

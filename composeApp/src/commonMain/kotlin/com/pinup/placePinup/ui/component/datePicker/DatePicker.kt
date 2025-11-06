@@ -45,7 +45,7 @@ fun DatePicker(
         disabledDateColor = Colors.White,
         todayDateBorderColor = Colors.Main,
         rangeDateDateColor = Colors.White,
-        textDisabledDateColor = Colors.Gray800,
+        textDisabledDateColor = Colors.Gray200,
         textSelectedDateColor = Colors.White,
         textTodayDateColor = Colors.Gray800,
         textCurrentMonthDateColor = Colors.Gray800,
@@ -233,6 +233,7 @@ fun DatePicker(
                                 maxLines = 1,
                                 style = dayStyle,
                                 color = when {
+                                    calendarDate.date > getLocalDate() -> dateTimePickerColors.textDisabledDateColor
                                     calendarDate.isDisabled -> dateTimePickerColors.textDisabledDateColor
                                     calendarDate.isSelected -> dateTimePickerColors.textSelectedDateColor
                                     calendarDate.isToday -> dateTimePickerColors.textTodayDateColor
