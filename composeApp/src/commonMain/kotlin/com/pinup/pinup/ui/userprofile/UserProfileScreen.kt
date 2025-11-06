@@ -78,6 +78,8 @@ fun UserProfileScreen(
     onSettingClick: () -> Unit = {},
     onRequestCancel: () -> Unit = {},
     onRemovePinBuddy: () -> Unit = {},
+    onReceivedAccept: () -> Unit = {},
+    onReceivedReject: () -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
     onClickShare: () -> Unit = {},
@@ -123,7 +125,7 @@ fun UserProfileScreen(
                 )
                 .statusBarsPadding()
                 .navigationBarsPadding()
-                .fillMaxWidth(),
+                .fillMaxSize(),
             state = scrollState
         ) {
             item {
@@ -140,14 +142,6 @@ fun UserProfileScreen(
                         painter = painterResource(Res.drawable.ic_back),
                         contentDescription = null
                     )
-
-//                    Text(
-//                        text = member.profile.nickname,
-//                        style = Typography.T1.copy(
-//                            fontWeight = FontWeight.SemiBold
-//                        ),
-//                        color = Colors.Gray800
-//                    )
 
                     Spacer(Modifier.weight(1f))
 
@@ -303,35 +297,12 @@ fun UserProfileScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Row {
-                        RoundedBox(
-                            modifier = Modifier
-                                .weight(1f)
-                                .clickableWithNoRipple {
-                                    onClickShare()
-                                },
-                            cornerRounded = 8,
-                            backgroundColor = Colors.Gray100,
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .padding(vertical = 12.dp, horizontal = 16.dp)
-                                    .align(Alignment.Center),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Image(
-                                    painter = painterResource(Res.drawable.ic_share_profile),
-                                    contentDescription = "share profile"
-                                )
-
-                                Text(
-                                    modifier = Modifier
-                                        .padding(start = 6.dp),
-                                    text = Texts.PROFILE.SHARE_PROFILE,
-                                    style = Typography.L1.copy(
-                                        fontWeight = FontWeight.SemiBold
-                                    ),
-                                    color = Colors.Gray800,
-                                )
+                        when (member.relationType) {
+                            RelationType.RECEIVED -> RejectButton {
+                                onReceivedReject()
+                            }
+                            else -> ProfileShareButton {
+                                onClickShare()
                             }
                         }
 
@@ -343,6 +314,9 @@ fun UserProfileScreen(
                             }
                             RelationType.PENDING -> PendingButton {
                                 onRequestCancel()
+                            }
+                            RelationType.RECEIVED -> ReceivedButton {
+                                onReceivedAccept()
                             }
                             else -> StrangerButton {
                                 onRequestPinBuddy()
@@ -479,6 +453,72 @@ private fun ContentView(
 }
 
 @Composable
+private fun RowScope.ProfileShareButton(
+    onClickShare: () -> Unit = {},
+) {
+    RoundedBox(
+        modifier = Modifier
+            .weight(1f)
+            .clickableWithNoRipple {
+                onClickShare()
+            },
+        cornerRounded = 8,
+        backgroundColor = Colors.Gray100,
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(vertical = 12.dp, horizontal = 16.dp)
+                .align(Alignment.Center),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.ic_share_profile),
+                contentDescription = "share profile"
+            )
+
+            Text(
+                modifier = Modifier
+                    .padding(start = 6.dp),
+                text = Texts.PROFILE.SHARE_PROFILE,
+                style = Typography.L1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray800,
+            )
+        }
+    }
+}
+@Composable
+private fun RowScope.RejectButton(
+    onReceivedReject: () -> Unit = {},
+) {
+    RoundedBox(
+        modifier = Modifier
+            .weight(1f)
+            .clickableSingleWithNoRipple {
+                onReceivedReject()
+            },
+        cornerRounded = 8,
+        backgroundColor = Colors.Gray200,
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(vertical = 12.dp, horizontal = 16.dp)
+                .align(Alignment.Center),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = Texts.PROFILE.REJECT_PIN_BUDDY,
+                style = Typography.L1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray500,
+            )
+        }
+    }
+}
+
+@Composable
 private fun RowScope.StrangerButton(
     onRequestPinBuddy: () -> Unit = {},
 ) {
@@ -549,6 +589,36 @@ private fun RowScope.PendingButton(
 
             Text(
                 text = Texts.PROFILE.ALREADY_REQUEST_PIN_BUDDY,
+                style = Typography.L1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray800,
+            )
+        }
+    }
+}
+
+@Composable
+private fun RowScope.ReceivedButton(
+    onReceivedAccept: () -> Unit = {},
+) {
+    RoundedBox(
+        modifier = Modifier
+            .weight(1f)
+            .clickableSingleWithNoRipple {
+                onReceivedAccept()
+            },
+        cornerRounded = 8,
+        backgroundColor = Colors.Gray100,
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(vertical = 12.dp, horizontal = 16.dp)
+                .align(Alignment.Center),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = Texts.PROFILE.ACCEPT_PIN_BUDDY,
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),

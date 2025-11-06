@@ -148,7 +148,7 @@ fun MyScreen(
                     )
                     .padding(bottom = bottomBarHeight)
                     .statusBarsPadding()
-                    .fillMaxWidth(),
+                    .fillMaxSize(),
                 state = scrollState
             ) {
                 item {

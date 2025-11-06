@@ -9,6 +9,7 @@ import com.pinup.pinup.domain.model.PintsPageAble
 import com.pinup.pinup.domain.model.Profile
 import com.pinup.pinup.domain.model.RelationType
 import com.pinup.pinup.domain.model.getSuccessOrNull
+import com.pinup.pinup.domain.usecase.AcceptPinBuddyUseCase
 import com.pinup.pinup.domain.usecase.DeletePinBuddyUseCase
 import com.pinup.pinup.domain.usecase.DeleteRequestPinBuddyUseCase
 import com.pinup.pinup.domain.usecase.GetFeedUseCase
@@ -16,6 +17,7 @@ import com.pinup.pinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.pinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.pinup.domain.usecase.GetPintsUseCase
 import com.pinup.pinup.domain.usecase.PostReviewLikeChangeUseCase
+import com.pinup.pinup.domain.usecase.RejectPinBuddyUseCase
 import com.pinup.pinup.domain.usecase.RequestPinBuddyUseCase
 import com.pinup.pinup.domain.usecase.SearchUserUseCase
 import com.pinup.pinup.platform.ContextFactory
@@ -39,6 +41,8 @@ class UserProfileViewModel (
     private val postReviewLikeChangeUseCase : PostReviewLikeChangeUseCase,
     private val getMyProfileUseCase: GetMyProfileUseCase,
     private val getPintsUseCase: GetPintsUseCase,
+    private val acceptPinBuddyUseCase: AcceptPinBuddyUseCase,
+    private val rejectPinBuddyUseCase: RejectPinBuddyUseCase,
     private val kaKaoShareController: KaKaoShareController
 ) : BaseViewModel<UserProfileUiState, UiEvent>(UserProfileUiState()) {
     val memberId = savedStateHandle.get<Int>(MEMBER_ID) ?: -1
@@ -207,6 +211,24 @@ class UserProfileViewModel (
             context = contextFactory.getActivity(),
             memberId = uiState.value.member.profile.memberId,
             memberName = uiState.value.member.profile.nickname,
+        )
+    }
+
+    fun acceptPinBuddy() = viewModelScope.launch {
+        resultResponse(
+            response = acceptPinBuddyUseCase(uiState.value.member.profile.memberId),
+            successCallback = {
+                initUserProfile(uiState.value.member.profile.memberId)
+            }
+        )
+    }
+
+    fun rejectPinBuddy() = viewModelScope.launch {
+        resultResponse(
+            response = rejectPinBuddyUseCase(uiState.value.member.profile.memberId),
+            successCallback = {
+                initUserProfile(uiState.value.member.profile.memberId)
+            }
         )
     }
 

@@ -228,6 +228,8 @@ object Texts {
         const val AVERAGE_STAR_RATING = "평균 별점"
         const val SHARE_PROFILE = "프로필 공유"
         const val ADD_PIN_BUDDY = "핀버디 추가"
+        const val ACCEPT_PIN_BUDDY = "핀버디 수락"
+        const val REJECT_PIN_BUDDY = "핀버디 거절"
         const val RECEIVE_REQUEST = "받은 신청"
         const val SENT_REQUEST = "보낸 신청"
         const val CANCEL_SENT_REQUEST = "신청 취소"

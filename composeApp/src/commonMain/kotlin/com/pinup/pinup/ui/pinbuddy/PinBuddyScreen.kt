@@ -84,6 +84,7 @@ fun PinBuddyScreen(
 
     Box(
         Modifier
+            .background(Colors.White)
             .statusBarsPadding()
             .pullRefresh(
                 state = pullRefreshState,

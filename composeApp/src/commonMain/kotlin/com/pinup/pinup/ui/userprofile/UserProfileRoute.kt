@@ -25,6 +25,8 @@ fun UserProfileRoute(
         onRequestCancel = viewModel::deleteRequestPinBuddy,
         onRemovePinBuddy = viewModel::deletePinBuddy,
         onRequestPinBuddy = viewModel::requestPinBuddy,
+        onReceivedAccept = viewModel::acceptPinBuddy,
+        onReceivedReject = viewModel::rejectPinBuddy,
         onClickLike = viewModel::likeChanged,
         onClickDetail = onClickDetail,
         onSettingClick = onSettingClick,
