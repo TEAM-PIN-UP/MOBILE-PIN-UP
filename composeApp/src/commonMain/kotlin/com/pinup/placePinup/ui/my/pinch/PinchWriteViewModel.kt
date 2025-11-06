@@ -142,15 +142,20 @@ class PinchWriteViewModel (
 
     fun deletePinch(index: Int) {
         updateState {
-            if (index !in pinchList.indices) return@updateState this
-
-            val reordered =
-                pinchList
-                    .filterIndexed { i, _ -> i != index }
-                    .plus(Place())
-            val lastIdx = reordered.indexOfLast { it.kakaoPlaceId.isNotEmpty() }
-            updatePosition(Position(reordered[lastIdx].latitude,reordered[lastIdx].longitude))
-            copy(pinchList = reordered)
+            copy(
+                pinchList = pinchList.mapIndexed { originalIndex, place ->
+                    if(originalIndex == index) Place() else place
+                }
+            )
+//            if (index !in pinchList.indices) return@updateState this
+//
+//            val reordered =
+//                pinchList
+//                    .filterIndexed { i, _ -> i != index }
+//                    .plus(Place())
+//            val lastIdx = reordered.indexOfLast { it.kakaoPlaceId.isNotEmpty() }
+//            updatePosition(Position(reordered[lastIdx].latitude,reordered[lastIdx].longitude))
+//            copy(pinchList = reordered)
         }
     }
 
