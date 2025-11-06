@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.model.ChipState
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
@@ -40,12 +41,17 @@ fun MapBottomSheetNavHost(
     val detailRoute = MapBottomSheetDestination.Detail::class.qualifiedName
 
     LaunchedEffect(placeDetailUiState.detailPlace) {
+        hLog("하이 ${placeDetailUiState.detailPlace}")
         val current = navHostController.currentBackStackEntry?.destination?.route
         if (placeDetailUiState.detailPlace != null) {
             if (current != detailRoute) {
                 navHostController.navigate(MapBottomSheetDestination.Detail) {
                     launchSingleTop = true
                 }
+            }
+        } else {
+            navHostController.navigate(MapBottomSheetDestination.Search) {
+                launchSingleTop = true
             }
         }
     }

@@ -23,6 +23,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -226,6 +227,13 @@ fun MapScreen(
         }
 
         onPauseOrDispose { }
+    }
+
+    DisposableEffect(Unit){
+        onDispose {
+            hLog("자 나 팅김")
+            viewModel.clearDetailPlace()
+        }
     }
 
     ModalBottomSheetLayout(
