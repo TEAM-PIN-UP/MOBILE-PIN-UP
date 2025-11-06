@@ -1,0 +1,35 @@
+package com.pinup.placePinup.data.response
+
+import com.pinup.placePinup.domain.model.Profile
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class MemberResponse(
+    val bio: String,
+    val email: String,
+    val memberId: Int,
+    val name: String,
+    val nickname: String,
+    val profilePictureUrl: String?,
+    val termsOfMarketing: String,
+    val averageStarRating: Double,
+    val pinBuddyCount: Int? = 0,
+    val reviewCount: Int,
+) {
+    companion object {
+        fun MemberResponse.toModel(): Profile {
+            return Profile(
+                bio = bio,
+                email = email,
+                memberId = memberId,
+                name = name,
+                nickname = nickname,
+                profilePictureUrl = profilePictureUrl,
+                termsOfMarketing = termsOfMarketing,
+                averageStarRating = averageStarRating,
+                pinBuddyCount = pinBuddyCount ?: 0,
+                reviewCount = reviewCount,
+            )
+        }
+    }
+}

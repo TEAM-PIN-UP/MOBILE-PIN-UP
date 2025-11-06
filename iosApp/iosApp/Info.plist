@@ -51,7 +51,7 @@
 			<string>NaverLogin</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.pinup.pinup.PinUp</string>
+				<string>com.pinup.placePinup.PinUp</string>
 			</array>
 		</dict>
 	</array>
@@ -94,7 +94,7 @@
 	<key>NidClientSecret</key>
 	<string>YizfCTl8_9</string>
 	<key>NidUrlScheme</key>
-	<string>com.pinup.pinup.PinUp</string>
+	<string>com.pinup.placePinup.PinUp</string>
     <key>UIApplicationSceneManifest</key>
     <dict>
         <key>UIApplicationSupportsMultipleScenes</key>

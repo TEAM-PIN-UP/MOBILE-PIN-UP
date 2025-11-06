@@ -1,0 +1,101 @@
+package com.pinup.placePinup
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.pinup.placePinup.domain.usecase.LogoutUseCase
+import com.pinup.placePinup.event.LogoutEventBus
+import com.pinup.placePinup.platform.KakaoDeepLinkStore
+import com.pinup.placePinup.util.ScreenState
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+class StartAppViewModel(
+    private val logoutUseCase: LogoutUseCase,
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(StartAppUiState())
+    val uiState: StateFlow<StartAppUiState>
+        get() = _uiState.asStateFlow()
+
+    init {
+        initLogoutEventBus()
+        initGetUserId()
+        initGetErrorMessage()
+    }
+
+
+    @OptIn(FlowPreview::class)
+    private fun initLogoutEventBus() = viewModelScope.launch {
+        LogoutEventBus.logoutEvent
+            .debounce(300)
+            .collectLatest { message ->
+                logoutUseCase()
+                _uiState.update {
+                    it.copy(
+                        alertState = it.alertState.copy(
+                            title = message ?: "세션이 만료되어 로그아웃 되었습니다.\n다시 로그인 해주세요.",
+                            isShow = true
+                        )
+                    )
+                }
+            }
+    }
+
+    private fun initGetUserId() = viewModelScope.launch {
+        KakaoDeepLinkStore.params.collect { id ->
+            _uiState.update {
+                it.copy(
+                    userId = id.toInt(),
+                )
+            }
+        }
+    }
+
+    private fun initGetErrorMessage() = viewModelScope.launch {
+        ScreenState.errorMessage.collect { error ->
+            _uiState.update {
+                it.copy(
+                    errorMessage = error,
+                )
+            }
+        }
+    }
+
+    fun dismissAlert() {
+        _uiState.update {
+            it.copy(
+                alertState = AlertState()
+            )
+        }
+    }
+
+    fun updateUserId(userId: Int) {
+        _uiState.update {
+            it.copy(
+                userId = userId,
+            )
+        }
+    }
+}
+
+data class StartAppUiState(
+    val isLogin: Boolean? = null,
+    val alertState: AlertState = AlertState(),
+    val userId: Int = -1,
+    val errorMessage: String = "",
+)
+
+data class AlertState(
+    val title: String = "",
+    val message: String = "",
+    val isShow: Boolean = false,
+    val leftButtonText: String = "",
+    val rightButtonText: String = "",
+    val onLeftButtonClick: () -> Unit = {},
+    val onRightButtonClick: () -> Unit = {},
+)

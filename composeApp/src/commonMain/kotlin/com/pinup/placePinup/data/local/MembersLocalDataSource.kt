@@ -1,0 +1,19 @@
+package com.pinup.placePinup.data.local
+
+import com.pinup.placePinup.domain.model.PResult
+import com.pinup.placePinup.domain.model.TokenInfo
+import com.pinup.placePinup.domain.model.UserInfo
+import kotlinx.coroutines.flow.StateFlow
+
+interface MembersLocalDataSource {
+    suspend fun saveToken(tokenInfo: TokenInfo): PResult<Unit>
+    suspend fun saveUserInfo(userInfo: UserInfo)
+    suspend fun getAccessToken(): String
+    suspend fun getRefreshToken(): String
+    suspend fun getUserInfo(): StateFlow<UserInfo>
+    suspend fun getIsUsedApp(): Boolean
+    suspend fun logout()
+    suspend fun deleteRecentSearch(index: Int)
+    suspend fun getRecentSearch(): StateFlow<List<String>>
+    suspend fun saveRecentSearch(search: String)
+}

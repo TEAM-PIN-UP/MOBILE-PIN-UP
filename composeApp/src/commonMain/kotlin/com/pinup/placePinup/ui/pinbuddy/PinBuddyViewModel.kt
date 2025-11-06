@@ -1,0 +1,167 @@
+package com.pinup.placePinup.ui.pinbuddy
+
+import androidx.lifecycle.viewModelScope
+import com.pinup.placePinup.domain.model.Pagination
+import com.pinup.placePinup.domain.model.PinBuddyRequest
+import com.pinup.placePinup.domain.model.Profile
+import com.pinup.placePinup.domain.model.getSuccessOrNull
+import com.pinup.placePinup.domain.usecase.AcceptPinBuddyUseCase
+import com.pinup.placePinup.domain.usecase.DeletePinBuddyUseCase
+import com.pinup.placePinup.domain.usecase.DeleteRequestPinBuddyUseCase
+import com.pinup.placePinup.domain.usecase.GetMemberInfoUseCase
+import com.pinup.placePinup.domain.usecase.GetPinBuddiesUseCase
+import com.pinup.placePinup.domain.usecase.GetReceivePinBuddyRequestsUseCase
+import com.pinup.placePinup.domain.usecase.GetSentPinBuddyRequestsUseCase
+import com.pinup.placePinup.domain.usecase.RejectPinBuddyUseCase
+import com.pinup.placePinup.ui.base.BaseViewModel
+import com.pinup.placePinup.ui.base.UiEvent
+import com.pinup.placePinup.ui.base.UiState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
+
+
+class PinBuddyViewModel (
+    private val getPinBuddiesUseCase: GetPinBuddiesUseCase,
+    private val getSentPinBuddyRequestsUseCase: GetSentPinBuddyRequestsUseCase,
+    private val getReceivePinBuddyRequestsUseCase: GetReceivePinBuddyRequestsUseCase,
+    private val deletePinBuddyUseCase: DeletePinBuddyUseCase,
+    private val deleteRequestPinBuddyUseCase: DeleteRequestPinBuddyUseCase,
+    private val acceptPinBuddyUseCase: AcceptPinBuddyUseCase,
+    private val rejectPinBuddyUseCase: RejectPinBuddyUseCase,
+    private val getMemberInfoUseCase: GetMemberInfoUseCase
+) : BaseViewModel<PinBuddyUiState, PinBuddyUiEvent>(PinBuddyUiState()) {
+    private val pinBuddyPagination = Pagination()
+    private val sentPinBuddyPagination = Pagination()
+    private val receivePinBuddyPagination = Pagination()
+
+    fun initPinBuddies() = viewModelScope.launch {
+        initMyInfo()
+        val pinBuddies = getPinBuddiesUseCase(pinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE).getSuccessOrNull() ?: return@launch
+        val sentPinBuddyRequests = getSentPinBuddyRequestsUseCase(sentPinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE).getSuccessOrNull() ?: return@launch
+        val receivePinBuddyRequests = getReceivePinBuddyRequestsUseCase(receivePinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE).getSuccessOrNull() ?: return@launch
+
+        updateState {
+            copy(
+                pinBuddies = pinBuddies.profiles,
+                sentPinBuddyRequests = sentPinBuddyRequests.pinBuddyRequests,
+                receivePinBuddyRequests = receivePinBuddyRequests.pinBuddyRequests,
+                isRefreshing = false
+            )
+        }
+    }
+
+    private fun initMyInfo() = viewModelScope.launch {
+        val memberInfo = getMemberInfoUseCase().getSuccessOrNull() ?: return@launch
+        updateState {
+            copy(
+                profileUrl = memberInfo.profile.profilePictureUrl ?: "",
+            )
+        }
+    }
+
+    fun deletePinBuddy(friendId: Int) = viewModelScope.launch {
+        resultResponse(
+            response = deletePinBuddyUseCase(friendId.toString()),
+            successCallback = {
+                emitEvent(PinBuddyUiEvent.SuccessDelete)
+                updatePinBuddies()
+            }
+        )
+    }
+
+    fun deletePinBuddyRequest(memberId: Int) = viewModelScope.launch {
+        resultResponse(
+            response = deleteRequestPinBuddyUseCase(memberId),
+            successCallback = {
+                emitEvent(PinBuddyUiEvent.SuccessCancel)
+                updatePinBuddyRequests()
+            }
+        )
+    }
+
+    fun acceptPinBuddy(friendRequestId: Int) = viewModelScope.launch {
+        resultResponse(
+            response = acceptPinBuddyUseCase(friendRequestId),
+            successCallback = {
+                emitEvent(PinBuddyUiEvent.SuccessAccept)
+                updatePinBuddies()
+                updateReceivePinBuddyRequests()
+            }
+        )
+    }
+
+    fun rejectPinBuddy(friendRequestId: Int) = viewModelScope.launch {
+        resultResponse(
+            response = rejectPinBuddyUseCase(friendRequestId),
+            successCallback = {
+                emitEvent(PinBuddyUiEvent.SuccessRefuse)
+                updateReceivePinBuddyRequests()
+            }
+        )
+    }
+
+    private fun updateReceivePinBuddyRequests() = viewModelScope.launch {
+        resultResponse(
+            response = getReceivePinBuddyRequestsUseCase(sentPinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE),
+            successCallback = {
+                updateState {
+                    copy(
+                        receivePinBuddyRequests = it.pinBuddyRequests
+                    )
+                }
+            }
+        )
+    }
+
+    private fun updatePinBuddies() = viewModelScope.launch {
+        resultResponse(
+            response = getPinBuddiesUseCase(pinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE),
+            successCallback = {
+                updateState {
+                    copy(
+                        pinBuddies = it.profiles,
+                    )
+                }
+            }
+        )
+    }
+
+    private fun updatePinBuddyRequests() = viewModelScope.launch {
+        resultResponse(
+            response = getSentPinBuddyRequestsUseCase(sentPinBuddyPagination.pageNum, Pagination.DEFAULT_PAGE_SIZE),
+            successCallback = {
+                updateState {
+                    copy(
+                        sentPinBuddyRequests = it.pinBuddyRequests,
+                    )
+                }
+            }
+        )
+    }
+
+    fun refreshView() = viewModelScope.launch {
+        updateState {
+            copy(
+                isRefreshing = true
+            )
+        }
+        delay(1.seconds)
+        initPinBuddies()
+    }
+}
+
+data class PinBuddyUiState(
+    val pinBuddies: List<Profile> = emptyList(),
+    val isRefreshing: Boolean = false,
+    val sentPinBuddyRequests: List<PinBuddyRequest> = emptyList(),
+    val receivePinBuddyRequests: List<PinBuddyRequest> = emptyList(),
+    val profileUrl: String = ""
+) : UiState
+
+sealed interface PinBuddyUiEvent : UiEvent {
+    data object SuccessDelete : PinBuddyUiEvent
+    data object SuccessAccept : PinBuddyUiEvent
+    data object SuccessRefuse : PinBuddyUiEvent
+    data object SuccessCancel : PinBuddyUiEvent
+}

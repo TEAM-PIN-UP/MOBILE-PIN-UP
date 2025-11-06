@@ -1,5 +1,4 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -123,7 +122,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.pinup.pinup"
+    namespace = "com.pinup.placePinup"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {

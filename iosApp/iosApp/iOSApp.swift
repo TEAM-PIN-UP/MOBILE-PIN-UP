@@ -63,8 +63,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         // KAKAO_USER_ID 값 꺼내보기
         if let userId = params["userId"] {
-            print("✅ 카카오 공유 링크 userId: \(userId)")
-            // 👉 Kotlin으로 전달 (Compose에서 쓰기 위해)
             KakaoLinkBridge().onOpenFromKakao(userId: userId)
             return true
         } else {
