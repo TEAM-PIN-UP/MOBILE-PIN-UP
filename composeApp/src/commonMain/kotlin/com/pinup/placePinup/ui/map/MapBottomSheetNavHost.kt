@@ -41,7 +41,6 @@ fun MapBottomSheetNavHost(
     val detailRoute = MapBottomSheetDestination.Detail::class.qualifiedName
 
     LaunchedEffect(placeDetailUiState.detailPlace) {
-        hLog("하이 ${placeDetailUiState.detailPlace}")
         val current = navHostController.currentBackStackEntry?.destination?.route
         if (placeDetailUiState.detailPlace != null) {
             if (current != detailRoute) {

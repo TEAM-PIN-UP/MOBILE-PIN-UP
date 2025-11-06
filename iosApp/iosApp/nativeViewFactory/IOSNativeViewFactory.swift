@@ -255,6 +255,7 @@ struct NaverMap: UIViewRepresentable {
 
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
         // ⬇️ 현재 위치 오버레이 갱신 (옵셔널 안전 언래핑)
+        print("하이 이거는?? 호출되나?")
         if let p = position, p.isValid {
             uiView.mapView.locationOverlay.location = NMGLatLng(lat: p.latitude, lng: p.longitude)
         }
@@ -301,7 +302,7 @@ struct NaverMap: UIViewRepresentable {
             }
         }
         // 일반 모드: 검색 결과 마커
-        else {
+        if !isShowPinch {
             for r in searchUiState.reviewedPlaces {
                 let selected = (r.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace.kakaoPlaceId)
                 let iconName: String = {
