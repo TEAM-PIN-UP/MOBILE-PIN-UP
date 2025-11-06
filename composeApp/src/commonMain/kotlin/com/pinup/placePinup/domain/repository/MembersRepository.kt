@@ -1,5 +1,6 @@
 package com.pinup.placePinup.domain.repository
 
+import com.pinup.placePinup.data.request.ChangePasswordRequest
 import com.pinup.placePinup.data.request.ProfileEditRequest
 import com.pinup.placePinup.domain.model.Member
 import com.pinup.placePinup.domain.model.PResult
@@ -28,4 +29,5 @@ interface MembersRepository {
     suspend fun unregister(): PResult<Unit>
     suspend fun findIdByEmail(request: String): PResult<UserInfo>
     suspend fun findIdByNickName(request: String): PResult<UserInfo>
+    suspend fun changePassword(request: ChangePasswordRequest): PResult<Unit>
 }

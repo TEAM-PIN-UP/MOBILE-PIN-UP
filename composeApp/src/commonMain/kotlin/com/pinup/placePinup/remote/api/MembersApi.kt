@@ -1,5 +1,6 @@
 package com.pinup.placePinup.remote.api
 
+import com.pinup.placePinup.data.request.ChangePasswordRequest
 import com.pinup.placePinup.data.request.ProfileEditRequest
 import com.pinup.placePinup.data.request.signUp.EmailSignUpRequest
 import com.pinup.placePinup.data.request.signUp.SocialSignUpRequest
@@ -14,6 +15,7 @@ import com.pinup.placePinup.domain.model.PResult
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.PATCH
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
@@ -85,4 +87,9 @@ interface MembersApi {
     suspend fun getFindIdByEmail(
         @Query("email") email: String
     ): PResult<PResponse<FindIdResponse>>
+
+    @PATCH(ApiPath.Members.CHANGE_PASSWORD)
+    suspend fun changePassword(
+        @Body request: ChangePasswordRequest
+    ): PResult<PResponse<Unit>>
 }

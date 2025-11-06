@@ -6,6 +6,7 @@ import org.koin.dsl.module
 val useCaseModule = module {
     single<AcceptPinBuddyUseCase> { AcceptPinBuddyUseCase(get()) }
     single<AddBookmarkUseCase> { AddBookmarkUseCase(get()) }
+    single<ChangePasswordUseCase> { ChangePasswordUseCase(get()) }
     single<CheckNickNameUseCase> { CheckNickNameUseCase(get()) }
     single<DeleteBookmarkUseCase> { DeleteBookmarkUseCase(get()) }
     single<DeleteCommentUseCase> { DeleteCommentUseCase(get()) }

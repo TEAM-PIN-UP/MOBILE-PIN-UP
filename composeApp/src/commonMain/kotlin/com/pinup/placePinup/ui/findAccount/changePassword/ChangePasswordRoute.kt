@@ -17,7 +17,7 @@ fun ChangePasswordRoute(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
             when(it){
-                ChangePasswordUiEvent.MoveLogin -> onMoveLogin
+                ChangePasswordUiEvent.MoveLogin -> onMoveLogin()
             }
         }
     }

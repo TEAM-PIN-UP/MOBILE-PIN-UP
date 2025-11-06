@@ -1,6 +1,7 @@
 package com.pinup.placePinup.remote.impl
 
 import com.pinup.placePinup.data.remote.MembersRemoteDataSource
+import com.pinup.placePinup.data.request.ChangePasswordRequest
 import com.pinup.placePinup.data.request.ProfileEditRequest
 import com.pinup.placePinup.data.response.CheckNickNameResponse
 import com.pinup.placePinup.data.response.FindIdResponse
@@ -64,5 +65,9 @@ class MembersRemoteDataSourceImpl (
 
     override suspend fun findIdByNickName(request: String): PResult<FindIdResponse> {
         return membersApi.getFindIdByNickname(request).mapSuccessData()
+    }
+
+    override suspend fun changePassword(request: ChangePasswordRequest): PResult<Unit> {
+        return membersApi.changePassword(request).mapSuccessData()
     }
 }

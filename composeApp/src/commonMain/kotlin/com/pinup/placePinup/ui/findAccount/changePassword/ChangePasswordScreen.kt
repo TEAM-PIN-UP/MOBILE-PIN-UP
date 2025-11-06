@@ -184,7 +184,7 @@ fun ChangePasswordScreen(
 
         PButton(
             text = Texts.FindPassword.CHANGE_PASSWORD,
-            isEnable = isPasswordValid,
+            isEnable = isPasswordValid && isPasswordMatched && password.isNotEmpty() && passwordAgain.isNotEmpty(),
             onClick = {
                 onClickConfirm()
             }

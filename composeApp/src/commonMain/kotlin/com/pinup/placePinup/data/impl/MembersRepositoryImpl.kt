@@ -2,6 +2,7 @@ package com.pinup.placePinup.data.impl
 
 import com.pinup.placePinup.data.local.MembersLocalDataSource
 import com.pinup.placePinup.data.remote.MembersRemoteDataSource
+import com.pinup.placePinup.data.request.ChangePasswordRequest
 import com.pinup.placePinup.data.request.ProfileEditRequest
 import com.pinup.placePinup.data.response.CheckNickNameResponse.Companion.toModel
 import com.pinup.placePinup.data.response.FindIdResponse.Companion.toModel
@@ -120,5 +121,9 @@ class MembersRepositoryImpl (
         return membersRemoteDataSource.findIdByNickName(request).map {
             it.toModel()
         }
+    }
+
+    override suspend fun changePassword(request: ChangePasswordRequest): PResult<Unit> {
+        return membersRemoteDataSource.changePassword(request)
     }
 }

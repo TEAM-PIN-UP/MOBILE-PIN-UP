@@ -1,5 +1,6 @@
 package com.pinup.placePinup.data.remote
 
+import com.pinup.placePinup.data.request.ChangePasswordRequest
 import com.pinup.placePinup.data.request.ProfileEditRequest
 import com.pinup.placePinup.data.response.CheckNickNameResponse
 import com.pinup.placePinup.data.response.FindIdResponse
@@ -18,4 +19,5 @@ interface MembersRemoteDataSource {
     suspend fun unregister(): PResult<Unit>
     suspend fun findIdByEmail(request: String): PResult<FindIdResponse>
     suspend fun findIdByNickName(request: String): PResult<FindIdResponse>
+    suspend fun changePassword(request: ChangePasswordRequest): PResult<Unit>
 }
