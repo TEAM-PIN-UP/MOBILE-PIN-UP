@@ -464,7 +464,8 @@ fun PinUpApp(
                 composable<PinUpAppDestination.Scrap> {
                     ScrapRoute(
                         onMovePlaceDetail = { navHostController.navigate(PinUpAppDestination.PlaceDetail(it)) },
-                        onSettingClick = { navHostController.navigate(PinUpAppDestination.Setting) }
+                        onBackPressed = { navHostController.popBackStack() },
+                        onClickGoFeed = { navHostController.navigate(PinUpAppDestination.WriteReview) }
                     )
                 }
             }

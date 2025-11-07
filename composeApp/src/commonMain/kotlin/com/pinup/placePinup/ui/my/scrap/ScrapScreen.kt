@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -24,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.domain.model.BookmarkedPlace
@@ -34,6 +36,7 @@ import com.pinup.placePinup.ui.component.Chips
 import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.component.ScrapDetailItemView
 import com.pinup.placePinup.ui.component.SortBottomSheet
+import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.model.ChipState
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Texts
@@ -45,6 +48,8 @@ import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_alarm
 import pinup.composeapp.generated.resources.ic_chevron_bottom
+import pinup.composeapp.generated.resources.ic_right_arrow
+import pinup.composeapp.generated.resources.ic_search
 import pinup.composeapp.generated.resources.ic_setting
 
 @Composable
@@ -53,10 +58,10 @@ fun ScrapScreen(
     chipStates: PersistentList<ChipState>,
     sortType: SortType,
     onUpdateSortType: (SortType) -> Unit = {},
-    onAlarmClick: () -> Unit = {},
-    onSettingClick: () -> Unit = {},
+    onClickGoFeed: () -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
+    onBackPressed: () -> Unit
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -88,95 +93,108 @@ fun ScrapScreen(
                 .statusBarsPadding()
                 .fillMaxWidth()
         ) {
-            Row(
+            TitleBar(
                 modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .padding(vertical = 15.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = Texts.Word.SCRAP,
-                    style = Typography.T1.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    color = Colors.Gray800
-                )
-
-                Spacer(Modifier.weight(1f))
-
-                Image(
-                    modifier = Modifier
-                        .clickableSingleWithNoRipple {
-                            onAlarmClick()
-                        },
-                    painter = painterResource(Res.drawable.ic_alarm),
-                    contentDescription = "alarm"
-                )
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Image(
-                    modifier = Modifier
-                        .clickableSingleWithNoRipple {
-                            onSettingClick()
-                        },
-                    painter = painterResource(Res.drawable.ic_setting),
-                    contentDescription = "setting"
-                )
-            }
-
-            PHorizontalDivider()
+                    .padding(horizontal = 20.dp),
+                title = Texts.Word.SCRAP,
+                onLeftButtonClick = onBackPressed,
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-            ) {
-                Chips(
-                    chipStates = chipStates,
-                    onClick = onChipClick
-                )
 
-                Spacer(Modifier.weight(1f))
-
+            if (scrapList.isNotEmpty()) {
                 Row(
                     modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .clickableWithNoRipple {
-                            scope.launch { sheetState.show() }
-                        },
-                    verticalAlignment = Alignment.CenterVertically,
+                        .padding(horizontal = 20.dp)
+                ) {
+                    Chips(
+                        chipStates = chipStates,
+                        onClick = onChipClick
+                    )
+
+                    Spacer(Modifier.weight(1f))
+
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .clickableWithNoRipple {
+                                scope.launch { sheetState.show() }
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = sortType.text,
+                            style = Typography.B4
+                        )
+
+                        Image(
+                            modifier = Modifier
+                                .padding(start = 2.dp),
+                            painter = painterResource(Res.drawable.ic_chevron_bottom),
+                            contentDescription = null
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                LazyVerticalGrid(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 20.dp),
+                    columns = GridCells.Fixed(2),
+                    horizontalArrangement = Arrangement.spacedBy(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(13.dp),
+                ) {
+                    items(scrapList) { it ->
+                        ScrapDetailItemView(
+                            place = it,
+                            onMovePlaceDetail = onMovePlaceDetail
+                        )
+                    }
+                }
+            } else {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = sortType.text,
-                        style = Typography.B4
+                        text = Texts.PROFILE.EMPTY_SCRAP,
+                        style = Typography.B1.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        color = Colors.Gray400
                     )
 
-                    Image(
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(
                         modifier = Modifier
-                            .padding(start = 2.dp),
-                        painter = painterResource(Res.drawable.ic_chevron_bottom),
-                        contentDescription = null
-                    )
-                }
-            }
+                            .clickableWithNoRipple {
+                                onClickGoFeed()
+                            },
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = Texts.PROFILE.GO_PINLOG,
+                            style = Typography.B2.copy(
+                                fontWeight = FontWeight.SemiBold
+                            ),
+                            color = Colors.Gray600
+                        )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
 
-            LazyVerticalGrid(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 20.dp),
-                columns = GridCells.Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(20.dp),
-                verticalArrangement = Arrangement.spacedBy(13.dp),
-            ) {
-                items(scrapList) { it ->
-                    ScrapDetailItemView(
-                        place = it,
-                        onMovePlaceDetail = onMovePlaceDetail
-                    )
+                        Image(
+                            modifier = Modifier.size(14.dp),
+                            painter = painterResource(Res.drawable.ic_right_arrow),
+                            colorFilter = ColorFilter.tint(Colors.Gray600),
+                            contentDescription = null
+                        )
+                    }
                 }
             }
         }

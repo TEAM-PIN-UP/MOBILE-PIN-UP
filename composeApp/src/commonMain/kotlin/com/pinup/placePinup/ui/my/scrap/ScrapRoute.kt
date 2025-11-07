@@ -9,7 +9,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun ScrapRoute(
     viewModel: ScrapViewModel = koinViewModel(),
     onMovePlaceDetail: (String) -> Unit = {},
-    onSettingClick: () -> Unit = {},
+    onBackPressed: () -> Unit = {},
+    onClickGoFeed: () -> Unit = {},
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -20,7 +21,7 @@ fun ScrapRoute(
         onMovePlaceDetail = onMovePlaceDetail,
         onChipClick = viewModel::updateChipState,
         onUpdateSortType = viewModel::updateSortType,
-        onAlarmClick = { /*TODO 알림 화면 이동 */ },
-        onSettingClick = onSettingClick,
+        onBackPressed = onBackPressed,
+        onClickGoFeed = onClickGoFeed
     )
 }
