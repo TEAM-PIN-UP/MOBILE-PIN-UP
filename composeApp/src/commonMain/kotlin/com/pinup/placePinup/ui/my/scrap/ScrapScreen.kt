@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.domain.model.BookmarkedPlace
 import com.pinup.placePinup.domain.model.SortType
@@ -166,7 +167,8 @@ fun ScrapScreen(
                         style = Typography.B1.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
-                        color = Colors.Gray400
+                        color = Colors.Gray400,
+                        textAlign = TextAlign.Center
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -183,7 +185,7 @@ fun ScrapScreen(
                             style = Typography.B2.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
-                            color = Colors.Gray600
+                            color = Colors.Gray600,
                         )
 
                         Spacer(modifier = Modifier.width(4.dp))
