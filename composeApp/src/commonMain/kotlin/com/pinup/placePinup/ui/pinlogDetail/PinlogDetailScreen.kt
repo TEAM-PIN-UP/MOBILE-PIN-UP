@@ -96,6 +96,7 @@ fun PinlogDetailScreen(
     updateNonFocusMode: () -> Unit = {},
     updateReplyCommentId: (Int) -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
+    onMoveDetailImage: (Int, List<String>) -> Unit = {_,_ -> },
     onClickLike: (Boolean) -> Unit = {},
     onRefresh: () -> Unit = {},
 ) {
@@ -345,7 +346,10 @@ fun PinlogDetailScreen(
                                         ) { page ->
                                             RoundedBox(
                                                 modifier = Modifier
-                                                    .padding(horizontal = 20.dp),
+                                                    .padding(horizontal = 20.dp)
+                                                    .clickableWithNoRipple {
+                                                        onMoveDetailImage(page, pinlogDetail.reviewImageUrls)
+                                                    },
                                                 cornerRounded = 8,
                                                 backgroundColor = Colors.Gray100,
                                             ) {

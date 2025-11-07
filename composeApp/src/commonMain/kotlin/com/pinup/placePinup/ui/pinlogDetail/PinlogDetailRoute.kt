@@ -21,6 +21,7 @@ fun PinlogDetailRoute(
     onClickEdit: (Int) -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {},
+    onMoveDetailImage: (Int, List<String>) -> Unit = {_,_ -> },
 ) {
     val toast = rememberToastState()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -102,6 +103,7 @@ fun PinlogDetailRoute(
         },
         updateReplyCommentId = viewModel::updateClickedReplyId,
         onMovePlaceDetail = onMovePlaceDetail,
+        onMoveDetailImage = onMoveDetailImage,
         onClickLike = viewModel::likeChanged,
         userInfo = uiState.userInfo,
         onRefresh = viewModel::refreshView

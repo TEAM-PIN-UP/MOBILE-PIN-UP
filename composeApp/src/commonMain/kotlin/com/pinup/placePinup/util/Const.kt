@@ -37,5 +37,7 @@ object Const {
 
     object NavKey {
         const val PINLOG_WRITE_RESULT = "pinlog_result"
+        const val DETAIL_IMAGE_POSITION = "position"
+        const val DETAIL_IMAGE_ALL_IMAGES = "images"
     }
 }
