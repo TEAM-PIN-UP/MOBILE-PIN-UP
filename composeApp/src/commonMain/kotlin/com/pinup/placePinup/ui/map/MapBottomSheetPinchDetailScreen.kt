@@ -18,6 +18,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.component.ReviewedPlaceCard
@@ -69,7 +71,11 @@ fun MapBottomSheetPinchDetailScreen(
                     .weight(1f),
                 text = pinchUiState.editorPintsDetail.title,
                 color = Colors.Gray800,
-                style = Typography.T1
+                style = Typography.T1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             Spacer(modifier = Modifier.width(8.dp))
