@@ -153,6 +153,13 @@ class SignUpViewModel (
             resultResponse(
                 response = sendVerifyCodeUseCase(request),
                 successCallback = {
+                    updateState {
+                        copy(
+                            emailState = emailState.copy(
+                                isClickedVerify = true
+                            )
+                        )
+                    }
                     startTimer()
                 }
             )
@@ -169,7 +176,6 @@ class SignUpViewModel (
             copy(
                 emailState = emailState.copy(
                     isEmailValid = isValid,
-                    isClickedVerify = isValid,
                 )
             )
         }

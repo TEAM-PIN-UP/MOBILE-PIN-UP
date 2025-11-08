@@ -1,14 +1,20 @@
 package com.pinup.placePinup.util
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 object ScreenState {
-    private val _errorMessage = MutableStateFlow<String>("")
-    val errorMessage = _errorMessage.asStateFlow()
+    private val _errorMessage = MutableSharedFlow<String>(
+        replay = 0,
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val errorMessage: SharedFlow<String>
+        get() = _errorMessage.asSharedFlow()
 
-    fun updateError(error: String) {
-        _errorMessage.update { error }
+    fun updateError(error: String)  {
+        _errorMessage.tryEmit(error)
     }
 }
