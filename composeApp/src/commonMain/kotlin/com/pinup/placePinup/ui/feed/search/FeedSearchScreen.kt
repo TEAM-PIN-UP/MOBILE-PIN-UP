@@ -253,18 +253,18 @@ fun FeedSearchScreen(
                 }
             }
         }
-    }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Bottom
-    ){
-        BottomBar(
-            selectedMenu = MainDestination.Feed,
-            profileImage = profile,
-            onBottomMenuClick = onClickBottomNav,
-            onSizeChanged = { bottomBarHeight = it }
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom
+        ){
+            BottomBar(
+                selectedMenu = MainDestination.Feed,
+                profileImage = profile,
+                onBottomMenuClick = onClickBottomNav,
+                onSizeChanged = { bottomBarHeight = it }
+            )
+        }
     }
 }
