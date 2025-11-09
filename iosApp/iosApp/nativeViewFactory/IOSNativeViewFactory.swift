@@ -89,9 +89,6 @@ struct PintsNaverMap: UIViewRepresentable{
         view.showZoomControls = false
         view.showScaleBar = false
         view.mapView.minZoomLevel = 3.0
-        view.mapView.isRotateGestureEnabled = false
-        view.mapView.isScrollGestureEnabled = false
-        view.mapView.isZoomGestureEnabled = false
 
         // 현재 위치 오버레이
         view.mapView.locationOverlay.hidden = false

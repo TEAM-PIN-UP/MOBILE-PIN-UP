@@ -104,10 +104,6 @@ actual fun PinchNaverMap(
             isCompassEnabled = false,
             isZoomControlEnabled = false,
             isScaleBarEnabled = false,
-            isRotateGesturesEnabled = false,
-            isScrollGesturesEnabled = false,
-            isZoomGesturesEnabled = false,
-            isTiltGesturesEnabled = false,
         ),
     ) {
 
