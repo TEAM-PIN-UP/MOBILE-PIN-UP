@@ -36,6 +36,7 @@ fun MapBottomSheetNavHost(
     onMovePinlogDetail: (Int) -> Unit = {},
     onMoveWriteReview: (String) -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {},
+    onClickArticle: (Int) -> Unit = {},
 ) {
     val pinchRoute = MapBottomSheetDestination.Pinch::class.qualifiedName
     val detailRoute = MapBottomSheetDestination.Detail::class.qualifiedName
@@ -144,7 +145,8 @@ fun MapBottomSheetNavHost(
                 },
                 onClickPinch = { id ->
                     onPlaceClick(id)
-                }
+                },
+                onClickArticle = onClickArticle
             )
         }
     }

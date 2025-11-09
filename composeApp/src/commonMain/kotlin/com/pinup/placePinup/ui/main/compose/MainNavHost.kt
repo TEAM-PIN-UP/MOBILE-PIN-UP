@@ -44,6 +44,7 @@ fun MainNavHost(
     userId: Int = -1,
     onMovePintsDetail: (Int) -> Unit = {},
     updateUserId: (Int) -> Unit = {},
+    onClickArticle: (Int) -> Unit = {},
 ) {
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
     val selectedMenuBar = remember { mutableStateOf<MainDestination>(MainDestination.Map) }
@@ -109,7 +110,8 @@ fun MainNavHost(
                     onMoveWriteReview = onMoveNewWriteReview,
                     onMoveUserProfile = {
                         onMoveUserProfileWithName(it)
-                    }
+                    },
+                    onClickArticle = onClickArticle
                 )
             }
 

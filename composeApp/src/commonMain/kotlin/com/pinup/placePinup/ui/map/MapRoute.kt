@@ -27,6 +27,7 @@ fun MapRoute(
     onMovePinlogDetail: (Int) -> Unit = {},
     onMoveWriteReview: (String) -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {},
+    onClickArticle: (Int) -> Unit = {},
 ) {
     val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
         accuracy = LocationTrackerAccuracy.Best
@@ -104,6 +105,7 @@ fun MapRoute(
         onMovePinlogDetail = onMovePinlogDetail,
         onClickLike = mapViewModel::likeChanged,
         onMoveWriteReview = onMoveWriteReview,
-        onMoveUserProfile = mapViewModel::onProfileClick
+        onMoveUserProfile = mapViewModel::onProfileClick,
+        onClickArticle = onClickArticle
     )
 }

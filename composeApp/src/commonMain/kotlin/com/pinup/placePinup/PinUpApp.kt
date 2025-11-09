@@ -278,6 +278,9 @@ fun PinUpApp(
                         },
                         updateUserId = {
                             startAppViewModel.updateUserId(it)
+                        },
+                        onClickArticle = {
+                            navHostController.navigate(PinUpAppDestination.ArticleDetail(it))
                         }
                     )
                 }
