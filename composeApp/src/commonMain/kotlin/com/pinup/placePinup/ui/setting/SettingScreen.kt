@@ -107,7 +107,7 @@ fun SettingScreen(
             MenuBar(
                 text = Texts.Setting.CHANGE_PASSWORD,
                 onClick = {
-                    onChangedPassword()
+                    if (snsType == SNSType.PINUP) onChangedPassword()
                 }
             )
 
