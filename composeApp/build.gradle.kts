@@ -131,6 +131,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 3
         versionName = "1.0.2"
+        multiDexEnabled = true
 
         buildConfigField(
             "String",
@@ -170,7 +171,13 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            isDebuggable = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {

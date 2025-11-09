@@ -437,17 +437,7 @@ fun PinlogDetailScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = Texts.Word.COMMENT,
-                                    style = Typography.T2.copy(
-                                        fontWeight = FontWeight.Medium
-                                    ),
-                                    color = Colors.Gray800,
-                                )
-
-                                Spacer(modifier = Modifier.width(4.dp))
-
-                                Text(
-                                    text = pinlogDetail.commentCount.toString(),
+                                    text = Texts.Word.COMMENT + " " + pinlogDetail.commentCount.toString(),
                                     style = Typography.T2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),

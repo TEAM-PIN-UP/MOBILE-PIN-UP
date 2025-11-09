@@ -231,7 +231,6 @@ fun MapScreen(
 
     DisposableEffect(Unit){
         onDispose {
-            hLog("자 나 팅김")
             viewModel.clearDetailPlace()
         }
     }
