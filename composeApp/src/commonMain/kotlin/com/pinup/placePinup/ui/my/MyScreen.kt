@@ -45,6 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.domain.model.BookmarkedPlace
 import com.pinup.placePinup.domain.model.Member
+import com.pinup.placePinup.domain.model.PagingReview
 import com.pinup.placePinup.domain.model.PintsPageAble
 import com.pinup.placePinup.domain.model.Review
 import com.pinup.placePinup.extentions.ScrollToEndCallback
@@ -74,7 +75,7 @@ import kotlin.String
 @Composable
 fun MyScreen(
     member: Member,
-    reviews: List<Review>,
+    pagingReview: PagingReview,
     scrapList: List<BookmarkedPlace>,
     pinchPageAble: PintsPageAble,
     onClickBottomNav: (MainDestination) -> Unit,
@@ -96,6 +97,7 @@ fun MyScreen(
     onMoveDetail: (Int) -> Unit = {},
     onRefresh: () -> Unit = {},
     onProfileModifyClick: () -> Unit = {},
+    getMoreReviews: () -> Unit = {}
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -113,6 +115,9 @@ fun MyScreen(
     ScrollToEndCallback(scrollState) {
         if (pagerState.value == 1 && !pinchPageAble.last) {
             getMorePints()
+        }
+        if (pagerState.value == 0 && pagingReview.hasNext) {
+            getMoreReviews()
         }
     }
 
@@ -175,7 +180,7 @@ fun MyScreen(
 
                 if (pagerState.value == 0) {
                     this.MyPinLogList(
-                        reviewList = reviews,
+                        reviewList = pagingReview.reviews,
                         onClickMenu = {
                             clickedReviewId = it
                             scope.launch { sheetState.show() }

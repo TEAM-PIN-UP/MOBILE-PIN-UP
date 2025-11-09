@@ -55,7 +55,7 @@ fun MyRoute(
 
     MyScreen(
         member = uiState.value.member,
-        reviews = uiState.value.pagingReview.reviews,
+        pagingReview = uiState.value.pagingReview,
         scrapList = uiState.value.scrapList,
         pinchPageAble = uiState.value.pinchPageAble,
         isRefreshing = uiState.value.isRefreshing,
@@ -80,5 +80,8 @@ fun MyRoute(
         getMorePints = myViewModel::getMorePints,
         onMoveDetail = onMovePintsDetail,
         onRefresh = myViewModel::refreshView,
+        getMoreReviews = {
+            myViewModel.getFeedList(id = uiState.value.pagingReview.nextCursor, memberId = uiState.value.member.profile.memberId)
+        }
     )
 }

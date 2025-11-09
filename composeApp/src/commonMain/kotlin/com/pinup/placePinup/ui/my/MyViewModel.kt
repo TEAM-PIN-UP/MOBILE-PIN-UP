@@ -43,7 +43,7 @@ class MyViewModel (
 
     fun initMyInfo() = viewModelScope.launch {
         val memberInfo = getMemberInfoUseCase().getSuccessOrNull() ?: return@launch
-        getFeedList(memberId = memberInfo.profile.memberId)
+        getFeedList(id = null, memberId = memberInfo.profile.memberId)
         getScrapList()
         getPintsList(memberId = memberInfo.profile.memberId)
         updateState {
@@ -62,7 +62,7 @@ class MyViewModel (
                     copy(
                         prevCursor = id,
                         pagingReview = it.copy(
-                            reviews = pagingReview.reviews + it.reviews
+                            reviews = if (id == null) it.reviews else pagingReview.reviews + it.reviews
                         ),
                     )
                 }
