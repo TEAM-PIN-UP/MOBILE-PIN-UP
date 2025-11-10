@@ -83,7 +83,10 @@ fun PinlogDetailScreen(
                 Row(
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .clickableWithNoRipple {
+                            onClickPlaceDetail(pinlogDetail.kakaoPlaceId)
+                        },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
@@ -111,10 +114,6 @@ fun PinlogDetailScreen(
                     }
 
                     Image(
-                        modifier = Modifier
-                            .clickableWithNoRipple {
-                                onClickPlaceDetail("")
-                            },
                         painter = painterResource(Res.drawable.ic_right_arrow_300),
                         contentDescription = null,
                         colorFilter = ColorFilter.tint(Colors.Gray400)

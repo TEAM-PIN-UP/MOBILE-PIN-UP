@@ -26,12 +26,17 @@ fun CommentView(
     modifier: Modifier = Modifier,
     comment: Comment = Comment(),
     onClickMenu: (Int, String) -> Unit = {_, _ -> },
+    onClickProfile: (String) -> Unit = {},
     onReplyClick: (Int) -> Unit = {},
 ) {
     Row(
         modifier = modifier
     ) {
         ProfileImageView(
+            modifier = Modifier
+                .clickableWithNoRipple {
+                    onClickProfile(comment.author.nickname)
+                },
             imgUrl = comment.author.profileImageUrl,
             size = 36.dp,
         )
@@ -43,6 +48,10 @@ fun CommentView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
+                    modifier = Modifier
+                        .clickableWithNoRipple {
+                            onClickProfile(comment.author.nickname)
+                        },
                     text = comment.author.nickname,
                     style = Typography.L1.copy(
                         fontWeight = FontWeight.SemiBold
@@ -98,6 +107,10 @@ fun CommentView(
                     Row(
                     ) {
                         ProfileImageView(
+                            modifier = Modifier
+                                .clickableWithNoRipple {
+                                    onClickProfile(it.author.nickname)
+                                },
                             imgUrl = it.author.profileImageUrl,
                             size = 36.dp,
                         )
@@ -109,6 +122,10 @@ fun CommentView(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
+                                    modifier = Modifier
+                                        .clickableWithNoRipple {
+                                            onClickProfile(it.author.nickname)
+                                        },
                                     text = it.author.nickname,
                                     style = Typography.L1.copy(
                                         fontWeight = FontWeight.SemiBold

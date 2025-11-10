@@ -311,6 +311,9 @@ fun PinUpApp(
                                 ?.set(PINLOG_WRITE_RESULT, true)
                             navHostController.popBackStack()
                         },
+                        onClickPlaceDetail = {
+                            navHostController.navigate(PinUpAppDestination.PlaceDetail(it))
+                        }
                     )
                 }
 

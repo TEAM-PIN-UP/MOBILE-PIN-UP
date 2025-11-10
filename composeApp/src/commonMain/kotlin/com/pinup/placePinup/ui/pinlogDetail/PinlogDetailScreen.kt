@@ -466,7 +466,8 @@ fun PinlogDetailScreen(
                                 onReplyClick = { id ->
                                     updateReplyCommentId(id)
                                     focusRequester.requestFocus()
-                                }
+                                },
+                                onClickProfile = onClickProfile
                             )
 
                             Spacer(modifier = Modifier.height(20.dp))
