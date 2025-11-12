@@ -834,7 +834,7 @@ fun LazyListScope.MyScrapList(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = Texts.PROFILE.EMPTY_PINCH(member.profile.name),
+                        text = Texts.PROFILE.EMPTY_PINCH(member.profile.nickname),
                         style = Typography.B3.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
