@@ -75,7 +75,7 @@ actual fun PinchNaverMap(
                 val bounds = LatLngBounds(sw, ne)
 
                 cameraPositionState.animate(
-                    CameraUpdate.fitBounds(bounds, 50)
+                    CameraUpdate.fitBounds(bounds, 100)
                 )
             }
             coords.size == 1 -> {

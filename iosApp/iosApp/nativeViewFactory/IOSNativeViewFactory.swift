@@ -127,7 +127,7 @@ struct PintsNaverMap: UIViewRepresentable{
 
             // Compose: CameraUpdate.fitBounds(bounds, 30)
             // iOS: bounds 맞춤(패딩 30)
-            let fit = NMFCameraUpdate(fit: bounds, padding: 30)
+            let fit = NMFCameraUpdate(fit: bounds, padding: 100)
             uiView.mapView.moveCamera(fit)
         } else if coords.count == 1 {
             // 단일 포인트: 위치로 스크롤 후 줌
@@ -252,7 +252,6 @@ struct NaverMap: UIViewRepresentable {
 
     func updateUIView(_ uiView: NMFNaverMapView, context: Context) {
         // ⬇️ 현재 위치 오버레이 갱신 (옵셔널 안전 언래핑)
-        print("하이 이거는?? 호출되나?")
         if let p = position, p.isValid {
             uiView.mapView.locationOverlay.location = NMGLatLng(lat: p.latitude, lng: p.longitude)
         }

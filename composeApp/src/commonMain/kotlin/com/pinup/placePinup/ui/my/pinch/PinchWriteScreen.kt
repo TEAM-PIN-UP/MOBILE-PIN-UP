@@ -335,7 +335,11 @@ fun PinchWriteScreen(
                                     DropdownMenuItem(
                                         modifier = Modifier.fillMaxWidth(),
                                         onClick = {
-                                            onPlaceClick(place, index)
+                                            if (place.hasMyReview) {
+                                                onPlaceClick(place, index)
+                                            } else {
+                                                onClickShowDialog(place, index)
+                                            }
                                             expandedIndex = null
                                         }
                                     ) {
