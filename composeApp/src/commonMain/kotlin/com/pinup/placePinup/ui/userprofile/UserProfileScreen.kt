@@ -773,52 +773,18 @@ fun LazyListScope.UserPinchList(
 
     if (pinchPageAble.content.isEmpty()) {
         item {
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(104.dp))
 
-            RoundedBox(
+            Text(
                 modifier = Modifier
-                    .padding(horizontal = 20.dp)
                     .fillMaxWidth(),
-                cornerColor = Colors.Gray200,
-                cornerRounded = 12,
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(top = 24.dp, bottom = 23.dp)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = Texts.PROFILE.EMPTY_PINCH(member.profile.name),
-                        style = Typography.L2.copy(
-                            fontWeight = FontWeight.SemiBold
-                        ),
-                        color = Colors.Gray400,
-                        textAlign = TextAlign.Center
-                    )
-
-                    Spacer(modifier = Modifier.height(11.dp))
-
-                    RoundedBox(
-                        backgroundColor = Colors.Main99,
-                        cornerRounded = 5
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .padding(horizontal = 18.dp, vertical = 4.dp)
-                                .background(color = Colors.Main99)
-                                .clickableWithNoRipple {
-                                    onClickGoCreatePinch()
-                                },
-                            text = Texts.PROFILE.GO_PINCH_CREATE,
-                            style = Typography.L3.copy(
-                                fontWeight = FontWeight.Medium
-                            ),
-                            color = Colors.Main
-                        )
-                    }
-                }
-            }
+                text = Texts.PROFILE.EMPTY_USER_PINTS,
+                style = Typography.B1.copy(
+                    fontWeight = FontWeight.Medium
+                ),
+                color = Colors.Gray400,
+                textAlign = TextAlign.Center
+            )
         }
     } else {
         item {

@@ -251,6 +251,7 @@ object Texts {
         const val EMPTY_SCRAP = "저장된 장소가 없어요!\n핀로그를 살펴보며 장소를 살펴보아요."
         const val GO_PINLOG = "핀로그 보러가기"
         fun EMPTY_PINCH(name: String) = "${name}님 만의 코스로 핀츠를 만들어보아요."
+        const val EMPTY_USER_PINTS = "작성된 핀츠가\n아직 없습니다!"
         const val GO_PINCH_CREATE = "핀츠 만들러 가기"
     }
 
