@@ -36,9 +36,7 @@ class ChoiceSignUpViewModel (
     }
     fun doSNSLogin(snsType: SNSType) {
         if(snsType == SNSType.PINUP) {
-            emitEvent(ChoiceSignUpUiEvent.MoveSignUp(
-                SNSUserInfo(snsType = snsType)
-            ))
+            emitEvent(ChoiceSignUpUiEvent.MoveEmailLogin)
         }
         else {
             snsLoginFactory.doLogin(snsType, contextFactory, loginResultListener)
