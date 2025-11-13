@@ -12,6 +12,7 @@ import com.pinup.placePinup.domain.usecase.EditCommentUseCase
 import com.pinup.placePinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.placePinup.domain.usecase.GetPinlogDetailUseCase
 import com.pinup.placePinup.domain.usecase.PostCommentUseCase
+import com.pinup.placePinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
 import com.pinup.placePinup.ui.base.UiState
@@ -27,6 +28,7 @@ class PinlogDetailViewModel(
     private val deleteCommentUseCase: DeleteCommentUseCase,
     private val editCommentUseCase: EditCommentUseCase,
     private val getPinlogDetailUseCase: GetPinlogDetailUseCase,
+    private val postReviewLikeChangeUseCase: PostReviewLikeChangeUseCase,
     private val getMyProfileUseCase: GetMyProfileUseCase
 ) : BaseViewModel<PinlogUiState, PinlogUiEvent>(PinlogUiState()) {
 
@@ -49,6 +51,15 @@ class PinlogDetailViewModel(
                 myComment = query
             )
         }
+    }
+
+    fun likeChanged(isLike: Boolean) = viewModelScope.launch {
+        resultResponse(
+            response = postReviewLikeChangeUseCase(reviewId, isLike),
+            successCallback = {
+                getPinlogDetail()
+            }
+        )
     }
 
     private fun getPinlogDetail() = viewModelScope.launch{

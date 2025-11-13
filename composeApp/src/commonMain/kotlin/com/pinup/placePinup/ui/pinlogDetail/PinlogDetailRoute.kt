@@ -102,6 +102,7 @@ fun PinlogDetailRoute(
         },
         updateReplyCommentId = viewModel::updateClickedReplyId,
         onMovePlaceDetail = onMovePlaceDetail,
+        onClickLike = viewModel::likeChanged,
         userInfo = uiState.userInfo,
         onRefresh = viewModel::refreshView
     )

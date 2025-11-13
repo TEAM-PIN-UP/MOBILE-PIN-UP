@@ -96,6 +96,7 @@ fun PinlogDetailScreen(
     updateNonFocusMode: () -> Unit = {},
     updateReplyCommentId: (Int) -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
+    onClickLike: (Boolean) -> Unit = {},
     onRefresh: () -> Unit = {},
 ) {
 
@@ -394,6 +395,10 @@ fun PinlogDetailScreen(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Image(
+                                        modifier = Modifier
+                                            .clickableWithNoRipple {
+                                                onClickLike(pinlogDetail.isLikedByUser)
+                                            },
                                         painter = painterResource(if (pinlogDetail.isLikedByUser) Res.drawable.ic_heat_on else Res.drawable.ic_heart_off),
                                         contentDescription = null
                                     )
