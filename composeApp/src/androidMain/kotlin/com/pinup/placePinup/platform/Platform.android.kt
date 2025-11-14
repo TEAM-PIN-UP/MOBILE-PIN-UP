@@ -38,6 +38,8 @@ actual fun getRealPathFromUri(contentUri: String): String? {
     return null
 }
 
+actual fun getPlatformName(): String = PLATFORM_ANDROID
+
 actual fun hLog(message: String) {
     Log.d("jsh", message)
 }

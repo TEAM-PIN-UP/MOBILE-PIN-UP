@@ -15,6 +15,7 @@ interface Platform {
 }
 
 expect fun openBrowser(url: String, context: PlatformContext)
+expect fun getPlatformName(): String
 expect fun getRealPathFromUri(contentUri: String): String?
 expect fun hLog(message: String)
 expect fun dataStorePreferences(): DataStore<Preferences>
@@ -30,3 +31,5 @@ fun createDataStore(
     )
 
 const val DATA_STORE_PREFERENCE = "pinup.preferences_pb"
+const val PLATFORM_ANDROID = "Android"
+const val PLATFORM_IOS = "iOS"

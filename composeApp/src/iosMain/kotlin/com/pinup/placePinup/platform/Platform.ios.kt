@@ -35,6 +35,8 @@ actual fun getRealPathFromUri(contentUri: String): String? {
 actual fun hLog(message: String) {
     return println(message)
 }
+
+actual fun getPlatformName(): String = PLATFORM_IOS
 actual fun dataStorePreferences(): DataStore<Preferences> {
     return createDataStore(
         producePath = { producePath() }

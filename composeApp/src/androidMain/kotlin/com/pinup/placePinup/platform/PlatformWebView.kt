@@ -1,5 +1,6 @@
 package com.pinup.placePinup.platform
 
+import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.runtime.Composable
@@ -11,7 +12,16 @@ import androidx.compose.ui.viewinterop.AndroidView
 actual fun PlatformWebView(modifier: Modifier, url: String, html: String) {
     val context = LocalContext.current
     AndroidView(
-        factory = { WebView(context).apply { webViewClient = WebViewClient() } },
+        factory = { WebView(context).apply {
+            settings.javaScriptEnabled = true
+            addJavascriptInterface(
+                JSBridge { src ->
+                    hLog("이미지 클릭됨: $src")
+                },
+                "Android"
+            )
+            webViewClient = WebViewClient()
+        } },
         modifier = Modifier.then(modifier),
         update = {
             if(url.isEmpty()) {
@@ -22,4 +32,11 @@ actual fun PlatformWebView(modifier: Modifier, url: String, html: String) {
             }
         }
     )
+}
+
+class JSBridge(val onImageClick: (String) -> Unit) {
+    @JavascriptInterface
+    fun onImageClicked(src: String) {
+        onImageClick(src)
+    }
 }

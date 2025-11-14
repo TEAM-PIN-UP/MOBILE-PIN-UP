@@ -129,7 +129,7 @@ android {
         applicationId = "com.pinup.placePinup"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 5
+        versionCode = 6
         versionName = "1.0.0"
         multiDexEnabled = true
 
@@ -171,8 +171,6 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = true
-            isShrinkResources = true
             isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
