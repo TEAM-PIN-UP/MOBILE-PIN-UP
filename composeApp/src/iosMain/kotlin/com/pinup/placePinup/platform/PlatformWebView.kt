@@ -14,6 +14,7 @@ import platform.Foundation.NSMutableURLRequest
 import platform.Foundation.NSNumber
 import platform.Foundation.NSURL
 import platform.WebKit.*
+import platform.darwin.NSObject
 
 private object SharedWebKitObjects {
     val processPool = WKProcessPool()
@@ -55,6 +56,13 @@ actual fun PlatformWebView(
         factory = {
             val controller = WKUserContentController().apply {
                 // viewport 메타가 없을 때 자동 삽입 (글자 작게 보이는 문제 방지)
+                addScriptMessageHandler(
+                    ImageClickHandler { src ->
+                        println("iOS 이미지 클릭됨: $src")
+                    },
+                    name = "imageClick"
+                )
+
                 addUserScript(
                     WKUserScript(
                         source = """
@@ -115,4 +123,17 @@ actual fun PlatformWebView(
             (view as? WKWebView)?.navigationDelegate = null
         },
     )
+}
+
+class ImageClickHandler(
+    private val onImageClick: (String) -> Unit
+) : NSObject(), WKScriptMessageHandlerProtocol {
+
+    override fun userContentController(
+        userContentController: WKUserContentController,
+        didReceiveScriptMessage: WKScriptMessage
+    ) {
+        val body = didReceiveScriptMessage.body as? String ?: return
+        onImageClick(body)
+    }
 }
