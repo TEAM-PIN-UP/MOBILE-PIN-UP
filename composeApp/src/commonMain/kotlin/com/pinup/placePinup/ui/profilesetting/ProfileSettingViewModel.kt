@@ -5,15 +5,21 @@ import com.pinup.placePinup.data.request.ProfileEditRequest
 import com.pinup.placePinup.domain.model.ImageUploadType
 import com.pinup.placePinup.domain.usecase.EditProfileUseCase
 import com.pinup.placePinup.domain.usecase.GetMemberInfoUseCase
+import com.pinup.placePinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.placePinup.domain.usecase.PostImageUploadUseCase
+import com.pinup.placePinup.domain.usecase.SaveUserInfoUseCase
+import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
 import com.pinup.placePinup.ui.base.UiState
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
 class ProfileSettingViewModel(
     private val getMemberInfoUseCase: GetMemberInfoUseCase,
+    private val getMyProfileUseCase: GetMyProfileUseCase,
+    private val saveUserInfoUseCase: SaveUserInfoUseCase,
     private val editProfileUseCase: EditProfileUseCase,
     private val uploadImageUseCase: PostImageUploadUseCase
 ) : BaseViewModel<ProfileSettingUiState, ProfileSettingUiEvent>(ProfileSettingUiState()) {
@@ -42,8 +48,14 @@ class ProfileSettingViewModel(
         )
     }
 
-    fun updateProfile(profileByte: ByteArray) {
-        updateState { copy( profileByte = profileByte ) }
+    fun updateProfile(profileByte: ByteArray?) {
+        if (profileByte == null) {
+            updateState {
+                copy( profileByte = null, profileUrl = "")
+            }
+        } else {
+            updateState { copy( profileByte = profileByte ) }
+        }
     }
 
     fun updateNickName(nickName: String) {
@@ -88,12 +100,25 @@ class ProfileSettingViewModel(
             profileImageUrl = profile
         )
 
+        hLog(request.toString())
+
         resultResponse(
             response = editProfileUseCase(request),
             successCallback = {
+                updateMyProfile()
                 emitEvent(ProfileSettingUiEvent.SuccessChangeProfile)
             }
         )
+    }
+
+    private fun updateMyProfile() = viewModelScope.launch {
+        getMyProfileUseCase().collectLatest {
+            val userInfo = it.copy(
+                nickname = uiState.value.nickName,
+                profileUrl = uiState.value.profileUrl
+            )
+            saveUserInfoUseCase(userInfo)
+        }
     }
 }
 

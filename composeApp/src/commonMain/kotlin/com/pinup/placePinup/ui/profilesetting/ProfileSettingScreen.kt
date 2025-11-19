@@ -17,8 +17,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,13 +38,17 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.pinup.placePinup.extentions.clickableSingleWithNoRipple
 import com.pinup.placePinup.extentions.clickableWithNoRipple
+import com.pinup.placePinup.ui.component.CommentMenuBottomSheet
 import com.pinup.placePinup.ui.component.PHorizontalDivider
+import com.pinup.placePinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.placePinup.ui.component.RoundedTextField
+import com.pinup.placePinup.ui.component.bottomSheet.ProfileMenuBottomSheet
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_back
@@ -49,7 +59,7 @@ import pinup.composeapp.generated.resources.ic_profile_setting_image
 fun ProfileSettingScreen(
     onBackPressed: () -> Unit,
     onClickModifyProfile: () -> Unit = {},
-    onUpdateProfileImage: (ByteArray) -> Unit,
+    onUpdateProfileImage: (ByteArray?) -> Unit,
     profileImage: String = "",
     profileImageByte: ByteArray? = null,
     nickName: String = "",
@@ -69,190 +79,210 @@ fun ProfileSettingScreen(
             }
         }
     )
+    val sheetState = rememberModalBottomSheetState(
+        ModalBottomSheetValue.Hidden
+    )
 
-    Column(
-        modifier = Modifier
-            .background(Colors.White)
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = {
-                    focusManager.clearFocus()
-                    keyboard?.hide()
-                })
-            }
+    ModalBottomSheetLayout(
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        sheetContent = {
+            ProfileMenuBottomSheet(
+                onClickSelectImage = {
+                    singleImagePicker.launch()
+                    scope.launch { sheetState.hide() }
+                },
+                onClickDelete = {
+                    onUpdateProfileImage(null)
+                    scope.launch { sheetState.hide() }
+                },
+            )
+        },
+        sheetBackgroundColor = Colors.White,
+        sheetState = sheetState,
     ) {
-        Box(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(horizontal = 20.dp)
-                .height(56.dp),
+                .background(Colors.White)
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        focusManager.clearFocus()
+                        keyboard?.hide()
+                    })
+                }
         ) {
-            Image(
+            Box(
                 modifier = Modifier
-                    .clickableWithNoRipple {
-                        onBackPressed()
-                    }
-                    .align(Alignment.CenterStart),
-                painter = painterResource(Res.drawable.ic_back),
-                contentDescription = null
-            )
-
-            Text(
-                modifier = Modifier
-                    .align(Alignment.Center),
-                text =  Texts.Setting.PROFILE_SETTING,
-                style = Typography.H3,
-                color = Colors.Neutral800
-            )
-
-            Text(
-                modifier = Modifier
-                    .clickableWithNoRipple {
-                        onClickModifyProfile()
-                    }
-                    .align(Alignment.CenterEnd),
-                text = Texts.Word.COMPLETE,
-                color = Colors.Main,
-                style = Typography.B2.copy(
-                    fontWeight = FontWeight.Medium
-                )
-            )
-        }
-
-        PHorizontalDivider()
-
-        Spacer(modifier = Modifier.height(42.dp))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            if (profileImage.isEmpty() && profileImageByte == null) {
+                    .fillMaxWidth()
+                    .statusBarsPadding()
+                    .padding(horizontal = 20.dp)
+                    .height(56.dp),
+            ) {
                 Image(
                     modifier = Modifier
-                        .size(84.dp)
-                        .clickableSingleWithNoRipple {
-                            singleImagePicker.launch()
-                        },
-                    painter = painterResource(Res.drawable.ic_profile_select),
-                    contentDescription = null,
+                        .clickableWithNoRipple {
+                            onBackPressed()
+                        }
+                        .align(Alignment.CenterStart),
+                    painter = painterResource(Res.drawable.ic_back),
+                    contentDescription = null
                 )
-            } else {
-                Box {
-                    AsyncImage(
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .size(84.dp)
-                            .clickableSingleWithNoRipple {
-                                singleImagePicker.launch()
-                            },
-                        model = profileImageByte ?: profileImage,
-                        contentScale = ContentScale.Crop,
-                        contentDescription = null,
-                    )
 
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.Center),
+                    text =  Texts.Setting.PROFILE_SETTING,
+                    style = Typography.H3,
+                    color = Colors.Neutral800
+                )
+
+                Text(
+                    modifier = Modifier
+                        .clickableWithNoRipple {
+                            onClickModifyProfile()
+                        }
+                        .align(Alignment.CenterEnd),
+                    text = Texts.Word.COMPLETE,
+                    color = Colors.Main,
+                    style = Typography.B2.copy(
+                        fontWeight = FontWeight.Medium
+                    )
+                )
+            }
+
+            PHorizontalDivider()
+
+            Spacer(modifier = Modifier.height(42.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                if (profileImage.isEmpty() && profileImageByte == null) {
                     Image(
                         modifier = Modifier
                             .size(84.dp)
                             .clickableSingleWithNoRipple {
-                                singleImagePicker.launch()
+                                scope.launch { sheetState.show() }
+                                //singleImagePicker.launch()
                             },
-                        painter = painterResource(Res.drawable.ic_profile_setting_image),
+                        painter = painterResource(Res.drawable.ic_profile_select),
                         contentDescription = null,
                     )
+                } else {
+                    Box {
+                        AsyncImage(
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .size(84.dp),
+                            model = profileImageByte ?: profileImage,
+                            contentScale = ContentScale.Crop,
+                            contentDescription = null,
+                        )
+
+                        Image(
+                            modifier = Modifier
+                                .size(84.dp)
+                                .clickableSingleWithNoRipple {
+                                    scope.launch { sheetState.show() }
+                                    //singleImagePicker.launch()
+                                },
+                            painter = painterResource(Res.drawable.ic_profile_setting_image),
+                            contentDescription = null,
+                        )
+                    }
                 }
-                }
-        }
-
-        Spacer(modifier = Modifier.height(34.dp))
-
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-        ) {
-            Column {
-                Text(
-                    text = Texts.Word.NICKNAME,
-                    color = Colors.Gray800,
-                    style = Typography.B1.copy(
-                        fontWeight = FontWeight.Medium
-                    )
-                )
-
-                Spacer(modifier = Modifier.height(36.dp))
-
-                Text(
-                    text = Texts.Word.INTRO,
-                    color = Colors.Gray800,
-                    style = Typography.B1.copy(
-                        fontWeight = FontWeight.Medium
-                    )
-                )
             }
 
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.height(34.dp))
 
-            Column {
-                RoundedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    text = nickName,
-                    onValueChange = {
-                        onNickNameChange(it)
-                    },
-                    cornerRounded = 0,
-                    textStyle = Typography.B1.copy(
-                        fontWeight = FontWeight.Medium
-                    ),
-                    contentPadding = PaddingValues(0.dp),
-                    fixedBorderColor = Colors.Transparency
-                )
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+            ) {
+                Column {
+                    Text(
+                        text = Texts.Word.NICKNAME,
+                        color = Colors.Gray800,
+                        style = Typography.B1.copy(
+                            fontWeight = FontWeight.Medium
+                        )
+                    )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(36.dp))
 
-                PHorizontalDivider(
-                    color = if (nickName.isEmpty()) Colors.Gray100 else Colors.Gray800
-                )
+                    Text(
+                        text = Texts.Word.INTRO,
+                        color = Colors.Gray800,
+                        style = Typography.B1.copy(
+                            fontWeight = FontWeight.Medium
+                        )
+                    )
+                }
 
-                Spacer(modifier = Modifier.height(26.dp))
+                Spacer(modifier = Modifier.width(20.dp))
 
-                RoundedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    text = bio,
-                    onValueChange = {
-                        onBioChange(it)
-                    },
-                    cornerRounded = 0,
-                    singleLine = false,
-                    textStyle = Typography.B1.copy(
-                        fontWeight = FontWeight.Medium
-                    ),
-                    contentPadding = PaddingValues(0.dp),
-                    fixedBorderColor = Colors.Transparency,
-                    placeholder = Texts.Setting.HINT_BIO_CHANGE
-                )
+                Column {
+                    RoundedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        text = nickName,
+                        onValueChange = {
+                            onNickNameChange(it)
+                        },
+                        cornerRounded = 0,
+                        textStyle = Typography.B1.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        contentPadding = PaddingValues(0.dp),
+                        fixedBorderColor = Colors.Transparency
+                    )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(10.dp))
 
-                PHorizontalDivider(
-                    color = if (bio.isEmpty()) Colors.Gray100 else Colors.Gray800
-                )
+                    PHorizontalDivider(
+                        color = if (nickName.isEmpty()) Colors.Gray100 else Colors.Gray800
+                    )
+
+                    Spacer(modifier = Modifier.height(26.dp))
+
+                    RoundedTextField(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        text = bio,
+                        onValueChange = {
+                            onBioChange(it)
+                        },
+                        cornerRounded = 0,
+                        singleLine = false,
+                        textStyle = Typography.B1.copy(
+                            fontWeight = FontWeight.Medium
+                        ),
+                        contentPadding = PaddingValues(0.dp),
+                        fixedBorderColor = Colors.Transparency,
+                        placeholder = Texts.Setting.HINT_BIO_CHANGE
+                    )
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    PHorizontalDivider(
+                        color = if (bio.isEmpty()) Colors.Gray100 else Colors.Gray800
+                    )
+                }
             }
-        }
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 20.dp),
-            text = Texts.Setting.HINT_NICKNAME_CHANGE,
-            color = Colors.Gray400,
-            style = Typography.L1.copy(
-                fontWeight = FontWeight.Medium
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp),
+                text = Texts.Setting.HINT_NICKNAME_CHANGE,
+                color = Colors.Gray400,
+                style = Typography.L1.copy(
+                    fontWeight = FontWeight.Medium
+                )
             )
-        )
+        }
     }
 }

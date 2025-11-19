@@ -253,6 +253,8 @@ object Texts {
         fun EMPTY_PINCH(name: String) = "${name}님 만의 코스로 핀츠를 만들어보아요."
         const val EMPTY_USER_PINTS = "작성된 핀츠가\n아직 없습니다!"
         const val GO_PINCH_CREATE = "핀츠 만들러 가기"
+        const val PICK_LIBRARY = "라이브러리에서 선택"
+        const val DELETE_PROFILE_IMAGE = "프로필 이미지 삭제"
     }
 
     object Article {
