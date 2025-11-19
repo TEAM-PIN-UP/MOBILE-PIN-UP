@@ -3,6 +3,8 @@ package com.pinup.placePinup.ui.my.pinch
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.pinup.placePinup.data.request.pints.ModifyPintsRequest
+import com.pinup.placePinup.data.request.pints.PintsPlaceRequest
+import com.pinup.placePinup.domain.model.Category
 import com.pinup.placePinup.domain.model.Place
 import com.pinup.placePinup.domain.model.Position
 import com.pinup.placePinup.domain.usecase.EditPintsUseCase
@@ -163,7 +165,17 @@ class PinchWriteViewModel (
         val request = ModifyPintsRequest(
             title = uiState.value.title,
             content = uiState.value.description,
-            kakaoPlaceIds = uiState.value.pinchList.filter { it.kakaoPlaceId != "" }.map { it.kakaoPlaceId },
+            placeRequests = uiState.value.pinchList.filter { it.kakaoPlaceId != "" }.map {
+                PintsPlaceRequest(
+                    kakaoPlaceId = it.kakaoPlaceId,
+                    name = it.name,
+                    category = Category.of(it.placeCategory),
+                    address = it.address,
+                    roadAddress = it.roadAddress,
+                    longitude = it.longitude,
+                    latitude = it.latitude
+                )
+            },
         )
 
         resultResponse(
