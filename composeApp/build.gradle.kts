@@ -102,7 +102,7 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.composeVM)
             // backHandler
-//            implementation(libs.ui.backhandler)
+            implementation(libs.ui.backhandler)
             // datastore
             implementation(libs.androidx.data.store.core)
             // moko library(geo, permission, media)

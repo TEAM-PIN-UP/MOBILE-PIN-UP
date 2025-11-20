@@ -20,7 +20,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.util.VelocityTracker
@@ -31,6 +33,7 @@ import com.pinup.placePinup.ui.theme.Colors
 import kotlinx.datetime.Clock
 import kotlin.math.abs
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PBottomSheet(
     expandedHeight: Dp,
@@ -87,6 +90,13 @@ fun PBottomSheet(
     LaunchedEffect(isShowPinch){
         if (isShowPinch) realHeight = halfHeight
     }
+
+    BackHandler(
+        enabled = realHeight != hiddenHeight,
+        onBack = {
+            realHeight = hiddenHeight
+        }
+    )
 
     Column(
         modifier = modifier
