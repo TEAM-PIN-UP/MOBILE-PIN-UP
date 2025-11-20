@@ -233,6 +233,7 @@ fun MapScreen(
     DisposableEffect(Unit){
         onDispose {
             viewModel.clearDetailPlace()
+            viewModel.clearPinchDetailList()
         }
     }
 

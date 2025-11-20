@@ -97,6 +97,7 @@ class MapViewModel (
 
     fun updateShowPinch() {
         clearDetailPlace()
+        clearPinchDetailList()
         updateState {
             copy(
                 isShowPinch = !isShowPinch
@@ -302,13 +303,10 @@ class MapViewModel (
         )
     }
 
-    fun clearDetailPlace() = viewModelScope.launch {
+    fun clearDetailPlace() {
         updateState {
             copy(
                 placeDetailUiState = PlaceDetailUiState(),
-                pinchUiState = pinchUiState.copy(
-                    editorPintsDetail = EditorPintsDetail()
-                ),
                 isDetailClicked = false
             )
         }

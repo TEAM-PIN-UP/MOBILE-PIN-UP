@@ -8,7 +8,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.model.ChipState
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.serialization.Serializable
@@ -50,6 +49,7 @@ fun MapBottomSheetNavHost(
                 }
             }
         } else {
+            if (isShowPinch) return@LaunchedEffect
             navHostController.navigate(MapBottomSheetDestination.Search) {
                 launchSingleTop = true
             }
@@ -65,21 +65,16 @@ fun MapBottomSheetNavHost(
                 }
             }
         } else {
-            if (current == pinchRoute) {
-                navHostController.popBackStack()
-            }
-            else {
-                navHostController.popBackStack(
-                    route = MapBottomSheetDestination.Search,
-                    inclusive = false
-                )
-            }
+            navHostController.popBackStack(
+                route = MapBottomSheetDestination.Search,
+                inclusive = false
+            )
         }
     }
 
     NavHost(
         navController = navHostController,
-        startDestination = if (placeDetailUiState.detailPlace != null) MapBottomSheetDestination.Detail else MapBottomSheetDestination.Search,
+        startDestination = MapBottomSheetDestination.Search,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None },
         popEnterTransition = { EnterTransition.None },
@@ -107,7 +102,6 @@ fun MapBottomSheetNavHost(
                 isExpanded = isScrollable,
                 onMoveWriteReview = onMoveWriteReview,
                 onBackPressed = {
-                    onClearDetailPlace()
                     navHostController.popBackStack()
                 },
                 onClearDetailPlace = {
