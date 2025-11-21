@@ -474,7 +474,7 @@ fun PinUpApp(
                     UserProfileRoute(
                         contextFactory = contextFactory,
                         onClickDetail = { navHostController.navigate(PinUpAppDestination.PinlogDetail(it)) },
-                        onMovePinchWrite = { navHostController.navigate(PinUpAppDestination.PinchWrite(0)) },
+                        onMovePints = { navHostController.navigate(PinUpAppDestination.Pints(it)) },
                         onMovePintsDetail = { navHostController.navigate(PinUpAppDestination.PinchDetail(it)) },
                         onClickBack = {
                             navHostController.popBackStack()

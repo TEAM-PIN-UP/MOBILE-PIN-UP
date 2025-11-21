@@ -79,7 +79,7 @@ fun UserProfileScreen(
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
     onClickShare: () -> Unit = {},
-    onMovePinchWrite: () -> Unit = {},
+    onMovePints: (Int) -> Unit = {},
     getMorePints: () -> Unit = {},
     onMoveDetail: (Int) -> Unit = {},
     onClickBack: () -> Unit = {},
@@ -346,7 +346,7 @@ fun UserProfileScreen(
                     this.UserPinchList(
                         member = member,
                         pinchPageAble = pinchPageAble,
-                        onClickGoCreatePinch = onMovePinchWrite,
+                        onMovePints = onMovePints,
                         onMoveDetail = onMoveDetail
                     )
                 }
@@ -730,7 +730,7 @@ fun LazyListScope.UserPinlogList(
 fun LazyListScope.UserPinchList(
     member: Member,
     pinchPageAble: PintsPageAble,
-    onClickGoCreatePinch: () -> Unit = {},
+    onMovePints: (Int) -> Unit = {},
     onMoveDetail: (Int) -> Unit = {},
 ) {
     item {
@@ -745,7 +745,7 @@ fun LazyListScope.UserPinchList(
                 )
                 .padding(horizontal = 8.dp, vertical = 6.dp)
                 .clickableWithNoRipple {
-                    onClickGoCreatePinch()
+                    onMovePints(member.profile.memberId)
                 },
             verticalAlignment = Alignment.CenterVertically
         ) {

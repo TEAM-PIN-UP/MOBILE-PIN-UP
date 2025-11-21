@@ -10,7 +10,7 @@ import org.koin.core.parameter.parametersOf
 fun UserProfileRoute(
     contextFactory: ContextFactory,
     onClickDetail: (Int) -> Unit = {},
-    onMovePinchWrite: () -> Unit = {},
+    onMovePints: (Int) -> Unit = {},
     onMovePintsDetail: (Int) -> Unit = {},
     onClickBack: () -> Unit = {},
     onSettingClick: () -> Unit = {},
@@ -29,7 +29,7 @@ fun UserProfileRoute(
         onClickLike = viewModel::likeChanged,
         onClickDetail = onClickDetail,
         onSettingClick = onSettingClick,
-        onMovePinchWrite = onMovePinchWrite,
+        onMovePints = onMovePints,
         onClickShare = viewModel::shareMyProfile,
         onMoveDetail = onMovePintsDetail,
         getMorePints = viewModel::getMorePints,
