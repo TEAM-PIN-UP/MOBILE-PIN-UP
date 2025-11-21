@@ -25,6 +25,7 @@ fun MyRoute(
     onClickDetail: (Int) -> Unit = {},
     onClickMoreScrap: () -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
+    onMovePints: (Int) -> Unit = {},
     onMovePinchWrite: () -> Unit = {},
     onMovePintsDetail: (Int) -> Unit = {},
 ) {
@@ -76,6 +77,7 @@ fun MyRoute(
         onClickShare = myViewModel::shareMyProfile,
         onClickMoreScrap = onClickMoreScrap,
         onMovePlaceDetail = onMovePlaceDetail,
+        onMovePints = onMovePints,
         onMovePinchWrite = onMovePinchWrite,
         getMorePints = myViewModel::getMorePints,
         onMoveDetail = onMovePintsDetail,

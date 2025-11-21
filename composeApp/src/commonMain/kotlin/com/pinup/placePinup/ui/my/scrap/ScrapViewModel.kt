@@ -14,22 +14,11 @@ import kotlinx.coroutines.launch
 
 
 class ScrapViewModel (
-    private val getMemberInfoUseCase: GetMemberInfoUseCase,
     private val getBookmarksUseCase: GetBookmarksUseCase,
 ) : BaseViewModel<ScrapUiState, UiEvent>(ScrapUiState()) {
 
     init {
-        initMyInfo()
-    }
-
-    private fun initMyInfo() = viewModelScope.launch {
-        val memberInfo = getMemberInfoUseCase().getSuccessOrNull() ?: return@launch
         getScrapList()
-        updateState {
-            copy(
-                profileUrl = memberInfo.profile.profilePictureUrl ?: "",
-            )
-        }
     }
 
     private fun getScrapList(
@@ -72,5 +61,4 @@ data class ScrapUiState(
     val scrapList: List<BookmarkedPlace> = emptyList(),
     val chipStates: List<ChipState> = ChipState.default,
     val sortType: SortType = SortType.LATEST,
-    val profileUrl: String = "",
 ) : UiState

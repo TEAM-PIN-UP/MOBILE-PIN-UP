@@ -22,7 +22,8 @@ import com.pinup.placePinup.ui.feed.FeedViewModel
 import com.pinup.placePinup.ui.findAccount.changePassword.ChangePasswordViewModel
 import com.pinup.placePinup.ui.findAccount.findId.FindIdViewModel
 import com.pinup.placePinup.ui.findAccount.findPassword.FindPasswordViewModel
-import com.pinup.placePinup.ui.my.pinch.PinchWriteViewModel
+import com.pinup.placePinup.ui.my.pinch.PintsViewModel
+import com.pinup.placePinup.ui.my.pinch.write.PinchWriteViewModel
 import com.pinup.placePinup.ui.my.pinch.detail.PinchDetailViewModel
 import com.pinup.placePinup.ui.my.scrap.ScrapViewModel
 import com.pinup.placePinup.ui.onboarding.OnboardingViewModel
@@ -60,6 +61,7 @@ val viewModelModule = module {
     viewModelOf(::StartAppViewModel)
     viewModelOf(::ScrapViewModel)
     viewModelOf(::PlaceDetailViewModel)
+    viewModelOf(::PintsViewModel)
     viewModelOf(::PinchWriteViewModel)
     viewModelOf(::PinchDetailViewModel)
 }

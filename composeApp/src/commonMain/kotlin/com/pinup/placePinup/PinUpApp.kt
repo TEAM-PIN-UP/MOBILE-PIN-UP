@@ -34,7 +34,8 @@ import com.pinup.placePinup.ui.login.compose.LoginRoute
 import com.pinup.placePinup.ui.login.model.SNSType
 import com.pinup.placePinup.ui.login.model.SNSUserInfo
 import com.pinup.placePinup.ui.main.compose.MainNavHost
-import com.pinup.placePinup.ui.my.pinch.PinchWriteRoute
+import com.pinup.placePinup.ui.my.pinch.PintsRoute
+import com.pinup.placePinup.ui.my.pinch.write.PinchWriteRoute
 import com.pinup.placePinup.ui.my.pinch.detail.PinchDetailRoute
 import com.pinup.placePinup.ui.my.scrap.ScrapRoute
 import com.pinup.placePinup.ui.onboarding.OnboardingRoute
@@ -281,6 +282,9 @@ fun PinUpApp(
                         },
                         onClickArticle = {
                             navHostController.navigate(PinUpAppDestination.ArticleDetail(it))
+                        },
+                        onMovePints = {
+                            navHostController.navigate(PinUpAppDestination.Pints(it))
                         }
                     )
                 }
@@ -349,6 +353,17 @@ fun PinUpApp(
                         onMoveUserProfile = {
                             navHostController.navigate(PinUpAppDestination.UserProfile(name = it))
                         }
+                    )
+                }
+
+                composable<PinUpAppDestination.Pints> {
+                    PintsRoute(
+                        onBackPressed = {
+                            navHostController.popBackStack()
+                        },
+                        onMovePintsDetail = {
+                            navHostController.navigate(PinUpAppDestination.PinchDetail(it))
+                        },
                     )
                 }
 
@@ -559,6 +574,11 @@ sealed interface PinUpAppDestination {
 
     @Serializable
     data object Scrap : PinUpAppDestination
+    @Serializable
+    data class Pints(
+        val memberId: Int
+    ) : PinUpAppDestination
+
     @Serializable
     data class PinchWrite(
         val pintsId: Int

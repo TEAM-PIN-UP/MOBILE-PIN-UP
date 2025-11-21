@@ -1,4 +1,4 @@
-package com.pinup.placePinup.ui.my.pinch
+package com.pinup.placePinup.ui.my.pinch.write
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

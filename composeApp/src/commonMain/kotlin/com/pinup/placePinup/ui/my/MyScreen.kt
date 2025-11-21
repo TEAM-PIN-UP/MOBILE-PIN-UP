@@ -93,6 +93,7 @@ fun MyScreen(
     onClickMoreScrap: () -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
     onMovePinchWrite: () -> Unit = {},
+    onMovePints: (Int) -> Unit = {},
     getMorePints: () -> Unit = {},
     onMoveDetail: (Int) -> Unit = {},
     onRefresh: () -> Unit = {},
@@ -197,6 +198,7 @@ fun MyScreen(
                         onClickMoreScrap = onClickMoreScrap,
                         onClickPlaceDetail = onMovePlaceDetail,
                         onClickGoCreatePinch = onMovePinchWrite,
+                        onMovePintsList = onMovePints,
                         onClickGoFeed = { onClickBottomNav(MainDestination.Feed) },
                         onMoveDetail = onMoveDetail
                     )
@@ -645,6 +647,7 @@ fun LazyListScope.MyScrapList(
     pinchPageAble: PintsPageAble,
     onClickGoFeed: () -> Unit = {},
     onClickGoCreatePinch: () -> Unit = {},
+    onMovePintsList: (Int) -> Unit = {},
     onClickPlaceDetail: (String) -> Unit = {},
     onClickMoreScrap: () -> Unit = {},
     onMoveDetail: (Int) -> Unit = {},
@@ -790,7 +793,7 @@ fun LazyListScope.MyScrapList(
                 )
                 .padding(horizontal = 8.dp, vertical = 6.dp)
                 .clickableWithNoRipple {
-                    onClickGoCreatePinch()
+                    onMovePintsList(member.profile.memberId)
                 },
             verticalAlignment = Alignment.CenterVertically
         ) {

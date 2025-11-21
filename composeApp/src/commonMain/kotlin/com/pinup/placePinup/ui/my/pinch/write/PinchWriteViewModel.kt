@@ -1,4 +1,4 @@
-package com.pinup.placePinup.ui.my.pinch
+package com.pinup.placePinup.ui.my.pinch.write
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
