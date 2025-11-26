@@ -141,17 +141,18 @@ fun MyScreen(
     ) {
         Box(
             Modifier
+                .background(color = Colors.White)
                 .statusBarsPadding()
-                .pullRefresh(state = pullRefreshState,)
+                .pullRefresh(state = pullRefreshState)
         ) {
             LazyColumn(
                 modifier = modifier
                     .background(
                         color = Colors.White
                     )
+                    .fillMaxSize()
                     .padding(bottom = bottomBarHeight)
-                    .statusBarsPadding()
-                    .fillMaxSize(),
+                    .statusBarsPadding(),
                 state = scrollState
             ) {
                 item {
