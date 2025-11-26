@@ -22,5 +22,6 @@ expect fun PlatformNaverMap(
     isShowPinch: Boolean,
     cameraPosition: Position?,
     onPlaceClick: (String) -> Unit,
-    onCameraStateChange: (CameraState) -> Unit
+    onCameraStateChange: (CameraState) -> Unit,
+    onMapClick: () -> Unit
 )

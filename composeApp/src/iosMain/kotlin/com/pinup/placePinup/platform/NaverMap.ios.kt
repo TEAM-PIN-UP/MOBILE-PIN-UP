@@ -28,14 +28,15 @@ actual fun PlatformNaverMap(
     isShowPinch: Boolean,
     cameraPosition: Position?,
     onPlaceClick: (String) -> Unit,
-    onCameraStateChange: (CameraState) -> Unit
+    onCameraStateChange: (CameraState) -> Unit,
+    onMapClick: () -> Unit
 ) {
     val factory = LocalNativeViewFactory.current
     LaunchedEffect(key1 = cameraPosition) {
-        // some logic
         hLog("cameraPosition>>> $cameraPosition")
     }
 
+    //TODO 네이버 맵에도 터치 이벤트 달아야 함.
     UIKitViewController(
         modifier = modifier
             .fillMaxSize(),

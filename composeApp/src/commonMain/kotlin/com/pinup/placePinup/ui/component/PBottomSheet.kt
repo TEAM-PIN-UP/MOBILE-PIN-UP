@@ -43,10 +43,12 @@ fun PBottomSheet(
     pBottomSheetTargetValue: PBottomSheetTargetValue = PBottomSheetTargetValue.HIDDEN,
     onSheetHeightChanged: (Dp) -> Unit = {},
     consumeDetailClicked: () -> Unit = {},
+    consumeMapClicked: () -> Unit = {},
     isMoving: Boolean = false,
     isDetailClicked: Boolean = false,
     isFocusSearch: Boolean = false,
     isShowPinch: Boolean = false,
+    isMapClicked: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     var currentTargetValue by remember { mutableStateOf(pBottomSheetTargetValue) }
@@ -89,6 +91,13 @@ fun PBottomSheet(
 
     LaunchedEffect(isShowPinch){
         if (isShowPinch) realHeight = halfHeight
+    }
+
+    LaunchedEffect(isMapClicked){
+        if (isMapClicked) {
+            realHeight = hiddenHeight
+            consumeMapClicked()
+        }
     }
 
     BackHandler(

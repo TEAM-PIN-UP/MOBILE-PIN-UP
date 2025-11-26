@@ -130,6 +130,7 @@ fun MapScreen(
     val statusBarHeightDp = WindowInsets.statusBars
         .asPaddingValues()
         .calculateTopPadding()
+
     val expandedHeight by remember(parentHeightDp) {
         derivedStateOf {
             parentHeightDp - 24.dp - bottomBarHeightDp - statusBarHeightDp
@@ -145,6 +146,7 @@ fun MapScreen(
             35.dp
         }
     }
+
     var bottomSheetHeight by remember { mutableStateOf(hiddenHeight) }
     val alpha by remember(parentHeightDp) {
         derivedStateOf {
@@ -160,6 +162,7 @@ fun MapScreen(
 
     BindEffect(permissionsController)
     val isPermissionGranted = remember { mutableStateOf(false) }
+    val isMapClicked = remember { mutableStateOf(false) }
 
     fun requestPermission() {
         scope.launch {
@@ -283,7 +286,8 @@ fun MapScreen(
                 isShowPinch = isShowPinch,
                 cameraPosition = cameraPosition,
                 onPlaceClick = onPlaceClick,
-                onCameraStateChange = onCameraStateChange
+                onCameraStateChange = onCameraStateChange,
+                onMapClick = { isMapClicked.value = true }
             )
 
             ConstraintLayout(
@@ -401,7 +405,9 @@ fun MapScreen(
                         isMoving = isCameraMoving,
                         isDetailClicked = isDetailClicked,
                         isFocusSearch = searchUiState.isFocus,
-                        isShowPinch = isShowPinch
+                        isShowPinch = isShowPinch,
+                        isMapClicked = isMapClicked.value,
+                        consumeMapClicked = { isMapClicked.value = false },
                     ) {
                         MapBottomSheetNavHost(
                             searchUiState = searchUiState,

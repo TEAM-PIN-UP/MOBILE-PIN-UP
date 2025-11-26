@@ -64,7 +64,8 @@ actual fun PlatformNaverMap(
     isShowPinch: Boolean,
     cameraPosition: Position?,
     onPlaceClick: (String) -> Unit,
-    onCameraStateChange: (CameraState) -> Unit
+    onCameraStateChange: (CameraState) -> Unit,
+    onMapClick: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val cameraPositionState = rememberCameraPositionState()
@@ -120,6 +121,9 @@ actual fun PlatformNaverMap(
         modifier = Modifier
             .fillMaxSize(),
         cameraPositionState = cameraPositionState,
+        onMapClick = { _, _ ->
+            onMapClick()
+        },
         properties = MapProperties(
             extent = LatLngBounds(
                 LatLng(33.0, 124.0),
