@@ -66,6 +66,10 @@ kotlin {
             implementation(libs.kakao.user)
             // naver login
             implementation(libs.naver.oauth)
+
+            implementation(libs.camera.camera2)
+            implementation(libs.camera.lifecycle)
+            implementation(libs.camera.view)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -129,8 +133,8 @@ android {
         applicationId = "com.pinup.placePinup"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 10
-        versionName = "1.0.3"
+        versionCode = 11
+        versionName = "1.0.4"
         multiDexEnabled = true
 
         buildConfigField(
