@@ -13,20 +13,28 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.extentions.clickableWithNoRipple
+import com.pinup.placePinup.ui.model.TitleBarButtonType
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_back
+import pinup.composeapp.generated.resources.ic_titlebar_close
 
 @Composable
 fun TitleBar(
-    title : String = "",
     modifier: Modifier = Modifier,
+    buttonType: TitleBarButtonType = TitleBarButtonType.BACK,
+    title : String = "",
     onLeftButtonClick: () -> Unit = {},
     rightIcon: Painter? = null,
     onRightButtonClick: () -> Unit = {},
 ) {
+    val leftIcon = when (buttonType) {
+        TitleBarButtonType.CLOSE -> painterResource(Res.drawable.ic_titlebar_close)
+        TitleBarButtonType.BACK -> painterResource(Res.drawable.ic_back)
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -37,7 +45,7 @@ fun TitleBar(
             modifier = Modifier
                 .clickableWithNoRipple { onLeftButtonClick() }
                 .align(Alignment.CenterStart),
-            painter = painterResource(Res.drawable.ic_back),
+            painter = leftIcon,
             contentDescription = null
         )
 

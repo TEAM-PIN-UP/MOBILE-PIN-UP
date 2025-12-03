@@ -30,6 +30,7 @@ import com.pinup.placePinup.ui.component.LogoutDialog
 import com.pinup.placePinup.ui.findAccount.changePassword.ChangePasswordRoute
 import com.pinup.placePinup.ui.findAccount.findId.FindIdRoute
 import com.pinup.placePinup.ui.findAccount.findPassword.FindPasswordEmailRoute
+import com.pinup.placePinup.ui.image.DetailImageRoute
 import com.pinup.placePinup.ui.login.compose.LoginRoute
 import com.pinup.placePinup.ui.login.model.SNSType
 import com.pinup.placePinup.ui.login.model.SNSUserInfo
@@ -280,6 +281,9 @@ fun PinUpApp(
                         updateUserId = {
                             startAppViewModel.updateUserId(it)
                         },
+                        onMoveDetailImage = { position, images ->
+                            navHostController.navigate(PinUpAppDestination.DetailImage(position, images))
+                        },
                         onClickArticle = {
                             navHostController.navigate(PinUpAppDestination.ArticleDetail(it))
                         },
@@ -352,6 +356,9 @@ fun PinUpApp(
                         },
                         onMoveUserProfile = {
                             navHostController.navigate(PinUpAppDestination.UserProfile(name = it))
+                        },
+                        onMoveDetailImage = { position, images ->
+                            navHostController.navigate(PinUpAppDestination.DetailImage(position, images))
                         }
                     )
                 }
@@ -490,6 +497,12 @@ fun PinUpApp(
                         onClickGoFeed = { navHostController.navigate(PinUpAppDestination.WriteReview) }
                     )
                 }
+
+                composable<PinUpAppDestination.DetailImage> {
+                    DetailImageRoute(
+                        onClose = { navHostController.popBackStack() }
+                    )
+                }
             }
 
             LogoutDialog(
@@ -593,4 +606,10 @@ sealed interface PinUpAppDestination {
     ) : PinUpAppDestination
     @Serializable
     data object ProfileSetting : PinUpAppDestination
+
+    @Serializable
+    data class DetailImage(
+        val position: Int,
+        val images: List<String>
+    ) : PinUpAppDestination
 }
