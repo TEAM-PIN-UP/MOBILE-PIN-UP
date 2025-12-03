@@ -8,6 +8,7 @@ class SNSLoginFactory(
     private val kaKaoLoginController: KaKaoLoginController,
     private val naverLoginController: NaverLoginController,
     private val googleLoginController: GoogleLoginController,
+    private val appleLoginController: AppleLoginController
 ) {
     fun doLogin(snsType: SNSType, contextFactory: ContextFactory, resultListener: SNSLoginResultListener) {
         when (snsType) {
@@ -15,6 +16,7 @@ class SNSLoginFactory(
             SNSType.NAVER -> naverLoginController.doLogin(resultListener, contextFactory.getActivity())
             SNSType.GOOGLE -> googleLoginController.doLogin(resultListener)
             SNSType.PINUP -> {}
+            SNSType.APPLE -> appleLoginController.doLogin(resultListener, contextFactory.getActivity())
         }
     }
 }

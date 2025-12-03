@@ -131,7 +131,8 @@ struct iOSApp: App {
         KoinInitializerKt.doInit(
             kaKaoLoginController: IOSKaKaoLoginController(),
             kaKaoShareController: IOSKaKaoShareController(),
-            naverLoginController: IOSNaverLoginController()
+            naverLoginController: IOSNaverLoginController(),
+            appleLoginController: IOSAppleLoginController(),
         )
     }
     

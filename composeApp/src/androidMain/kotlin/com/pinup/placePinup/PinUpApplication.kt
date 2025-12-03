@@ -30,7 +30,7 @@ class PinUpApplication : Application() {
                 single<KaKaoShareController> { AndroidKaKaoShareController() }
                 single<NaverLoginController> { AndroidNaverLoginController() }
                 single<GoogleLoginController> { GoogleLoginController() }
-                single<SNSLoginFactory> { SNSLoginFactory(get(), get(), get()) }
+                single<SNSLoginFactory> { SNSLoginFactory(get(), get(), get(), get()) }
             },
             appDeclaration = {
                 androidLogger()
