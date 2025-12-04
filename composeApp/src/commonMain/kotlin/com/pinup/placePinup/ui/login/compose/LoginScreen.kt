@@ -21,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.extentions.clickableSingleWithNoRipple
+import com.pinup.placePinup.platform.PLATFORM_IOS
+import com.pinup.placePinup.platform.getPlatformName
 import com.pinup.placePinup.ui.component.PButton
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.login.model.SNSType
@@ -29,6 +31,7 @@ import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.ic_apple
 import pinup.composeapp.generated.resources.ic_google
 import pinup.composeapp.generated.resources.ic_kakao
 import pinup.composeapp.generated.resources.ic_naver
@@ -248,10 +251,17 @@ fun LoginScreen(
                 contentDescription = "구글 로그인"
             )
 
-//            Image(
-//                painter = painterResource(Res.drawable.ic_naver),
-//                contentDescription = "애플 로그인"
-//            )
+            if (getPlatformName() == PLATFORM_IOS) {
+                Image(
+                    modifier = Modifier
+                        .size(52.dp)
+                        .clickableSingleWithNoRipple {
+                            onSnsLoginClick(SNSType.APPLE)
+                        },
+                    painter = painterResource(Res.drawable.ic_apple),
+                    contentDescription = "애플 로그인"
+                )
+            }
         }
     }
 }

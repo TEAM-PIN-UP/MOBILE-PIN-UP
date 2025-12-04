@@ -10,23 +10,61 @@ import Foundation
 import AuthenticationServices
 import ComposeApp
 
-class IOSAppleLoginController: AppleLoginController {
+class IOSAppleLoginController: NSObject,
+                               AppleLoginController,
+                               ASAuthorizationControllerDelegate,
+                               ASAuthorizationControllerPresentationContextProviding {
+
+    private var resultListener: SNSLoginResultListener?
+    private weak var presentingViewController: UIViewController?
+
     func doLogin(resultListener: SNSLoginResultListener, context: Any) {
-        // 애플 ID Provider 생성 (애플로그인 요청을 생성하기 위한 ASAuthorizationAppleIDProvider객체임)
+        self.resultListener = resultListener
+        self.presentingViewController = context as? UIViewController
+        
         let appleIDProvider = ASAuthorizationAppleIDProvider()
-        // 애플 로그인에 필요한 request 객체 생성하기
         let request = appleIDProvider.createRequest()
-        // 사용자에게 얻고자 하는 정보 지정하기 (이름, 메일)
         request.requestedScopes = [.fullName, .email]
 
-        // 애플로그인 절차를 관리하는 컨트롤러이다.
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-        // 로그인 과정의 성공/실패 결과를 처리한다.
-        //authorizationController.delegate = self
-        // 인증 컨트롤러가 어떤 화면에 표시될지 결정하는 부분. 보통 현재 화면을 지정한다.
-        //authorizationController.presentationContextProvider = self
-        // 애플로그인 request 시작 !
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
     }
+
+    // ✅ 필수: 어떤 윈도우 위에 애플 로그인 창 띄울지
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        if let window = presentingViewController?.view.window {
+            return window
+        }
+        // fallback (키 윈도우 찾기)
+        return UIApplication.shared
+            .connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first { $0.isKeyWindow } ?? ASPresentationAnchor()
+    }
+
+    // ✅ 로그인 성공
+    func authorizationController(controller: ASAuthorizationController,
+                                 didCompleteWithAuthorization authorization: ASAuthorization) {
+        guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
+
+        let userId = credential.user
+        let email = credential.email
+        let fullName = credential.fullName
+
+        // TODO: 여기서 resultListener로 성공 전달
+        print("\(userId) \(email ?? "") \(fullName?.description ?? "")")
+
+    }
+
+    // ✅ 로그인 실패
+    func authorizationController(controller: ASAuthorizationController,
+                                 didCompleteWithError error: Error) {
+        // TODO: 여기서 resultListener로 실패 전달
+        // resultListener.onFailure(error: error)
+        print("실패")
+    }
 }
-    
+
