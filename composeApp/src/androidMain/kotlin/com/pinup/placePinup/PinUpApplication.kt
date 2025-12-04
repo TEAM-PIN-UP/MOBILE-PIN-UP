@@ -5,6 +5,7 @@ import com.kakao.sdk.common.KakaoSdk
 import com.navercorp.nid.NaverIdLoginSDK
 import com.pinup.placePinup.di.initKoin
 import com.pinup.placePinup.platform.GoogleLoginController
+import com.pinup.placePinup.ui.login.sns.AppleLoginController
 import com.pinup.placePinup.ui.login.sns.KaKaoLoginController
 import com.pinup.placePinup.ui.login.sns.KaKaoShareController
 import com.pinup.placePinup.ui.login.sns.NaverLoginController
@@ -29,6 +30,7 @@ class PinUpApplication : Application() {
                 single<KaKaoLoginController> { AndroidKaKaoLoginController() }
                 single<KaKaoShareController> { AndroidKaKaoShareController() }
                 single<NaverLoginController> { AndroidNaverLoginController() }
+                single<AppleLoginController> { AndroidAppleLoginController() }
                 single<GoogleLoginController> { GoogleLoginController() }
                 single<SNSLoginFactory> { SNSLoginFactory(get(), get(), get(), get()) }
             },

@@ -16,12 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.extentions.clickableSingleWithNoRipple
+import com.pinup.placePinup.platform.PLATFORM_IOS
+import com.pinup.placePinup.platform.getPlatformName
 import com.pinup.placePinup.ui.login.model.SNSType
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.ic_apple_login
 import pinup.composeapp.generated.resources.ic_email_login
 import pinup.composeapp.generated.resources.ic_google_login
 import pinup.composeapp.generated.resources.ic_kakao_login
@@ -95,6 +98,21 @@ fun ChoiceSignUpScreen(
             painter = painterResource(Res.drawable.ic_google_login),
             contentDescription = null
         )
+
+        if (getPlatformName() == PLATFORM_IOS) {
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Image(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth()
+                    .clickableSingleWithNoRipple {
+                        onClickSnsLogin(SNSType.APPLE)
+                    },
+                painter = painterResource(Res.drawable.ic_apple_login),
+                contentDescription = null
+            )
+        }
 
         Spacer(modifier = Modifier.height(20.dp))
 
