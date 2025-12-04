@@ -117,6 +117,7 @@ class PinlogDetailViewModel(
                 response = uploadCommentUseCase(reviewId, request),
                 successCallback = {
                     updateMyComment("")
+                    updateClickedReplyId(null)
                     getPinlogDetail()
                 }
             )
@@ -141,7 +142,7 @@ class PinlogDetailViewModel(
         )
     }
 
-    fun updateClickedReplyId(id: Int) {
+    fun updateClickedReplyId(id: Int?) {
         updateState {
             copy(
                 clickedReplyId = id

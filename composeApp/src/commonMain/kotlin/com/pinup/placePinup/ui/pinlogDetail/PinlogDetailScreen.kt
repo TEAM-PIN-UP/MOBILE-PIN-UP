@@ -94,7 +94,7 @@ fun PinlogDetailScreen(
     onClickDeleteComment: (Int) -> Unit = {},
     onClickProfile: (String) -> Unit = {},
     updateNonFocusMode: () -> Unit = {},
-    updateReplyCommentId: (Int) -> Unit = {},
+    updateReplyCommentId: (Int?) -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
     onMoveDetailImage: (Int, List<String>) -> Unit = {_,_ -> },
     onClickLike: (Boolean) -> Unit = {},
@@ -162,6 +162,7 @@ fun PinlogDetailScreen(
                             focusManager.clearFocus(force = true)
                             keyboard?.hide()
                             updateNonFocusMode()
+                            updateReplyCommentId(null)
                         })
                     }
             ){

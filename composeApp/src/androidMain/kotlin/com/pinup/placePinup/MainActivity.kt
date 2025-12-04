@@ -21,6 +21,9 @@ class MainActivity : ComponentActivity() {
             statusBarStyle = SystemBarStyle.light(
                 Color.Transparent.toArgb(), Color.Transparent.toArgb()
             ),
+            navigationBarStyle = SystemBarStyle.light(
+                Color.Transparent.toArgb(), Color.Transparent.toArgb()
+            )
         )
 
         setContent {
