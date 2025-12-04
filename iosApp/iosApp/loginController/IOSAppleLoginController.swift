@@ -32,12 +32,11 @@ class IOSAppleLoginController: NSObject,
         authorizationController.performRequests()
     }
 
-    // ✅ 필수: 어떤 윈도우 위에 애플 로그인 창 띄울지
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         if let window = presentingViewController?.view.window {
             return window
         }
-        // fallback (키 윈도우 찾기)
+        
         return UIApplication.shared
             .connectedScenes
             .compactMap { $0 as? UIWindowScene }
@@ -45,26 +44,26 @@ class IOSAppleLoginController: NSObject,
             .first { $0.isKeyWindow } ?? ASPresentationAnchor()
     }
 
-    // ✅ 로그인 성공
     func authorizationController(controller: ASAuthorizationController,
                                  didCompleteWithAuthorization authorization: ASAuthorization) {
         guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
 
         let userId = credential.user
-        let email = credential.email
-        let fullName = credential.fullName
+        let email: String? = credential.email
+        let fullName: String? = credential.fullName?.formatted()
 
-        // TODO: 여기서 resultListener로 성공 전달
-        print("\(userId) \(email ?? "") \(fullName?.description ?? "")")
-
+        resultListener?.onSuccess(snsLoginInfo: SNSUserInfo(
+                            socialId: credential.user,
+                            snsType: SNSType.apple,
+                            email: email,
+                            name: fullName,
+                            nickname: fullName
+                        ))
     }
 
-    // ✅ 로그인 실패
     func authorizationController(controller: ASAuthorizationController,
                                  didCompleteWithError error: Error) {
-        // TODO: 여기서 resultListener로 실패 전달
-        // resultListener.onFailure(error: error)
-        print("실패")
+        resultListener?.onFail(message: error.localizedDescription)
     }
 }
 
