@@ -441,9 +441,6 @@ fun PinUpApp(
                         onBackPressed = {
                             navHostController.popBackStack()
                         },
-                        onMoveWriteReview = {
-                            navHostController.navigate(PinUpAppDestination.WriteReview(0, selectPlace = Json.encodeToString(it)))
-                        },
                         onMovePintsDetail = {
                             navHostController.popBackStack()
                             navHostController.navigate(PinUpAppDestination.PinchDetail(it))

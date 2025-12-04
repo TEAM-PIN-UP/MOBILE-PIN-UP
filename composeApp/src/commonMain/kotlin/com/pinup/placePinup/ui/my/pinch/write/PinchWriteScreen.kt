@@ -88,7 +88,6 @@ fun PinchWriteScreen(
     onClickDelete: (Int) -> Unit = {},
     moveItem: (Int, Int) -> Unit = { _, _ -> },
     onPlaceClick: (Place, Int) -> Unit = { _, _ -> },
-    onClickShowDialog: (Place, Int) -> Unit = {_, _ -> },
     registerPints: () -> Unit = {},
 ) {
 
@@ -335,11 +334,7 @@ fun PinchWriteScreen(
                                     DropdownMenuItem(
                                         modifier = Modifier.fillMaxWidth(),
                                         onClick = {
-                                            if (place.hasMyReview) {
-                                                onPlaceClick(place, index)
-                                            } else {
-                                                onClickShowDialog(place, index)
-                                            }
+                                            onPlaceClick(place, index)
                                             expandedIndex = null
                                         }
                                     ) {

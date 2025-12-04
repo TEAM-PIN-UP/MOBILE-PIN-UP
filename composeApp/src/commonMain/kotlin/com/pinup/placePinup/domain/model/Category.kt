@@ -4,6 +4,7 @@ enum class Category {
     ALL,
     RESTAURANT,
     CAFE,
+    ETC,
     NONE;
     companion object {
         fun of(name: String): Category {

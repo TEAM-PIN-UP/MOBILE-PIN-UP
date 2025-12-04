@@ -11,6 +11,7 @@ import com.pinup.placePinup.domain.usecase.EditPintsUseCase
 import com.pinup.placePinup.domain.usecase.GetPintsDetailUseCase
 import com.pinup.placePinup.domain.usecase.RegisterPintsUseCase
 import com.pinup.placePinup.domain.usecase.SearchPlacesUseCase
+import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
 import com.pinup.placePinup.ui.base.UiState
@@ -169,7 +170,7 @@ class PinchWriteViewModel (
                 PintsPlaceRequest(
                     kakaoPlaceId = it.kakaoPlaceId,
                     name = it.name,
-                    category = Category.of(it.placeCategory),
+                    category = Category.of(it.placeCategory).takeUnless { category -> category == Category.NONE } ?: Category.ETC,
                     address = it.address,
                     roadAddress = it.roadAddress,
                     longitude = it.longitude,
@@ -177,6 +178,7 @@ class PinchWriteViewModel (
                 )
             },
         )
+        hLog(request.toString())
 
         resultResponse(
             response = if (pintsId != 0) editPintsUseCase(pintsId, request) else registerPintsUseCase(request),

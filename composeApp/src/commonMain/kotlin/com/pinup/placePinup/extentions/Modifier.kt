@@ -16,7 +16,6 @@ import androidx.compose.ui.input.pointer.changedToUpIgnoreConsumed
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.semantics.Role
-import com.pinup.placePinup.platform.hLog
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
@@ -148,7 +147,6 @@ fun Modifier.longPressDrag(
         val wasTapBeforeLongPress = withTimeoutOrNull(viewConfiguration.longPressTimeoutMillis) {
             while (true) {
                 val event = awaitPointerEvent(pass = PointerEventPass.Initial)
-                hLog(event.changes.firstOrNull { it.id == down.id }.toString())
                 val change = event.changes.firstOrNull { it.id == down.id } ?: return@withTimeoutOrNull true
                 if (change.changedToUpIgnoreConsumed()) return@withTimeoutOrNull true
             }

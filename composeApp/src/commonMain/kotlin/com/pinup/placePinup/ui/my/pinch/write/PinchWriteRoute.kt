@@ -23,7 +23,6 @@ import org.koin.core.parameter.parametersOf
 fun PinchWriteRoute(
     navHostController: NavHostController,
     onBackPressed: () -> Unit = {},
-    onMoveWriteReview: (Place) -> Unit = {},
     onMovePintsDetail: (Int) -> Unit = {},
 ) {
     val navBackStackEntry = remember { navHostController.currentBackStackEntry }
@@ -34,7 +33,6 @@ fun PinchWriteRoute(
     val viewModel: PinchWriteViewModel = koinViewModel(parameters = { parametersOf(locationTrackerFactory.createLocationTracker()) })
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val isShowCompleteDialog = remember { mutableStateOf(false to 0) }
-    val isShowWritePinlogDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         savedStateHandle?.getStateFlow(Const.NavKey.PINLOG_WRITE_RESULT, false)?.collect { result ->
@@ -71,11 +69,6 @@ fun PinchWriteRoute(
         moveItem = viewModel::moveItem,
         onClickDelete = viewModel::deletePinch,
         onPlaceClick = viewModel::updatePlace,
-        onClickShowDialog = { place, index ->
-            isShowWritePinlogDialog.value = true
-            viewModel.selectPlace = place
-            viewModel.selectIndex = index
-        },
         registerPints = viewModel::registerPints
     )
 
@@ -92,22 +85,6 @@ fun PinchWriteRoute(
             onRightButtonClick = {
                 isShowCompleteDialog.value = false to isShowCompleteDialog.value.second
                 onMovePintsDetail(isShowCompleteDialog.value.second)
-            },
-        )
-    }
-
-    if (isShowWritePinlogDialog.value) {
-        PDialog(
-            titleText = Texts.Pinch.NO_PINLOG_DIALOG_TITLE,
-            descriptionText = Texts.Pinch.NO_PINLOG_DIALOG_CONTENT,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_REGISTER,
-            onLeftButtonClick = {
-                isShowWritePinlogDialog.value = false
-            },
-            onRightButtonClick = {
-                isShowWritePinlogDialog.value = false
-                onMoveWriteReview(viewModel.selectPlace)
             },
         )
     }
