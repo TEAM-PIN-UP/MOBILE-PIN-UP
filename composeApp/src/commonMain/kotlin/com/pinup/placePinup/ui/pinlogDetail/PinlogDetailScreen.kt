@@ -501,49 +501,54 @@ fun PinlogDetailScreen(
 
                 PHorizontalDivider()
 
-                Row(
-                    modifier = Modifier
-                        .navigationBarsPadding()
-                        .background(Colors.White)
-                        .padding(vertical = 8.dp, horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+
+                Box(
+                    modifier = Modifier.background(color = Colors.White)
                 ) {
-                    ProfileImageView(
+                    Row(
                         modifier = Modifier
-                            .align(Alignment.Top),
-                        imgUrl = userInfo.profileUrl,
-                        size = 34.dp
-                    )
+                            .navigationBarsPadding()
+                            .background(Colors.White)
+                            .padding(vertical = 8.dp, horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        ProfileImageView(
+                            modifier = Modifier
+                                .align(Alignment.Top),
+                            imgUrl = userInfo.profileUrl,
+                            size = 34.dp
+                        )
 
-                    Spacer(modifier = Modifier.width(4.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
 
-                    RoundedTextField(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        text = query,
-                        textStyle = Typography.B3.copy(
-                            fontWeight = FontWeight.Medium
-                        ),
-                        singleLine = false,
-                        onValueChange = onValueChange,
-                        placeholder = if(replyId == null) Texts.PinLog.COMMENT_HINT else COMMENT_REPLY_HINT,
-                        placeholderStyle = Typography.B3.copy(
-                            fontWeight = FontWeight.Medium
-                        ),
-                        placeholderTextColor = Colors.Gray500,
-                        cornerRounded = 24,
-                        isTrailIconAlwaysShow = true,
-                        tailIcon = painterResource(Res.drawable.ic_comment_upload),
-                        tailIconPos = Alignment.Bottom,
-                        tailIconSize = 28,
-                        onTailIconClick = {
-                            onClickUploadComment()
-                        },
-                        fixedBorderColor = Colors.Gray300,
-                        backgroundColor = Colors.White,
-                        contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
-                        focusRequester = focusRequester
-                    )
+                        RoundedTextField(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = query,
+                            textStyle = Typography.B3.copy(
+                                fontWeight = FontWeight.Medium
+                            ),
+                            singleLine = false,
+                            onValueChange = onValueChange,
+                            placeholder = if(replyId == null) Texts.PinLog.COMMENT_HINT else COMMENT_REPLY_HINT,
+                            placeholderStyle = Typography.B3.copy(
+                                fontWeight = FontWeight.Medium
+                            ),
+                            placeholderTextColor = Colors.Gray500,
+                            cornerRounded = 24,
+                            isTrailIconAlwaysShow = true,
+                            tailIcon = painterResource(Res.drawable.ic_comment_upload),
+                            tailIconPos = Alignment.Bottom,
+                            tailIconSize = 28,
+                            onTailIconClick = {
+                                onClickUploadComment()
+                            },
+                            fixedBorderColor = Colors.Gray300,
+                            backgroundColor = Colors.White,
+                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+                            focusRequester = focusRequester
+                        )
+                    }
                 }
             }
         }
