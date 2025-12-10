@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.pinup.placePinup.domain.model.PinlogDetail
+import com.pinup.placePinup.domain.model.ReportType
 import com.pinup.placePinup.domain.model.UserInfo
 import com.pinup.placePinup.extentions.clickableSingleWithNoRipple
 import com.pinup.placePinup.extentions.clickableWithNoRipple
@@ -60,6 +61,7 @@ import com.pinup.placePinup.ui.component.ProfileImageView
 import com.pinup.placePinup.ui.component.RoundedBox
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
+import com.pinup.placePinup.ui.component.bottomSheet.ReportBlockMenuBottomSheet
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Texts.PinLog.COMMENT_REPLY_HINT
@@ -108,7 +110,8 @@ fun PinlogDetailScreen(
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
-    var commentSheet by remember { mutableStateOf(false) }
+    //첫 번째가 isShow, 두 번째가 isOwn
+    var commentSheet by remember { mutableStateOf(false to false) }
     val pagerState = rememberPagerState(pageCount = { pinlogDetail.reviewImageUrls.size })
     val focusManager = LocalFocusManager.current
     val keyboard = LocalSoftwareKeyboardController.current
@@ -124,7 +127,7 @@ fun PinlogDetailScreen(
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContent = {
-            if (commentSheet) {
+            if (commentSheet.first && commentSheet.second) {
                 CommentMenuBottomSheet(
                     onClickEdit = {
                         onClickEditComment(clickedCommentId, clickedComment)
@@ -136,7 +139,7 @@ fun PinlogDetailScreen(
                         scope.launch { sheetState.hide() }
                     },
                 )
-            } else {
+            } else if (pinlogDetail.isOwn){
                 PinlogMenuBottomSheet(
                     onClickEdit = {
                         onClickEdit()
@@ -146,6 +149,20 @@ fun PinlogDetailScreen(
                         onClickDelete()
                         scope.launch { sheetState.hide() }
                     },
+                )
+            } else if (commentSheet.first && !commentSheet.second){
+                ReportBlockMenuBottomSheet(
+                    reportType = ReportType.COMMENT,
+                    onClickReport = {},
+                    onClickBlock = {},
+                )
+                // 신고 팝업 댓글 타입
+            } else {
+                // 신고 팝업 핀로그 타입
+                ReportBlockMenuBottomSheet(
+                    reportType = ReportType.PINLOG,
+                    onClickReport = {},
+                    onClickBlock = {},
                 )
             }
         },
@@ -289,16 +306,14 @@ fun PinlogDetailScreen(
                                     }
                                 }
 
-                                if (pinlogDetail.isOwn) {
-                                    Image(
-                                        modifier = Modifier
-                                            .clickableWithNoRipple {
-                                                scope.launch { sheetState.show() }
-                                            },
-                                        painter = painterResource(Res.drawable.ic_menu_dot),
-                                        contentDescription = null,
-                                    )
-                                }
+                                Image(
+                                    modifier = Modifier
+                                        .clickableWithNoRipple {
+                                            scope.launch { sheetState.show() }
+                                        },
+                                    painter = painterResource(Res.drawable.ic_menu_dot),
+                                    contentDescription = null,
+                                )
                             }
                         }
 
@@ -467,8 +482,8 @@ fun PinlogDetailScreen(
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp),
                                 comment = it,
-                                onClickMenu = { id, comment ->
-                                    commentSheet = true
+                                onClickMenu = { isOwn, id, comment ->
+                                    commentSheet = true to isOwn
                                     clickedCommentId = id
                                     clickedComment = comment
                                     scope.launch { sheetState.show() }

@@ -306,6 +306,16 @@ object Texts {
         const val PINTS_WRITE_COMPLETE_DIALOG_CONTENT = "등록한 마이핀츠를\n확인하시겠어요?"
     }
 
+    object Report {
+        const val PINLOG_REPORT = "핀로그 신고"
+        const val USER_REPORT = "계정 신고"
+        const val COMMENT_REPORT = "댓글 신고"
+    }
+
+    object Block {
+        const val USER_BLOCK = "계정 차단"
+    }
+
     object Toast {
         const val DELETE_PINLOG = "핀로그가 삭제되었어요."
         const val DELETE_PIN_BUDDY = "해당 핀버디가 삭제되었어요"

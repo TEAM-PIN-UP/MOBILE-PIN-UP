@@ -25,7 +25,7 @@ import com.pinup.placePinup.util.relativeOrDate
 fun CommentView(
     modifier: Modifier = Modifier,
     comment: Comment = Comment(),
-    onClickMenu: (Int, String) -> Unit = {_, _ -> },
+    onClickMenu: (Boolean, Int, String) -> Unit = { _, _, _ -> },
     onClickProfile: (String) -> Unit = {},
     onReplyClick: (Int) -> Unit = {},
 ) {
@@ -76,7 +76,9 @@ fun CommentView(
                 modifier = Modifier
                     .combinedClickable(
                         onClick = {},
-                        onLongClick = { if(comment.isOwn) onClickMenu(comment.id, comment.content) },
+                        onLongClick = {
+                            onClickMenu(comment.isOwn, comment.id, comment.content)
+                        }
                     ),
                 text = comment.content,
                 style = Typography.B3.copy(
@@ -150,7 +152,7 @@ fun CommentView(
                                 modifier = Modifier
                                     .combinedClickable(
                                         onClick = {},
-                                        onLongClick = { if(comment.isOwn) onClickMenu(comment.id, comment.content) },
+                                        onLongClick = { onClickMenu(comment.isOwn, comment.id, comment.content) },
                                     ),
                                 text = it.content,
                                 style = Typography.B3.copy(
