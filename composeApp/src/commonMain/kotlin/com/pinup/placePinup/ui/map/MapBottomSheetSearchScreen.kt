@@ -64,7 +64,8 @@ fun MapBottomSheetSearchScreen(
     onChipClick: (ChipState) -> Unit = {},
     onPlaceClick: (String) -> Unit = {},
     onSelectSortTypeClick: () -> Unit = {},
-    onFocusChange: (Boolean) -> Unit ={},
+    onFocusChange: (Boolean) -> Unit = {},
+    showEmptyToast: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -117,7 +118,8 @@ fun MapBottomSheetSearchScreen(
             FocusScreen(
                 places = places,
                 onPlaceClick = {
-                    onPlaceClick(it.kakaoPlaceId)
+                    if (it.reviewCount == 0) showEmptyToast()
+                    else onPlaceClick(it.kakaoPlaceId)
                 }
             )
         } else {

@@ -1,13 +1,19 @@
 package com.pinup.placePinup.ui.map
 
+import PToastHost
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.placePinup.domain.model.Position
+import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.theme.Texts
@@ -68,6 +74,7 @@ fun MapRoute(
     }
 
     BindLocationTrackerEffect(mapViewModel.locationTracker)
+
     MapScreen(
         viewModel = mapViewModel,
         searchUiState = mapUiState.value.searchUiState,
@@ -106,6 +113,16 @@ fun MapRoute(
         onClickLike = mapViewModel::likeChanged,
         onMoveWriteReview = onMoveWriteReview,
         onMoveUserProfile = mapViewModel::onProfileClick,
-        onClickArticle = onClickArticle
+        onClickArticle = onClickArticle,
+        showEmptyToast = {
+            toast.show(Texts.Toast.EMPTY_PINLOG)
+        }
+    )
+
+    PToastHost(
+        modifier = Modifier
+            .statusBarsPadding()
+            .padding(top = 24.dp, start = 20.dp, end = 20.dp),
+        state = toast
     )
 }

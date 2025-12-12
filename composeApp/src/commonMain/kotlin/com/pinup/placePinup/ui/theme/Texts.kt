@@ -322,6 +322,7 @@ object Texts {
         const val ACCEPT_PIN_BUDDY = "핀버디 신청을 수락했어요"
         const val REFUSE_PIN_BUDDY = "핀버디 신청을 거절했어요"
         const val CANCEL_PIN_BUDDY_REQEUST = "핀버디 신청을 취소했어요"
+        const val EMPTY_PINLOG = "핀로그가 작성되지 않은 장소입니다."
     }
 
     object Kakao {

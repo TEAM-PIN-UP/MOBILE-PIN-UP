@@ -36,6 +36,7 @@ fun MapBottomSheetNavHost(
     onMoveWriteReview: (String) -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {},
     onClickArticle: (Int) -> Unit = {},
+    showEmptyToast: () -> Unit = {},
 ) {
     val pinchRoute = MapBottomSheetDestination.Pinch::class.qualifiedName
     val detailRoute = MapBottomSheetDestination.Detail::class.qualifiedName
@@ -92,7 +93,8 @@ fun MapBottomSheetNavHost(
                 onChipClick = onChipClick,
                 onPlaceClick = onPlaceClick,
                 onSelectSortTypeClick = onSelectSortTypeClick,
-                onFocusChange = onFocusChange
+                onFocusChange = onFocusChange,
+                showEmptyToast = showEmptyToast
             )
         }
 

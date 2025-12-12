@@ -133,8 +133,8 @@ android {
         applicationId = "com.pinup.placePinup"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 12
-        versionName = "1.0.5"
+        versionCode = 14
+        versionName = "1.0.6"
         multiDexEnabled = true
 
         buildConfigField(
