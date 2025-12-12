@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pinup.placePinup.domain.model.ReportType
 import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.theme.Texts
 import kotlinx.coroutines.flow.collectLatest
@@ -22,6 +23,7 @@ fun PinlogDetailRoute(
     onMovePlaceDetail: (String) -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {},
     onMoveDetailImage: (Int, List<String>) -> Unit = {_,_ -> },
+    onMoveReport: (Int, ReportType) -> Unit = {_, _ -> },
 ) {
     val toast = rememberToastState()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -106,6 +108,7 @@ fun PinlogDetailRoute(
         onMoveDetailImage = onMoveDetailImage,
         onClickLike = viewModel::likeChanged,
         userInfo = uiState.userInfo,
-        onRefresh = viewModel::refreshView
+        onRefresh = viewModel::refreshView,
+        onMoveReport = onMoveReport
     )
 }

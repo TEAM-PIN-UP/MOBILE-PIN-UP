@@ -101,6 +101,7 @@ fun PinlogDetailScreen(
     onMoveDetailImage: (Int, List<String>) -> Unit = {_,_ -> },
     onClickLike: (Boolean) -> Unit = {},
     onRefresh: () -> Unit = {},
+    onMoveReport: (Int, ReportType) -> Unit = {_, _ -> },
 ) {
 
     val density = LocalDensity.current
@@ -154,16 +155,27 @@ fun PinlogDetailScreen(
             } else if (commentSheet.first && !commentSheet.second){
                 ReportBlockMenuBottomSheet(
                     reportType = ReportType.COMMENT,
-                    onClickReport = {},
-                    onClickBlock = {},
+                    onClickReport = {
+                        onMoveReport(clickedUserId, ReportType.COMMENT)
+                        scope.launch { sheetState.hide() }
+                    },
+                    onClickBlock = {
+                        scope.launch { sheetState.hide() }
+                    },
                 )
                 // 신고 팝업 댓글 타입
             } else {
                 // 신고 팝업 핀로그 타입
+                // TODO 핀로그 상세에서 유저 아이디 넣기
                 ReportBlockMenuBottomSheet(
                     reportType = ReportType.PINLOG,
-                    onClickReport = {},
-                    onClickBlock = {},
+                    onClickReport = {
+                        onMoveReport(-1, ReportType.PINLOG)
+                        scope.launch { sheetState.hide() }
+                    },
+                    onClickBlock = {
+                        scope.launch { sheetState.hide() }
+                    },
                 )
             }
         },

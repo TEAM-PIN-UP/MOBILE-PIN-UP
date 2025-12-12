@@ -38,7 +38,7 @@ fun ReportScreen(
     ) {
         TitleBar(
             onLeftButtonClick = onBackPressed,
-            title = Texts.Report.getReportTitle(reportType.name)
+            title = Texts.Report.getReportTitle(reportType.title)
         )
 
         PHorizontalDivider()

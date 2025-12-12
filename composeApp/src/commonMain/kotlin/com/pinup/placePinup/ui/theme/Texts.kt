@@ -317,8 +317,8 @@ object Texts {
         fun getDescription(reportType: ReportType): String {
             return when(reportType) {
                 COMMENT,
-                USER -> "해당 ${reportType.name}을 신고하는 사유를 선택해 주세요."
-                PINLOG -> "해당 ${reportType.name}를 신고하는 사유를 선택해 주세요."
+                USER -> "해당 ${reportType.title}을 신고하는 사유를 선택해 주세요."
+                PINLOG -> "해당 ${reportType.title}를 신고하는 사유를 선택해 주세요."
             }
         }
 
@@ -338,6 +338,9 @@ object Texts {
                 )
             }
         }
+
+        const val REPORT_SUCCESS_DIALOG_TITLE = "신고가 완료 되었습니다."
+        const val REPORT_SUCCESS_DIALOG_CONTENT = "신고 접수된 핀로그는 24시간 이내에 검토되며, 지속적인 신고를 받은 계정은 계정 삭제 처리될 수 있습니다."
     }
 
     object Block {

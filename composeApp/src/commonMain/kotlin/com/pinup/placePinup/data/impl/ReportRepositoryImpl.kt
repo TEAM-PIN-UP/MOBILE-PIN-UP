@@ -12,18 +12,18 @@ class ReportRepositoryImpl (
     private val reportRemoteDataSource: ReportRemoteDataSource,
 ) : ReportRepository {
     override suspend fun blockUser(request: UserBlockRequest): PResult<Unit> {
-        TODO("Not yet implemented")
+        return reportRemoteDataSource.blockUser(request)
     }
 
     override suspend fun reportPinlog(request: ReportPinlogRequest): PResult<Unit> {
-        TODO("Not yet implemented")
+        return reportRemoteDataSource.reportPinlog(request)
     }
 
     override suspend fun reportUser(request: ReportUserRequest): PResult<Unit> {
-        TODO("Not yet implemented")
+        return reportRemoteDataSource.reportUser(request)
     }
 
     override suspend fun reportComment(request: ReportCommentRequest): PResult<Unit> {
-        TODO("Not yet implemented")
+        return reportRemoteDataSource.reportComment(request)
     }
 }

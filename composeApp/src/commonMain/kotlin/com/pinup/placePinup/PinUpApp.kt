@@ -361,6 +361,9 @@ fun PinUpApp(
                         },
                         onMoveDetailImage = { position, images ->
                             navHostController.navigate(PinUpAppDestination.DetailImage(position, images))
+                        },
+                        onMoveReport = { targetId, reportType ->
+                            navHostController.navigate(PinUpAppDestination.Report(targetId, reportType))
                         }
                     )
                 }
@@ -504,9 +507,7 @@ fun PinUpApp(
                 }
 
                 composable<PinUpAppDestination.Report> {
-                    val reportType = it.jsonToArg<ReportType>("reportType") ?: ReportType.USER
                     ReportRoute(
-                        reportType = reportType,
                         onBackPressed = { navHostController.popBackStack() }
                     )
                 }
