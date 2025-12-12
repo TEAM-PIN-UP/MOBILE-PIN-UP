@@ -8,6 +8,7 @@ import com.pinup.placePinup.data.impl.MembersRepositoryImpl
 import com.pinup.placePinup.data.impl.PinBuddyRepositoryImpl
 import com.pinup.placePinup.data.impl.PintsRepositoryImpl
 import com.pinup.placePinup.data.impl.PlacesRepositoryImpl
+import com.pinup.placePinup.data.impl.ReportRepositoryImpl
 import com.pinup.placePinup.data.impl.ReviewsRepositoryImpl
 import com.pinup.placePinup.domain.repository.AuthRepository
 import com.pinup.placePinup.domain.repository.BookmarksRepository
@@ -17,6 +18,7 @@ import com.pinup.placePinup.domain.repository.MembersRepository
 import com.pinup.placePinup.domain.repository.PinBuddyRepository
 import com.pinup.placePinup.domain.repository.PintsRepository
 import com.pinup.placePinup.domain.repository.PlacesRepository
+import com.pinup.placePinup.domain.repository.ReportRepository
 import com.pinup.placePinup.domain.repository.ReviewsRepository
 import org.koin.dsl.module
 
@@ -30,4 +32,5 @@ val repositoryModule = module {
     single<PlacesRepository> { PlacesRepositoryImpl(get()) }
     single<ReviewsRepository> { ReviewsRepositoryImpl(get(), get()) }
     single<PintsRepository> { PintsRepositoryImpl(get()) }
+    single<ReportRepository> { ReportRepositoryImpl(get()) }
 }

@@ -46,4 +46,12 @@ object ApiPath {
         const val EDITOR_CATEGORY = "$EDITOR/category"
         const val EDITOR_PINCH = "$EDITOR/{pintsId}"
     }
+
+    object Report {
+        const val REPORT = "api/reports"
+        const val BLOCK_USER = "$REPORT/userblock"
+        const val REPORT_USER = "$REPORT/user"
+        const val REPORT_PINLOG = "$REPORT/pints"
+        const val REPORT_COMMENT = "$REPORT/comment"
+    }
 }
