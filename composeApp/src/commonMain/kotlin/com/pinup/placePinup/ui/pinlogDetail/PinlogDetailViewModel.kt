@@ -184,7 +184,8 @@ class PinlogDetailViewModel(
         val request = UserBlockRequest(id)
         resultResponse(
             response = postUserBlockUseCase(request),
-            successCallback = { emitEvent(PinlogUiEvent.SuccessBlockUser) }
+            successCallback = { emitEvent(PinlogUiEvent.SuccessBlockUser) },
+            errorCallback = { emitEvent(PinlogUiEvent.ErrorBlockUser) }
         )
     }
 }
@@ -203,5 +204,6 @@ data class PinlogUiState(
 sealed interface PinlogUiEvent : UiEvent {
     data object SuccessDelete : PinlogUiEvent
     data object SuccessBlockUser : PinlogUiEvent
+    data object ErrorBlockUser : PinlogUiEvent
     data class OnMoveUserProfile(val name: String): PinlogUiEvent
 }

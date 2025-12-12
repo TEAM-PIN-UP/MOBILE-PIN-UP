@@ -51,6 +51,10 @@ fun PinlogDetailRoute(
                 PinlogUiEvent.SuccessBlockUser -> {
                     toast.show(Texts.Toast.blockSuccessToast(clickedTargetName))
                 }
+
+                PinlogUiEvent.ErrorBlockUser -> {
+                    toast.show(Texts.Toast.ALREADY_BLOCK_USER)
+                }
             }
         }
     }

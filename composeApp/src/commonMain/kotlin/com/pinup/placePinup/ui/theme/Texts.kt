@@ -359,6 +359,7 @@ object Texts {
         const val CANCEL_PIN_BUDDY_REQEUST = "핀버디 신청을 취소했어요"
         const val EMPTY_PINLOG = "핀로그가 작성되지 않은 장소입니다."
         fun blockSuccessToast(name: String) = "${name}님이 차단되었습니다."
+        const val ALREADY_BLOCK_USER = "이미 차단된 유저입니다."
     }
 
     object Kakao {
