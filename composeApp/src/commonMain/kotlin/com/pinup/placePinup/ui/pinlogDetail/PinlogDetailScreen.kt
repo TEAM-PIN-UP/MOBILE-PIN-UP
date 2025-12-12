@@ -102,6 +102,7 @@ fun PinlogDetailScreen(
     onClickLike: (Boolean) -> Unit = {},
     onRefresh: () -> Unit = {},
     onMoveReport: (Int, ReportType) -> Unit = {_, _ -> },
+    onClickBlock: (Int, String) -> Unit = {_, _ -> },
 ) {
 
     val density = LocalDensity.current
@@ -118,7 +119,8 @@ fun PinlogDetailScreen(
     val keyboard = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
 
-    var clickedUserId by remember { mutableStateOf(0) }
+    var clickedCommentUserName by remember { mutableStateOf("") }
+    var clickedCommentUserId by remember { mutableStateOf(0) }
     var clickedCommentId by remember { mutableStateOf(0) }
     var clickedComment by remember { mutableStateOf("") }
     val pullRefreshState = rememberPullRefreshState(
@@ -156,16 +158,15 @@ fun PinlogDetailScreen(
                 ReportBlockMenuBottomSheet(
                     reportType = ReportType.COMMENT,
                     onClickReport = {
-                        onMoveReport(clickedUserId, ReportType.COMMENT)
+                        onMoveReport(clickedCommentUserId, ReportType.COMMENT)
                         scope.launch { sheetState.hide() }
                     },
                     onClickBlock = {
+                        onClickBlock(clickedCommentUserId, clickedCommentUserName)
                         scope.launch { sheetState.hide() }
                     },
                 )
-                // 신고 팝업 댓글 타입
             } else {
-                // 신고 팝업 핀로그 타입
                 // TODO 핀로그 상세에서 유저 아이디 넣기
                 ReportBlockMenuBottomSheet(
                     reportType = ReportType.PINLOG,
@@ -174,6 +175,7 @@ fun PinlogDetailScreen(
                         scope.launch { sheetState.hide() }
                     },
                     onClickBlock = {
+                        onClickBlock(-1, pinlogDetail.writerName)
                         scope.launch { sheetState.hide() }
                     },
                 )
@@ -495,9 +497,10 @@ fun PinlogDetailScreen(
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp),
                                 comment = it,
-                                onClickMenu = { isOwn, id, comment, userId ->
+                                onClickMenu = { isOwn, id, comment, author ->
                                     commentSheet = true to isOwn
-                                    clickedUserId = userId
+                                    clickedCommentUserName = author.nickname
+                                    clickedCommentUserId = author.id
                                     clickedCommentId = id
                                     clickedComment = comment
                                     scope.launch { sheetState.show() }

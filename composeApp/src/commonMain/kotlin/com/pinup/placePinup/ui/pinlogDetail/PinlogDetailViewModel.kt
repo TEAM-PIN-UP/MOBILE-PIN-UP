@@ -2,6 +2,7 @@ package com.pinup.placePinup.ui.pinlogDetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.pinup.placePinup.data.request.report.UserBlockRequest
 import com.pinup.placePinup.data.request.review.CommentRequest
 import com.pinup.placePinup.domain.model.Comment
 import com.pinup.placePinup.domain.model.PinlogDetail
@@ -13,6 +14,7 @@ import com.pinup.placePinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.placePinup.domain.usecase.GetPinlogDetailUseCase
 import com.pinup.placePinup.domain.usecase.PostCommentUseCase
 import com.pinup.placePinup.domain.usecase.PostReviewLikeChangeUseCase
+import com.pinup.placePinup.domain.usecase.PostUserBlockUseCase
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
 import com.pinup.placePinup.ui.base.UiState
@@ -29,7 +31,8 @@ class PinlogDetailViewModel(
     private val editCommentUseCase: EditCommentUseCase,
     private val getPinlogDetailUseCase: GetPinlogDetailUseCase,
     private val postReviewLikeChangeUseCase: PostReviewLikeChangeUseCase,
-    private val getMyProfileUseCase: GetMyProfileUseCase
+    private val getMyProfileUseCase: GetMyProfileUseCase,
+    private val postUserBlockUseCase: PostUserBlockUseCase,
 ) : BaseViewModel<PinlogUiState, PinlogUiEvent>(PinlogUiState()) {
 
     companion object {
@@ -176,6 +179,14 @@ class PinlogDetailViewModel(
             if(it.nickname != name) emitEvent(PinlogUiEvent.OnMoveUserProfile(name))
         }
     }
+
+    fun blockUser(id: Int) = viewModelScope.launch {
+        val request = UserBlockRequest(id)
+        resultResponse(
+            response = postUserBlockUseCase(request),
+            successCallback = { emitEvent(PinlogUiEvent.SuccessBlockUser) }
+        )
+    }
 }
 
 
@@ -191,5 +202,6 @@ data class PinlogUiState(
 
 sealed interface PinlogUiEvent : UiEvent {
     data object SuccessDelete : PinlogUiEvent
+    data object SuccessBlockUser : PinlogUiEvent
     data class OnMoveUserProfile(val name: String): PinlogUiEvent
 }

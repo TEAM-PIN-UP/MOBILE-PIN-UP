@@ -71,6 +71,7 @@ object Texts {
         const val INTRO = "소개"
         const val UNREGISTER = "탈퇴하기"
         const val SIGN_UP = "회원가입"
+        const val DO_BLOCK = "차단하기"
     }
 
     object Onboarding {
@@ -339,6 +340,9 @@ object Texts {
             }
         }
 
+        fun getBlockUserDialogTitle(name: String) = "${name}님을 차단하시겠습니까?"
+        const val BLOCK_USER_DIALOG_CONTENT = "계정 차단 시, 더 이상 해당 사용자의 핀로그와 댓글이 보이지 않으며 상호 작용할 수 없습니다."
+
         const val REPORT_SUCCESS_DIALOG_TITLE = "신고가 완료 되었습니다."
         const val REPORT_SUCCESS_DIALOG_CONTENT = "신고 접수된 핀로그는 24시간 이내에 검토되며, 지속적인 신고를 받은 계정은 계정 삭제 처리될 수 있습니다."
     }
@@ -354,6 +358,7 @@ object Texts {
         const val REFUSE_PIN_BUDDY = "핀버디 신청을 거절했어요"
         const val CANCEL_PIN_BUDDY_REQEUST = "핀버디 신청을 취소했어요"
         const val EMPTY_PINLOG = "핀로그가 작성되지 않은 장소입니다."
+        fun blockSuccessToast(name: String) = "${name}님이 차단되었습니다."
     }
 
     object Kakao {

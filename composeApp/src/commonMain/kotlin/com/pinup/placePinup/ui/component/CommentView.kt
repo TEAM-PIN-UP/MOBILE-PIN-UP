@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.pinup.placePinup.domain.model.AuthorInfo
 import com.pinup.placePinup.domain.model.Comment
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
@@ -25,7 +26,7 @@ import com.pinup.placePinup.util.relativeOrDate
 fun CommentView(
     modifier: Modifier = Modifier,
     comment: Comment = Comment(),
-    onClickMenu: (Boolean, Int, String, Int) -> Unit = { _, _, _, _-> },
+    onClickMenu: (Boolean, Int, String, AuthorInfo) -> Unit = { _, _, _, _-> },
     onClickProfile: (String) -> Unit = {},
     onReplyClick: (Int) -> Unit = {},
 ) {
@@ -77,7 +78,7 @@ fun CommentView(
                     .combinedClickable(
                         onClick = {},
                         onLongClick = {
-                            onClickMenu(comment.isOwn, comment.id, comment.content, comment.author.id)
+                            onClickMenu(comment.isOwn, comment.id, comment.content, comment.author)
                         }
                     ),
                 text = comment.content,
@@ -152,7 +153,7 @@ fun CommentView(
                                 modifier = Modifier
                                     .combinedClickable(
                                         onClick = {},
-                                        onLongClick = { onClickMenu(comment.isOwn, comment.id, comment.content, comment.author.id) },
+                                        onLongClick = { onClickMenu(comment.isOwn, comment.id, comment.content, comment.author) },
                                     ),
                                 text = it.content,
                                 style = Typography.B3.copy(

@@ -29,7 +29,12 @@ fun PinlogDetailRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
     val isShowDeleteCommentDialog = remember { mutableStateOf(false) }
+    val isShowBlockUserDialog = remember { mutableStateOf(false) }
     var clickedCommentId by remember { mutableStateOf(0) }
+
+    var clickedTargetId by remember { mutableStateOf(0) }
+    var clickedTargetName by remember { mutableStateOf("") }
+
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
@@ -41,6 +46,10 @@ fun PinlogDetailRoute(
 
                 is PinlogUiEvent.OnMoveUserProfile -> {
                     onMoveUserProfile(it.name)
+                }
+
+                PinlogUiEvent.SuccessBlockUser -> {
+                    toast.show(Texts.Toast.blockSuccessToast(clickedTargetName))
                 }
             }
         }
@@ -60,6 +69,22 @@ fun PinlogDetailRoute(
             onRightButtonClick = {
                 isShowDeleteDialog.value = false
                 viewModel.deleteReview()
+            },
+        )
+    }
+
+    if (isShowBlockUserDialog.value) {
+        PDialog(
+            titleText = Texts.Report.getBlockUserDialogTitle(clickedTargetName),
+            descriptionText = Texts.Report.BLOCK_USER_DIALOG_CONTENT,
+            leftButtonText = Texts.Word.DO_RETURN,
+            rightButtonText = Texts.Word.DO_BLOCK,
+            onLeftButtonClick = {
+                isShowBlockUserDialog.value = false
+            },
+            onRightButtonClick = {
+                isShowBlockUserDialog.value = false
+                viewModel.blockUser(clickedTargetId)
             },
         )
     }
@@ -109,6 +134,11 @@ fun PinlogDetailRoute(
         onClickLike = viewModel::likeChanged,
         userInfo = uiState.userInfo,
         onRefresh = viewModel::refreshView,
-        onMoveReport = onMoveReport
+        onMoveReport = onMoveReport,
+        onClickBlock = { userId, userName ->
+            clickedTargetId = userId
+            clickedTargetName = userName
+            isShowBlockUserDialog.value = true
+        }
     )
 }
