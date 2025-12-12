@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.pinup.placePinup.domain.model.ReportType
 import com.pinup.placePinup.extentions.jsonToArg
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.ui.addpinbuddy.AddPinBuddyRoute
@@ -45,6 +46,7 @@ import com.pinup.placePinup.ui.pinbuddy.PinBuddyRoute
 import com.pinup.placePinup.ui.pinlogDetail.PinlogDetailRoute
 import com.pinup.placePinup.ui.placeDetail.PlaceDetailRoute
 import com.pinup.placePinup.ui.profilesetting.ProfileSettingRoute
+import com.pinup.placePinup.ui.report.ReportRoute
 import com.pinup.placePinup.ui.reviewwrite.compose.WriteReviewNavHost
 import com.pinup.placePinup.ui.reviewwrite.successWriteReview.WriteReviewDetailRoute
 import com.pinup.placePinup.ui.setting.SettingNavHost
@@ -500,6 +502,14 @@ fun PinUpApp(
                         onClose = { navHostController.popBackStack() }
                     )
                 }
+
+                composable<PinUpAppDestination.Report> {
+                    val reportType = it.jsonToArg<ReportType>("reportType") ?: ReportType.USER
+                    ReportRoute(
+                        reportType = reportType,
+                        onBackPressed = { navHostController.popBackStack() }
+                    )
+                }
             }
 
             LogoutDialog(
@@ -608,5 +618,11 @@ sealed interface PinUpAppDestination {
     data class DetailImage(
         val position: Int,
         val images: List<String>
+    ) : PinUpAppDestination
+
+    @Serializable
+    data class Report(
+        val targetId: Int,
+        val reportType: ReportType
     ) : PinUpAppDestination
 }

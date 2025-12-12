@@ -6,6 +6,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
+import com.pinup.placePinup.domain.model.ReportType
+import com.pinup.placePinup.domain.model.ReportType.*
 
 object Texts {
     fun buildHighlightedText(
@@ -310,6 +312,32 @@ object Texts {
         const val PINLOG_REPORT = "핀로그 신고"
         const val USER_REPORT = "계정 신고"
         const val COMMENT_REPORT = "댓글 신고"
+
+        fun getReportTitle(title: String) = "$title 신고하기"
+        fun getDescription(reportType: ReportType): String {
+            return when(reportType) {
+                COMMENT,
+                USER -> "해당 ${reportType.name}을 신고하는 사유를 선택해 주세요."
+                PINLOG -> "해당 ${reportType.name}를 신고하는 사유를 선택해 주세요."
+            }
+        }
+
+        fun getReportReason(reportType: ReportType): List<String> {
+            return when(reportType) {
+                COMMENT,
+                PINLOG -> listOf(
+                    "가학적이거나 유해한 내용입니다.",
+                    "허위사실을 포함하는 내용입니다.",
+                    "혐오를 조장하는 내용입니다.",
+                    "기타"
+                )
+                USER -> listOf(
+                    "다른 사람을 사칭하는 계정입니다.",
+                    "유해한 내용을 포함하는 계정입니다.",
+                    "기타"
+                )
+            }
+        }
     }
 
     object Block {

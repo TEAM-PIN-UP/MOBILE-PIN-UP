@@ -117,6 +117,7 @@ fun PinlogDetailScreen(
     val keyboard = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
 
+    var clickedUserId by remember { mutableStateOf(0) }
     var clickedCommentId by remember { mutableStateOf(0) }
     var clickedComment by remember { mutableStateOf("") }
     val pullRefreshState = rememberPullRefreshState(
@@ -482,8 +483,9 @@ fun PinlogDetailScreen(
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp),
                                 comment = it,
-                                onClickMenu = { isOwn, id, comment ->
+                                onClickMenu = { isOwn, id, comment, userId ->
                                     commentSheet = true to isOwn
+                                    clickedUserId = userId
                                     clickedCommentId = id
                                     clickedComment = comment
                                     scope.launch { sheetState.show() }
