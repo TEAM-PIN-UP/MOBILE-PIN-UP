@@ -33,6 +33,7 @@ fun UserProfileRoute(
         onClickShare = viewModel::shareMyProfile,
         onMoveDetail = onMovePintsDetail,
         getMorePints = viewModel::getMorePints,
-        onClickBack = onClickBack
+        onClickBack = onClickBack,
+        onClickBlockUser = viewModel::blockUser
     )
 }

@@ -3,6 +3,7 @@ package com.pinup.placePinup.ui.userprofile
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.pinup.placePinup.data.request.pints.PageAble
+import com.pinup.placePinup.data.request.report.UserBlockRequest
 import com.pinup.placePinup.domain.model.Member
 import com.pinup.placePinup.domain.model.PagingReview
 import com.pinup.placePinup.domain.model.PintsPageAble
@@ -17,6 +18,7 @@ import com.pinup.placePinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.placePinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.placePinup.domain.usecase.GetPintsUseCase
 import com.pinup.placePinup.domain.usecase.PostReviewLikeChangeUseCase
+import com.pinup.placePinup.domain.usecase.PostUserBlockUseCase
 import com.pinup.placePinup.domain.usecase.RejectPinBuddyUseCase
 import com.pinup.placePinup.domain.usecase.RequestPinBuddyUseCase
 import com.pinup.placePinup.domain.usecase.SearchUserUseCase
@@ -25,6 +27,7 @@ import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
 import com.pinup.placePinup.ui.base.UiState
 import com.pinup.placePinup.ui.login.sns.KaKaoShareController
+import com.pinup.placePinup.ui.pinlogDetail.PinlogUiEvent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -43,7 +46,8 @@ class UserProfileViewModel (
     private val getPintsUseCase: GetPintsUseCase,
     private val acceptPinBuddyUseCase: AcceptPinBuddyUseCase,
     private val rejectPinBuddyUseCase: RejectPinBuddyUseCase,
-    private val kaKaoShareController: KaKaoShareController
+    private val kaKaoShareController: KaKaoShareController,
+    private val postUserBlockUseCase: PostUserBlockUseCase
 ) : BaseViewModel<UserProfileUiState, UiEvent>(UserProfileUiState()) {
     val memberId = savedStateHandle.get<Int>(MEMBER_ID) ?: -1
     val memberName = savedStateHandle.get<String>(MEMBER_NAME) ?: ""
@@ -229,6 +233,15 @@ class UserProfileViewModel (
             successCallback = {
                 initUserProfile(uiState.value.member.profile.memberId)
             }
+        )
+    }
+
+    fun blockUser(id: Int) = viewModelScope.launch {
+        val request = UserBlockRequest(id)
+        resultResponse(
+            response = postUserBlockUseCase(request),
+            successCallback = { emitEvent(PinlogUiEvent.SuccessBlockUser) },
+            errorCallback = { emitEvent(PinlogUiEvent.ErrorBlockUser) }
         )
     }
 

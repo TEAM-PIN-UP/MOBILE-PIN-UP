@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.domain.model.Member
 import com.pinup.placePinup.domain.model.PintsPageAble
 import com.pinup.placePinup.domain.model.RelationType
+import com.pinup.placePinup.domain.model.ReportType
 import com.pinup.placePinup.domain.model.Review
 import com.pinup.placePinup.extentions.ScrollToEndCallback
 import com.pinup.placePinup.extentions.clickableSingleWithNoRipple
@@ -55,6 +56,7 @@ import com.pinup.placePinup.ui.component.PinBuddyBottomSheet
 import com.pinup.placePinup.ui.component.PinchItemView
 import com.pinup.placePinup.ui.component.ProfileImageView
 import com.pinup.placePinup.ui.component.RoundedBox
+import com.pinup.placePinup.ui.component.bottomSheet.ReportBlockMenuBottomSheet
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
@@ -83,14 +85,17 @@ fun UserProfileScreen(
     getMorePints: () -> Unit = {},
     onMoveDetail: (Int) -> Unit = {},
     onClickBack: () -> Unit = {},
+    onClickBlockUser: (Int) -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     var isShowDeleteDialog by remember { mutableStateOf(false) }
+    var isShowBlockUserDialog by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
     val pagerState = remember { mutableStateOf(0) }
     val scrollState = rememberLazyListState()
+    var clickedReport by remember { mutableStateOf(false) }
 
     ScrollToEndCallback(scrollState) {
         if (pagerState.value == 1 && !pinchPageAble.last) {
@@ -101,15 +106,27 @@ fun UserProfileScreen(
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetContent = {
-            PinBuddyBottomSheet(
-                onClickRequestCancel = {
-                    onRequestCancel()
-                    scope.launch { sheetState.hide() }
-                },
-                onClickClose = {
-                    scope.launch { sheetState.hide() }
-                },
-            )
+            if (clickedReport) {
+                ReportBlockMenuBottomSheet(
+                    reportType = ReportType.USER,
+                    onClickReport = {
+                        scope.launch { sheetState.hide() }
+                    },
+                    onClickBlock = {
+                        scope.launch { sheetState.hide() }
+                    }
+                )
+            } else {
+                PinBuddyBottomSheet(
+                    onClickRequestCancel = {
+                        onRequestCancel()
+                        scope.launch { sheetState.hide() }
+                    },
+                    onClickClose = {
+                        scope.launch { sheetState.hide() }
+                    },
+                )
+            }
         },
         sheetBackgroundColor = Colors.White,
         sheetState = sheetState,
@@ -140,6 +157,20 @@ fun UserProfileScreen(
                     )
 
                     Spacer(Modifier.weight(1f))
+
+                    Image(
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickableSingleWithNoRipple {
+                                clickedReport = true
+                                scope.launch { sheetState.show() }
+                            },
+                        colorFilter = ColorFilter.tint(Colors.Gray800),
+                        painter = painterResource(Res.drawable.ic_menu_dot),
+                        contentDescription = null
+                    )
+
+                    Spacer(modifier = Modifier.width(16.dp))
 
                     Image(
                         modifier = Modifier
@@ -309,7 +340,8 @@ fun UserProfileScreen(
                                 isShowDeleteDialog = true
                             }
                             RelationType.PENDING -> PendingButton {
-                                onRequestCancel()
+                                clickedReport = false
+                                scope.launch { sheetState.show() }
                             }
                             RelationType.RECEIVED -> ReceivedButton {
                                 onReceivedAccept()
@@ -366,6 +398,22 @@ fun UserProfileScreen(
             onRightButtonClick = {
                 onRemovePinBuddy()
                 isShowDeleteDialog = false
+            },
+        )
+    }
+
+    if (isShowBlockUserDialog) {
+        PDialog(
+            titleText = Texts.Report.getBlockUserDialogTitle(member.profile.nickname),
+            descriptionText = Texts.Report.BLOCK_USER_DIALOG_CONTENT,
+            leftButtonText = Texts.Word.DO_RETURN,
+            rightButtonText = Texts.Word.DO_BLOCK,
+            onLeftButtonClick = {
+                isShowBlockUserDialog = false
+            },
+            onRightButtonClick = {
+                isShowBlockUserDialog = false
+                onClickBlockUser(member.profile.memberId)
             },
         )
     }
