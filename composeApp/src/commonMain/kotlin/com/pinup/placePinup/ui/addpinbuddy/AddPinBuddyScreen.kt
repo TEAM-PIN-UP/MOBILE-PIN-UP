@@ -285,6 +285,7 @@ fun AlreadyRequestButton() {
         Row(
             modifier = Modifier
                 .padding(vertical = 8.dp, horizontal = 14.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(Res.drawable.ic_clock),
