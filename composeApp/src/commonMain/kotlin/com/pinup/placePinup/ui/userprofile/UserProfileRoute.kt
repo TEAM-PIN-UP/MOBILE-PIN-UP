@@ -2,6 +2,7 @@ package com.pinup.placePinup.ui.userprofile
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pinup.placePinup.domain.model.ReportType
 import com.pinup.placePinup.platform.ContextFactory
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -14,6 +15,7 @@ fun UserProfileRoute(
     onMovePintsDetail: (Int) -> Unit = {},
     onClickBack: () -> Unit = {},
     onSettingClick: () -> Unit = {},
+    onMoveReport: (Int, ReportType) -> Unit = {_, _ -> },
     viewModel: UserProfileViewModel = koinViewModel(parameters = { parametersOf(contextFactory) })
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -34,6 +36,7 @@ fun UserProfileRoute(
         onMoveDetail = onMovePintsDetail,
         getMorePints = viewModel::getMorePints,
         onClickBack = onClickBack,
-        onClickBlockUser = viewModel::blockUser
+        onClickBlockUser = viewModel::blockUser,
+        onMoveReport = onMoveReport
     )
 }

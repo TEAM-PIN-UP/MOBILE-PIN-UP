@@ -488,7 +488,10 @@ fun PinUpApp(
                         onClickBack = {
                             navHostController.popBackStack()
                         },
-                        onSettingClick = { navHostController.navigate(PinUpAppDestination.Setting) }
+                        onSettingClick = { navHostController.navigate(PinUpAppDestination.Setting) },
+                        onMoveReport = { id, type ->
+                            navHostController.navigate(PinUpAppDestination.Report(id, type))
+                        }
                     )
                 }
 

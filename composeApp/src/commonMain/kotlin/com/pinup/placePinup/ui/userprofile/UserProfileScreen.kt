@@ -86,6 +86,7 @@ fun UserProfileScreen(
     onMoveDetail: (Int) -> Unit = {},
     onClickBack: () -> Unit = {},
     onClickBlockUser: (Int) -> Unit = {},
+    onMoveReport: (Int, ReportType) -> Unit = {_, _ -> },
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     var isShowDeleteDialog by remember { mutableStateOf(false) }
@@ -110,9 +111,11 @@ fun UserProfileScreen(
                 ReportBlockMenuBottomSheet(
                     reportType = ReportType.USER,
                     onClickReport = {
+                        onMoveReport(member.profile.memberId, ReportType.USER)
                         scope.launch { sheetState.hide() }
                     },
                     onClickBlock = {
+                        isShowBlockUserDialog = true
                         scope.launch { sheetState.hide() }
                     }
                 )
