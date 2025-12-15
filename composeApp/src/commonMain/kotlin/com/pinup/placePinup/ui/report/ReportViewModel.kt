@@ -26,7 +26,7 @@ class ReportViewModel (
     private val postReportPinlogUseCase: PostReportPinlogUseCase
 ) : BaseViewModel<ReportUiState, ReportUiEvent>(ReportUiState()) {
     val targetId = savedStateHandle.get<Int>(TARGET_ID) ?: -1
-    val reportType = savedStateHandle.get<ReportType>(REPORT_TYPE) ?: ReportType.USER
+    val reportType = ReportType.valueOf(savedStateHandle.get<String>(REPORT_TYPE) ?: "")
 
     init {
         updateState {

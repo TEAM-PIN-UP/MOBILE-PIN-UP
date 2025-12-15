@@ -111,19 +111,21 @@ fun UserProfileScreen(
                 ReportBlockMenuBottomSheet(
                     reportType = ReportType.USER,
                     onClickReport = {
-                        onMoveReport(member.profile.memberId, ReportType.USER)
-                        scope.launch { sheetState.hide() }
+                        scope.launch {
+                            sheetState.hide()
+                            onMoveReport(member.profile.memberId, ReportType.USER)
+                        }
                     },
                     onClickBlock = {
-                        isShowBlockUserDialog = true
                         scope.launch { sheetState.hide() }
+                        isShowBlockUserDialog = true
                     }
                 )
             } else {
                 PinBuddyBottomSheet(
                     onClickRequestCancel = {
-                        onRequestCancel()
                         scope.launch { sheetState.hide() }
+                        onRequestCancel()
                     },
                     onClickClose = {
                         scope.launch { sheetState.hide() }

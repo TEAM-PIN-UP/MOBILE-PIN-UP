@@ -363,7 +363,7 @@ fun PinUpApp(
                             navHostController.navigate(PinUpAppDestination.DetailImage(position, images))
                         },
                         onMoveReport = { targetId, reportType ->
-                            navHostController.navigate(PinUpAppDestination.Report(targetId, reportType))
+                            navHostController.navigate(PinUpAppDestination.Report(targetId, reportType.name))
                         }
                     )
                 }
@@ -490,7 +490,7 @@ fun PinUpApp(
                         },
                         onSettingClick = { navHostController.navigate(PinUpAppDestination.Setting) },
                         onMoveReport = { id, type ->
-                            navHostController.navigate(PinUpAppDestination.Report(id, type))
+                            navHostController.navigate(PinUpAppDestination.Report(id, type.name))
                         }
                     )
                 }
@@ -627,6 +627,6 @@ sealed interface PinUpAppDestination {
     @Serializable
     data class Report(
         val targetId: Int,
-        val reportType: ReportType
+        val reportType: String
     ) : PinUpAppDestination
 }

@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.pinup.placePinup.domain.model.ReportType
 import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.theme.Texts
 import kotlinx.coroutines.flow.collectLatest
