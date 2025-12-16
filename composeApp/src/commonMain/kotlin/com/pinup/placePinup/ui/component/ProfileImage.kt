@@ -72,7 +72,7 @@ fun ProfileImageView(
     size: Dp = 26.dp,
     cornerColor: Color = Colors.Transparency,
 ) {
-    if (imgUrl.isNullOrEmpty() || !imgUrl.startsWith("http")) {
+    if (imgUrl.isNullOrEmpty()) {
         RoundedBox(
             modifier = modifier
                 .size(size),

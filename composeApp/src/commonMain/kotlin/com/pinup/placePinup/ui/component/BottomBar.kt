@@ -254,7 +254,6 @@ fun BottomBarMenuItem(
             ProfileImageView(
                 modifier = Modifier
                     .padding(horizontal = 25.dp)
-                    .background(Colors.White)
                     .clickableWithNoRipple {
                         onBottomMenuClick(myMenu)
                     },

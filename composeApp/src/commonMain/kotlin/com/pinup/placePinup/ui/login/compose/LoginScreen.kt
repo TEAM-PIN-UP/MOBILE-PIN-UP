@@ -241,15 +241,15 @@ fun LoginScreen(
                 contentDescription = "네이버 로그인"
             )
 
-            Image(
-                modifier = Modifier
-                    .size(52.dp)
-                    .clickableSingleWithNoRipple {
-                        onSnsLoginClick(SNSType.GOOGLE)
-                    },
-                painter = painterResource(Res.drawable.ic_google),
-                contentDescription = "구글 로그인"
-            )
+//            Image(
+//                modifier = Modifier
+//                    .size(52.dp)
+//                    .clickableSingleWithNoRipple {
+//                        onSnsLoginClick(SNSType.GOOGLE)
+//                    },
+//                painter = painterResource(Res.drawable.ic_google),
+//                contentDescription = "구글 로그인"
+//            )
 
             if (getPlatformName() == PLATFORM_IOS) {
                 Image(

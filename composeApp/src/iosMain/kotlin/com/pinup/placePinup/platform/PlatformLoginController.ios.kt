@@ -10,7 +10,7 @@ import platform.UIKit.UIApplication
 
 actual class GoogleLoginController : SNSLoginController {
     @OptIn(ExperimentalForeignApi::class)
-    override fun doLogin(resultListener: SNSLoginResultListener) {
+    override fun doLogin(resultListener: SNSLoginResultListener, context: Any,) {
         val rootViewController = UIApplication.sharedApplication.keyWindow?.rootViewController ?: run {
             resultListener.onCancel()
             return

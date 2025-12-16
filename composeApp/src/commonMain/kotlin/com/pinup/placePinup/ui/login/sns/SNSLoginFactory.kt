@@ -14,7 +14,7 @@ class SNSLoginFactory(
         when (snsType) {
             SNSType.KAKAO -> kaKaoLoginController.doLogin(resultListener, contextFactory.getActivity())
             SNSType.NAVER -> naverLoginController.doLogin(resultListener, contextFactory.getActivity())
-            SNSType.GOOGLE -> googleLoginController.doLogin(resultListener)
+            SNSType.GOOGLE -> googleLoginController.doLogin(resultListener, contextFactory.getActivity())
             SNSType.PINUP -> {}
             SNSType.APPLE -> appleLoginController.doLogin(resultListener, contextFactory.getActivity())
         }
