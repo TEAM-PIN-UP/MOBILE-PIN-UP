@@ -28,6 +28,7 @@ data class GetPinlogDetailResponse(
     val comments: List<CommentResponse> = emptyList(),
     val isScrapByUser: Boolean = false,
     val writerName: String ="",
+    val memberId: Int = 0,
 ) {
     companion object {
         fun GetPinlogDetailResponse.toModel(): PinlogDetail {
@@ -51,6 +52,7 @@ data class GetPinlogDetailResponse(
                     it.toModel()
                 },
                 isScrapByUser = isScrapByUser,
+                memberId = memberId
             )
         }
     }

@@ -80,6 +80,7 @@ class StartAppViewModel(
                 userId = userId,
             )
         }
+        KakaoDeepLinkStore.onNewParams(userId.toString())
     }
 }
 

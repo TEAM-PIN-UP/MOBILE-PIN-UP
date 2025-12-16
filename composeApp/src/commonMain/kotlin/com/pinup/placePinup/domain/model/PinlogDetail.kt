@@ -18,4 +18,5 @@ data class PinlogDetail(
     val commentCount: Int = 0,
     val comments: List<Comment> = emptyList(),
     val isScrapByUser: Boolean = false,
+    val memberId: Int = 0,
 )

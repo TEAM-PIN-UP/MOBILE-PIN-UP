@@ -167,15 +167,14 @@ fun PinlogDetailScreen(
                     },
                 )
             } else {
-                // TODO 핀로그 상세에서 유저 아이디 넣기
                 ReportBlockMenuBottomSheet(
                     reportType = ReportType.PINLOG,
                     onClickReport = {
-                        onMoveReport(-1, ReportType.PINLOG)
+                        onMoveReport(pinlogDetail.memberId, ReportType.PINLOG)
                         scope.launch { sheetState.hide() }
                     },
                     onClickBlock = {
-                        onClickBlock(-1, pinlogDetail.writerName)
+                        onClickBlock(pinlogDetail.memberId, pinlogDetail.writerName)
                         scope.launch { sheetState.hide() }
                     },
                 )
