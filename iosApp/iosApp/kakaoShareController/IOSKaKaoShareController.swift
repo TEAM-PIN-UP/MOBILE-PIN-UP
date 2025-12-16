@@ -42,15 +42,16 @@ class IOSKaKaoShareController: NSObject, KaKaoShareController {
         title: title,
         imageUrl: imageUrl,
         description: desc,
-        link: Link()
+        link: Link(
+            androidExecutionParams: [userIdParamKey: String(memberId)],
+            iosExecutionParams:     [userIdParamKey: String(memberId)]
+        )
     )
 
     // 버튼: 실행 파라미터 + 폴백 웹 링크 (Android와 동일 키/링크)
     let buttonLink = Link(
-        webUrl: URL(string: webLinkString),
-        mobileWebUrl: URL(string: webLinkString),
         androidExecutionParams: [userIdParamKey: String(memberId)],
-        iosExecutionParams:     [userIdParamKey: String(memberId)],
+        iosExecutionParams:     [userIdParamKey: String(memberId)]
     )
     let button = Button(title: buttonTitle, link: buttonLink)
 

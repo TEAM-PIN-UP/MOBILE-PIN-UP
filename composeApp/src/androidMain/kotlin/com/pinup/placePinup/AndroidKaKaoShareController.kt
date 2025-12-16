@@ -56,7 +56,10 @@ class AndroidKaKaoShareController: KaKaoShareController {
                     title = Texts.Kakao.getProfileShareTitle(memberName),
                     description = Texts.Kakao.getProfileShareContent(memberName),
                     imageUrl = "https://lh3.googleusercontent.com/d/1ui1iK7vFLd1wj8KuiCgXMQo3YFGMd4w-",
-                    link = Link(),
+                    link = Link(
+                        androidExecutionParams = mapOf(Const.ShareKey.KAKAO_USER_ID to memberId.toString()),
+                        iosExecutionParams = mapOf(Const.ShareKey.KAKAO_USER_ID to memberId.toString())
+                    ),
                 ),
             buttons =
                 listOf(
@@ -64,8 +67,7 @@ class AndroidKaKaoShareController: KaKaoShareController {
                         Texts.Kakao.PROFILE_SHARE_BUTTON,
                         Link(
                             androidExecutionParams = mapOf(Const.ShareKey.KAKAO_USER_ID to memberId.toString()),
-                            mobileWebUrl = Const.ShareKey.WEB_LINK,
-                            webUrl = Const.ShareKey.WEB_LINK
+                            iosExecutionParams = mapOf(Const.ShareKey.KAKAO_USER_ID to memberId.toString())
                         ),
                     ),
                 ),

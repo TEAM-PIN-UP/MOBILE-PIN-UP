@@ -63,6 +63,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
         // KAKAO_USER_ID 값 꺼내보기
         if let userId = params["userId"] {
+            print("예아 userId")
             KakaoLinkBridge().onOpenFromKakao(userId: userId)
             return true
         } else {
