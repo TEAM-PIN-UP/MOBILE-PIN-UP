@@ -24,11 +24,11 @@ class LoginViewModel (
 ) : BaseViewModel<LoginUiState, LoginUiEvent>(LoginUiState()) {
     private val loginResultListener = object : SNSLoginResultListener {
         override fun onCancel() {
-            hLog("login cancel")
+            emitEvent(LoginUiEvent.TestError("cancel"))
         }
 
         override fun onFail(message: String?) {
-            hLog(message ?: "error")
+            emitEvent(LoginUiEvent.TestError(message ?: "error"))
         }
 
         override fun onSuccess(snsLoginInfo: SNSUserInfo) {
@@ -41,6 +41,7 @@ class LoginViewModel (
             emailLogin()
             return
         }
+
         snsLoginFactory.doLogin(snsType, contextFactory, loginResultListener)
     }
 
@@ -118,4 +119,5 @@ data class LoginUiState(
 sealed interface LoginUiEvent : UiEvent {
     data class MoveSignUp(val snsLoginInfo: SNSUserInfo) : LoginUiEvent
     data object MoveMain : LoginUiEvent
+    data class TestError(val test: String) : LoginUiEvent
 }

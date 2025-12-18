@@ -50,11 +50,10 @@ actual class GoogleLoginController : SNSLoginController {
                             putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
                         }
                     )
-                    resultListener.onCancel()
+                    resultListener.onFail(e2.message)
                 }
             } catch (e: Exception) {
-                hLog(e.message.toString())
-                resultListener.onCancel()
+                resultListener.onFail(e.message)
             }
         }
     }
