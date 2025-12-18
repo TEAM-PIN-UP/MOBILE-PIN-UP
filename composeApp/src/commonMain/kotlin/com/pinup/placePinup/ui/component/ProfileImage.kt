@@ -2,6 +2,8 @@ package com.pinup.placePinup.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -92,9 +94,11 @@ fun ProfileImageView(
             cornerColor = cornerColor,
         ) {
             AsyncImage(
+                modifier = Modifier.fillMaxSize(),
                 model = imgUrl,
                 contentScale = ContentScale.Crop,
-                contentDescription = "profile image"
+                contentDescription = "profile image",
+                error = painterResource(Res.drawable.ic_profile_default)
             )
         }
     }
