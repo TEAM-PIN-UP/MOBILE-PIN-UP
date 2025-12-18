@@ -158,24 +158,32 @@ fun PinlogDetailScreen(
                 ReportBlockMenuBottomSheet(
                     reportType = ReportType.COMMENT,
                     onClickReport = {
-                        onMoveReport(clickedCommentUserId, ReportType.COMMENT)
-                        scope.launch { sheetState.hide() }
+                        scope.launch {
+                            onMoveReport(clickedCommentId, ReportType.COMMENT)
+                            sheetState.hide()
+                        }
                     },
                     onClickBlock = {
-                        onClickBlock(clickedCommentUserId, clickedCommentUserName)
-                        scope.launch { sheetState.hide() }
+                        scope.launch {
+                            onClickBlock(clickedCommentUserId, clickedCommentUserName)
+                            sheetState.hide()
+                        }
                     },
                 )
             } else {
                 ReportBlockMenuBottomSheet(
                     reportType = ReportType.PINLOG,
                     onClickReport = {
-                        onMoveReport(pinlogDetail.memberId, ReportType.PINLOG)
-                        scope.launch { sheetState.hide() }
+                        scope.launch {
+                            onMoveReport(pinlogDetail.id, ReportType.PINLOG)
+                            sheetState.hide()
+                        }
                     },
                     onClickBlock = {
-                        onClickBlock(pinlogDetail.memberId, pinlogDetail.writerName)
-                        scope.launch { sheetState.hide() }
+                        scope.launch {
+                            onClickBlock(pinlogDetail.memberId, pinlogDetail.writerName)
+                            sheetState.hide()
+                        }
                     },
                 )
             }

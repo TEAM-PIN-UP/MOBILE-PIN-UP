@@ -5,11 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.placePinup.data.request.report.ReportCommentRequest
 import com.pinup.placePinup.data.request.report.ReportPinlogRequest
 import com.pinup.placePinup.data.request.report.ReportUserRequest
-import com.pinup.placePinup.domain.model.Comment
-import com.pinup.placePinup.domain.model.PinlogDetail
 import com.pinup.placePinup.domain.model.ReportType
 import com.pinup.placePinup.domain.model.ReportType.*
-import com.pinup.placePinup.domain.model.UserInfo
 import com.pinup.placePinup.domain.usecase.PostReportCommentUseCase
 import com.pinup.placePinup.domain.usecase.PostReportPinlogUseCase
 import com.pinup.placePinup.domain.usecase.PostReportUserUseCase
