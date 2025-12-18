@@ -42,7 +42,7 @@ class ArticleViewModel(
         )
     }
 
-    private fun getMyProfile() = viewModelScope.launch {
+    fun getMyProfile() = viewModelScope.launch {
         getMyProfileUseCase()
             .collectLatest {
                 updateState {

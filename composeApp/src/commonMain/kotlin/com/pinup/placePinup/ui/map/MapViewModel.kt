@@ -61,7 +61,6 @@ class MapViewModel (
     init {
         initDetailPlaceEventBus()
         initCollectLocation()
-        getMyProfileImage()
         getEditorPintsCategory()
     }
 
@@ -379,7 +378,7 @@ class MapViewModel (
         }
     }
 
-    private fun getMyProfileImage() = viewModelScope.launch {
+    fun getMyProfileImage() = viewModelScope.launch {
         getMyProfileUseCase().collectLatest {
             updateState {
                 copy(

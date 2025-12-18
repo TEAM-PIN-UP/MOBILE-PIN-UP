@@ -18,6 +18,7 @@ fun ArticleRoute(
 
     LaunchedEffect(Unit) {
         viewModel.getArticleList()
+        viewModel.getMyProfile()
     }
 
     ArticleScreen(

@@ -57,6 +57,10 @@ fun MapRoute(
         }
     }
 
+    LaunchedEffect(Unit) {
+        mapViewModel.getMyProfileImage()
+    }
+
     if (isShowDeleteDialog.value) {
         PDialog(
             titleText = Texts.PinLog.DELETE_DIALOG_TITLE,

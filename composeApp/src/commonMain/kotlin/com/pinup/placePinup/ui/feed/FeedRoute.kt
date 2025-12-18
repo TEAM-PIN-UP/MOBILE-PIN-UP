@@ -27,6 +27,7 @@ fun FeedRoute(
 
     LaunchedEffect(Unit) {
         viewModel.getFeedList()
+        viewModel.getMyProfile()
     }
 
     LaunchedEffect(Unit) {

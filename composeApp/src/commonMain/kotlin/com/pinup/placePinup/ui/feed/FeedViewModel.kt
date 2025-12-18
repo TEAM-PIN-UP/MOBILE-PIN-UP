@@ -149,7 +149,7 @@ class FeedViewModel(
         saveRecentSearch()
     }
 
-    private fun getMyProfile() = viewModelScope.launch {
+    fun getMyProfile() = viewModelScope.launch {
         getMyProfileUseCase()
             .collectLatest {
                 updateState {
