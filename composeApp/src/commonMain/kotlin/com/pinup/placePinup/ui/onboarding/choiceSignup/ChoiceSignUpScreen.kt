@@ -86,18 +86,18 @@ fun ChoiceSignUpScreen(
             contentDescription = null
         )
 
-//        Spacer(modifier = Modifier.height(20.dp))
-//
-//        Image(
-//            modifier = Modifier
-//                .padding(horizontal = 20.dp)
-//                .fillMaxWidth()
-//                .clickableSingleWithNoRipple {
-//                    onClickSnsLogin(SNSType.GOOGLE)
-//                },
-//            painter = painterResource(Res.drawable.ic_google_login),
-//            contentDescription = null
-//        )
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Image(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .fillMaxWidth()
+                .clickableSingleWithNoRipple {
+                    onClickSnsLogin(SNSType.GOOGLE)
+                },
+            painter = painterResource(Res.drawable.ic_google_login),
+            contentDescription = null
+        )
 
         if (getPlatformName() == PLATFORM_IOS) {
             Spacer(modifier = Modifier.height(20.dp))

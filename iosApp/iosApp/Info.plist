@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.6</string>
+	<string>1.0.7</string>
 	<key>CFBundleURLSchemes</key>
 	<array>
 		<string>com.googleusercontent.apps.260271399045-hju2qsak4evpvic6u4qq77qo0d3k1ggi</string>
@@ -56,7 +56,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>5</string>
+	<string>6</string>
 	<key>GIDClientID</key>
 	<string>260271399045-hju2qsak4evpvic6u4qq77qo0d3k1ggi.apps.googleusercontent.com</string>
 	<key>LSApplicationQueriesSchemes</key>
