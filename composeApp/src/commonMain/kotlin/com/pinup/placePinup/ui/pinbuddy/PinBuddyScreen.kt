@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -280,6 +281,10 @@ private fun PinBuddyList(
                     }
                 )
             }
+
+            item {
+                Spacer(Modifier.navigationBarsPadding())
+            }
         }
     }
 }
@@ -349,6 +354,10 @@ private fun SentPinBuddyRequestList(
                         }
                     }
                 )
+            }
+
+            item {
+                Spacer(Modifier.navigationBarsPadding())
             }
         }
     }
@@ -444,6 +453,10 @@ private fun ReceivePinBuddyRequestList(
                         }
                     }
                 )
+            }
+
+            item {
+                Spacer(Modifier.navigationBarsPadding())
             }
         }
     }
