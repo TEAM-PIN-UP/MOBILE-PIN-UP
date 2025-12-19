@@ -459,8 +459,8 @@ fun PinUpApp(
                         onBackPressed = {
                             navHostController.popBackStack()
                         },
-                        onMoveUserProfile = {
-                            navHostController.navigate(PinUpAppDestination.UserProfile(it))
+                        onMoveUserProfile = { memberId, friendRequestId ->
+                            navHostController.navigate(PinUpAppDestination.UserProfile(memberId = memberId, friendRequestId = friendRequestId))
                         },
                         onClickSearch = {
                             navHostController.navigate(PinUpAppDestination.AddPinBuddy)
