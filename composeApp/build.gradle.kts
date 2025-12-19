@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktorfit)
+    alias(libs.plugins.googleServices)
 }
 
 kotlin {
@@ -66,6 +67,9 @@ kotlin {
             implementation(libs.kakao.user)
             // naver login
             implementation(libs.naver.oauth)
+            // firebase
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.messaging)
 
             implementation(libs.camera.camera2)
             implementation(libs.camera.lifecycle)

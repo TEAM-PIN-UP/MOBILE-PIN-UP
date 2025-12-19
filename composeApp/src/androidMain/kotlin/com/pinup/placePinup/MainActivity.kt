@@ -8,6 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.google.firebase.Firebase
+import com.google.firebase.initialize
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.util.Const
 
@@ -16,6 +18,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val contextFactory = ContextFactory(this)
+        Firebase.initialize(this)
         val data: Uri? = intent?.data
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(
