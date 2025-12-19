@@ -50,6 +50,7 @@ object ApiPath {
     object Report {
         const val REPORT = "api/reports"
         const val BLOCK_USER = "$REPORT/userblock"
+        const val UNDO_BLOCK_USER = "$BLOCK_USER/{blockedUserId}"
         const val REPORT_USER = "$REPORT/user"
         const val REPORT_PINLOG = "$REPORT/pints"
         const val REPORT_COMMENT = "$REPORT/comment"

@@ -27,4 +27,8 @@ class ReportRemoteDataSourceImpl(
     override suspend fun reportComment(request: ReportCommentRequest): PResult<Unit> {
         return reportApi.reportComment(request).mapSuccessData()
     }
+
+    override suspend fun unBlockUser(request: Int): PResult<Unit> {
+        return reportApi.unBlockUser(request).mapSuccessData()
+    }
 }

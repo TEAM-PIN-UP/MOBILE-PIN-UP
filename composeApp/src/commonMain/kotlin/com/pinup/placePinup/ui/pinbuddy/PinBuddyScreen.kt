@@ -62,7 +62,7 @@ fun PinBuddyScreen(
     onDeletePinBuddyRequest: (Int) -> Unit = {},
     onAcceptClick: (Int) -> Unit = {},
     onRejectClick: (Int) -> Unit = {},
-    onProfileClick: (Int) -> Unit = {},
+    onProfileClick: (Int, Int) -> Unit = {_, _ -> },
     onClickSearch: () -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope(),
     onRefresh: () -> Unit = {},
@@ -218,7 +218,7 @@ fun PinBuddyScreen(
 @Composable
 private fun PinBuddyList(
     pinBuddies: PersistentList<Profile>,
-    onProfileClick: (Int) -> Unit,
+    onProfileClick: (Int, Int) -> Unit,
     onDeletePinBuddy: (Int) -> Unit,
 ) {
     if (pinBuddies.isEmpty()) {
@@ -255,7 +255,7 @@ private fun PinBuddyList(
                 UserCard(
                     modifier = Modifier
                         .clickableSingleWithNoRipple {
-                            onProfileClick(it.memberId)
+                            onProfileClick(it.memberId, -1)
                         },
                     imgUrl = it.profilePictureUrl,
                     nickname = it.nickname,
@@ -292,7 +292,7 @@ private fun PinBuddyList(
 @Composable
 private fun SentPinBuddyRequestList(
     sentPinBuddyRequests: PersistentList<PinBuddyRequest>,
-    onProfileClick: (Int) -> Unit,
+    onProfileClick: (Int, Int) -> Unit,
     onDeletePinBuddyRequest: (Int) -> Unit,
 ) {
     if (sentPinBuddyRequests.isEmpty()) {
@@ -329,7 +329,7 @@ private fun SentPinBuddyRequestList(
                 UserCard(
                     modifier = Modifier
                         .clickableSingleWithNoRipple {
-                            onProfileClick(it.receiver.memberId)
+                            onProfileClick(it.receiver.memberId, -1)
                         },
                     imgUrl = it.receiver.profilePictureUrl,
                     nickname = it.receiver.nickname,
@@ -366,7 +366,7 @@ private fun SentPinBuddyRequestList(
 @Composable
 private fun ReceivePinBuddyRequestList(
     receivePinBuddyRequests: PersistentList<PinBuddyRequest>,
-    onProfileClick: (Int) -> Unit,
+    onProfileClick: (Int, Int) -> Unit,
     onRejectClick: (Int) -> Unit,
     onAcceptClick: (Int) -> Unit,
 ) {
@@ -404,7 +404,7 @@ private fun ReceivePinBuddyRequestList(
                 UserCard(
                     modifier = Modifier
                         .clickableSingleWithNoRipple {
-                            onProfileClick(it.sender.memberId)
+                            onProfileClick(it.sender.memberId, it.id)
                         },
                     imgUrl = it.sender.profilePictureUrl,
                     nickname = it.sender.nickname,

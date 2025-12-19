@@ -11,4 +11,5 @@ interface ReportRemoteDataSource {
     suspend fun reportPinlog(request: ReportPinlogRequest): PResult<Unit>
     suspend fun reportUser(request: ReportUserRequest): PResult<Unit>
     suspend fun reportComment(request: ReportCommentRequest): PResult<Unit>
+    suspend fun unBlockUser(request: Int): PResult<Unit>
 }

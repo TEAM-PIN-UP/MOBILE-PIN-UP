@@ -72,6 +72,7 @@ object Texts {
         const val UNREGISTER = "탈퇴하기"
         const val SIGN_UP = "회원가입"
         const val DO_BLOCK = "차단하기"
+        const val DO_RELEASE = "해제하기"
     }
 
     object Onboarding {
@@ -345,6 +346,9 @@ object Texts {
 
         const val REPORT_SUCCESS_DIALOG_TITLE = "신고가 완료 되었습니다."
         const val REPORT_SUCCESS_DIALOG_CONTENT = "신고 접수된 핀로그는 24시간 이내에 검토되며, 지속적인 신고를 받은 계정은 계정 삭제 처리될 수 있습니다."
+        const val UNDO_BLOCK = "차단 해제하기"
+        const val UNDO_BLOCK_DIALOG_TITLE = "차단을 해제하시겠습니까?"
+        const val UNDO_BLOCK_DIALOG_CONTENT = "차단 해제 시, 해당 계정에 친구 추가, 댓글 등의 상호작용이 가능합니다."
     }
 
     object Block {

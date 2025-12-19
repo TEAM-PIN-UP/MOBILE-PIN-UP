@@ -13,7 +13,7 @@ import rememberToastState
 @Composable
 fun PinBuddyRoute(
     onBackPressed: () -> Unit,
-    onMoveUserProfile: (Int) -> Unit,
+    onMoveUserProfile: (Int, Int) -> Unit,
     onClickSearch: () -> Unit = {},
     pinBuddyViewModel: PinBuddyViewModel = koinViewModel()
 ) {

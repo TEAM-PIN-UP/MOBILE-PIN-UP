@@ -19,10 +19,12 @@ import com.pinup.placePinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.placePinup.domain.usecase.GetPintsUseCase
 import com.pinup.placePinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.placePinup.domain.usecase.PostUserBlockUseCase
+import com.pinup.placePinup.domain.usecase.PostUserUnBlockUseCase
 import com.pinup.placePinup.domain.usecase.RejectPinBuddyUseCase
 import com.pinup.placePinup.domain.usecase.RequestPinBuddyUseCase
 import com.pinup.placePinup.domain.usecase.SearchUserUseCase
 import com.pinup.placePinup.platform.ContextFactory
+import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
 import com.pinup.placePinup.ui.base.UiState
@@ -47,9 +49,11 @@ class UserProfileViewModel (
     private val acceptPinBuddyUseCase: AcceptPinBuddyUseCase,
     private val rejectPinBuddyUseCase: RejectPinBuddyUseCase,
     private val kaKaoShareController: KaKaoShareController,
-    private val postUserBlockUseCase: PostUserBlockUseCase
+    private val postUserBlockUseCase: PostUserBlockUseCase,
+    private val postUserUnBlockUseCase: PostUserUnBlockUseCase
 ) : BaseViewModel<UserProfileUiState, UiEvent>(UserProfileUiState()) {
     val memberId = savedStateHandle.get<Int>(MEMBER_ID) ?: -1
+    val friendRequestId = savedStateHandle.get<Int>(FRIEND_REQUEST_ID) ?: -1
     val memberName = savedStateHandle.get<String>(MEMBER_NAME) ?: ""
 
     init {
@@ -220,7 +224,7 @@ class UserProfileViewModel (
 
     fun acceptPinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = acceptPinBuddyUseCase(uiState.value.member.profile.memberId),
+            response = acceptPinBuddyUseCase(friendRequestId),
             successCallback = {
                 initUserProfile(uiState.value.member.profile.memberId)
             }
@@ -229,7 +233,7 @@ class UserProfileViewModel (
 
     fun rejectPinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = rejectPinBuddyUseCase(uiState.value.member.profile.memberId),
+            response = rejectPinBuddyUseCase(friendRequestId),
             successCallback = {
                 initUserProfile(uiState.value.member.profile.memberId)
             }
@@ -240,15 +244,25 @@ class UserProfileViewModel (
         val request = UserBlockRequest(id)
         resultResponse(
             response = postUserBlockUseCase(request),
-            successCallback = { emitEvent(PinlogUiEvent.SuccessBlockUser) },
+            successCallback = {
+                initUserProfile(uiState.value.member.profile.memberId)
+                emitEvent(PinlogUiEvent.SuccessBlockUser)
+            },
             errorCallback = { emitEvent(PinlogUiEvent.ErrorBlockUser) }
+        )
+    }
+
+    fun undoBlockUser() = viewModelScope.launch {
+        resultResponse(
+            response = postUserUnBlockUseCase(uiState.value.member.profile.memberId),
+            successCallback = { initUserProfile(uiState.value.member.profile.memberId) },
         )
     }
 
     companion object {
         private const val MEMBER_ID = "memberId"
         private const val MEMBER_NAME = "name"
-        private const val PAGE_SIZE = 20
+        private const val FRIEND_REQUEST_ID = "friendRequestId"
 
     }
 }

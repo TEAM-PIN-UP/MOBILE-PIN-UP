@@ -26,4 +26,8 @@ class ReportRepositoryImpl (
     override suspend fun reportComment(request: ReportCommentRequest): PResult<Unit> {
         return reportRemoteDataSource.reportComment(request)
     }
+
+    override suspend fun undoBlock(request: Int): PResult<Unit> {
+        return reportRemoteDataSource.unBlockUser(request)
+    }
 }

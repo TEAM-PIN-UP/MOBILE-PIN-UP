@@ -14,7 +14,6 @@ fun UserProfileRoute(
     onMovePints: (Int) -> Unit = {},
     onMovePintsDetail: (Int) -> Unit = {},
     onClickBack: () -> Unit = {},
-    onSettingClick: () -> Unit = {},
     onMoveReport: (Int, ReportType) -> Unit = {_, _ -> },
     viewModel: UserProfileViewModel = koinViewModel(parameters = { parametersOf(contextFactory) })
 ) {
@@ -30,13 +29,13 @@ fun UserProfileRoute(
         onReceivedReject = viewModel::rejectPinBuddy,
         onClickLike = viewModel::likeChanged,
         onClickDetail = onClickDetail,
-        onSettingClick = onSettingClick,
         onMovePints = onMovePints,
         onClickShare = viewModel::shareMyProfile,
         onMoveDetail = onMovePintsDetail,
         getMorePints = viewModel::getMorePints,
         onClickBack = onClickBack,
         onClickBlockUser = viewModel::blockUser,
-        onMoveReport = onMoveReport
+        onMoveReport = onMoveReport,
+        onClickUnBlock = viewModel::undoBlockUser
     )
 }

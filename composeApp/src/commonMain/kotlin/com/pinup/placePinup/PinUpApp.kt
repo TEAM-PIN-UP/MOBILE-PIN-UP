@@ -488,7 +488,6 @@ fun PinUpApp(
                         onClickBack = {
                             navHostController.popBackStack()
                         },
-                        onSettingClick = { navHostController.navigate(PinUpAppDestination.Setting) },
                         onMoveReport = { id, type ->
                             navHostController.navigate(PinUpAppDestination.Report(id, type.name))
                         }
@@ -577,6 +576,7 @@ sealed interface PinUpAppDestination {
     @Serializable
     data class UserProfile(
         val memberId: Int = -1,
+        val friendRequestId: Int = -1,
         val name: String = ""
     ) : PinUpAppDestination
     @Serializable

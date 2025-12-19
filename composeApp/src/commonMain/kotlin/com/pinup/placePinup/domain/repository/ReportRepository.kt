@@ -11,4 +11,5 @@ interface ReportRepository {
     suspend fun reportPinlog(request: ReportPinlogRequest): PResult<Unit>
     suspend fun reportUser(request: ReportUserRequest): PResult<Unit>
     suspend fun reportComment(request: ReportCommentRequest): PResult<Unit>
+    suspend fun undoBlock(request: Int): PResult<Unit>
 }

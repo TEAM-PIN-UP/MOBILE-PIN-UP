@@ -72,8 +72,6 @@ fun UserProfileScreen(
     pinchPageAble: PintsPageAble,
     modifier: Modifier = Modifier,
     onRequestPinBuddy: () -> Unit = {},
-    onAlarmClick: () -> Unit = {},
-    onSettingClick: () -> Unit = {},
     onRequestCancel: () -> Unit = {},
     onRemovePinBuddy: () -> Unit = {},
     onReceivedAccept: () -> Unit = {},
@@ -87,10 +85,12 @@ fun UserProfileScreen(
     onClickBack: () -> Unit = {},
     onClickBlockUser: (Int) -> Unit = {},
     onMoveReport: (Int, ReportType) -> Unit = {_, _ -> },
+    onClickUnBlock: () -> Unit = {},
     scope: CoroutineScope = rememberCoroutineScope()
 ) {
     var isShowDeleteDialog by remember { mutableStateOf(false) }
     var isShowBlockUserDialog by remember { mutableStateOf(false) }
+    var isShowUnBlockUserDialog by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
@@ -173,28 +173,6 @@ fun UserProfileScreen(
                         colorFilter = ColorFilter.tint(Colors.Gray800),
                         painter = painterResource(Res.drawable.ic_menu_dot),
                         contentDescription = null
-                    )
-
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    Image(
-                        modifier = Modifier
-                            .clickableSingleWithNoRipple {
-                                onAlarmClick()
-                            },
-                        painter = painterResource(Res.drawable.ic_alarm),
-                        contentDescription = "alarm"
-                    )
-
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    Image(
-                        modifier = Modifier
-                            .clickableSingleWithNoRipple {
-                                onSettingClick()
-                            },
-                        painter = painterResource(Res.drawable.ic_setting),
-                        contentDescription = "setting"
                     )
                 }
 
@@ -328,64 +306,71 @@ fun UserProfileScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Row {
-                        when (member.relationType) {
-                            RelationType.RECEIVED -> RejectButton {
-                                onReceivedReject()
-                            }
-                            else -> ProfileShareButton {
-                                onClickShare()
-                            }
+                    if (member.relationType == RelationType.BLOCK) {
+                        BlockedButton {
+                            isShowUnBlockUserDialog = true
                         }
+                    } else {
+                        Row {
+                            when (member.relationType) {
+                                RelationType.RECEIVED -> RejectButton {
+                                    onReceivedReject()
+                                }
+                                else -> ProfileShareButton {
+                                    onClickShare()
+                                }
+                            }
 
-                        Spacer(Modifier.width(10.dp))
+                            Spacer(Modifier.width(10.dp))
 
-                        when (member.relationType) {
-                            RelationType.FRIEND -> AlreadyPinBuddyButton {
-                                isShowDeleteDialog = true
-                            }
-                            RelationType.PENDING -> PendingButton {
-                                clickedReport = false
-                                scope.launch { sheetState.show() }
-                            }
-                            RelationType.RECEIVED -> ReceivedButton {
-                                onReceivedAccept()
-                            }
-                            else -> StrangerButton {
-                                onRequestPinBuddy()
+                            when (member.relationType) {
+                                RelationType.FRIEND -> AlreadyPinBuddyButton {
+                                    isShowDeleteDialog = true
+                                }
+                                RelationType.PENDING -> PendingButton {
+                                    clickedReport = false
+                                    scope.launch { sheetState.show() }
+                                }
+                                RelationType.RECEIVED -> ReceivedButton {
+                                    onReceivedAccept()
+                                }
+                                else -> StrangerButton {
+                                    onRequestPinBuddy()
+                                }
                             }
                         }
                     }
                 }
             }
 
-            item {
-                ContentView(
-                    scope = scope,
-                    pagerState = pagerState,
-                    onClickPage = { pagerState.value = it }
-                )
-            }
-
-
-            if (member.relationType != RelationType.FRIEND) {
+            if (member.relationType != RelationType.BLOCK) {
                 item {
-                    LockReviewScreen()
+                    ContentView(
+                        scope = scope,
+                        pagerState = pagerState,
+                        onClickPage = { pagerState.value = it }
+                    )
                 }
-            } else {
-                if (pagerState.value == 0) {
-                    UserPinlogList(
-                        reviewList = photoReviews,
-                        onClickDetail = onClickDetail,
-                        onClickLike = onClickLike,
-                    )
+
+                if (member.relationType != RelationType.FRIEND) {
+                    item {
+                        LockReviewScreen()
+                    }
                 } else {
-                    this.UserPinchList(
-                        member = member,
-                        pinchPageAble = pinchPageAble,
-                        onMovePints = onMovePints,
-                        onMoveDetail = onMoveDetail
-                    )
+                    if (pagerState.value == 0) {
+                        UserPinlogList(
+                            reviewList = photoReviews,
+                            onClickDetail = onClickDetail,
+                            onClickLike = onClickLike,
+                        )
+                    } else {
+                        this.UserPinchList(
+                            member = member,
+                            pinchPageAble = pinchPageAble,
+                            onMovePints = onMovePints,
+                            onMoveDetail = onMoveDetail
+                        )
+                    }
                 }
             }
         }
@@ -419,6 +404,22 @@ fun UserProfileScreen(
             onRightButtonClick = {
                 isShowBlockUserDialog = false
                 onClickBlockUser(member.profile.memberId)
+            },
+        )
+    }
+
+    if (isShowUnBlockUserDialog) {
+        PDialog(
+            titleText = Texts.Report.UNDO_BLOCK_DIALOG_TITLE,
+            descriptionText = Texts.Report.UNDO_BLOCK_DIALOG_CONTENT,
+            leftButtonText = Texts.Word.DO_RETURN,
+            rightButtonText = Texts.Word.DO_RELEASE,
+            onLeftButtonClick = {
+                isShowUnBlockUserDialog = false
+            },
+            onRightButtonClick = {
+                isShowUnBlockUserDialog = false
+                onClickUnBlock()
             },
         )
     }
@@ -499,6 +500,44 @@ private fun ContentView(
     }
 
     PHorizontalDivider()
+}
+
+@Composable
+private fun BlockedButton(
+    onClickUnBlock: () -> Unit = {}
+) {
+    RoundedBox(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickableWithNoRipple {
+                onClickUnBlock()
+            },
+        cornerRounded = 8,
+        backgroundColor = Colors.Negative,
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(vertical = 12.dp, horizontal = 16.dp)
+                .align(Alignment.Center),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.ic_block),
+                colorFilter = ColorFilter.tint(Colors.White),
+                contentDescription = "share profile"
+            )
+
+            Text(
+                modifier = Modifier
+                    .padding(start = 6.dp),
+                text = Texts.Report.UNDO_BLOCK,
+                style = Typography.L1.copy(
+                    fontWeight = FontWeight.SemiBold
+                ),
+                color = Colors.Gray100,
+            )
+        }
+    }
 }
 
 @Composable
