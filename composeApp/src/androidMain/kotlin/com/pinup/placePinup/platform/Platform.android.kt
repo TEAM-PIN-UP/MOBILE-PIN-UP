@@ -12,6 +12,8 @@ import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import coil3.PlatformContext
+import com.google.firebase.messaging.FirebaseMessaging
+import kotlinx.coroutines.tasks.await
 import org.koin.java.KoinJavaComponent
 
 class AndroidPlatform : Platform {
@@ -55,4 +57,12 @@ actual fun pxToDp(px: Float): Float {
     val context: Context = KoinJavaComponent.getKoin().get()
     val metric = context.resources.displayMetrics
     return (px / (metric.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT))
+}
+
+actual suspend fun getFCMToken(): String {
+    return try {
+        FirebaseMessaging.getInstance().token.await()
+    } catch (e: Exception) {
+        ""
+    }
 }

@@ -1,6 +1,8 @@
 package com.pinup.placePinup
 
 import android.app.Application
+import com.google.firebase.Firebase
+import com.google.firebase.initialize
 import com.kakao.sdk.common.KakaoSdk
 import com.navercorp.nid.NaverIdLoginSDK
 import com.pinup.placePinup.di.initKoin
@@ -25,6 +27,7 @@ class PinUpApplication : Application() {
             BuildConfig.NAVER_CLIENT_SECRET,
             getString(R.string.app_name)
         )
+        Firebase.initialize(this)
         initKoin(
             module = module {
                 single<KaKaoLoginController> { AndroidKaKaoLoginController() }
