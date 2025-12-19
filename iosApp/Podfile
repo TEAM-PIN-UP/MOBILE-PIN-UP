@@ -9,6 +9,8 @@ target 'iosApp' do
   # Pods for iosApp
   pod 'NMapsMap'
   pod 'FirebaseAnalytics'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Core'
   pod 'GoogleSignIn'
   pod 'KakaoSDKCommon' # 카카오 공통 SDK
   pod 'KakaoSDKAuth'  # 사용자 인증
