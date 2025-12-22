@@ -48,10 +48,6 @@ actual fun pxToDp(px: Float): Float {
     return px / scale
 }
 
-actual suspend fun getFCMToken(): String {
-
-}
-
 @OptIn(ExperimentalForeignApi::class)
 private fun producePath(): String {
     val documentDirectory = NSFileManager.defaultManager.URLForDirectory(

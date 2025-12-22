@@ -58,11 +58,3 @@ actual fun pxToDp(px: Float): Float {
     val metric = context.resources.displayMetrics
     return (px / (metric.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT))
 }
-
-actual suspend fun getFCMToken(): String {
-    return try {
-        FirebaseMessaging.getInstance().token.await()
-    } catch (e: Exception) {
-        ""
-    }
-}

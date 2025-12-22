@@ -20,7 +20,6 @@ expect fun getRealPathFromUri(contentUri: String): String?
 expect fun hLog(message: String)
 expect fun dataStorePreferences(): DataStore<Preferences>
 expect fun pxToDp(px: Float): Float
-expect suspend fun getFCMToken(): String
 
 fun createDataStore(
     producePath: () -> String,
