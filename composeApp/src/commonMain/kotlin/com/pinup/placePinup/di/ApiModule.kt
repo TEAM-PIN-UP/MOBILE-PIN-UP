@@ -2,6 +2,7 @@ package com.pinup.placePinup.di
 
 import com.pinup.placePinup.remote.api.AuthApi
 import com.pinup.placePinup.remote.api.BookmarksApi
+import com.pinup.placePinup.remote.api.CallApi
 import com.pinup.placePinup.remote.api.EmailApi
 import com.pinup.placePinup.remote.api.ImageApi
 import com.pinup.placePinup.remote.api.MembersApi
@@ -12,6 +13,7 @@ import com.pinup.placePinup.remote.api.ReportApi
 import com.pinup.placePinup.remote.api.ReviewsApi
 import com.pinup.placePinup.remote.api.createAuthApi
 import com.pinup.placePinup.remote.api.createBookmarksApi
+import com.pinup.placePinup.remote.api.createCallApi
 import com.pinup.placePinup.remote.api.createEmailApi
 import com.pinup.placePinup.remote.api.createImageApi
 import com.pinup.placePinup.remote.api.createMembersApi
@@ -34,4 +36,5 @@ val apiModule = module {
     single<ReviewsApi> { get<Ktorfit>().createReviewsApi() }
     single<PintsApi> { get<Ktorfit>().createPintsApi() }
     single<ReportApi> { get<Ktorfit>().createReportApi()}
+    single<CallApi> { get<Ktorfit>().createCallApi()}
 }

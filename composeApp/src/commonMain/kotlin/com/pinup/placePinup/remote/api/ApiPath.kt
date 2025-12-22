@@ -55,4 +55,13 @@ object ApiPath {
         const val REPORT_PINLOG = "$REPORT/pints"
         const val REPORT_COMMENT = "$REPORT/comment"
     }
+
+    object Call {
+        const val CALL = "api/call"
+        const val DEVICE_TOKEN = "$CALL/device-tokens"
+        const val NOTIFICATION = "$CALL/notifications"
+        const val READ_ALL_NOTIFICATION = "$NOTIFICATION/read-all"
+        const val READ_NOTIFICATION = "$NOTIFICATION/{notificationId}/read"
+        const val DELETE_NOTIFICATION = "$NOTIFICATION/{notificationId}"
+    }
 }
