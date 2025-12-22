@@ -70,20 +70,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
-        print("APNs deviceToken set")
-        
-        print("APNs deviceToken received, length:", deviceToken.count)
-
-              // 2) 그 다음에 FCM 토큰 fetch
-              Messaging.messaging().token { token, error in
-                  if let error = error {
-                      print("FCM token fetch error:", error)
-                      return
-                  }
-                  if let token = token {
-                      print("FCM Token (fetch after APNs):", token)
-                  }
-              }
     }
 
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {

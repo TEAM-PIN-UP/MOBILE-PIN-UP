@@ -2,10 +2,14 @@ package com.pinup.placePinup.ui.login
 
 import androidx.lifecycle.viewModelScope
 import com.pinup.placePinup.data.request.EmailLoginRequest
+import com.pinup.placePinup.data.request.fcm.SetDeviceTokenRequest
 import com.pinup.placePinup.domain.model.StatusCode
 import com.pinup.placePinup.domain.usecase.EmailLoginUseCase
+import com.pinup.placePinup.domain.usecase.PostSetDeviceTokenUseCase
 import com.pinup.placePinup.domain.usecase.SocialLoginUseCase
 import com.pinup.placePinup.platform.ContextFactory
+import com.pinup.placePinup.platform.FcmBridgeStore
+import com.pinup.placePinup.platform.getPlatformName
 import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
@@ -20,7 +24,8 @@ class LoginViewModel (
     private val contextFactory: ContextFactory,
     private val emailLoginUseCase: EmailLoginUseCase,
     private val socialLoginUseCase: SocialLoginUseCase,
-    private val snsLoginFactory: SNSLoginFactory
+    private val snsLoginFactory: SNSLoginFactory,
+    private val postSetDeviceTokenUseCase: PostSetDeviceTokenUseCase
 ) : BaseViewModel<LoginUiState, LoginUiEvent>(LoginUiState()) {
     private val loginResultListener = object : SNSLoginResultListener {
         override fun onCancel() {
@@ -50,7 +55,7 @@ class LoginViewModel (
             resultResponse(
                 response = socialLoginUseCase(snsLoginInfo),
                 successCallback = {
-                    emitEvent( LoginUiEvent.MoveMain )
+                    setDeviceToken()
                 },
                 errorCallback = {
                     handleFailSocialLogin(it, snsLoginInfo)
@@ -68,7 +73,7 @@ class LoginViewModel (
             resultResponse(
                 response = emailLoginUseCase(request),
                 successCallback = {
-                    emitEvent(LoginUiEvent.MoveMain )
+                    setDeviceToken()
                 },
                 errorCallback = ::handleFailEmailLogin
             )
@@ -107,6 +112,23 @@ class LoginViewModel (
                 isError = false
             )
         }
+    }
+
+    private fun setDeviceToken() = viewModelScope.launch {
+        val request = SetDeviceTokenRequest(
+            token = FcmBridgeStore.getFcmToken(),
+            platform = getPlatformName()
+        )
+
+        resultResponse(
+            response = postSetDeviceTokenUseCase(request),
+            successCallback = {
+                emitEvent(LoginUiEvent.MoveMain)
+            },
+            errorCallback = {
+                emitEvent(LoginUiEvent.TestError("fcm 오류"))
+            }
+        )
     }
 }
 

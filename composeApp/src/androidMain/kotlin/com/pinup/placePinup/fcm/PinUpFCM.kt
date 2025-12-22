@@ -11,5 +11,6 @@ class PinUpFCM : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         //TODO 메시지 받을 때 처리
+        hLog(remoteMessage.data.toString())
     }
 }
