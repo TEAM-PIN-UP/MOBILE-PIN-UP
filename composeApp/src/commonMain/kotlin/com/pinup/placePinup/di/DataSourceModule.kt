@@ -20,4 +20,5 @@ val dataSourceModule = module {
     single<ReviewsRemoteDataSource> { ReviewsRemoteDataSourceImpl(get()) }
     single<PintsRemoteDataSource> { PintsRemoteDataSourceImpl(get()) }
     single<ReportRemoteDataSource> { ReportRemoteDataSourceImpl(get()) }
+    single<CallRemoteDataSource> { CallRemoteDataSourceImpl(get()) }
 }
