@@ -77,6 +77,27 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         FCMLinkBridge().setFcmIos(token: fcmToken)
         print("FCM Token:", fcmToken)
     }
+
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+
+        print("FCM data userInfo:", userInfo)
+        completionHandler(.newData)
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+        let userInfo = notification.request.content.userInfo
+        print(userInfo)
+        
+        if #available(iOS 14.0, *) {
+            return [.sound, .banner, .list]
+        } else {
+            return []
+        }
+    }
+
+
     
     func handleKakaoShareUrl(_ url: URL) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
