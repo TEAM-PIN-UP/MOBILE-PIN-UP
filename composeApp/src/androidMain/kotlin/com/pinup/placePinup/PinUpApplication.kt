@@ -14,9 +14,9 @@ import com.pinup.placePinup.ui.login.sns.KaKaoLoginController
 import com.pinup.placePinup.ui.login.sns.KaKaoShareController
 import com.pinup.placePinup.ui.login.sns.NaverLoginController
 import com.pinup.placePinup.ui.login.sns.SNSLoginFactory
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -35,7 +35,7 @@ class PinUpApplication : Application() {
         )
         Firebase.initialize(this)
 
-        runBlocking {
+        CoroutineScope(Dispatchers.Main).launch {
             val token = FirebaseMessaging.getInstance().token.await()
             FcmBridgeStore.setFcmToken(token)
         }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -181,7 +182,7 @@ fun BottomBar(
 }
 
 @Composable
-fun BottomBarMenuItem(
+fun RowScope.BottomBarMenuItem(
     selectedMenu: MainDestination,
     selectedMode: Boolean = false,
     myMenu: MainDestination,
@@ -215,13 +216,13 @@ fun BottomBarMenuItem(
 
     Column(
         modifier = Modifier
+            .weight(1f)
             .padding(vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         if (myMenu is MainDestination.Upload) {
             Image(
                 modifier = Modifier
-                    .padding(horizontal = 25.dp)
                     .background(Colors.White)
                     .clickableWithNoRipple {
                         onUploadClick()
@@ -237,7 +238,6 @@ fun BottomBarMenuItem(
         else if (myMenu != MainDestination.My) {
             Image(
                 modifier = Modifier
-                    .padding(horizontal = 25.dp)
                     .background(Colors.White)
                     .clickableWithNoRipple {
                         if (myMenu is MainDestination.Upload) return@clickableWithNoRipple
@@ -253,10 +253,11 @@ fun BottomBarMenuItem(
         } else {
             ProfileImageView(
                 modifier = Modifier
-                    .padding(horizontal = 25.dp)
+                    .padding(bottom = 2.dp)
                     .clickableWithNoRipple {
                         onBottomMenuClick(myMenu)
                     },
+                size = 22.dp,
                 imgUrl = imageUrl,
                 cornerColor = if(selectedMenu == myMenu) Colors.Main else Colors.Transparency
             )
