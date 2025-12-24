@@ -1,6 +1,7 @@
 package com.pinup.placePinup
 
 import android.Manifest
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -11,7 +12,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.pinup.placePinup.fcm.PinUpFCM
 import com.pinup.placePinup.platform.ContextFactory
+import com.pinup.placePinup.platform.FcmBridgeStore
 import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.util.Const
 
@@ -62,11 +65,26 @@ class MainActivity : ComponentActivity() {
             )
         }
 
+        handlePushIntent(intent)
         setContent {
             PinUpApp(
                 userId = data?.getQueryParameter(Const.ShareKey.KAKAO_USER_ID)?.toInt() ?: -1,
                 contextFactory = contextFactory
             )
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handlePushIntent(intent)
+    }
+
+    private fun handlePushIntent(intent: Intent?) {
+        val type = intent?.getStringExtra(PinUpFCM.PUSH_TYPE) ?: ""
+        val targetId = intent?.getIntExtra(PinUpFCM.PUSH_TARGET_ID, -1) ?: -1
+
+        FcmBridgeStore.updateType(type)
+        FcmBridgeStore.updateTargetId(targetId)
     }
 }

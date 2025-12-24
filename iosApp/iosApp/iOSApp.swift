@@ -23,8 +23,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
               return
           }
           print("Notification permission granted:", granted)
+
+          
           DispatchQueue.main.async {
-              application.registerForRemoteNotifications()
+              UIApplication.shared.registerForRemoteNotifications()
           }
       }
 
@@ -76,13 +78,17 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         guard let fcmToken else { return }
         FCMLinkBridge().setFcmIos(token: fcmToken)
         print("FCM Token:", fcmToken)
+        if let tokenData = Messaging.messaging().apnsToken {
+            let hex = tokenData.map { String(format: "%02x", $0) }.joined()
+            print("✅ APNs token (hex): \(hex)")
+        } else {
+            print("⚠️ APNs token is nil")
+        }
+
     }
 
-    func application(_ application: UIApplication,
-                     didReceiveRemoteNotification userInfo: [AnyHashable : Any],
-                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-
-        print("FCM data userInfo:", userInfo)
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("Receive silent push>", userInfo)
         completionHandler(.newData)
     }
     
@@ -90,11 +96,35 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         let userInfo = notification.request.content.userInfo
         print(userInfo)
         
+        
         if #available(iOS 14.0, *) {
             return [.sound, .banner, .list]
         } else {
             return []
         }
+    }
+    
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        let userInfo = response.notification.request.content.userInfo
+        print("🔔 notification tapped userInfo:", userInfo)
+
+        // 1) custom 딕셔너리 꺼내기
+        if let custom = userInfo["custom"] as? [String: Any] {
+            // 2) 내부 키 파싱
+            let targetId = custom["targetId"] as? Int
+            let type = custom["type"] as? String
+        } else {
+            print("⚠️ custom 없음 (payload 구조 확인 필요)")
+        }
+
+        FCMLinkBridge().updateTargetId(id: targetId)
+        FCMLinkBridge().updateType(type: type)
+
+        completionHandler()
     }
 
 
