@@ -2,6 +2,7 @@ package com.pinup.placePinup.remote.impl
 
 import com.pinup.placePinup.data.remote.CallRemoteDataSource
 import com.pinup.placePinup.data.request.fcm.SetDeviceTokenRequest
+import com.pinup.placePinup.data.response.NotificationResponse
 import com.pinup.placePinup.domain.model.PResult
 import com.pinup.placePinup.domain.model.mapSuccessData
 import com.pinup.placePinup.remote.api.CallApi
@@ -25,8 +26,8 @@ class CallRemoteDataSourceImpl(
         return callApi.readAllNotification().mapSuccessData()
     }
 
-    override suspend fun getMyNotification(): PResult<Unit> {
-        return callApi.getMyNotification().mapSuccessData()
+    override suspend fun getMyNotification(page: Int): PResult<NotificationResponse> {
+        return callApi.getMyNotification(page).mapSuccessData()
     }
 
     override suspend fun deleteNotification(path: Int): PResult<Unit> {

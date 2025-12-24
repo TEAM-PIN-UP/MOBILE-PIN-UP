@@ -49,6 +49,7 @@ fun MainNavHost(
     onClickArticle: (Int) -> Unit = {},
     onMovePints: (Int) -> Unit = {},
     onMoveDetailImage: (Int, List<String>) -> Unit = {_,_ -> },
+    onMoveNotification: () -> Unit = {},
 ) {
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
     val selectedMenuBar = remember { mutableStateOf<MainDestination>(MainDestination.Map) }
@@ -86,7 +87,7 @@ fun MainNavHost(
             if (it == null) return@collect
             val (type, targetId) = it
 
-            when (FCMType.valueOf(type)) {
+            when (FCMType.of(type)) {
                 FCMType.PLACE -> onMovePlaceDetail(targetId.toString())
                 FCMType.PINLOG -> onMovePinlogDetail(targetId)
                 FCMType.PINBUDDY ->  onMovePinBuddy()
@@ -224,6 +225,7 @@ fun MainNavHost(
                     onMovePlaceDetail = onMovePlaceDetail,
                     onMovePinchWrite = onMovePinchWrite,
                     onMovePintsDetail = onMovePintsDetail,
+                    onMoveNotification = onMoveNotification
                 )
             }
         }

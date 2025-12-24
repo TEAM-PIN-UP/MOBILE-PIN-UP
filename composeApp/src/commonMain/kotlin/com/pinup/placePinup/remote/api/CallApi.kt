@@ -1,6 +1,7 @@
 package com.pinup.placePinup.remote.api
 
 import com.pinup.placePinup.data.request.fcm.SetDeviceTokenRequest
+import com.pinup.placePinup.data.response.NotificationResponse
 import com.pinup.placePinup.data.response.PResponse
 import com.pinup.placePinup.domain.model.PResult
 import de.jensklingenberg.ktorfit.http.Body
@@ -35,7 +36,10 @@ interface CallApi {
     suspend fun readAllNotification(): PResult<PResponse<Unit>>
 
     @GET(ApiPath.Call.NOTIFICATION)
-    suspend fun getMyNotification(): PResult<PResponse<Unit>>
+    suspend fun getMyNotification(
+        @Query("page") page: Int,
+        @Query("size") size: Int = 10
+    ): PResult<PResponse<NotificationResponse>>
 
     @PATCH(ApiPath.Call.DELETE_NOTIFICATION)
     suspend fun deleteNotification(

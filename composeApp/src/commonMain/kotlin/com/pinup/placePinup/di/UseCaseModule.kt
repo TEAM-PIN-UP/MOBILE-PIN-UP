@@ -30,6 +30,7 @@ val useCaseModule = module {
     single<GetFindIdByNicknameUseCase> { GetFindIdByNicknameUseCase(get()) }
     single<GetMemberInfoUseCase> { GetMemberInfoUseCase(get()) }
     single<GetMyProfileUseCase> { GetMyProfileUseCase(get()) }
+    single<GetNotificationUseCase> { GetNotificationUseCase(get()) }
     single<GetPhotoReviewsUseCase> { GetPhotoReviewsUseCase(get()) }
     single<GetPinBuddiesUseCase> { GetPinBuddiesUseCase(get()) }
     single<GetPinlogDetailUseCase> { GetPinlogDetailUseCase(get()) }

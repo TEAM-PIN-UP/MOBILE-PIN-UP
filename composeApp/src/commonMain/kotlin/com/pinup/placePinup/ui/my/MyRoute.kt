@@ -28,6 +28,7 @@ fun MyRoute(
     onMovePints: (Int) -> Unit = {},
     onMovePinchWrite: () -> Unit = {},
     onMovePintsDetail: (Int) -> Unit = {},
+    onMoveNotification: () -> Unit = {},
 ) {
     val uiState = myViewModel.uiState.collectAsStateWithLifecycle()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
@@ -60,6 +61,7 @@ fun MyRoute(
         scrapList = uiState.value.scrapList,
         pinchPageAble = uiState.value.pinchPageAble,
         isRefreshing = uiState.value.isRefreshing,
+        onAlarmClick = onMoveNotification,
         onProfileModifyClick = onProfileModifyClick,
         onMovePinBuddy = onMovePinBuddy,
         onSettingClick = onMoveSetting,

@@ -73,6 +73,7 @@ object Texts {
         const val SIGN_UP = "회원가입"
         const val DO_BLOCK = "차단하기"
         const val DO_RELEASE = "해제하기"
+        const val NOTIFICATION = "알림"
     }
 
     object Onboarding {
@@ -370,5 +371,10 @@ object Texts {
         fun getProfileShareTitle(name: String) = "$name 님의 핀업 계정"
         fun getProfileShareContent(name: String) = "핀업에서 $name 님의 핀들을 구경해 보세요."
         const val PROFILE_SHARE_BUTTON = "핀업으로 이동하기"
+    }
+
+    object Notification {
+        const val ALL_READ = "모두 읽음"
+        fun getUnRead(count: Int) = "읽음 $count"
     }
 }

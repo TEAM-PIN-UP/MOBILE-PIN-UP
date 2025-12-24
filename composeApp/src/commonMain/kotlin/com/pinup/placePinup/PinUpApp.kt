@@ -40,6 +40,7 @@ import com.pinup.placePinup.ui.my.pinch.PintsRoute
 import com.pinup.placePinup.ui.my.pinch.write.PinchWriteRoute
 import com.pinup.placePinup.ui.my.pinch.detail.PinchDetailRoute
 import com.pinup.placePinup.ui.my.scrap.ScrapRoute
+import com.pinup.placePinup.ui.notification.NotificationRoute
 import com.pinup.placePinup.ui.onboarding.OnboardingRoute
 import com.pinup.placePinup.ui.onboarding.choiceSignup.ChoiceSignUpRoute
 import com.pinup.placePinup.ui.pinbuddy.PinBuddyRoute
@@ -291,6 +292,9 @@ fun PinUpApp(
                         },
                         onMovePints = {
                             navHostController.navigate(PinUpAppDestination.Pints(it))
+                        },
+                        onMoveNotification = {
+                            navHostController.navigate(PinUpAppDestination.Notification)
                         }
                     )
                 }
@@ -513,6 +517,12 @@ fun PinUpApp(
                         onBackPressed = { navHostController.popBackStack() }
                     )
                 }
+
+                composable<PinUpAppDestination.Notification> {
+                    NotificationRoute(
+                        onBackPressed = { navHostController.popBackStack() }
+                    )
+                }
             }
 
             LogoutDialog(
@@ -629,4 +639,7 @@ sealed interface PinUpAppDestination {
         val targetId: Int,
         val reportType: String
     ) : PinUpAppDestination
+
+    @Serializable
+    data object Notification: PinUpAppDestination
 }
