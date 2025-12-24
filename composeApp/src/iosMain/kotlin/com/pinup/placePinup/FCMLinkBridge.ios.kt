@@ -8,11 +8,7 @@ class FCMLinkBridge {
         FcmBridgeStore.setFcmToken(token)
     }
 
-    fun updateTargetId(id: Int) {
-        FcmBridgeStore.updateTargetId(id)
-    }
-
-    fun updateType(type: String) {
-        FcmBridgeStore.updateType(type)
+    fun updatePending(type: String, id: Int) {
+        FcmBridgeStore.updatePending(type, id)
     }
 }

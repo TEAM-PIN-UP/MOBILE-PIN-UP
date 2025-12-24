@@ -84,7 +84,6 @@ class MainActivity : ComponentActivity() {
         val type = intent?.getStringExtra(PinUpFCM.PUSH_TYPE) ?: ""
         val targetId = intent?.getIntExtra(PinUpFCM.PUSH_TARGET_ID, -1) ?: -1
 
-        FcmBridgeStore.updateType(type)
-        FcmBridgeStore.updateTargetId(targetId)
+        FcmBridgeStore.updatePending(type, targetId)
     }
 }

@@ -14,7 +14,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.pinup.placePinup.domain.model.FCMType
 import com.pinup.placePinup.platform.ContextFactory
+import com.pinup.placePinup.platform.FcmBridgeStore
 import com.pinup.placePinup.ui.article.ArticleRoute
 import com.pinup.placePinup.ui.feed.FeedRoute
 import com.pinup.placePinup.ui.main.MainViewModel
@@ -65,7 +67,7 @@ fun MainNavHost(
 
     LaunchedEffect(userId) {
         if (userId == -1) return@LaunchedEffect
-        if (userId== uiState.value.myId) {
+        if (userId == uiState.value.myId) {
             navHostController.navigate(MainDestination.My) {
                 launchSingleTop = true
                 restoreState = true
@@ -77,6 +79,30 @@ fun MainNavHost(
             onMoveUserProfileWithId(userId)
         }
         updateUserId(-1)
+    }
+
+    LaunchedEffect(Unit) {
+        FcmBridgeStore.pending.collect {
+            if (it == null) return@collect
+            val (type, targetId) = it
+
+            when (FCMType.valueOf(type)) {
+                FCMType.PLACE -> onMovePlaceDetail(targetId.toString())
+                FCMType.PINLOG -> onMovePinlogDetail(targetId)
+                FCMType.PINBUDDY ->  onMovePinBuddy()
+                FCMType.USER -> onMoveUserProfileWithId(userId)
+                FCMType.MY_PROFILE -> {
+                    navHostController.navigate(MainDestination.My) {
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(navHostController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                    }
+                }
+                FCMType.NONE -> {}
+            }
+        }
     }
 
     Column {

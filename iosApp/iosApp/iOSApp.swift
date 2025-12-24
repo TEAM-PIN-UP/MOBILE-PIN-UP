@@ -121,8 +121,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
             print("⚠️ custom 없음 (payload 구조 확인 필요)")
         }
 
-        FCMLinkBridge().updateTargetId(id: targetId)
-        FCMLinkBridge().updateType(type: type)
+        FCMLinkBridge().updatePending(type: type, id: targetId)
 
         completionHandler()
     }
