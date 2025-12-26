@@ -91,7 +91,7 @@ fun MainNavHost(
                 FCMType.PLACE -> onMovePlaceDetail(targetId.toString())
                 FCMType.PINLOG -> onMovePinlogDetail(targetId)
                 FCMType.PINBUDDY ->  onMovePinBuddy()
-                FCMType.USER -> onMoveUserProfileWithId(userId)
+                FCMType.USER -> onMoveUserProfileWithId(targetId)
                 FCMType.MY_PROFILE -> {
                     navHostController.navigate(MainDestination.My) {
                         launchSingleTop = true
@@ -103,6 +103,7 @@ fun MainNavHost(
                 }
                 FCMType.NONE -> {}
             }
+            FcmBridgeStore.consume()
         }
     }
 

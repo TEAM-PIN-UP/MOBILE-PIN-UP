@@ -71,21 +71,29 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		AE0824E22D9ECA6B00E53D9A /* loginController */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = loginController;
 			sourceTree = "<group>";
 		};
 		AE08252B2DA38F2F00E53D9A /* nativeViewFactory */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = nativeViewFactory;
 			sourceTree = "<group>";
 		};
 		AF0007C82EB08567004A85E1 /* pintsMapController */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = pintsMapController;
 			sourceTree = "<group>";
 		};
 		AF26741B2EB2F6FB008A6128 /* kakaoShareController */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = kakaoShareController;
 			sourceTree = "<group>";
 		};
@@ -241,8 +249,6 @@
 				AF884B762EFBC50E00ADBB44 /* PinUpNotificationService */,
 			);
 			name = PinUpNotificationService;
-			packageProductDependencies = (
-			);
 			productName = PinUpNotificationService;
 			productReference = AF884B752EFBC50E00ADBB44 /* PinUpNotificationService.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -314,13 +320,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -335,13 +337,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-iosApp/Pods-iosApp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
