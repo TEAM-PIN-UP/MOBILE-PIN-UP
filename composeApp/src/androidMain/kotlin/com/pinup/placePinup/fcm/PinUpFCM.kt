@@ -4,6 +4,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -12,6 +14,11 @@ import com.pinup.placePinup.MainActivity
 import com.pinup.placePinup.R
 import com.pinup.placePinup.platform.FcmBridgeStore
 import com.pinup.placePinup.platform.hLog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.net.HttpURLConnection
+import java.net.URL
 
 class PinUpFCM : FirebaseMessagingService() {
     companion object {
@@ -30,18 +37,23 @@ class PinUpFCM : FirebaseMessagingService() {
         val body = data["body"] ?: ""
         val type = data["type"] ?: ""
         val targetId = data["targetId"]?.toInt() ?: -1
+        val imageUrl = data["imageUrl"] ?: ""
 
-        showNotification(
-            body = body,
-            type = type,
-            targetId = targetId
-        )
+        CoroutineScope(Dispatchers.IO).launch {
+            showNotification(
+                body = body,
+                type = type,
+                targetId = targetId,
+                image = loadBitmapFromUrl(imageUrl)
+            )
+        }
     }
 
     private fun showNotification(
         body: String,
         type: String,
-        targetId: Int
+        targetId: Int,
+        image: Bitmap?
     ) {
         val channelId = "pinup_push"
         val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -78,8 +90,33 @@ class PinUpFCM : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .build()
 
-        nm.notify((System.currentTimeMillis() % Int.MAX_VALUE).toInt(), notification)
+        if (image != null) {
+            notification
+                .setLargeIcon(image)
+                .setStyle(
+                    NotificationCompat.BigPictureStyle()
+                        .bigPicture(image)
+                )
+        }
+
+        nm.notify((System.currentTimeMillis() % Int.MAX_VALUE).toInt(), notification.build())
+    }
+}
+
+private fun loadBitmapFromUrl(urlString: String): Bitmap? {
+    return try {
+        val url = URL(urlString)
+        val conn = (url.openConnection() as HttpURLConnection).apply {
+            connectTimeout = 7000
+            readTimeout = 7000
+            doInput = true
+        }
+        conn.connect()
+        conn.inputStream.use { input ->
+            BitmapFactory.decodeStream(input)
+        }
+    } catch (e: Exception) {
+        null
     }
 }
