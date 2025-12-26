@@ -115,18 +115,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
         // 1) custom 딕셔너리 꺼내기
         if let custom = userInfo["custom"] as? [String: Any] {
             // 2) 내부 키 파싱
-            let targetId = custom["targetId"] as? Int
-            let type = custom["type"] as? String
+            let targetId: Int = (custom["targetId"] as? Int) ?? -1
+            let type: String  = (custom["type"] as? String) ?? "UNKNOWN"
+            FCMLinkBridge().updatePending(type: type, id: Int32(targetId))
         } else {
             print("⚠️ custom 없음 (payload 구조 확인 필요)")
         }
 
-        FCMLinkBridge().updatePending(type: type, id: targetId)
-
         completionHandler()
     }
-
-
     
     func handleKakaoShareUrl(_ url: URL) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
