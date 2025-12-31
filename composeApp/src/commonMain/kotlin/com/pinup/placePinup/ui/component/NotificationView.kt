@@ -2,6 +2,7 @@ package com.pinup.placePinup.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.pinup.placePinup.domain.model.Notification
+import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
@@ -28,13 +30,17 @@ import pinup.composeapp.generated.resources.ic_right_arrow
 
 @Composable
 fun NotificationView(
-    notification: Notification
+    notification: Notification,
+    onClickNotification: (Notification) -> Unit = {},
 ) {
     Row(
         modifier = Modifier
             .background(if (notification.isRead) Colors.White else Colors.Gray200)
             .fillMaxWidth()
-            .height(75.dp),
+            .height(75.dp)
+            .clickableWithNoRipple{
+                onClickNotification(notification)
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         //TODO 프로필 url로

@@ -47,6 +47,7 @@ fun NotificationScreen(
     getMoreNotification: () -> Unit = {},
     onRefresh: () -> Unit = {},
     onClickBack: () -> Unit = {},
+    onClickNotification: (Notification) -> Unit = {},
 ) {
     val scrollState = rememberLazyListState()
 
@@ -121,7 +122,6 @@ fun NotificationScreen(
         ) {
             LazyColumn(
                 modifier = Modifier
-                    .padding(horizontal = 20.dp)
                     .background(Colors.White),
                 state = scrollState,
             ) {
@@ -134,7 +134,8 @@ fun NotificationScreen(
 
                 items(notificationList) {
                     NotificationView(
-                        notification = it
+                        notification = it,
+                        onClickNotification = onClickNotification
                     )
                 }
 
