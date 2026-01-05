@@ -40,12 +40,12 @@ fun NotificationView(
             .height(75.dp)
             .clickableWithNoRipple{
                 onClickNotification(notification)
-            },
+            }
+            .padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        //TODO 프로필 url로
         ProfileImageView(
-            imgUrl = null,
+            imgUrl = notification.senderProfileImage,
             size = 36.dp
         )
 
@@ -53,7 +53,7 @@ fun NotificationView(
 
         Text(
             modifier = Modifier.weight(1f),
-            text = notification.title,
+            text = notification.message,
             style = Typography.B3.copy(
                 fontWeight = FontWeight.Medium
             ),
@@ -64,8 +64,7 @@ fun NotificationView(
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        // TODO 이미지가 비어있다면
-        if (true) {
+        if (notification.imageUrl.isNullOrEmpty()) {
             Image(
                 modifier = Modifier.size(16.dp),
                 painter = painterResource(Res.drawable.ic_right_arrow),
@@ -79,8 +78,7 @@ fun NotificationView(
                 AsyncImage(
                     modifier = Modifier
                         .size(50.dp),
-                    //TODO 이미지 url로
-                    model = notification.data,
+                    model = notification.imageUrl,
                     contentScale = ContentScale.Crop,
                     contentDescription = null
                 )

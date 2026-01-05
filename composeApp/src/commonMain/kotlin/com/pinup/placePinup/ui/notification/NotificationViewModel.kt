@@ -77,7 +77,7 @@ class NotificationViewModel(
         resultResponse(
             response = postReadNotificationUseCase(notification.id),
             successCallback = {
-                emitEvent(NotificationUiEvent.OnMoveUiEvent(notification.type, -1)) // TODO 데이터에서 targetId 뽑기
+                emitEvent(NotificationUiEvent.OnMoveUiEvent(notification.type, notification.targetId))
             }
         )
     }

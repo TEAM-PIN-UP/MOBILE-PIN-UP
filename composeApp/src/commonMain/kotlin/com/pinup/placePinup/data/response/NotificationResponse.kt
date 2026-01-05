@@ -5,6 +5,7 @@ import com.pinup.placePinup.domain.model.FCMType
 import com.pinup.placePinup.domain.model.Notification
 import com.pinup.placePinup.domain.model.PagingNotification
 import kotlinx.serialization.Serializable
+import kotlin.Int
 
 @Serializable
 data class NotificationResponse(
@@ -29,7 +30,11 @@ data class NotificationItemResponse(
     val title: String = "",
     val message: String = "",
     val type: String = "",
-    val data: String = "",
+    val targetId: Int? = -1,
+    val senderProfileImage: String? = "",
+    val imageUrl: String? = "",
+    val createdAt: List<Int> = emptyList(),
+    val readAt: List<Int>? = emptyList(),
     val isRead: Boolean = false
 ) {
     companion object {
@@ -39,7 +44,9 @@ data class NotificationItemResponse(
                 title = title,
                 message = message,
                 type = FCMType.of(type),
-                data = data,
+                targetId = targetId ?: -1,
+                senderProfileImage = senderProfileImage,
+                imageUrl = imageUrl,
                 isRead = isRead
             )
         }

@@ -2,7 +2,7 @@ package com.pinup.placePinup.domain.model
 
 data class PagingNotification(
     val content: List<Notification> = emptyList(),
-    val last: Boolean = false
+    val last: Boolean = true
 )
 
 data class Notification(
@@ -10,6 +10,8 @@ data class Notification(
     val title: String = "",
     val message: String = "",
     val type: FCMType = FCMType.NONE,
-    val data: String = "",
+    val targetId: Int = -1,
+    val senderProfileImage: String? = "",
+    val imageUrl: String? = "",
     val isRead: Boolean = false
 )
