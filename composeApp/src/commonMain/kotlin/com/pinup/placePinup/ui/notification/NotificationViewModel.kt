@@ -35,7 +35,6 @@ class NotificationViewModel(
         resultResponse(
             response = getNotificationUseCase(currentPage),
             successCallback = {
-                currentPage++
                 updateState {
                     copy(
                         pagingNotification = it,

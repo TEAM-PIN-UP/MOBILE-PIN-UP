@@ -1,6 +1,6 @@
 package com.pinup.placePinup.data.response
 
-import com.pinup.placePinup.data.response.NotificationItemResponse.Companion.toModel
+import com.pinup.placePinup.data.response.NotificationContentResponse.Companion.toModel
 import com.pinup.placePinup.domain.model.FCMType
 import com.pinup.placePinup.domain.model.Notification
 import com.pinup.placePinup.domain.model.PagingNotification
@@ -9,16 +9,17 @@ import kotlin.Int
 
 @Serializable
 data class NotificationResponse(
-    val content: List<NotificationItemResponse> = emptyList(),
-    val last: Boolean = false
+    val notifications: NotificationItemResponse = NotificationItemResponse(),
+    val unReadCount: Int = 0
 ) {
-    companion object {
+    companion object Companion {
         fun NotificationResponse.toModel(): PagingNotification {
             return PagingNotification(
-                content = content.map {
+                content = notifications.content.map {
                     it.toModel()
                 },
-                last = last
+                last = notifications.last,
+                unReadCount = unReadCount
             )
         }
     }
@@ -26,6 +27,12 @@ data class NotificationResponse(
 
 @Serializable
 data class NotificationItemResponse(
+    val content: List<NotificationContentResponse> = emptyList(),
+    val last: Boolean = false
+)
+
+@Serializable
+data class NotificationContentResponse(
     val id: Int = -1,
     val title: String = "",
     val message: String = "",
@@ -37,8 +44,8 @@ data class NotificationItemResponse(
     val readAt: List<Int>? = emptyList(),
     val isRead: Boolean = false
 ) {
-    companion object {
-        fun NotificationItemResponse.toModel(): Notification {
+    companion object Companion {
+        fun NotificationContentResponse.toModel(): Notification {
             return Notification(
                 id = id,
                 title = title,

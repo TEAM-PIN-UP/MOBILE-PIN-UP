@@ -48,6 +48,7 @@ fun NotificationScreen(
     onRefresh: () -> Unit = {},
     onClickBack: () -> Unit = {},
     onClickNotification: (Notification) -> Unit = {},
+    unReadCount: Int = 0,
 ) {
     val scrollState = rememberLazyListState()
 
@@ -86,7 +87,7 @@ fun NotificationScreen(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
-                    text = Texts.Notification.ALL_READ,
+                    text = if (unReadCount == 0) Texts.Notification.ALL_READ else "안읽음 $unReadCount",
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.Medium
                     ),
@@ -125,13 +126,6 @@ fun NotificationScreen(
                     .background(Colors.White),
                 state = scrollState,
             ) {
-                item {
-                    Spacer(
-                        modifier = Modifier
-                            .height(19.dp)
-                    )
-                }
-
                 items(notificationList) {
                     NotificationView(
                         notification = it,

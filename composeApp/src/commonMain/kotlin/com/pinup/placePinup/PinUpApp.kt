@@ -75,7 +75,7 @@ fun PinUpApp(
     val toast = rememberToastState()
 
     fun moveMain() {
-        navHostController.navigate(PinUpAppDestination.Main) {
+        navHostController.navigate(PinUpAppDestination.Main()) {
             popUpTo(navHostController.graph.id) {
                 inclusive = true
             }
@@ -112,7 +112,7 @@ fun PinUpApp(
                             navHostController.navigate(PinUpAppDestination.Login, navOptions)
                         },
                         onMoveMain = {
-                            navHostController.navigate(PinUpAppDestination.Main, navOptions)
+                            navHostController.navigate(PinUpAppDestination.Main(), navOptions)
                         }
                     )
                 }
@@ -128,7 +128,7 @@ fun PinUpApp(
                             navHostController.navigate(PinUpAppDestination.SignUp(snsUserInfoString))
                         },
                         onMoveMain = {
-                            navHostController.navigate(PinUpAppDestination.Main)
+                            navHostController.navigate(PinUpAppDestination.Main())
                         }
                     )
                 }
@@ -520,7 +520,22 @@ fun PinUpApp(
 
                 composable<PinUpAppDestination.Notification> {
                     NotificationRoute(
-                        onBackPressed = { navHostController.popBackStack() }
+                        onBackPressed = { navHostController.popBackStack() },
+                        onMovePlaceDetail = { placeId ->
+                            navHostController.navigate(PinUpAppDestination.PlaceDetail(placeId))
+                        },
+                        onMovePinlogDetail = { id ->
+                            navHostController.navigate(PinUpAppDestination.PinlogDetail(id))
+                        },
+                        onMovePinBuddy = {
+                            navHostController.navigate(PinUpAppDestination.PinBuddy)
+                        },
+                        onMoveUserProfileWithId = { id ->
+                            navHostController.navigate(PinUpAppDestination.UserProfile(id))
+                        },
+                        onMoveMyProfile = {
+                            navHostController.navigate(PinUpAppDestination.Main(true))
+                        }
                     )
                 }
             }
@@ -560,10 +575,9 @@ sealed interface PinUpAppDestination {
     @Serializable
     data object ChoiceSignUp : PinUpAppDestination
     @Serializable
-    data object Main : PinUpAppDestination {
-        @Serializable
-        data class DetailPlace(val kakaoPlaceId: String) : PinUpAppDestination
-    }
+    data class Main(
+        val isMyPage: Boolean = false,
+    ) : PinUpAppDestination
     @Serializable
     data class WriteReview(
         val reviewId: Int?,

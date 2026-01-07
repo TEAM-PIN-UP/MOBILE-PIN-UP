@@ -1,6 +1,7 @@
 package com.pinup.placePinup.remote.api
 
 import com.pinup.placePinup.data.request.fcm.SetDeviceTokenRequest
+import com.pinup.placePinup.data.response.NotificationItemResponse
 import com.pinup.placePinup.data.response.NotificationResponse
 import com.pinup.placePinup.data.response.PResponse
 import com.pinup.placePinup.domain.model.PResult

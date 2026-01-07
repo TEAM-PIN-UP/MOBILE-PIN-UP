@@ -82,17 +82,36 @@ fun MainNavHost(
         updateUserId(-1)
     }
 
+    LaunchedEffect(mainViewModel.isMyPage) {
+        if (mainViewModel.isMyPage) {
+            navHostController.navigate(MainDestination.My) {
+                launchSingleTop = true
+                restoreState = true
+                popUpTo(navHostController.graph.startDestinationId) {
+                    saveState = true
+                }
+            }
+            mainViewModel.isMyPage = false
+        } else {
+            return@LaunchedEffect
+        }
+    }
+
     LaunchedEffect(Unit) {
         FcmBridgeStore.pending.collect {
             if (it == null) return@collect
             val (type, targetId) = it
 
             when (FCMType.of(type)) {
-                FCMType.PLACE -> onMovePlaceDetail(targetId.toString())
-                FCMType.PINLOG -> onMovePinlogDetail(targetId)
-                FCMType.PINBUDDY ->  onMovePinBuddy()
-                FCMType.USER -> onMoveUserProfileWithId(targetId)
-                FCMType.MY_PROFILE -> {
+                FCMType.FRIEND_LOG_SAME_PLACE,
+                FCMType.FRIEND_LOG_CREATED -> onMovePlaceDetail(targetId.toString())
+                FCMType.MEMORY_REMINDER,
+                FCMType.LOG_LIKE,
+                FCMType.LOG_COMMENT -> onMovePinlogDetail(targetId)
+                FCMType.FRIEND_REQUEST -> onMovePinBuddy()
+                FCMType.FRIEND_REQUEST_ACCEPTED -> onMoveUserProfileWithId(targetId)
+                FCMType.SUMMARY_WEEKLY,
+                FCMType.SUMMARY_MONTHLY -> {
                     navHostController.navigate(MainDestination.My) {
                         launchSingleTop = true
                         restoreState = true
@@ -101,7 +120,12 @@ fun MainNavHost(
                         }
                     }
                 }
-                FCMType.NONE -> {}
+                FCMType.FEATURE_UPDATE,
+                FCMType.ANNIVERSARY,
+                FCMType.WEEKLY_RECOMMENDATION, //TODO 아티클로 보내는듯
+                FCMType.DAILY_LOG_REMINDER,
+                FCMType.WEEKLY_LOG_REMINDER,
+                FCMType.DORMANT_USER_REENGAGEMENT -> {}
             }
             FcmBridgeStore.consume()
         }
