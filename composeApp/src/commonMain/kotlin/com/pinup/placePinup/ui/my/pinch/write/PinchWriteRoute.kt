@@ -69,7 +69,8 @@ fun PinchWriteRoute(
         moveItem = viewModel::moveItem,
         onClickDelete = viewModel::deletePinch,
         onPlaceClick = viewModel::updatePlace,
-        registerPints = viewModel::registerPints
+        registerPints = viewModel::registerPints,
+        initCollectLocation = viewModel::initCollectLocation
     )
 
     if (isShowCompleteDialog.value.first) {

@@ -43,11 +43,9 @@ class PinchWriteViewModel (
         if (pintsId != 0) {
             getPintsDetail()
         }
-
-        initCollectLocation()
     }
 
-    private fun initCollectLocation() = viewModelScope.launch {
+    fun initCollectLocation() = viewModelScope.launch {
         locationTracker.startTracking()
         locationTracker.getLocationsFlow()
             .distinctUntilChanged()

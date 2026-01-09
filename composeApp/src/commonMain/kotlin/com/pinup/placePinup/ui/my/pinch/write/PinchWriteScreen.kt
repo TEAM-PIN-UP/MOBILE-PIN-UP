@@ -31,9 +31,11 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ExposedDropdownMenuBox
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,8 +58,10 @@ import com.pinup.placePinup.domain.model.Position
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.extentions.longPressDrag
 import com.pinup.placePinup.platform.PinchNaverMap
+import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.component.IndexedRoundedTextField
 import com.pinup.placePinup.ui.component.PButton
+import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.component.RoundedBox
 import com.pinup.placePinup.ui.component.RoundedTextField
@@ -67,6 +71,18 @@ import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.dragModifier
 import com.pinup.placePinup.util.rememberDragAndDropListState
+import dev.icerock.moko.permissions.DeniedAlwaysException
+import dev.icerock.moko.permissions.DeniedException
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.PermissionState
+import dev.icerock.moko.permissions.PermissionsController
+import dev.icerock.moko.permissions.RequestCanceledException
+import dev.icerock.moko.permissions.compose.BindEffect
+import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
+import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
+import dev.icerock.moko.permissions.location.LOCATION
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_map_off
@@ -89,7 +105,9 @@ fun PinchWriteScreen(
     moveItem: (Int, Int) -> Unit = { _, _ -> },
     onPlaceClick: (Place, Int) -> Unit = { _, _ -> },
     registerPints: () -> Unit = {},
+    initCollectLocation: () -> Unit = {},
 ) {
+    val scope: CoroutineScope = rememberCoroutineScope()
 
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -104,6 +122,42 @@ fun PinchWriteScreen(
     var textFieldSize by remember { mutableStateOf(IntSize.Zero) }
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
+
+    val permissionFactory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
+    val permissionsController: PermissionsController = remember(permissionFactory) {
+        permissionFactory.createPermissionsController()
+    }
+    BindEffect(permissionsController)
+    val isPermissionGranted = remember { mutableStateOf(false) }
+    val isShowPermissionDialog = remember { mutableStateOf(false) }
+
+    fun requestPermission() {
+        scope.launch {
+            try {
+                permissionsController.providePermission(Permission.LOCATION)
+            } catch (exc: RequestCanceledException) {
+                hLog("RequestCanceledException")
+                isShowPermissionDialog.value = true
+            } catch (exc: DeniedException) {
+                hLog("DeniedException")
+                isShowPermissionDialog.value = true
+            } catch (exc: DeniedAlwaysException) {
+                hLog("DeniedAlwaysException")
+                isShowPermissionDialog.value = true
+            }
+        }
+    }
+
+    LaunchedEffect(permissionsController) {
+        isPermissionGranted.value = permissionsController.isPermissionGranted(Permission.LOCATION)
+        hLog("처음 권한 확인 >>> ${isPermissionGranted.value}")
+        if (isPermissionGranted.value) {
+            initCollectLocation()
+            requestPermission()
+        } else {
+            requestPermission()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -392,5 +446,21 @@ fun PinchWriteScreen(
             Spacer(modifier = Modifier.height(39.dp))
         }
 
+    }
+
+    if (isShowPermissionDialog.value) {
+        PDialog(
+            titleText = "권한 필요",
+            descriptionText = "위치 권한 허용이 필요해요.\n확인을 누르시면 설정 화면으로 이동합니다",
+            leftButtonText = "취소",
+            rightButtonText = "확인",
+            onLeftButtonClick = {
+                isShowPermissionDialog.value = false
+            },
+            onRightButtonClick = {
+                isShowPermissionDialog.value = false
+                permissionsController.openAppSettings()
+            },
+        )
     }
 }
