@@ -30,6 +30,7 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ExposedDropdownMenuBox
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -130,6 +131,7 @@ fun PinchWriteScreen(
     BindEffect(permissionsController)
     val isPermissionGranted = remember { mutableStateOf(false) }
     val isShowPermissionDialog = remember { mutableStateOf(false) }
+    val isFocus = remember { mutableStateOf(false) }
 
     fun requestPermission() {
         scope.launch {
@@ -185,6 +187,10 @@ fun PinchWriteScreen(
                 Box(modifier = Modifier.width(IntrinsicSize.Min)) {
                     BasicTextField(
                         modifier = Modifier
+                            .onFocusChanged { state ->
+                                isFocus.value = state.hasFocus
+                                if (state.hasFocus) keyboard?.show()
+                            }
                             .focusRequester(focusRequester),
                         value = title,
                         onValueChange = onTitleChanged,
@@ -194,14 +200,15 @@ fun PinchWriteScreen(
                         ),
                         singleLine = true,
                     )
+
                 }
 
-                if (title.isEmpty()) {
+                if (title.isEmpty() && !isFocus.value) {
                     Text(
                         modifier = Modifier
                             .clickableWithNoRipple {
                                 focusRequester.requestFocus()
-                                keyboard?.show()
+                                //keyboard?.show()
                             },
                         text = Texts.Pinch.TITLE_HINT,
                         style = Typography.H1.copy(fontWeight = FontWeight.SemiBold),

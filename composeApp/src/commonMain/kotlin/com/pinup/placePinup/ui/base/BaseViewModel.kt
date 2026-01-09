@@ -39,7 +39,7 @@ abstract class BaseViewModel<STATE: UiState, EVENT : UiEvent>(
     protected fun<D> resultResponse(response: PResult<D>, successCallback : (D) -> Unit, errorCallback : ((String) -> Unit)? = null){
         when(response){
             is PResult.Fail -> {
-                ScreenState.updateError(response.failState.message)
+                if (response.failState.code != "E_MEMBER001") ScreenState.updateError(response.failState.message)
                 errorCallback?.invoke(response.failState.code)
             }
             is PResult.Success -> {
