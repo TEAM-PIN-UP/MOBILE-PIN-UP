@@ -402,16 +402,18 @@ fun PinlogDetailScreen(
                                             }
                                         }
 
-                                        Column(
-                                            modifier = Modifier
-                                                .align(Alignment.BottomCenter)
-                                        ) {
-                                            PagerIndicator(
-                                                page = pagerState.pageCount,
-                                                selectedPage = pagerState.currentPage
-                                            )
+                                        if (pinlogDetail.reviewImageUrls.size != 1) {
+                                            Column(
+                                                modifier = Modifier
+                                                    .align(Alignment.BottomCenter)
+                                            ) {
+                                                PagerIndicator(
+                                                    page = pagerState.pageCount,
+                                                    selectedPage = pagerState.currentPage
+                                                )
 
-                                            Spacer(modifier = Modifier.height(8.dp))
+                                                Spacer(modifier = Modifier.height(8.dp))
+                                            }
                                         }
                                     }
                                 }
