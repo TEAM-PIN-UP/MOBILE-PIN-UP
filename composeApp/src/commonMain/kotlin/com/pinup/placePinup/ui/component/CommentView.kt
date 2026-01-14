@@ -153,7 +153,10 @@ fun CommentView(
                                 modifier = Modifier
                                     .combinedClickable(
                                         onClick = {},
-                                        onLongClick = { onClickMenu(comment.isOwn, comment.id, comment.content, comment.author) },
+                                        onLongClick = {
+                                            if (!comment.isOwn) return@combinedClickable
+                                            onClickMenu(comment.isOwn, comment.id, comment.content, comment.author)
+                                        },
                                     ),
                                 text = it.content,
                                 style = Typography.B3.copy(
