@@ -121,6 +121,9 @@ kotlin {
             implementation(libs.file.picker)
 
             implementation(libs.web.view)
+
+            // image zoomable
+            implementation(libs.zoomable)
         }
         iosMain.dependencies {
             // ktor

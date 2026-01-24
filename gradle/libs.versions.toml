@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.2"
+agp = "8.6.0"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -42,6 +42,7 @@ kakao = "2.11.0"
 webview = "1.8.0"
 camerax = "1.4.0"
 firebase = "33.6.0"
+zoomable = "2.6.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -118,6 +119,9 @@ web-view = { module = "io.github.kevinnzou:compose-webview-multiplatform", versi
 # Firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
+
+# Image Zoomable
+zoomable = { module = "net.engawapg.lib:zoomable", version.ref = "zoomable" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
