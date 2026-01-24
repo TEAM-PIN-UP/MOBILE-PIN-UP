@@ -33,6 +33,7 @@ class PinUpFCM : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         val data = remoteMessage.data
+        hLog(data.toString())
 
         val body = data["body"] ?: ""
         val type = data["type"] ?: ""
@@ -90,15 +91,6 @@ class PinUpFCM : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-
-        if (image != null) {
-            notification
-                .setLargeIcon(image)
-                .setStyle(
-                    NotificationCompat.BigPictureStyle()
-                        .bigPicture(image)
-                )
-        }
 
         nm.notify((System.currentTimeMillis() % Int.MAX_VALUE).toInt(), notification.build())
     }

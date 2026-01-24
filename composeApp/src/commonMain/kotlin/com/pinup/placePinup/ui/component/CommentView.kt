@@ -78,6 +78,7 @@ fun CommentView(
                     .combinedClickable(
                         onClick = {},
                         onLongClick = {
+                            if (!comment.isOwn) return@combinedClickable
                             onClickMenu(comment.isOwn, comment.id, comment.content, comment.author)
                         }
                     ),
