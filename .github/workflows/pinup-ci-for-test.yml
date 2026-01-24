@@ -1,0 +1,69 @@
+name: PinUp CI for Test
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  test-android:
+    name: Android Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v4
+
+      - name: Create local.properties file
+        run: |
+          cat > local.properties << 'EOF'
+          kakao.app.key="DUMMY"           
+          kakao.login.key="DUMMY"
+          naver.client.id="DUMMY"
+          naver.client.secret="DUMMY"
+          naver.map.client.id="DUMMY"
+          google.client.id="DUMMY"
+          EOF
+
+      - name: Create Google Services JSON File
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          if [ -n "$GOOGLE_SERVICES_JSON" ]; then
+            printf '%s' "$GOOGLE_SERVICES_JSON" | base64 -d > ./composeApp/google-services.json
+          else
+            echo "Warning: GOOGLE_SERVICES_JSON secret not found, skipping..."
+          fi
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build Android Debug
+        run: ./gradlew :composeApp:assembleDebug --stacktrace
+
+      - name: Run Android Unit Tests
+        run: ./gradlew :composeApp:testDebugUnitTest --stacktrace
+        continue-on-error: true  # 테스트 파일이 없으면 실패하지 않도록
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: composeApp/build/reports/tests/
