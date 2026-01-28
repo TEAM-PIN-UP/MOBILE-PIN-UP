@@ -46,9 +46,9 @@ fun PinBuddyRoute(
     PToastHost(state = toast)
 
     PinBuddyScreen(
-        pinBuddies = uiState.value.pinBuddies.toPersistentList(),
-        sentPinBuddyRequests = uiState.value.sentPinBuddyRequests.toPersistentList(),
-        receivePinBuddyRequests = uiState.value.receivePinBuddyRequests.toPersistentList(),
+        pinBuddies = uiState.value.pinBuddies,
+        sentPinBuddyRequests = uiState.value.sentPinBuddyRequests,
+        receivePinBuddyRequests = uiState.value.receivePinBuddyRequests,
         onBackPressed = onBackPressed,
         onDeletePinBuddy = pinBuddyViewModel::deletePinBuddy,
         onDeletePinBuddyRequest = pinBuddyViewModel::deletePinBuddyRequest,
@@ -58,5 +58,8 @@ fun PinBuddyRoute(
         onClickSearch = onClickSearch,
         onRefresh = pinBuddyViewModel::refreshView,
         isRefreshing = uiState.value.isRefreshing,
+        getMorePinBuddy = pinBuddyViewModel::getMorePinBuddies,
+        getMoreSentPinBuddy = pinBuddyViewModel::getMoreSentPinBuddies,
+        getMoreReceivePinBuddy = pinBuddyViewModel::getMoreReceivePinBuddies
     )
 }

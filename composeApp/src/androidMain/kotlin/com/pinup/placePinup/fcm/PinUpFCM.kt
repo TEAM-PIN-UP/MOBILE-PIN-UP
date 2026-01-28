@@ -45,7 +45,6 @@ class PinUpFCM : FirebaseMessagingService() {
                 body = body,
                 type = type,
                 targetId = targetId,
-                image = loadBitmapFromUrl(imageUrl)
             )
         }
     }
@@ -54,18 +53,20 @@ class PinUpFCM : FirebaseMessagingService() {
         body: String,
         type: String,
         targetId: Int,
-        image: Bitmap?
     ) {
         val channelId = "pinup_push"
         val nm = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
-        // 1) 채널 생성 (Android 8+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 channelId,
                 "PinUp 알림",
                 NotificationManager.IMPORTANCE_HIGH
-            )
+            ).apply {
+                // 잠금화면에서 내용 공개(가능한 범위 내)
+                lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
+                description = "PinUp 푸시 알림"
+            }
             nm.createNotificationChannel(channel)
         }
 
@@ -88,27 +89,11 @@ class PinUpFCM : FirebaseMessagingService() {
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle("핀업")
             .setContentText(body)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         nm.notify((System.currentTimeMillis() % Int.MAX_VALUE).toInt(), notification.build())
-    }
-}
-
-private fun loadBitmapFromUrl(urlString: String): Bitmap? {
-    return try {
-        val url = URL(urlString)
-        val conn = (url.openConnection() as HttpURLConnection).apply {
-            connectTimeout = 7000
-            readTimeout = 7000
-            doInput = true
-        }
-        conn.connect()
-        conn.inputStream.use { input ->
-            BitmapFactory.decodeStream(input)
-        }
-    } catch (e: Exception) {
-        null
     }
 }

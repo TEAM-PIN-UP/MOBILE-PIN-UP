@@ -48,9 +48,8 @@ class NotificationViewModel(
     fun getMoreNotification() = viewModelScope.launch {
         if (uiState.value.pagingNotification.last) return@launch
         resultResponse(
-            response = getNotificationUseCase(currentPage),
+            response = getNotificationUseCase(currentPage++),
             successCallback = {
-                currentPage++
                 updateState {
                     copy(
                         pagingNotification = uiState.value.pagingNotification.copy(

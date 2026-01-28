@@ -39,7 +39,7 @@ interface CallApi {
     @GET(ApiPath.Call.NOTIFICATION)
     suspend fun getMyNotification(
         @Query("page") page: Int,
-        @Query("size") size: Int = 10
+        @Query("size") size: Int = 20
     ): PResult<PResponse<NotificationResponse>>
 
     @PATCH(ApiPath.Call.DELETE_NOTIFICATION)
