@@ -31,7 +31,12 @@ class NotificationViewModel(
 
     private var currentPage = 0
 
-    fun getNotification() = viewModelScope.launch {
+    fun initNotification() {
+        currentPage = 0
+        getNotification()
+    }
+
+    private fun getNotification() = viewModelScope.launch {
         resultResponse(
             response = getNotificationUseCase(currentPage),
             successCallback = {
