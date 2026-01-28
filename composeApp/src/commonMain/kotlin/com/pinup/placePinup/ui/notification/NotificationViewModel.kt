@@ -57,8 +57,8 @@ class NotificationViewModel(
             successCallback = {
                 updateState {
                     copy(
-                        pagingNotification = uiState.value.pagingNotification.copy(
-                            content = uiState.value.pagingNotification.content + it.content
+                        pagingNotification = it.copy(
+                            content = pagingNotification.content + it.content
                         )
                     )
                 }

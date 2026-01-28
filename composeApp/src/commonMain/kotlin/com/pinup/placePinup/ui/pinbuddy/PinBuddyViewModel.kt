@@ -59,7 +59,7 @@ class PinBuddyViewModel (
             successCallback = {
                 updateState {
                     copy(
-                        pinBuddies = if (pinBuddyCurrentPage == 0) it else pinBuddies.copy(
+                        pinBuddies = if (pinBuddyCurrentPage == 0) it else it.copy(
                             profiles = pinBuddies.profiles + it.profiles
                         )
                     )
@@ -85,7 +85,7 @@ class PinBuddyViewModel (
             successCallback = {
                 updateState {
                     copy(
-                        sentPinBuddyRequests = if (sentPinBuddyCurrentPage == 0) it else sentPinBuddyRequests.copy(
+                        sentPinBuddyRequests = if (sentPinBuddyCurrentPage == 0) it else it.copy(
                             pinBuddyRequests = sentPinBuddyRequests.pinBuddyRequests + it.pinBuddyRequests
                         )
                     )
@@ -111,7 +111,7 @@ class PinBuddyViewModel (
             successCallback = {
                 updateState {
                     copy(
-                        receivePinBuddyRequests = if (receivePinBuddyCurrentPage == 0) it else receivePinBuddyRequests.copy(
+                        receivePinBuddyRequests = if (receivePinBuddyCurrentPage == 0) it else it.copy(
                             pinBuddyRequests = receivePinBuddyRequests.pinBuddyRequests + it.pinBuddyRequests
                         )
                     )
