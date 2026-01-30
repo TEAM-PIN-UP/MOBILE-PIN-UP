@@ -111,15 +111,18 @@ class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNot
     ) {
         let userInfo = response.notification.request.content.userInfo
         print("🔔 notification tapped userInfo:", userInfo)
-
-        // 1) custom 딕셔너리 꺼내기
-        if let custom = userInfo["custom"] as? [String: Any] {
-            // 2) 내부 키 파싱
-            let targetId: Int = (custom["targetId"] as? Int) ?? -1
-            let type: String  = (custom["type"] as? String) ?? "UNKNOWN"
+        let type = (userInfo["type"] as? String) ?? "UNKNOWN"
+        var targetId: Int = -1
+        if let id = userInfo["targetId"] as? Int {
+            targetId = id
+        } else if let idStr = userInfo["targetId"] as? String {
+            targetId = Int(idStr) ?? -1
+        }
+        if targetId != -1 {
+            print("✅ Parsing Success: type=\(type), targetId=\(targetId)")
             FCMLinkBridge().updatePending(type: type, id: Int32(targetId))
         } else {
-            print("⚠️ custom 없음 (payload 구조 확인 필요)")
+            print("⚠️ targetId 파싱 실패 또는 데이터 없음")
         }
 
         completionHandler()
