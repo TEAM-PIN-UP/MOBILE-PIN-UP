@@ -3,6 +3,7 @@ package com.pinup.placePinup.domain.model
 data class PagingNotification(
     val content: List<Notification> = emptyList(),
     val last: Boolean = true,
+    val totalPages: Int = 0,
     val unReadCount: Int = 0,
 )
 

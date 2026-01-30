@@ -61,6 +61,7 @@ fun NotificationRoute(
         getMoreNotification = viewModel::getMoreNotification,
         onRefresh = viewModel::refreshView,
         onClickBack = onBackPressed,
-        onClickNotification = viewModel::readNotification
+        onClickNotification = viewModel::readNotification,
+        onClickAllReadNotification = viewModel::readAll
     )
 }

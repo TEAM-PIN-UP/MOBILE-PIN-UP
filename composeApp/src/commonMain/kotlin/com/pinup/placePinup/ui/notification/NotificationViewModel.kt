@@ -12,9 +12,11 @@ import com.pinup.placePinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.placePinup.domain.usecase.GetNotificationUseCase
 import com.pinup.placePinup.domain.usecase.GetPinlogDetailUseCase
 import com.pinup.placePinup.domain.usecase.GetRecentSearchUseCase
+import com.pinup.placePinup.domain.usecase.PostAllReadNotificationUseCase
 import com.pinup.placePinup.domain.usecase.PostReadNotificationUseCase
 import com.pinup.placePinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.placePinup.domain.usecase.SaveRecentSearchUseCase
+import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
 import com.pinup.placePinup.ui.base.UiState
@@ -27,6 +29,7 @@ import kotlin.time.Duration.Companion.seconds
 class NotificationViewModel(
     private val getNotificationUseCase: GetNotificationUseCase,
     private val postReadNotificationUseCase: PostReadNotificationUseCase,
+    private val postAllReadNotification: PostAllReadNotificationUseCase
 ) : BaseViewModel<NotificationUiState, UiEvent>(NotificationUiState()) {
 
     private var currentPage = 0
@@ -42,7 +45,9 @@ class NotificationViewModel(
             successCallback = {
                 updateState {
                     copy(
-                        pagingNotification = it,
+                        pagingNotification = if (currentPage == 0) it else it.copy(
+                            content = pagingNotification.content + it.content
+                        ),
                         isRefreshing = false
                     )
                 }
@@ -50,20 +55,10 @@ class NotificationViewModel(
         )
     }
 
-    fun getMoreNotification() = viewModelScope.launch {
-        if (uiState.value.pagingNotification.last) return@launch
-        resultResponse(
-            response = getNotificationUseCase(currentPage++),
-            successCallback = {
-                updateState {
-                    copy(
-                        pagingNotification = it.copy(
-                            content = pagingNotification.content + it.content
-                        )
-                    )
-                }
-            }
-        )
+    fun getMoreNotification() {
+        if (currentPage + 1 == uiState.value.pagingNotification.totalPages) return
+        currentPage++
+        getNotification()
     }
 
     fun refreshView() {
@@ -81,6 +76,16 @@ class NotificationViewModel(
             response = postReadNotificationUseCase(notification.id),
             successCallback = {
                 emitEvent(NotificationUiEvent.OnMoveUiEvent(notification.type, notification.targetId))
+            }
+        )
+    }
+
+    fun readAll() = viewModelScope.launch {
+        resultResponse(
+            response = postAllReadNotification(),
+            successCallback = {
+                currentPage = 0
+                getNotification()
             }
         )
     }
