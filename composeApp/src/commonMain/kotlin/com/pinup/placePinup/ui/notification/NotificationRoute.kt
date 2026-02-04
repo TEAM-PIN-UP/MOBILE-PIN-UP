@@ -22,7 +22,7 @@ fun NotificationRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.getNotification()
+        viewModel.initNotification()
     }
 
     LaunchedEffect(Unit) {
@@ -61,6 +61,7 @@ fun NotificationRoute(
         getMoreNotification = viewModel::getMoreNotification,
         onRefresh = viewModel::refreshView,
         onClickBack = onBackPressed,
-        onClickNotification = viewModel::readNotification
+        onClickNotification = viewModel::readNotification,
+        onClickAllReadNotification = viewModel::readAll
     )
 }

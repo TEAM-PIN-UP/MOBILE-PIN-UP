@@ -1,7 +1,7 @@
 package com.pinup.placePinup.domain.model
 
 data class PagingPinBuddyRequest(
-    val pinBuddyRequests: List<PinBuddyRequest>,
-    val totalElements: Int,
-    val totalPages: Int
+    val pinBuddyRequests: List<PinBuddyRequest> = emptyList(),
+    val totalElements: Int = 0,
+    val totalPages: Int = 0
 )

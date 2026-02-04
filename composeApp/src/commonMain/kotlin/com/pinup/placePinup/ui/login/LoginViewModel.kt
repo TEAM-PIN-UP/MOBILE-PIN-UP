@@ -115,8 +115,9 @@ class LoginViewModel (
     }
 
     private fun setDeviceToken() = viewModelScope.launch {
+        val token = FcmBridgeStore.getFcmToken()
         val request = SetDeviceTokenRequest(
-            token = FcmBridgeStore.getFcmToken(),
+            token = token,
             platform = getPlatformName()
         )
 

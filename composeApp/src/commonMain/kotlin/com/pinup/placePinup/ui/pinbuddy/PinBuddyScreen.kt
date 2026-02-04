@@ -42,20 +42,25 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
+import com.pinup.placePinup.domain.model.PagingPinBuddy
+import com.pinup.placePinup.domain.model.PagingPinBuddyRequest
+import com.pinup.placePinup.extentions.ScrollToEndCallback
 import com.pinup.placePinup.ui.theme.Texts
+import kotlinx.collections.immutable.toPersistentList
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PinBuddyScreen(
-    pinBuddies: PersistentList<Profile>,
-    sentPinBuddyRequests: PersistentList<PinBuddyRequest>,
-    receivePinBuddyRequests: PersistentList<PinBuddyRequest>,
+    pinBuddies: PagingPinBuddy,
+    sentPinBuddyRequests: PagingPinBuddyRequest,
+    receivePinBuddyRequests: PagingPinBuddyRequest,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
     onDeletePinBuddy: (Int) -> Unit = {},
@@ -67,10 +72,13 @@ fun PinBuddyScreen(
     scope: CoroutineScope = rememberCoroutineScope(),
     onRefresh: () -> Unit = {},
     isRefreshing: Boolean = false,
+    getMorePinBuddy: () -> Unit,
+    getMoreReceivePinBuddy: () -> Unit,
+    getMoreSentPinBuddy: () -> Unit,
 ) {
     val isShowCompleteDialog = remember { mutableStateOf<Pair<Boolean, Int?>>(false to null) }
     val pages = remember { listOf(Texts.Word.PIN_BUDDY, Texts.PROFILE.RECEIVE_REQUEST , Texts.PROFILE.SENT_REQUEST) }
-    val listSize = listOf(pinBuddies.size, receivePinBuddyRequests.size, sentPinBuddyRequests.size)
+    val listSize = listOf(pinBuddies.totalElements, receivePinBuddyRequests.totalElements, sentPinBuddyRequests.totalElements)
     val pagerState = rememberPagerState{ pages.size }
     val pullRefreshState = rememberPullRefreshState(
         refreshing = isRefreshing,
@@ -133,7 +141,7 @@ fun PinBuddyScreen(
                                 textAlign = TextAlign.Center
                             )
 
-                            if (receivePinBuddyRequests.isNotEmpty()) {
+                            if (receivePinBuddyRequests.pinBuddyRequests.isNotEmpty()) {
                                 Image(
                                     painter = painterResource(Res.drawable.ic_new_alarm),
                                     contentDescription = "new pinBuddy request"
@@ -163,26 +171,29 @@ fun PinBuddyScreen(
                 when (it) {
                     0 -> {
                         PinBuddyList(
-                            pinBuddies = pinBuddies,
+                            pinBuddies = pinBuddies.profiles.toPersistentList(),
                             onProfileClick = onProfileClick,
                             onDeletePinBuddy = { memberId ->
                                 isShowCompleteDialog.value = true to memberId
                             },
+                            getMorePinBuddy = getMorePinBuddy
                         )
                     }
                     1 -> {
                         ReceivePinBuddyRequestList(
-                            receivePinBuddyRequests = receivePinBuddyRequests,
+                            receivePinBuddyRequests = receivePinBuddyRequests.pinBuddyRequests.toPersistentList(),
                             onProfileClick = onProfileClick,
                             onAcceptClick = onAcceptClick,
                             onRejectClick = onRejectClick,
+                            getMoreReceivePinBuddy = getMoreReceivePinBuddy
                         )
                     }
                     else -> {
                         SentPinBuddyRequestList(
-                            sentPinBuddyRequests = sentPinBuddyRequests,
+                            sentPinBuddyRequests = sentPinBuddyRequests.pinBuddyRequests.toPersistentList(),
                             onProfileClick = onProfileClick,
                             onDeletePinBuddyRequest = onDeletePinBuddyRequest,
+                            getMoreSentPinBuddy = getMoreSentPinBuddy
                         )
                     }
                 }
@@ -220,7 +231,14 @@ private fun PinBuddyList(
     pinBuddies: PersistentList<Profile>,
     onProfileClick: (Int, Int) -> Unit,
     onDeletePinBuddy: (Int) -> Unit,
+    getMorePinBuddy: () -> Unit,
 ) {
+    val scrollState = rememberLazyListState()
+
+    ScrollToEndCallback(scrollState) {
+        getMorePinBuddy()
+    }
+
     if (pinBuddies.isEmpty()) {
         Column(
             modifier = Modifier
@@ -246,6 +264,7 @@ private fun PinBuddyList(
         }
     } else {
         LazyColumn(
+            state = scrollState,
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .padding(top = 24.dp),
@@ -294,7 +313,14 @@ private fun SentPinBuddyRequestList(
     sentPinBuddyRequests: PersistentList<PinBuddyRequest>,
     onProfileClick: (Int, Int) -> Unit,
     onDeletePinBuddyRequest: (Int) -> Unit,
+    getMoreSentPinBuddy: () -> Unit,
 ) {
+    val scrollState = rememberLazyListState()
+
+    ScrollToEndCallback(scrollState) {
+        getMoreSentPinBuddy()
+    }
+
     if (sentPinBuddyRequests.isEmpty()) {
         Column(
             modifier = Modifier
@@ -320,6 +346,7 @@ private fun SentPinBuddyRequestList(
         }
     } else {
         LazyColumn(
+            state = scrollState,
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .padding(top = 24.dp),
@@ -369,7 +396,14 @@ private fun ReceivePinBuddyRequestList(
     onProfileClick: (Int, Int) -> Unit,
     onRejectClick: (Int) -> Unit,
     onAcceptClick: (Int) -> Unit,
+    getMoreReceivePinBuddy: () -> Unit,
 ) {
+    val scrollState = rememberLazyListState()
+
+    ScrollToEndCallback(scrollState) {
+        getMoreReceivePinBuddy()
+    }
+
     if (receivePinBuddyRequests.isEmpty()) {
         Column(
             modifier = Modifier

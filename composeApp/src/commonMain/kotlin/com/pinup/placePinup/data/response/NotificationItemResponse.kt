@@ -19,6 +19,7 @@ data class NotificationResponse(
                     it.toModel()
                 },
                 last = notifications.last,
+                totalPages = notifications.totalPages,
                 unReadCount = unReadCount
             )
         }
@@ -28,7 +29,8 @@ data class NotificationResponse(
 @Serializable
 data class NotificationItemResponse(
     val content: List<NotificationContentResponse> = emptyList(),
-    val last: Boolean = false
+    val last: Boolean = false,
+    val totalPages: Int = 0,
 )
 
 @Serializable
@@ -37,7 +39,7 @@ data class NotificationContentResponse(
     val title: String = "",
     val message: String = "",
     val type: String = "",
-    val targetId: Int? = -1,
+    val targetId: String? = "",
     val senderProfileImage: String? = "",
     val imageUrl: String? = "",
     val createdAt: List<Int> = emptyList(),
@@ -51,7 +53,7 @@ data class NotificationContentResponse(
                 title = title,
                 message = message,
                 type = FCMType.of(type),
-                targetId = targetId ?: -1,
+                targetId = targetId?.toIntOrNull() ?: -1,
                 senderProfileImage = senderProfileImage,
                 imageUrl = imageUrl,
                 isRead = isRead

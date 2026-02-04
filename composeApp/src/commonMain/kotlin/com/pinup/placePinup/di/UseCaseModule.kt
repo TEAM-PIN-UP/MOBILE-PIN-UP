@@ -43,6 +43,7 @@ val useCaseModule = module {
     single<GetSentPinBuddyRequestsUseCase> { GetSentPinBuddyRequestsUseCase(get()) }
     single<GetTextReviewsUseCase> { GetTextReviewsUseCase(get()) }
     single<IsLoginUseCase> { IsLoginUseCase(get(), get(), get()) }
+    single<PostAllReadNotificationUseCase> { PostAllReadNotificationUseCase(get()) }
     single<PostCommentUseCase> { PostCommentUseCase(get()) }
     single<PostEmailVerifyUseCase> { PostEmailVerifyUseCase(get()) }
     single<PostImageUploadUseCase> { PostImageUploadUseCase(get()) }

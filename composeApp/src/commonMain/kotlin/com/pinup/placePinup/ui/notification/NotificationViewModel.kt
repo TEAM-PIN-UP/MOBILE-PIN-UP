@@ -12,9 +12,11 @@ import com.pinup.placePinup.domain.usecase.GetMyProfileUseCase
 import com.pinup.placePinup.domain.usecase.GetNotificationUseCase
 import com.pinup.placePinup.domain.usecase.GetPinlogDetailUseCase
 import com.pinup.placePinup.domain.usecase.GetRecentSearchUseCase
+import com.pinup.placePinup.domain.usecase.PostAllReadNotificationUseCase
 import com.pinup.placePinup.domain.usecase.PostReadNotificationUseCase
 import com.pinup.placePinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.placePinup.domain.usecase.SaveRecentSearchUseCase
+import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
 import com.pinup.placePinup.ui.base.UiState
@@ -27,39 +29,39 @@ import kotlin.time.Duration.Companion.seconds
 class NotificationViewModel(
     private val getNotificationUseCase: GetNotificationUseCase,
     private val postReadNotificationUseCase: PostReadNotificationUseCase,
+    private val postAllReadNotification: PostAllReadNotificationUseCase
 ) : BaseViewModel<NotificationUiState, UiEvent>(NotificationUiState()) {
 
     private var currentPage = 0
 
-    fun getNotification() = viewModelScope.launch {
+    fun initNotification() {
+        currentPage = 0
+        getNotification()
+    }
+
+    private fun getNotification() = viewModelScope.launch {
+        updateState { copy(isLoading = true) }
         resultResponse(
             response = getNotificationUseCase(currentPage),
             successCallback = {
                 updateState {
                     copy(
-                        pagingNotification = it,
-                        isRefreshing = false
+                        pagingNotification = if (currentPage == 0) it else it.copy(
+                            content = pagingNotification.content + it.content
+                        ),
+                        isRefreshing = false,
+                        isLoading = true
                     )
                 }
             }
         )
     }
 
-    fun getMoreNotification() = viewModelScope.launch {
-        if (uiState.value.pagingNotification.last) return@launch
-        resultResponse(
-            response = getNotificationUseCase(currentPage),
-            successCallback = {
-                currentPage++
-                updateState {
-                    copy(
-                        pagingNotification = uiState.value.pagingNotification.copy(
-                            content = uiState.value.pagingNotification.content + it.content
-                        )
-                    )
-                }
-            }
-        )
+    fun getMoreNotification() {
+        if (uiState.value.isLoading) return
+        if (currentPage + 1 == uiState.value.pagingNotification.totalPages) return
+        currentPage++
+        getNotification()
     }
 
     fun refreshView() {
@@ -80,11 +82,22 @@ class NotificationViewModel(
             }
         )
     }
+
+    fun readAll() = viewModelScope.launch {
+        resultResponse(
+            response = postAllReadNotification(),
+            successCallback = {
+                currentPage = 0
+                getNotification()
+            }
+        )
+    }
 }
 
 data class NotificationUiState(
     val pagingNotification: PagingNotification = PagingNotification(),
     val isRefreshing: Boolean = false,
+    val isLoading: Boolean = false,
 ): UiState
 
 sealed class NotificationUiEvent : UiEvent {
