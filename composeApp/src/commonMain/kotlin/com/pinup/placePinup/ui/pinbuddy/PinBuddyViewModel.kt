@@ -54,6 +54,7 @@ class PinBuddyViewModel (
     }
 
     private fun getMyPinBuddies() = viewModelScope.launch {
+        updateState { copy(isLoadingMore = true) }
         resultResponse(
             response = getPinBuddiesUseCase(pinBuddyCurrentPage, Pagination.DEFAULT_PAGE_SIZE),
             successCallback = {
@@ -61,7 +62,8 @@ class PinBuddyViewModel (
                     copy(
                         pinBuddies = if (pinBuddyCurrentPage == 0) it else it.copy(
                             profiles = pinBuddies.profiles + it.profiles
-                        )
+                        ),
+                        isLoadingMore = false
                     )
                 }
             }
@@ -69,6 +71,7 @@ class PinBuddyViewModel (
     }
 
     fun getMorePinBuddies() {
+        if (uiState.value.isLoadingMore) return
         if (pinBuddyCurrentPage + 1 == uiState.value.pinBuddies.totalPages) return
         pinBuddyCurrentPage++
         getMyPinBuddies()
@@ -80,6 +83,7 @@ class PinBuddyViewModel (
     }
 
     private fun getSentPinBuddyRequests() = viewModelScope.launch {
+        updateState { copy(isLoadingMore = true) }
         resultResponse(
             response = getSentPinBuddyRequestsUseCase(sentPinBuddyCurrentPage, Pagination.DEFAULT_PAGE_SIZE),
             successCallback = {
@@ -87,7 +91,8 @@ class PinBuddyViewModel (
                     copy(
                         sentPinBuddyRequests = if (sentPinBuddyCurrentPage == 0) it else it.copy(
                             pinBuddyRequests = sentPinBuddyRequests.pinBuddyRequests + it.pinBuddyRequests
-                        )
+                        ),
+                        isLoadingMore = false
                     )
                 }
             }
@@ -95,6 +100,7 @@ class PinBuddyViewModel (
     }
 
     fun getMoreSentPinBuddies() {
+        if (uiState.value.isLoadingMore) return
         if (sentPinBuddyCurrentPage + 1 == uiState.value.sentPinBuddyRequests.totalPages) return
         sentPinBuddyCurrentPage++
         getSentPinBuddyRequests()
@@ -106,6 +112,7 @@ class PinBuddyViewModel (
     }
 
     private fun getReceivePinBuddies() = viewModelScope.launch {
+        updateState { copy(isLoadingMore = true) }
         resultResponse(
             response = getReceivePinBuddyRequestsUseCase(receivePinBuddyCurrentPage, Pagination.DEFAULT_PAGE_SIZE),
             successCallback = {
@@ -113,7 +120,8 @@ class PinBuddyViewModel (
                     copy(
                         receivePinBuddyRequests = if (receivePinBuddyCurrentPage == 0) it else it.copy(
                             pinBuddyRequests = receivePinBuddyRequests.pinBuddyRequests + it.pinBuddyRequests
-                        )
+                        ),
+                        isLoadingMore = false
                     )
                 }
             }
@@ -121,7 +129,8 @@ class PinBuddyViewModel (
     }
 
     fun getMoreReceivePinBuddies() {
-        if (receivePinBuddyCurrentPage + 1== uiState.value.receivePinBuddyRequests.totalPages) return
+        if (uiState.value.isLoadingMore) return
+        if (receivePinBuddyCurrentPage + 1 == uiState.value.receivePinBuddyRequests.totalPages) return
         receivePinBuddyCurrentPage++
         getReceivePinBuddies()
     }
@@ -222,7 +231,8 @@ data class PinBuddyUiState(
     val isRefreshing: Boolean = false,
     val sentPinBuddyRequests: PagingPinBuddyRequest = PagingPinBuddyRequest(),
     val receivePinBuddyRequests: PagingPinBuddyRequest = PagingPinBuddyRequest(),
-    val profileUrl: String = ""
+    val profileUrl: String = "",
+    val isLoadingMore: Boolean = false,
 ) : UiState
 
 sealed interface PinBuddyUiEvent : UiEvent {

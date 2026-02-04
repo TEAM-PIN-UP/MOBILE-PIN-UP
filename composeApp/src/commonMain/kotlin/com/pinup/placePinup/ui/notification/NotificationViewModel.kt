@@ -40,6 +40,7 @@ class NotificationViewModel(
     }
 
     private fun getNotification() = viewModelScope.launch {
+        updateState { copy(isLoading = true) }
         resultResponse(
             response = getNotificationUseCase(currentPage),
             successCallback = {
@@ -48,7 +49,8 @@ class NotificationViewModel(
                         pagingNotification = if (currentPage == 0) it else it.copy(
                             content = pagingNotification.content + it.content
                         ),
-                        isRefreshing = false
+                        isRefreshing = false,
+                        isLoading = true
                     )
                 }
             }
@@ -56,6 +58,7 @@ class NotificationViewModel(
     }
 
     fun getMoreNotification() {
+        if (uiState.value.isLoading) return
         if (currentPage + 1 == uiState.value.pagingNotification.totalPages) return
         currentPage++
         getNotification()
@@ -94,6 +97,7 @@ class NotificationViewModel(
 data class NotificationUiState(
     val pagingNotification: PagingNotification = PagingNotification(),
     val isRefreshing: Boolean = false,
+    val isLoading: Boolean = false,
 ): UiState
 
 sealed class NotificationUiEvent : UiEvent {
