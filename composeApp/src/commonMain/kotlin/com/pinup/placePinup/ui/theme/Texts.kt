@@ -377,4 +377,11 @@ object Texts {
         const val ALL_READ = "모두 읽음"
         fun getUnRead(count: Int) = "읽음 $count"
     }
+
+    object Update {
+        const val CHECK_UPDATE_TITLE = "업데이트 알림"
+        const val CHECK_UPDATE_DESCRIPTION = "더 나은 서비스를 위해 핀업이 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요"
+        const val CHECK_UPDATE_CONFIRM = "업데이트"
+        const val CHECK_UPDATE_OPTIONAL_CANCEL = "다음에 하기"
+    }
 }
