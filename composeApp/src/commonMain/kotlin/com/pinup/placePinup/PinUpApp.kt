@@ -14,10 +14,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.pinup.placePinup.platform.ContextFactory
+import com.pinup.placePinup.platform.openUpdateStore
 import com.pinup.placePinup.ui.component.ForcedCheckUpdateDialog
 import com.pinup.placePinup.ui.component.LogoutDialog
 import com.pinup.placePinup.ui.component.OptionalCheckUpdateDialog
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -44,13 +46,13 @@ fun PinUpApp(
     }
 
     LaunchedEffect(userId) {
-        if(userId != -1){
+        if (userId!=-1) {
             startAppViewModel.updateUserId(userId)
         }
     }
 
     MaterialTheme {
-        Box{
+        Box {
             PinUpNavHost(
                 userId = uiState.value.userId,
                 navHostController = navHostController,
@@ -83,33 +85,38 @@ fun PinUpApp(
             )
 
             LaunchedEffect(uiState.value.errorMessage) {
-                if(uiState.value.errorMessage.isNotEmpty()){
+                if (uiState.value.errorMessage.isNotEmpty()) {
                     toast.show(uiState.value.errorMessage)
                 }
             }
 
-            when(val updateDialogState = uiState.value.updateDialogState) {
+            when (val updateDialogState = uiState.value.updateDialogState) {
                 UpdateDialogState.Loading -> {
                     // TODO 로딩UI
                 }
 
                 is UpdateDialogState.UpdateRequired -> {
-                    when(updateDialogState.type) {
+                    when (updateDialogState.type) {
                         UpdateType.FORCE -> {
                             ForcedCheckUpdateDialog(
                                 title = updateDialogState.message.title,
                                 description = updateDialogState.message.body,
                                 onConfirm = {
-                                    // TODO 업데이트 이동
+                                    scope.launch {
+                                        openUpdateStore(contextFactory, updateDialogState.store)
+                                    }
                                 },
                             )
                         }
+
                         UpdateType.OPTIONAL -> {
                             OptionalCheckUpdateDialog(
                                 title = updateDialogState.message.title,
                                 description = updateDialogState.message.body,
                                 onConfirm = {
-                                    // TODO 업데이트 이동
+                                    scope.launch {
+                                        openUpdateStore(contextFactory, updateDialogState.store)
+                                    }
                                 },
                                 onDismiss = {
                                     startAppViewModel.dismissUpdateDialog()
@@ -132,49 +139,64 @@ fun PinUpApp(
 sealed interface PinUpAppDestination {
     @Serializable
     data object Onboarding : PinUpAppDestination
+
     @Serializable
     data object ChoiceSignUp : PinUpAppDestination
+
     @Serializable
     data class Main(
         val isMyPage: Boolean = false,
     ) : PinUpAppDestination
+
     @Serializable
     data class WriteReview(
         val reviewId: Int?,
         val selectPlace: String? = null
     ) : PinUpAppDestination
+
     @Serializable
     data class WriteReviewDetail(
         val reviewId: Int,
     ) : PinUpAppDestination
+
     @Serializable
     data class PinlogDetail(
         val reviewId: Int,
     ) : PinUpAppDestination
+
     @Serializable
     data class ArticleDetail(
         val pintsId: Int,
     ) : PinUpAppDestination
+
     @Serializable
     data object AddPinBuddy : PinUpAppDestination
+
     @Serializable
     data class UserProfile(
         val memberId: Int = -1,
         val friendRequestId: Int = -1,
         val name: String = ""
     ) : PinUpAppDestination
+
     @Serializable
     data object PinBuddy : PinUpAppDestination
+
     @Serializable
     data object Setting : PinUpAppDestination
+
     @Serializable
     data object Login : PinUpAppDestination
+
     @Serializable
     data object FindPasswordEmail : PinUpAppDestination
+
     @Serializable
     data object FindId : PinUpAppDestination
+
     @Serializable
     data object ChangePassword : PinUpAppDestination
+
     @Serializable
     data class SignUp(
         val snsUserInfo: String
@@ -182,6 +204,7 @@ sealed interface PinUpAppDestination {
 
     @Serializable
     data object Scrap : PinUpAppDestination
+
     @Serializable
     data class Pints(
         val memberId: Int
@@ -191,14 +214,17 @@ sealed interface PinUpAppDestination {
     data class PinchWrite(
         val pintsId: Int
     ) : PinUpAppDestination
+
     @Serializable
     data class PinchDetail(
         val pintsId: Int
     ) : PinUpAppDestination
+
     @Serializable
     data class PlaceDetail(
         val kakaoPlaceId: String
     ) : PinUpAppDestination
+
     @Serializable
     data object ProfileSetting : PinUpAppDestination
 
@@ -215,5 +241,5 @@ sealed interface PinUpAppDestination {
     ) : PinUpAppDestination
 
     @Serializable
-    data object Notification: PinUpAppDestination
+    data object Notification : PinUpAppDestination
 }
