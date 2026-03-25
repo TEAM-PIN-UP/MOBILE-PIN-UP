@@ -135,3 +135,30 @@ sealed interface UpdateDialogState {
 enum class UpdateType {
     OPTIONAL, FORCE
 }
+
+// TODO API 연동 후 삭제 예정
+val dummyForceUpdateState = UpdateDialogState.UpdateRequired(
+    type = UpdateType.FORCE,
+    message = UpdateMessage(
+        title = "업데이트 필요",
+        body = "더 나은 서비스를 위해 핀업이 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요"
+    ),
+    store = UpdateStore(
+        url = "https://play.google.com/store/apps/details?id=com.pinup.placePinup",
+        market = "playstore",
+        packageNameOrBundleId = "com.pinup.placePinup"
+    )
+)
+
+val dummyOptionalUpdateState = UpdateDialogState.UpdateRequired(
+    type = UpdateType.OPTIONAL,
+    message = UpdateMessage(
+        title = "업데이트 필요",
+        body = "더 나은 서비스를 위해 핀업이 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요"
+    ),
+    store = UpdateStore(
+        url = "https://play.google.com/store/apps/details?id=com.pinup.placePinup",
+        market = "playstore",
+        packageNameOrBundleId = "com.pinup.placePinup"
+    )
+)
