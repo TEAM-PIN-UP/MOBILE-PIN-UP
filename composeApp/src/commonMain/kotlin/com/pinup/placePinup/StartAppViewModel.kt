@@ -2,6 +2,8 @@ package com.pinup.placePinup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pinup.placePinup.domain.model.UpdateMessage
+import com.pinup.placePinup.domain.model.UpdateStore
 import com.pinup.placePinup.domain.usecase.LogoutUseCase
 import com.pinup.placePinup.event.LogoutEventBus
 import com.pinup.placePinup.platform.KakaoDeepLinkStore
@@ -82,11 +84,30 @@ class StartAppViewModel(
         }
         KakaoDeepLinkStore.onNewParams(userId.toString())
     }
+
+    fun dismissUpdateDialog() {
+        _uiState.update {
+            it.copy(
+                updateDialogState = UpdateDialogState.NoUpdate
+            )
+        }
+    }
+
+    fun remindLaterUpdateDialog() {
+        // TODO 다음에 하기 처리
+
+        _uiState.update {
+            it.copy(
+                updateDialogState = UpdateDialogState.NoUpdate
+            )
+        }
+    }
 }
 
 data class StartAppUiState(
     val isLogin: Boolean? = null,
     val alertState: AlertState = AlertState(),
+    val updateDialogState: UpdateDialogState = UpdateDialogState.Loading,
     val userId: Int = -1,
     val errorMessage: String = "",
 )
@@ -100,3 +121,17 @@ data class AlertState(
     val onLeftButtonClick: () -> Unit = {},
     val onRightButtonClick: () -> Unit = {},
 )
+
+sealed interface UpdateDialogState {
+    data object Loading : UpdateDialogState
+    data object NoUpdate : UpdateDialogState
+    data class UpdateRequired(
+        val type: UpdateType,
+        val message: UpdateMessage,
+        val store: UpdateStore
+    ) : UpdateDialogState
+}
+
+enum class UpdateType {
+    OPTIONAL, FORCE
+}

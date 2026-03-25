@@ -29,6 +29,7 @@ fun OptionalCheckUpdateDialog(
     title: String = Texts.Update.CHECK_UPDATE_TITLE,
     description: String = Texts.Update.CHECK_UPDATE_DESCRIPTION,
     onConfirm: () -> Unit,
+    onRemindLater: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     PDialog(
@@ -36,7 +37,8 @@ fun OptionalCheckUpdateDialog(
         descriptionText = description,
         leftButtonText = Texts.Update.CHECK_UPDATE_OPTIONAL_CANCEL,
         rightButtonText = Texts.Update.CHECK_UPDATE_CONFIRM,
-        onLeftButtonClick = onDismiss,
+        onDismissRequest = onDismiss,
+        onLeftButtonClick = onRemindLater,
         onRightButtonClick = onConfirm,
         properties = DialogProperties(
             usePlatformDefaultWidth = false
@@ -57,6 +59,7 @@ fun ForcedCheckUpdateDialogPreview() {
 fun OptionalCheckUpdateDialogPreview() {
     OptionalCheckUpdateDialog(
         onConfirm = {},
-        onDismiss = {}
+        onDismiss = {},
+        onRemindLater = {}
     )
 }
