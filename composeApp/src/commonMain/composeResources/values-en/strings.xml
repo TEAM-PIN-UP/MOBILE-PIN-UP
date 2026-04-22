@@ -41,4 +41,28 @@
     <string name="word_do_block">Block</string>
     <string name="word_do_release">Unblock</string>
     <string name="word_notification">Notifications</string>
+
+    <!-- Setting -->
+    <string name="setting_profile_setting_title">Account Settings</string>
+    <string name="setting_profile_setting">Edit Profile</string>
+    <string name="setting_profile_info">Account Info</string>
+    <string name="setting_change_password">Change Password</string>
+    <string name="setting_cs_title">Customer Support</string>
+    <string name="setting_qa">Contact Us</string>
+    <string name="setting_suggest">Suggestions</string>
+    <string name="setting_service_term">Terms of Service</string>
+    <string name="setting_personal_term">Privacy Policy</string>
+    <string name="setting_version">App Version</string>
+    <string name="setting_logout">Log Out</string>
+    <string name="setting_unregister">Delete Account</string>
+    <string name="setting_hint_bio_change">Introduce yourself in 60 characters or less.</string>
+    <string name="setting_hint_nickname_change">*Nickname can be changed every 30 days.</string>
+    <string name="setting_logout_dialog_title">Are you sure you want to log out?</string>
+    <string name="setting_logout_dialog_description">We\'ll miss you 😥\nCome back anytime!</string>
+    <string name="setting_unregister_title">Are you sure you want\nto leave PIN-UP?</string>
+    <string name="setting_unregister_description">Deleted information cannot be recovered after withdrawal.</string>
+    <string name="setting_unregister_check_comment">I have read all the information above and agree.</string>
+    <string name="setting_unregister_dialog_title">Are you sure you want to delete your account?</string>
+    <string name="setting_unregister_dialog_description">Once deleted, you will no longer\nbe able to access your\nprevious service history.</string>
+    <string name="setting_unregister_complete">Thank you for using PIN-UP :)\nSee you again!</string>
 </resources>

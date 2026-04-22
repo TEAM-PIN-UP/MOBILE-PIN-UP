@@ -470,7 +470,7 @@ private fun ProfileItem(
                     Text(
                         modifier = Modifier
                             .padding(start = 6.dp),
-                        text = Texts.Setting.PROFILE_SETTING,
+                        text = stringResource(Res.string.setting_profile_setting),
                         style = Typography.L1.copy(
                             fontWeight = FontWeight.SemiBold
                         ),

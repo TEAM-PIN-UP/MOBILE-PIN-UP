@@ -45,7 +45,6 @@ import com.pinup.placePinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.bottomSheet.ProfileMenuBottomSheet
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
@@ -133,7 +132,7 @@ fun ProfileSettingScreen(
                 Text(
                     modifier = Modifier
                         .align(Alignment.Center),
-                    text =  Texts.Setting.PROFILE_SETTING,
+                    text =  stringResource(Res.string.setting_profile_setting),
                     style = Typography.H3,
                     color = Colors.Neutral800
                 )
@@ -263,7 +262,7 @@ fun ProfileSettingScreen(
                         ),
                         contentPadding = PaddingValues(0.dp),
                         fixedBorderColor = Colors.Transparency,
-                        placeholder = Texts.Setting.HINT_BIO_CHANGE
+                        placeholder = stringResource(Res.string.setting_hint_bio_change)
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
@@ -279,7 +278,7 @@ fun ProfileSettingScreen(
             Text(
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                text = Texts.Setting.HINT_NICKNAME_CHANGE,
+                text = stringResource(Res.string.setting_hint_nickname_change),
                 color = Colors.Gray400,
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.Medium

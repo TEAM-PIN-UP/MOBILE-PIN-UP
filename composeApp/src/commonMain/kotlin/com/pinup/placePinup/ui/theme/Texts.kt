@@ -224,32 +224,6 @@ object Texts {
         const val RECOMMEND_ARTICLE = "핀업 에디터가 찾아낸\n또 다른 코스를 만나보세요."
     }
 
-    object Setting {
-        const val PROFILE_SETTING_TITLE = "계정 설정"
-        const val PROFILE_SETTING = "프로필 편집"
-        const val PROFILE_INFO = "계정 정보"
-        const val CHANGE_PASSWORD = "비밀번호 변경"
-        const val CS_TITLE = "고객센터"
-        const val QA = "문의하기"
-        const val SUGGEST = "건의하기"
-        const val SERVICE_TERM = "이용약관"
-        const val PERSONAL_TERM = "개인정보처리방침"
-        const val VERSION = "앱버전"
-        const val LOGOUT = "로그아웃"
-        const val UNREGISTER = "회원탈퇴"
-        const val HINT_BIO_CHANGE = "60자 이내로 나를 소개해 보세요."
-        const val HINT_NICKNAME_CHANGE = "*닉네임은 30일마다 변경 가능해요."
-        const val LOGOUT_DIALOG_TITLE = "로그아웃 하시겠어요?"
-        const val LOGOUT_DIALOG_DESCRIPTION = "아쉬워요\uD83D\uDE25\n언제든 다시 놀러오세요!"
-        const val UNREGISTER_TITLE = "정말 핀업과\n함께하지 않으실건가요?"
-        const val UNREGISTER_DESCRIPTION = "회원탈퇴시 삭제된 정보는 복구가 불가능합니다."
-        const val UNREGISTER_CHECK_COMMENT = "안내사항을 모두 확인하였으며, 이에 동의합니다."
-
-        const val UNREGISTER_DIALOG_TITLE = "정말 탈퇴하시겠습니까?"
-        const val UNREGISTER_DIALOG_DESCRIPTION = "회원 탈퇴시, 이전까지 사용하셨던\n서비스 기록들을 더 이상\n사용하실 수 없습니다."
-        const val UNREGISTER_COMPLETE = "그동안 핀업을 이용해주셔서\n감사합니다 :) \n다음에 또 만나요!"
-    }
-
     object Pinch {
         const val PINCH_WRITE = "핀츠 작성"
         const val PINCH_DETAIL = "핀츠 상세"

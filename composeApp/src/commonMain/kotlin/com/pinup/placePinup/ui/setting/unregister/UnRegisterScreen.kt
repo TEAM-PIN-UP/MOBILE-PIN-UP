@@ -24,7 +24,6 @@ import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
@@ -49,7 +48,7 @@ fun UnRegisterScreen(
         TitleBar(
             modifier = Modifier
                 .padding(start = 20.dp),
-            title = Texts.Setting.UNREGISTER,
+            title = stringResource(Res.string.setting_unregister),
             onLeftButtonClick = {
                 onBackPressed()
             }
@@ -64,7 +63,7 @@ fun UnRegisterScreen(
             Spacer(modifier = Modifier.height(57.dp))
 
             Text(
-                text = Texts.Setting.UNREGISTER_TITLE,
+                text = stringResource(Res.string.setting_unregister_title),
                 style = Typography.D2.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -74,7 +73,7 @@ fun UnRegisterScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = Texts.Setting.UNREGISTER_DESCRIPTION,
+                text = stringResource(Res.string.setting_unregister_description),
                 style = Typography.T2.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -100,7 +99,7 @@ fun UnRegisterScreen(
                 Spacer(modifier = Modifier.width(6.dp))
 
                 Text(
-                    text = Texts.Setting.UNREGISTER_CHECK_COMMENT,
+                    text = stringResource(Res.string.setting_unregister_check_comment),
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.Medium
                     ),
@@ -124,8 +123,8 @@ fun UnRegisterScreen(
 
     if (isShowUnRegisterDialog.value) {
         PDialog(
-            titleText = Texts.Setting.UNREGISTER_DIALOG_TITLE,
-            descriptionText = Texts.Setting.UNREGISTER_DIALOG_DESCRIPTION,
+            titleText = stringResource(Res.string.setting_unregister_dialog_title),
+            descriptionText = stringResource(Res.string.setting_unregister_dialog_description),
             leftButtonText = stringResource(Res.string.word_do_return),
             rightButtonText = stringResource(Res.string.word_unregister),
             onLeftButtonClick = {
