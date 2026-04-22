@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.userprofile
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -217,7 +219,7 @@ fun UserProfileScreen(
                                 Text(
                                     modifier = Modifier
                                         .padding(top = 4.dp),
-                                    text = Texts.Word.PINLOG,
+                                    text = stringResource(Res.string.word_pinlog),
                                     color = Colors.Gray400,
                                     style = Typography.B3.copy(
                                         fontWeight = FontWeight.SemiBold
@@ -274,7 +276,7 @@ fun UserProfileScreen(
                                 Text(
                                     modifier = Modifier
                                         .padding(top = 4.dp),
-                                    text = Texts.Word.PIN_BUDDY,
+                                    text = stringResource(Res.string.word_pin_buddy),
                                     color = Colors.Gray400,
                                     style = Typography.B3.copy(
                                         fontWeight = FontWeight.SemiBold
@@ -380,8 +382,8 @@ fun UserProfileScreen(
         PDialog(
             titleText = Texts.PROFILE.REMOVE_PIN_BUDDY_DIALOG_TITLE,
             descriptionText = Texts.PROFILE.REMOVE_PIN_BUDDY_DIALOG_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_DELETE,
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
                 isShowDeleteDialog = false
             },
@@ -396,8 +398,8 @@ fun UserProfileScreen(
         PDialog(
             titleText = Texts.Report.getBlockUserDialogTitle(member.profile.nickname),
             descriptionText = Texts.Report.BLOCK_USER_DIALOG_CONTENT,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_BLOCK,
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_block),
             onLeftButtonClick = {
                 isShowBlockUserDialog = false
             },
@@ -412,8 +414,8 @@ fun UserProfileScreen(
         PDialog(
             titleText = Texts.Report.UNDO_BLOCK_DIALOG_TITLE,
             descriptionText = Texts.Report.UNDO_BLOCK_DIALOG_CONTENT,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_RELEASE,
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_release),
             onLeftButtonClick = {
                 isShowUnBlockUserDialog = false
             },
@@ -449,7 +451,7 @@ private fun ContentView(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 12.dp, bottom = 11.dp),
-                text = Texts.Word.PINLOG,
+                text = stringResource(Res.string.word_pinlog),
                 style = if (pagerState.value == 0) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -480,7 +482,7 @@ private fun ContentView(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 12.dp, bottom = 11.dp),
-                text = Texts.Word.PINCH,
+                text = stringResource(Res.string.word_pinch),
                 style = if (pagerState.value == 1) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -747,7 +749,7 @@ private fun RowScope.AlreadyPinBuddyButton(
             Spacer(modifier = Modifier.width(6.dp))
 
             Text(
-                text = Texts.Word.PIN_BUDDY,
+                text = stringResource(Res.string.word_pin_buddy),
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -842,7 +844,7 @@ fun LazyListScope.UserPinchList(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = Texts.Word.PINCH,
+                text = stringResource(Res.string.word_pinch),
                 color = Colors.Gray500,
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold

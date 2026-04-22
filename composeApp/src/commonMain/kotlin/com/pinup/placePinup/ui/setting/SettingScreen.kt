@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.setting
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,6 +35,7 @@ import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.Const
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_chevron_right
 
 @Composable
@@ -57,7 +59,7 @@ fun SettingScreen(
         TitleBar(
             modifier = Modifier
                 .padding(start = 20.dp),
-            title = Texts.Word.SETTING,
+            title = stringResource(Res.string.word_setting),
             onLeftButtonClick = {
                 onBackPressed()
             }
@@ -172,7 +174,7 @@ fun SettingScreen(
             Text(
                 modifier = Modifier
                     .padding(start = 20.dp),
-                text = Texts.Word.ETC,
+                text = stringResource(Res.string.word_etc),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -243,7 +245,7 @@ fun SettingScreen(
         PDialog(
             titleText = Texts.Setting.LOGOUT_DIALOG_TITLE,
             descriptionText = Texts.Setting.LOGOUT_DIALOG_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
+            leftButtonText = stringResource(Res.string.word_do_return),
             rightButtonText = Texts.Setting.LOGOUT,
             onLeftButtonClick = {
                 isShowLogoutDialog.value = false

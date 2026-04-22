@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.my
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -318,7 +320,7 @@ private fun ProfileItem(
                     Text(
                         modifier = Modifier
                             .padding(top = 4.dp),
-                        text = Texts.Word.PINLOG,
+                        text = stringResource(Res.string.word_pinlog),
                         color = Colors.Gray400,
                         style = Typography.B3.copy(
                             fontWeight = FontWeight.SemiBold
@@ -378,7 +380,7 @@ private fun ProfileItem(
                     Text(
                         modifier = Modifier
                             .padding(top = 4.dp),
-                        text = Texts.Word.PIN_BUDDY,
+                        text = stringResource(Res.string.word_pin_buddy),
                         color = Colors.Gray400,
                         style = Typography.B3.copy(
                             fontWeight = FontWeight.SemiBold
@@ -504,7 +506,7 @@ private fun ContentView(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 12.dp, bottom = 11.dp),
-                text = Texts.Word.PINLOG,
+                text = stringResource(Res.string.word_pinlog),
                 style = if (pagerState.value == 0) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -670,7 +672,7 @@ fun LazyListScope.MyScrapList(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = Texts.Word.SCRAP,
+                text = stringResource(Res.string.word_scrap),
                 color = Colors.Gray500,
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold
@@ -799,7 +801,7 @@ fun LazyListScope.MyScrapList(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = Texts.Word.PINCH,
+                text = stringResource(Res.string.word_pinch),
                 color = Colors.Gray500,
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold

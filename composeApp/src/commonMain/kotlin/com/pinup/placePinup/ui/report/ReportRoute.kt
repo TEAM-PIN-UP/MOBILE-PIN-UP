@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.report
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,7 +42,7 @@ fun ReportRoute(
         PDialog(
             titleText = Texts.Report.REPORT_SUCCESS_DIALOG_TITLE,
             descriptionText = Texts.Report.REPORT_SUCCESS_DIALOG_CONTENT,
-            rightButtonText = Texts.Word.DO_RETURN,
+            rightButtonText = stringResource(Res.string.word_do_return),
             onRightButtonClick = {
                 onBackPressed()
                 isShowReportDialog.value = false

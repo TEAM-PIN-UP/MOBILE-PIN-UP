@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.component
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -47,7 +50,7 @@ fun PinBuddyBottomSheet(
                 .clickableWithNoRipple {
                     onClickClose()
                 },
-            text = Texts.Word.CLOSE,
+            text = stringResource(Res.string.word_close),
             color = Colors.Gray500,
             style = Typography.T2.copy(
                 fontWeight = FontWeight.Medium

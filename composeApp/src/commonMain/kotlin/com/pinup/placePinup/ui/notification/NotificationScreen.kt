@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.notification
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,6 +38,7 @@ import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_back
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -108,7 +110,7 @@ fun NotificationScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = Texts.Word.NOTIFICATION,
+                    text = stringResource(Res.string.word_notification),
                     style = Typography.B1.copy(
                         fontWeight = FontWeight.SemiBold
                     ),

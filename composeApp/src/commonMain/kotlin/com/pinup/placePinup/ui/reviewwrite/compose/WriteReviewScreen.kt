@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.reviewwrite.compose
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -198,7 +200,7 @@ fun WriteReviewScreen(
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = Texts.Word.PINLOG,
+                            text = stringResource(Res.string.word_pinlog),
                             style = Typography.L1.copy(
                                 fontWeight = FontWeight.Medium
                             ),
@@ -336,7 +338,7 @@ fun WriteReviewScreen(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = Texts.Word.RATING,
+                        text = stringResource(Res.string.word_rating),
                         style = Typography.B2.copy(
                             fontWeight = FontWeight.Medium
                         ),

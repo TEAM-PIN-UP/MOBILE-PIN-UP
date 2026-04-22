@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.reviewwrite.compose
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -125,8 +128,8 @@ fun WriteReviewNavHost(
         PDialog(
             titleText = Texts.PinLog.PINLOG_DIALOG_TITLE,
             descriptionText = Texts.PinLog.PINLOG_DIALOG_BODY,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_CONFiRM,
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_confirm),
             onLeftButtonClick = {
                 isShowCompleteDialog.value = false
                 onCompleteAndBackPressed()

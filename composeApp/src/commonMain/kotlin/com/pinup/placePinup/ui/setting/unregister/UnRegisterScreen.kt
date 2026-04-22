@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.setting.unregister
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +28,7 @@ import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_check_rect_off
 import pinup.composeapp.generated.resources.ic_check_rect_on
 
@@ -109,7 +111,7 @@ fun UnRegisterScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             PButton(
-                text = Texts.Word.UNREGISTER,
+                text = stringResource(Res.string.word_unregister),
                 onClick = {
                     isShowUnRegisterDialog.value = true
                 },
@@ -124,8 +126,8 @@ fun UnRegisterScreen(
         PDialog(
             titleText = Texts.Setting.UNREGISTER_DIALOG_TITLE,
             descriptionText = Texts.Setting.UNREGISTER_DIALOG_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.UNREGISTER,
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_unregister),
             onLeftButtonClick = {
                 isShowUnRegisterDialog.value = false
             },

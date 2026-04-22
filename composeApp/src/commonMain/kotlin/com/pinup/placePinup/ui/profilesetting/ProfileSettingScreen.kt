@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.profilesetting
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -51,6 +52,7 @@ import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_back
 import pinup.composeapp.generated.resources.ic_profile_select
 import pinup.composeapp.generated.resources.ic_profile_setting_image
@@ -142,7 +144,7 @@ fun ProfileSettingScreen(
                             onClickModifyProfile()
                         }
                         .align(Alignment.CenterEnd),
-                    text = Texts.Word.COMPLETE,
+                    text = stringResource(Res.string.word_complete),
                     color = Colors.Main,
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.Medium
@@ -203,7 +205,7 @@ fun ProfileSettingScreen(
             ) {
                 Column {
                     Text(
-                        text = Texts.Word.NICKNAME,
+                        text = stringResource(Res.string.word_nickname),
                         color = Colors.Gray800,
                         style = Typography.B1.copy(
                             fontWeight = FontWeight.Medium
@@ -213,7 +215,7 @@ fun ProfileSettingScreen(
                     Spacer(modifier = Modifier.height(36.dp))
 
                     Text(
-                        text = Texts.Word.INTRO,
+                        text = stringResource(Res.string.word_intro),
                         color = Colors.Gray800,
                         style = Typography.B1.copy(
                             fontWeight = FontWeight.Medium

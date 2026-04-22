@@ -33,49 +33,6 @@ object Texts {
         return builder.toAnnotatedString()
     }
 
-    object Word {
-        const val WORD_START = "시작하기"
-        const val WORD_ID = "아이디"
-        const val WORD_PASSWORD = "비밀번호"
-        const val WORD_LOGIN = "로그인"
-        const val NEXT = "다음"
-        const val SKIP = "건너뛰기"
-        const val DO_GO = "계속하기"
-        const val EMAIL = "이메일"
-        const val CONFIRM = "확인"
-        const val DO_CONFiRM = "확인하기"
-        const val VERIFY = "인증하기"
-        const val PIN_MAP = "핀맵"
-        const val PINLOG = "핀로그"
-        const val FEED = "피드"
-        const val ARTICLE = "아티클"
-        const val MY = "마이"
-        const val RATING = "별점"
-        const val DO_RETURN = "돌아가기"
-        const val DELETE = "삭제"
-        const val DO_DELETE = "삭제하기"
-        const val COMMENT = "댓글"
-        const val DO_REPLY_COMMENT = "답글달기"
-        const val DO_REGISTER = "등록하기"
-        const val SEE_MORE = "자세히 보기"
-        const val PIN_BUDDY = "핀버디"
-        const val PINCH = "핀츠"
-        const val SCRAP = "스크랩"
-        const val ACCEPT = "수락"
-        const val REFUSE = "거절"
-        const val CLOSE = "닫기"
-        const val SETTING = "설정"
-        const val ETC = "기타"
-        const val COMPLETE = "완료"
-        const val NICKNAME = "닉네임"
-        const val INTRO = "소개"
-        const val UNREGISTER = "탈퇴하기"
-        const val SIGN_UP = "회원가입"
-        const val DO_BLOCK = "차단하기"
-        const val DO_RELEASE = "해제하기"
-        const val NOTIFICATION = "알림"
-    }
-
     object Onboarding {
         val ONBOARDING_TEXT = buildAnnotatedString {
             withStyle(style = SpanStyle(color = Colors.Gray50)) {

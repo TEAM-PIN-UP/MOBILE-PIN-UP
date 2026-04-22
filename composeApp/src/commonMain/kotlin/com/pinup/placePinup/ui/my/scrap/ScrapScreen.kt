@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.my.scrap
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,6 +48,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_alarm
 import pinup.composeapp.generated.resources.ic_chevron_bottom
 import pinup.composeapp.generated.resources.ic_right_arrow
@@ -97,7 +99,7 @@ fun ScrapScreen(
             TitleBar(
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                title = Texts.Word.SCRAP,
+                title = stringResource(Res.string.word_scrap),
                 onLeftButtonClick = onBackPressed,
             )
 

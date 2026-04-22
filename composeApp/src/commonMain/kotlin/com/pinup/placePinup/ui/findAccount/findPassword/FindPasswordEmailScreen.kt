@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.findAccount.findPassword
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -61,7 +64,7 @@ fun FindPasswordEmailScreen(
         Spacer(modifier = Modifier.height(38.dp))
 
         Text(
-            text = Texts.Word.EMAIL,
+            text = stringResource(Res.string.word_email),
             style = Typography.B1.copy(
                 fontWeight = FontWeight.SemiBold
             ),

@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.component
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,6 +37,7 @@ import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.relativeOrDate
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_comment
 import pinup.composeapp.generated.resources.ic_heart_off
 import pinup.composeapp.generated.resources.ic_heat_on
@@ -211,7 +213,7 @@ fun FeedView(
                    .clickableWithNoRipple {
                        onClickDetail(item.id)
                    },
-               text = Texts.Word.SEE_MORE,
+               text = stringResource(Res.string.word_see_more),
                style = Typography.B3.copy(
                    fontWeight = FontWeight.Medium
                ),

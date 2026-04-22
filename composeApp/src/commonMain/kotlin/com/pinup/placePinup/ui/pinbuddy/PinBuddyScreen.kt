@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.pinbuddy
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -77,7 +79,8 @@ fun PinBuddyScreen(
     getMoreSentPinBuddy: () -> Unit,
 ) {
     val isShowCompleteDialog = remember { mutableStateOf<Pair<Boolean, Int?>>(false to null) }
-    val pages = remember { listOf(Texts.Word.PIN_BUDDY, Texts.PROFILE.RECEIVE_REQUEST , Texts.PROFILE.SENT_REQUEST) }
+    val pinBuddyLabel = stringResource(Res.string.word_pin_buddy)
+    val pages = remember(pinBuddyLabel) { listOf(pinBuddyLabel, Texts.PROFILE.RECEIVE_REQUEST, Texts.PROFILE.SENT_REQUEST) }
     val listSize = listOf(pinBuddies.totalElements, receivePinBuddyRequests.totalElements, sentPinBuddyRequests.totalElements)
     val pagerState = rememberPagerState{ pages.size }
     val pullRefreshState = rememberPullRefreshState(
@@ -101,7 +104,7 @@ fun PinBuddyScreen(
             TitleBar(
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                title = Texts.Word.PIN_BUDDY,
+                title = stringResource(Res.string.word_pin_buddy),
                 onLeftButtonClick = onBackPressed,
                 rightIcon = painterResource(Res.drawable.ic_search),
                 onRightButtonClick = onClickSearch
@@ -211,8 +214,8 @@ fun PinBuddyScreen(
         PDialog(
             titleText = Texts.PROFILE.DIALOG_DELETE_PIN_BUDDY_TITLE,
             descriptionText = Texts.PROFILE.DIALOG_DELETE_PIN_BUDDY_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_DELETE,
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
                 isShowCompleteDialog.value = false to null
             },
@@ -290,7 +293,7 @@ private fun PinBuddyList(
                             Text(
                                 modifier = Modifier
                                     .padding(vertical = 8.dp, horizontal = 12.dp),
-                                text = Texts.Word.DELETE,
+                                text = stringResource(Res.string.word_delete),
                                 color = Colors.Gray500,
                                 style = Typography.L1.copy(
                                     fontWeight = FontWeight.SemiBold
@@ -455,7 +458,7 @@ private fun ReceivePinBuddyRequestList(
                                 Text(
                                     modifier = Modifier
                                         .padding(vertical = 8.dp, horizontal = 12.dp),
-                                    text = Texts.Word.ACCEPT,
+                                    text = stringResource(Res.string.word_accept),
                                     color = Colors.Gray100,
                                     style = Typography.L1.copy(
                                         fontWeight = FontWeight.SemiBold
@@ -477,7 +480,7 @@ private fun ReceivePinBuddyRequestList(
                                 Text(
                                     modifier = Modifier
                                         .padding(vertical = 8.dp, horizontal = 12.dp),
-                                    text = Texts.Word.REFUSE,
+                                    text = stringResource(Res.string.word_refuse),
                                     color = Colors.Gray500,
                                     style = Typography.L1.copy(
                                         fontWeight = FontWeight.SemiBold

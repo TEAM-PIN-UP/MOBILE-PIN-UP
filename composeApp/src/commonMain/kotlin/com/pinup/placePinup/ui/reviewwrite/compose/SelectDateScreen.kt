@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.reviewwrite.compose
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,6 +38,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_arrow_right_800
 import pinup.composeapp.generated.resources.ic_back
 import pinup.composeapp.generated.resources.ic_calendar
@@ -129,7 +131,7 @@ fun SelectDateScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             PButton(
-                text = Texts.Word.NEXT,
+                text = stringResource(Res.string.word_next),
                 isEnable = selectedDate.isNotEmpty(),
                 onClick = {
                     onClickNext()
@@ -174,7 +176,7 @@ fun DatePickerScreen(
         Spacer(modifier = Modifier.height(22.dp))
 
         PButton(
-            text = Texts.Word.CONFIRM,
+            text = stringResource(Res.string.word_confirm),
             isEnable = true,
             onClick = {
                 onSelectedDate(selectedDate)

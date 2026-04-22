@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.my.pinch.write
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -77,8 +80,8 @@ fun PinchWriteRoute(
         PDialog(
             titleText = Texts.Pinch.PINTS_WRITE_COMPLETE_DIALOG_TITLE,
             descriptionText = Texts.Pinch.PINTS_WRITE_COMPLETE_DIALOG_CONTENT,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_CONFiRM,
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_confirm),
             onLeftButtonClick = {
                 isShowCompleteDialog.value = false to isShowCompleteDialog.value.second
                 onBackPressed()

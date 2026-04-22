@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.feed
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -49,6 +50,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_search
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -115,7 +117,7 @@ fun FeedScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = Texts.Word.FEED,
+                    text = stringResource(Res.string.word_feed),
                     style = Typography.T1.copy(
                         fontWeight = FontWeight.SemiBold
                     ),

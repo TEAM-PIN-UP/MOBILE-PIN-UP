@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.setting.complete
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -68,7 +71,7 @@ fun UnRegisterCompleteScreen(
         PButton(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
-            text = Texts.Word.CONFIRM,
+            text = stringResource(Res.string.word_confirm),
             onClick = {
                 onMoveOnboarding()
             },

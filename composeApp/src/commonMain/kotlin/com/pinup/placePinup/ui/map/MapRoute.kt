@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.map
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import PToastHost
 import androidx.compose.foundation.layout.padding
@@ -65,8 +68,8 @@ fun MapRoute(
         PDialog(
             titleText = Texts.PinLog.DELETE_DIALOG_TITLE,
             descriptionText = Texts.PinLog.DELETE_DIALOG_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_DELETE,
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
                 isShowDeleteDialog.value = false
             },

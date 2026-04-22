@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.signup.compose
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -136,7 +138,7 @@ fun SelectProfileImageScreen(
                 Text(
                     modifier = Modifier
                         .padding(vertical = 15.dp),
-                    text = Texts.Word.SKIP,
+                    text = stringResource(Res.string.word_skip),
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.Medium
                     ),
@@ -146,7 +148,7 @@ fun SelectProfileImageScreen(
         } else {
             PButton(
                 modifier = Modifier,
-                text = Texts.Word.NEXT,
+                text = stringResource(Res.string.word_next),
                 onClick = {
                     onClickSignup()
                 }

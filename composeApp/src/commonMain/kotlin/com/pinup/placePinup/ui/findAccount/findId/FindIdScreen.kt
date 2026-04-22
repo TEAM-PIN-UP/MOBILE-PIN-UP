@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.findAccount.findId
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +38,7 @@ import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_check_circle_black
 
 @Composable
@@ -155,7 +157,7 @@ fun FindIdScreen(
 
             if (isEmailFindClicked) {
                 Text(
-                    text = Texts.Word.EMAIL,
+                    text = stringResource(Res.string.word_email),
                     style = Typography.B1.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -195,7 +197,7 @@ fun FindIdScreen(
                                 modifier = Modifier
                                     .padding(horizontal = 12.dp, vertical = 6.dp)
                                     .align(Alignment.Center),
-                                text = Texts.Word.VERIFY,
+                                text = stringResource(Res.string.word_verify),
                                 style = Typography.L3.copy(
                                     fontWeight = FontWeight.SemiBold
                                 ),
@@ -287,7 +289,7 @@ fun FindIdScreen(
             PButton(
                 modifier = Modifier
                     .padding(bottom = 28.dp),
-                text = Texts.Word.CONFIRM,
+                text = stringResource(Res.string.word_confirm),
                 onClick = {
                     onClickConfirm()
                 },

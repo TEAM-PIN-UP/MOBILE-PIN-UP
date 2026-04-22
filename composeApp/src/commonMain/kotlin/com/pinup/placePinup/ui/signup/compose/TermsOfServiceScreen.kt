@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.signup.compose
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -149,7 +151,7 @@ fun TermsOfServiceScreen(
         Spacer(Modifier.weight(1f))
 
         PButton(
-            text = Texts.Word.CONFIRM,
+            text = stringResource(Res.string.word_confirm),
             isEnable = isPassValidation,
             onClick = {
                 onMoveInputName()

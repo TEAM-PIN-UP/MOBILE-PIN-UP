@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.reviewwrite.successWriteReview
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,6 +46,7 @@ import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.toShortDateXd
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_right_arrow_300
 import pinup.composeapp.generated.resources.ic_star
 
@@ -159,7 +161,7 @@ fun PinlogDetailScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = Texts.Word.PINLOG,
+                                text = stringResource(Res.string.word_pinlog),
                                 style = Typography.L2.copy(
                                     fontWeight = FontWeight.Medium
                                 ),
@@ -278,7 +280,7 @@ fun PinlogDetailScreen(
         PButton(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
-            text = Texts.Word.CONFIRM,
+            text = stringResource(Res.string.word_confirm),
             onClick = {
                 onBackPressed()
             }

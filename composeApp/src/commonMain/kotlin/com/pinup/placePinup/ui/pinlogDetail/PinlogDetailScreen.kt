@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.pinlogDetail
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -71,6 +72,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_comment
 import pinup.composeapp.generated.resources.ic_comment_upload
 import pinup.composeapp.generated.resources.ic_heart_off
@@ -309,7 +311,7 @@ fun PinlogDetailScreen(
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Text(
-                                            text = Texts.Word.PINLOG,
+                                            text = stringResource(Res.string.word_pinlog),
                                             style = Typography.L2.copy(
                                                 fontWeight = FontWeight.Medium
                                             ),
@@ -486,7 +488,7 @@ fun PinlogDetailScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = Texts.Word.COMMENT + " " + pinlogDetail.commentCount.toString(),
+                                    text = stringResource(Res.string.word_comment) + " " + pinlogDetail.commentCount.toString(),
                                     style = Typography.T2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),

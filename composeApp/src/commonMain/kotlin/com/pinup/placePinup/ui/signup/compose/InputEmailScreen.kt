@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.signup.compose
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -63,7 +66,7 @@ fun InputEmailScreen(
         Spacer(modifier = Modifier.height(31.dp))
 
         Text(
-            text = Texts.Word.EMAIL,
+            text = stringResource(Res.string.word_email),
             style = Typography.B1.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -104,7 +107,7 @@ fun InputEmailScreen(
                             modifier = Modifier
                                 .padding(horizontal = 12.dp, vertical = 6.dp)
                                 .align(Alignment.Center),
-                            text = Texts.Word.VERIFY,
+                            text = stringResource(Res.string.word_verify),
                             style = Typography.L3.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
@@ -172,7 +175,7 @@ fun InputEmailScreen(
         PButton(
             modifier = Modifier
                 .padding(bottom = 28.dp),
-            text = Texts.Word.CONFIRM,
+            text = stringResource(Res.string.word_confirm),
             onClick = {
                 onMovePassword()
             },

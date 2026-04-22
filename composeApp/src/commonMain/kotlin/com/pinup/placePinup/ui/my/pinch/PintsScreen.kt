@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.my.pinch
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -53,7 +56,7 @@ fun PintsScreen(
         TitleBar(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
-            title = Texts.Word.PINCH,
+            title = stringResource(Res.string.word_pinch),
             onLeftButtonClick = onBackPressed,
         )
 

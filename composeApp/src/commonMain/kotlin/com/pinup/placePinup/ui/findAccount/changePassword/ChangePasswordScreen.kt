@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.findAccount.changePassword
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,6 +31,7 @@ import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_password_show_enable
 import pinup.composeapp.generated.resources.ic_password_show_unable
 
@@ -81,7 +83,7 @@ fun ChangePasswordScreen(
         Spacer(modifier = Modifier.height(38.dp))
 
         Text(
-            text = Texts.Word.WORD_PASSWORD,
+            text = stringResource(Res.string.word_password),
             style = Typography.B1.copy(
                 fontWeight = FontWeight.SemiBold
             ),

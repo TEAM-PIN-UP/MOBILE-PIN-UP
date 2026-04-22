@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.my.pinch.write
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -86,6 +87,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_map_off
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -366,7 +368,7 @@ fun PinchWriteScreen(
                             ) {
                                 Text(
                                     modifier = Modifier.padding(vertical = 7.dp, horizontal = 17.dp),
-                                    text = Texts.Word.DELETE,
+                                    text = stringResource(Res.string.word_delete),
                                     color = Colors.White,
                                     style = Typography.L3.copy(fontWeight = FontWeight.SemiBold),
                                     textAlign = TextAlign.Center

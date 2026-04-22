@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.signup.compose
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_check_circle_black
 
 @Composable
@@ -110,7 +112,7 @@ fun InputNameScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         PButton(
-            text = Texts.Word.NEXT,
+            text = stringResource(Res.string.word_next),
             isEnable = isPassNickname,
             onClick = {
                 onMoveSelectProfileImage()

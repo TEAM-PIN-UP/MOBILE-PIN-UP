@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.addpinbuddy
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -266,7 +268,7 @@ fun FriendButton() {
             Spacer(modifier = Modifier.width(6.dp))
 
             Text(
-                text = Texts.Word.PIN_BUDDY,
+                text = stringResource(Res.string.word_pin_buddy),
                 color = Colors.Gray800,
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold

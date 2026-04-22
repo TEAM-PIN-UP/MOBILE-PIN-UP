@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.pinlogDetail
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import PToastHost
 import androidx.compose.runtime.Composable
@@ -65,8 +68,8 @@ fun PinlogDetailRoute(
         PDialog(
             titleText = Texts.PinLog.DELETE_DIALOG_TITLE,
             descriptionText = Texts.PinLog.DELETE_DIALOG_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_DELETE,
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
                 isShowDeleteDialog.value = false
             },
@@ -81,8 +84,8 @@ fun PinlogDetailRoute(
         PDialog(
             titleText = Texts.Report.getBlockUserDialogTitle(clickedTargetName),
             descriptionText = Texts.Report.BLOCK_USER_DIALOG_CONTENT,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_BLOCK,
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_block),
             onLeftButtonClick = {
                 isShowBlockUserDialog.value = false
             },
@@ -97,8 +100,8 @@ fun PinlogDetailRoute(
         PDialog(
             titleText = Texts.PinLog.DELETE_COMMENT_DIALOG_TITLE,
             descriptionText = Texts.PinLog.DELETE_COMMENT_DIALOG_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_DELETE,
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
                 isShowDeleteCommentDialog.value = false
             },
