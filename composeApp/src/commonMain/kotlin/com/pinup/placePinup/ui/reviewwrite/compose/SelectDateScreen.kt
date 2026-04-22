@@ -77,14 +77,16 @@ fun SelectDateScreen(
                 .padding(horizontal = 20.dp)
         ) {
             TitleBar(
-                title = Texts.PinLog.WRITE_PINLOG,
+                title = stringResource(Res.string.pin_log_write_pinlog),
                 onLeftButtonClick = onBackPressed
             )
 
             Spacer(modifier = Modifier.height(38.dp))
 
+            val selectDatePrefix = stringResource(Res.string.pin_log_select_date_prefix)
+            val selectDateSuffix = stringResource(Res.string.pin_log_select_date_suffix)
             Text(
-                text = Texts.PinLog.getSelectDateTitle(placeName),
+                text = Texts.PinLog.getSelectDateTitle(placeName, selectDatePrefix, selectDateSuffix),
                 style = Typography.D2.copy(
                     fontWeight = FontWeight.Bold
                 )
@@ -110,7 +112,7 @@ fun SelectDateScreen(
                         modifier = Modifier
                             .padding(vertical = 16.dp)
                             .padding(start = 20.dp),
-                        text = selectedDate.ifEmpty { Texts.PinLog.SELECT_DATE_HINT },
+                        text = selectedDate.ifEmpty { stringResource(Res.string.pin_log_select_date_hint) },
                         style = Typography.B2.copy(
                             fontWeight = FontWeight.Medium
                         ),

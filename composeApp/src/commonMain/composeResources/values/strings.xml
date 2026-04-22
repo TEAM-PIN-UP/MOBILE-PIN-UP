@@ -65,4 +65,33 @@
     <string name="setting_unregister_dialog_title">정말 탈퇴하시겠습니까?</string>
     <string name="setting_unregister_dialog_description">회원 탈퇴시, 이전까지 사용하셨던\n서비스 기록들을 더 이상\n사용하실 수 없습니다.</string>
     <string name="setting_unregister_complete">그동안 핀업을 이용해주셔서\n감사합니다 :) \n다음에 또 만나요!</string>
+
+    <!-- PinLog -->
+    <string name="pin_log_write_pinlog">핀로그 작성</string>
+    <string name="pin_log_write_pinlog_title">핀로그 작성하기</string>
+    <string name="pin_log_register_pinlog">핀로그 등록하기</string>
+    <string name="pin_log_write_title">어떤 장소의 핀로그를\n작성할까요?</string>
+    <string name="pin_log_write_description">작성된 핀로그는 핀버디만 볼 수 있어요</string>
+    <string name="pin_log_search_hint">장소 검색하기</string>
+    <string name="pin_log_search_result">검색 결과</string>
+    <string name="pin_log_select_date_hint">날짜 선택</string>
+    <string name="pin_log_image_upload">사진 업로드</string>
+    <string name="pin_log_hint">작성된 핀로그는 나의 핀버디들에게만 보여요!\n\n*주의: 욕설, 비방 목적 혹은 명예 훼손성 내용은 작성 시 삭제 처리 될 수 있습니다.</string>
+    <string name="pin_log_more_length">10자 이상 작성해 주세요.</string>
+    <string name="pin_log_too_much_length">입력 가능 글자 수를 초과했어요.</string>
+    <string name="pin_log_dialog_title">핀로그 작성 완료!</string>
+    <string name="pin_log_dialog_body">등록한 핀로그를\n확인하시겠어요?</string>
+    <string name="pin_log_detail_title">핀로그 상세</string>
+    <string name="pin_log_comment_hint">댓글을 입력하세요</string>
+    <string name="pin_log_comment_reply_hint">답글을 입력하세요</string>
+    <string name="pin_log_edit_pinlog">핀로그 수정</string>
+    <string name="pin_log_delete_pinlog">핀로그 삭제</string>
+    <string name="pin_log_edit_comment">댓글 수정</string>
+    <string name="pin_log_delete_comment">댓글 삭제</string>
+    <string name="pin_log_delete_dialog_title">핀로그를 삭제할까요?</string>
+    <string name="pin_log_delete_dialog_description">삭제된 핀로그는 복구할 수 없습니다.</string>
+    <string name="pin_log_delete_comment_dialog_title">댓글을 삭제할까요?</string>
+    <string name="pin_log_delete_comment_dialog_description">삭제된 댓글은 복구할 수 없습니다.</string>
+    <string name="pin_log_select_date_prefix"></string>
+    <string name="pin_log_select_date_suffix">은\n 언제 방문하셨나요?</string>
 </resources>

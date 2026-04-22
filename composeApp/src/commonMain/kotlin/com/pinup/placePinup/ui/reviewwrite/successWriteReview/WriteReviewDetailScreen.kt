@@ -41,7 +41,6 @@ import com.pinup.placePinup.ui.component.ProfileImageView
 import com.pinup.placePinup.ui.component.RoundedBox
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.toShortDateXd
 import org.jetbrains.compose.resources.painterResource
@@ -70,7 +69,7 @@ fun PinlogDetailScreen(
         TitleBar(
             modifier = Modifier
                 .padding(start = 20.dp),
-            title = Texts.PinLog.DETAIL_TITLE,
+            title = stringResource(Res.string.pin_log_detail_title),
             onLeftButtonClick = onBackPressed
         )
 

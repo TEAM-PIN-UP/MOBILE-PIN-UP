@@ -143,41 +143,13 @@ object Texts {
     }
 
     object PinLog {
-        const val WRITE_PINLOG = "핀로그 작성"
-        const val WRITE_PINLOG_TITLE = "핀로그 작성하기"
-        const val REGISTER_PINLOG = "핀로그 등록하기"
-        const val WRITE_TITLE = "어떤 장소의 핀로그를\n작성할까요?"
-        const val WRITE_DESCRIPTION = "작성된 핀로그는 핀버디만 볼 수 있어요"
-        const val SEARCH_HINT = "장소 검색하기"
-        const val SEARCH_RESULT = "검색 결과"
-        fun getSelectDateTitle(place : String) = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Colors.Main)) {
-                append("‘${place}’")
+        fun getSelectDateTitle(place: String, prefix: String, suffix: String) = buildAnnotatedString {
+            if (prefix.isNotEmpty()) {
+                withStyle(style = SpanStyle(color = Colors.Gray800)) { append(prefix) }
             }
-            withStyle(style = SpanStyle(color = Colors.Gray800)) {
-                append("은\n 언제 방문하셨나요?")
-            }
+            withStyle(style = SpanStyle(color = Colors.Main)) { append("’$place’") }
+            withStyle(style = SpanStyle(color = Colors.Gray800)) { append(suffix) }
         }
-        const val SELECT_DATE_HINT = "날짜 선택"
-        const val IMAGE_UPLOAD = "사진 업로드"
-        const val PINLOG_HINT = "작성된 핀로그는 나의 핀버디들에게만 보여요!\n\n" +
-                "*주의: 욕설, 비방 목적 혹은 명예 훼손성 내용은 작성 시 삭제 처리 될 수 있습니다."
-        const val PINLOG_MORE_LENGTH = "10자 이상 작성해 주세요."
-        const val PINLOG_TOO_MUCH_LENGTH = "입력 가능 글자 수를 초과했어요."
-        const val PINLOG_DIALOG_TITLE = "핀로그 작성 완료!"
-        const val PINLOG_DIALOG_BODY = "등록한 핀로그를\n확인하시겠어요?"
-        const val DETAIL_TITLE = "핀로그 상세"
-        const val COMMENT_HINT = "댓글을 입력하세요"
-        const val COMMENT_REPLY_HINT = "답글을 입력하세요"
-        const val EDIT_PINLOG = "핀로그 수정"
-        const val DELETE_PINLOG = "핀로그 삭제"
-        const val EDIT_COMMENT = "댓글 수정"
-        const val DELETE_COMMENT = "댓글 삭제"
-        const val DELETE_DIALOG_TITLE = "핀로그를 삭제할까요?"
-        const val DELETE_DIALOG_DESCRIPTION = "삭제된 핀로그는 복구할 수 없습니다."
-        const val DELETE_COMMENT_DIALOG_TITLE = "댓글을 삭제할까요?"
-        const val DELETE_COMMENT_DIALOG_DESCRIPTION = "삭제된 댓글은 복구할 수 없습니다."
-
     }
 
     object FEED {

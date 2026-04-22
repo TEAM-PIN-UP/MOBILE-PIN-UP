@@ -66,8 +66,8 @@ fun MapRoute(
 
     if (isShowDeleteDialog.value) {
         PDialog(
-            titleText = Texts.PinLog.DELETE_DIALOG_TITLE,
-            descriptionText = Texts.PinLog.DELETE_DIALOG_DESCRIPTION,
+            titleText = stringResource(Res.string.pin_log_delete_dialog_title),
+            descriptionText = stringResource(Res.string.pin_log_delete_dialog_description),
             leftButtonText = stringResource(Res.string.word_do_return),
             rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {

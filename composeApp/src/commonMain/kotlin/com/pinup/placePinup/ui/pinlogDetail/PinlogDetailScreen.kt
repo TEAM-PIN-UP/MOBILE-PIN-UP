@@ -64,8 +64,6 @@ import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.component.bottomSheet.ReportBlockMenuBottomSheet
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
-import com.pinup.placePinup.ui.theme.Texts.PinLog.COMMENT_REPLY_HINT
 import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.toShortDateXd
 import kotlinx.coroutines.CoroutineScope
@@ -210,7 +208,7 @@ fun PinlogDetailScreen(
                 TitleBar(
                     modifier = Modifier
                         .padding(start = 20.dp),
-                    title = Texts.PinLog.DETAIL_TITLE,
+                    title = stringResource(Res.string.pin_log_detail_title),
                     onLeftButtonClick = onBackPressed
                 )
 
@@ -574,7 +572,7 @@ fun PinlogDetailScreen(
                             ),
                             singleLine = false,
                             onValueChange = onValueChange,
-                            placeholder = if(replyId == null) Texts.PinLog.COMMENT_HINT else COMMENT_REPLY_HINT,
+                            placeholder = if(replyId == null) stringResource(Res.string.pin_log_comment_hint) else stringResource(Res.string.pin_log_comment_reply_hint),
                             placeholderStyle = Typography.B3.copy(
                                 fontWeight = FontWeight.Medium
                             ),

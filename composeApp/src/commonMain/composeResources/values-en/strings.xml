@@ -65,4 +65,33 @@
     <string name="setting_unregister_dialog_title">Are you sure you want to delete your account?</string>
     <string name="setting_unregister_dialog_description">Once deleted, you will no longer\nbe able to access your\nprevious service history.</string>
     <string name="setting_unregister_complete">Thank you for using PIN-UP :)\nSee you again!</string>
+
+    <!-- PinLog -->
+    <string name="pin_log_write_pinlog">Write Pin Log</string>
+    <string name="pin_log_write_pinlog_title">Write a Pin Log</string>
+    <string name="pin_log_register_pinlog">Register Pin Log</string>
+    <string name="pin_log_write_title">Which place would you like\nto write a Pin Log about?</string>
+    <string name="pin_log_write_description">Your Pin Log is only visible to your Pin Buddies</string>
+    <string name="pin_log_search_hint">Search for a place</string>
+    <string name="pin_log_search_result">Search Results</string>
+    <string name="pin_log_select_date_hint">Select a date</string>
+    <string name="pin_log_image_upload">Upload Photos</string>
+    <string name="pin_log_hint">Your Pin Log is only visible to your Pin Buddies!\n\n*Note: Content containing profanity, slander, or defamation may be deleted.</string>
+    <string name="pin_log_more_length">Please write at least 10 characters.</string>
+    <string name="pin_log_too_much_length">You have exceeded the maximum character limit.</string>
+    <string name="pin_log_dialog_title">Pin Log Created!</string>
+    <string name="pin_log_dialog_body">Would you like to check\nyour new Pin Log?</string>
+    <string name="pin_log_detail_title">Pin Log Details</string>
+    <string name="pin_log_comment_hint">Write a comment</string>
+    <string name="pin_log_comment_reply_hint">Write a reply</string>
+    <string name="pin_log_edit_pinlog">Edit Pin Log</string>
+    <string name="pin_log_delete_pinlog">Delete Pin Log</string>
+    <string name="pin_log_edit_comment">Edit Comment</string>
+    <string name="pin_log_delete_comment">Delete Comment</string>
+    <string name="pin_log_delete_dialog_title">Delete this Pin Log?</string>
+    <string name="pin_log_delete_dialog_description">Deleted Pin Logs cannot be recovered.</string>
+    <string name="pin_log_delete_comment_dialog_title">Delete this comment?</string>
+    <string name="pin_log_delete_comment_dialog_description">Deleted comments cannot be recovered.</string>
+    <string name="pin_log_select_date_prefix">When did you visit\n</string>
+    <string name="pin_log_select_date_suffix">?</string>
 </resources>

@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.reviewwrite.searchplace
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -27,7 +28,6 @@ import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.SearchedPlaceCard
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
 import pinup.composeapp.generated.resources.*
@@ -50,7 +50,7 @@ fun SearchPlaceScreen(
     ) {
 
         TitleBar(
-            title = Texts.PinLog.WRITE_PINLOG,
+            title = stringResource(Res.string.pin_log_write_pinlog),
             onLeftButtonClick = onBackPressed
         )
 
@@ -62,7 +62,7 @@ fun SearchPlaceScreen(
                 Spacer(modifier = Modifier.height(38.dp))
 
                 Text(
-                    text = Texts.PinLog.WRITE_TITLE,
+                    text = stringResource(Res.string.pin_log_write_title),
                     color = Colors.Black,
                     style = Typography.D2.copy(
                         fontWeight = FontWeight.Bold
@@ -72,7 +72,7 @@ fun SearchPlaceScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = Texts.PinLog.WRITE_DESCRIPTION,
+                    text = stringResource(Res.string.pin_log_write_description),
                     color = Colors.Main,
                     style = Typography.B3.copy(
                         fontWeight = FontWeight.Medium
@@ -93,7 +93,7 @@ fun SearchPlaceScreen(
                 fontWeight = FontWeight.Medium
             ),
             onValueChange = onValueChange,
-            placeholder = Texts.PinLog.SEARCH_HINT,
+            placeholder = stringResource(Res.string.pin_log_search_hint),
             placeholderStyle = Typography.T2.copy(
                 fontWeight = FontWeight.Medium
             ),
@@ -119,7 +119,7 @@ fun SearchPlaceScreen(
         ) {
             Column {
                 Text(
-                    text = Texts.PinLog.SEARCH_RESULT,
+                    text = stringResource(Res.string.pin_log_search_result),
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.Medium
                     ),

@@ -11,7 +11,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.main.compose.MainDestination
-import com.pinup.placePinup.ui.theme.Texts
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -44,8 +43,8 @@ fun MyRoute(
 
     if (isShowDeleteDialog.value) {
         PDialog(
-            titleText = Texts.PinLog.DELETE_DIALOG_TITLE,
-            descriptionText = Texts.PinLog.DELETE_DIALOG_DESCRIPTION,
+            titleText = stringResource(Res.string.pin_log_delete_dialog_title),
+            descriptionText = stringResource(Res.string.pin_log_delete_dialog_description),
             leftButtonText = stringResource(Res.string.word_do_return),
             rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {

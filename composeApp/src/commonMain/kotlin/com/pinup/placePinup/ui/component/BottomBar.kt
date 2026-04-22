@@ -82,7 +82,7 @@ fun BottomBar(
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = Texts.PinLog.WRITE_PINLOG,
+                            text = stringResource(Res.string.pin_log_write_pinlog),
                             color = Colors.Gray600,
                             style = Typography.B3.copy(
                                 fontWeight = FontWeight.SemiBold
