@@ -133,7 +133,7 @@ fun LoginScreen(
 
             Text(
                 modifier = Modifier,
-                text = Texts.Login.INCORRECT_ID,
+                text = stringResource(Res.string.login_incorrect_id),
                 style = Typography.B2.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -155,7 +155,7 @@ fun LoginScreen(
                     .clickableSingleWithNoRipple {
                         onCLickFindEmail()
                     },
-                text = Texts.Login.LOGIN_ID_FIND,
+                text = stringResource(Res.string.login_id_find),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -169,7 +169,7 @@ fun LoginScreen(
                     .clickableSingleWithNoRipple {
                         onClickFindPassword()
                     },
-                text = Texts.FindPassword.CHANGE_PASSWORD,
+                text = stringResource(Res.string.find_password_change_password),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -208,7 +208,7 @@ fun LoginScreen(
 
             Text(
                 modifier = Modifier.padding(horizontal = 14.dp),
-                text = Texts.Login.LOGIN_SNS,
+                text = stringResource(Res.string.login_sns),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),

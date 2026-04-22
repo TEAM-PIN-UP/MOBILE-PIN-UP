@@ -159,4 +159,31 @@
     <string name="pinch_delete_dialog_content">This action cannot be undone.\nDelete anyway?</string>
     <string name="pinch_write_complete_dialog_title">My Pints Created!</string>
     <string name="pinch_write_complete_dialog_content">Would you like to check\nyour new Pints?</string>
+
+    <!-- Login -->
+    <string name="login_id_find">Find ID</string>
+    <string name="login_sns">Social Login</string>
+    <string name="login_incorrect_id">Incorrect ID or password.</string>
+
+    <!-- FindPassword -->
+    <string name="find_password_hint">Password must be 8–20 characters and include a special character.</string>
+    <string name="find_password_change_password">Change Password</string>
+    <string name="find_password_change_password_hint">You must change your password when logging in with a temporary password.</string>
+    <string name="find_password_send_password">Send Password</string>
+    <string name="find_password_again_hint">Confirm Password</string>
+    <string name="find_password_find_password">Find Password</string>
+    <string name="find_password_find_password_hint">A temporary password will be sent to the entered address.</string>
+    <string name="find_password_sent_title">Email Sent!</string>
+    <string name="find_password_sent_hint">Please log in with the temporary password sent to your email.</string>
+    <string name="find_password_do_login">Log In</string>
+
+    <!-- FindId -->
+    <string name="find_id_find_id">Find ID</string>
+    <string name="find_id_input_nickname">Enter Nickname</string>
+    <string name="find_id_by_email">Find by Email</string>
+    <string name="find_id_by_nickname">Find by Nickname</string>
+    <string name="find_id_result">An account with this email exists.\nWould you like to change your password?</string>
+    <string name="find_id_not_exist_nickname">This nickname does not exist.</string>
+    <string name="find_id_nick_name_title_prefix">Hello,\n</string>
+    <string name="find_id_nick_name_title_suffix">!</string>
 </resources>

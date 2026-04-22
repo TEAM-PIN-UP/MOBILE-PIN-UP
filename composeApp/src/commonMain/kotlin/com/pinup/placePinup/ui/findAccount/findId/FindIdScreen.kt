@@ -91,7 +91,7 @@ fun FindIdScreen(
             Spacer(modifier = Modifier.height(44.dp))
 
             Text(
-                text = Texts.FindId.FIND_ID,
+                text = stringResource(Res.string.find_id_find_id),
                 style = Typography.D2.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -118,7 +118,7 @@ fun FindIdScreen(
                             .clickableWithNoRipple {
                                 onClickTabChanged(true)
                             },
-                        text = Texts.FindId.FIND_ID_BY_EMAIL,
+                        text = stringResource(Res.string.find_id_by_email),
                         color = if (isEmailFindClicked) Colors.White else Colors.Gray300,
                         style = Typography.L2.copy(
                             fontWeight = FontWeight.SemiBold
@@ -143,7 +143,7 @@ fun FindIdScreen(
                             .clickableWithNoRipple {
                                 onClickTabChanged(false)
                             },
-                        text = Texts.FindId.FIND_ID_BY_NICKNAME,
+                        text = stringResource(Res.string.find_id_by_nickname),
                         color = if (isEmailFindClicked) Colors.Gray300 else Colors.White,
                         style = Typography.L2.copy(
                             fontWeight = FontWeight.SemiBold
@@ -254,7 +254,7 @@ fun FindIdScreen(
                 }
             } else {
                 Text(
-                    text = Texts.FindId.INPUT_NICKNAME,
+                    text = stringResource(Res.string.find_id_input_nickname),
                     style = Typography.B1.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -279,7 +279,7 @@ fun FindIdScreen(
 
                 if (!isNicknameUsed && nickname.isNotEmpty()) {
                     ErrorText(
-                        text = Texts.FindId.NOT_EXIST_NICKNAME
+                        text = stringResource(Res.string.find_id_not_exist_nickname)
                     )
                 }
             }

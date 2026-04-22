@@ -44,7 +44,7 @@ fun FindPasswordEmailScreen(
         Spacer(modifier = Modifier.height(49.dp))
 
         Text(
-            text = Texts.FindPassword.FIND_PASSWORD,
+            text = stringResource(Res.string.find_password_find_password),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -54,7 +54,7 @@ fun FindPasswordEmailScreen(
         Spacer(modifier = Modifier.height(13.dp))
 
         Text(
-            text = Texts.FindPassword.FIND_PASSWORD,
+            text = stringResource(Res.string.find_password_find_password),
             style = Typography.B2.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -94,7 +94,7 @@ fun FindPasswordEmailScreen(
         PButton(
             modifier = Modifier
                 .padding(bottom = 28.dp),
-            text = Texts.FindPassword.SEND_PASSWORD,
+            text = stringResource(Res.string.find_password_send_password),
             onClick = {
                 onClickSendPassword()
             },

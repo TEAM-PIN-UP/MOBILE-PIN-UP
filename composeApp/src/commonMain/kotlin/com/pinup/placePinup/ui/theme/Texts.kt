@@ -53,42 +53,13 @@ object Texts {
         const val ONBOARDING_LOGIN_TEXT = "로그인하고 나만의 공간을 공유해보세요!"
     }
 
-    object Login {
-        const val LOGIN_ID_FIND = "아이디 찾기"
-        const val LOGIN_SNS = "SNS 로그인"
-        const val INCORRECT_ID = "아이디 혹은 비밀번호가 일치하지 않습니다."
-    }
-
-    object FindPassword {
-        const val PASSWORD_HINT = "비밀번호는 8~20자, 특수문자 포함 필수입니다."
-        const val CHANGE_PASSWORD = "비밀번호 변경하기"
-        const val CHANGE_PASSWORD_HINT = "임시 비밀번호로 로그인 시, 비밀번호 변경이 필요합니다."
-        const val SEND_PASSWORD = "비밀번호 발송"
-        const val PASSWORD_AGAIN_HINT = "비밀번호 확인"
-        const val FIND_PASSWORD = "비밀번호 찾기"
-        const val FIND_PASSWORD_HINT = "입력한 주소로 임시 비밀번호가 전송됩니다."
-        const val SENT_PASSWORD_TITLE = "이메일이 전송되었습니다!"
-        const val SENT_PASSWORD_HINT = "이메일로 전송 받은 임시 비밀번호로 로그인 해주세요."
-        const val DO_LOGIN = "로그인하기"
-    }
-
     object FindId {
-        const val FIND_ID = "아이디 찾기"
-        const val INPUT_NICKNAME = "닉네임 입력"
-        const val FIND_ID_BY_EMAIL = "이메일 주소로 찾기"
-        const val FIND_ID_BY_NICKNAME = "닉네임으로 찾기"
-        const val FIND_ID_RESULT = "해당 이메일로 가입된 계정이 있습니다.\n비밀번호를 변경하고 싶으신가요?"
-        const val NOT_EXIST_NICKNAME = "존재하지 않는 닉네임입니다."
-        fun getNickNameTitle(nickName : String) = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Colors.Gray800)) {
-                append("안녕하세요\n")
+        fun getNickNameTitle(nickName: String, prefix: String, suffix: String) = buildAnnotatedString {
+            if (prefix.isNotEmpty()) {
+                withStyle(style = SpanStyle(color = Colors.Gray800)) { append(prefix) }
             }
-            withStyle(style = SpanStyle(color = Colors.Main)) {
-                append(nickName)
-            }
-            withStyle(style = SpanStyle(color = Colors.Gray800)) {
-                append("님!")
-            }
+            withStyle(style = SpanStyle(color = Colors.Main)) { append(nickName) }
+            withStyle(style = SpanStyle(color = Colors.Gray800)) { append(suffix) }
         }
     }
 

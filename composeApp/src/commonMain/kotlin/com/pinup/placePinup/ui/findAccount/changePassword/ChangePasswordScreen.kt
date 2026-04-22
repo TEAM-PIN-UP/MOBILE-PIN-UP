@@ -63,7 +63,7 @@ fun ChangePasswordScreen(
         Spacer(modifier = Modifier.height(44.dp))
 
         Text(
-            text = Texts.FindPassword.CHANGE_PASSWORD,
+            text = stringResource(Res.string.find_password_change_password),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -73,7 +73,7 @@ fun ChangePasswordScreen(
         Spacer(modifier = Modifier.height(18.dp))
 
         Text(
-            text = Texts.FindPassword.CHANGE_PASSWORD_HINT,
+            text = stringResource(Res.string.find_password_change_password_hint),
             style = Typography.B2.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -101,7 +101,7 @@ fun ChangePasswordScreen(
                 },
                 cornerRounded = 100,
                 visualTransformation = if(isShowFirstPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                placeholder = Texts.FindPassword.PASSWORD_HINT,
+                placeholder = stringResource(Res.string.find_password_hint),
                 textStyle = Typography.B3,
                 isError = !isPasswordValid,
             )
@@ -135,7 +135,7 @@ fun ChangePasswordScreen(
         Spacer(modifier = Modifier.height(15.dp))
 
         Text(
-            text = Texts.FindPassword.PASSWORD_AGAIN_HINT,
+            text = stringResource(Res.string.find_password_again_hint),
             style = Typography.B1.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -185,7 +185,7 @@ fun ChangePasswordScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         PButton(
-            text = Texts.FindPassword.CHANGE_PASSWORD,
+            text = stringResource(Res.string.find_password_change_password),
             isEnable = isPasswordValid && isPasswordMatched && password.isNotEmpty() && passwordAgain.isNotEmpty(),
             onClick = {
                 onClickConfirm()

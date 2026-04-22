@@ -159,4 +159,31 @@
     <string name="pinch_delete_dialog_content">한 번 삭제하면 되돌릴 수 없어요.\n삭제하시겠습니까?</string>
     <string name="pinch_write_complete_dialog_title">마이핀츠 작성 완료!</string>
     <string name="pinch_write_complete_dialog_content">등록한 마이핀츠를\n확인하시겠어요?</string>
+
+    <!-- Login -->
+    <string name="login_id_find">아이디 찾기</string>
+    <string name="login_sns">SNS 로그인</string>
+    <string name="login_incorrect_id">아이디 혹은 비밀번호가 일치하지 않습니다.</string>
+
+    <!-- FindPassword -->
+    <string name="find_password_hint">비밀번호는 8~20자, 특수문자 포함 필수입니다.</string>
+    <string name="find_password_change_password">비밀번호 변경하기</string>
+    <string name="find_password_change_password_hint">임시 비밀번호로 로그인 시, 비밀번호 변경이 필요합니다.</string>
+    <string name="find_password_send_password">비밀번호 발송</string>
+    <string name="find_password_again_hint">비밀번호 확인</string>
+    <string name="find_password_find_password">비밀번호 찾기</string>
+    <string name="find_password_find_password_hint">입력한 주소로 임시 비밀번호가 전송됩니다.</string>
+    <string name="find_password_sent_title">이메일이 전송되었습니다!</string>
+    <string name="find_password_sent_hint">이메일로 전송 받은 임시 비밀번호로 로그인 해주세요.</string>
+    <string name="find_password_do_login">로그인하기</string>
+
+    <!-- FindId -->
+    <string name="find_id_find_id">아이디 찾기</string>
+    <string name="find_id_input_nickname">닉네임 입력</string>
+    <string name="find_id_by_email">이메일 주소로 찾기</string>
+    <string name="find_id_by_nickname">닉네임으로 찾기</string>
+    <string name="find_id_result">해당 이메일로 가입된 계정이 있습니다.\n비밀번호를 변경하고 싶으신가요?</string>
+    <string name="find_id_not_exist_nickname">존재하지 않는 닉네임입니다.</string>
+    <string name="find_id_nick_name_title_prefix">안녕하세요\n</string>
+    <string name="find_id_nick_name_title_suffix">님!</string>
 </resources>

@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.component
+import org.jetbrains.compose.resources.stringResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +17,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -33,7 +35,7 @@ fun FindIdBottomSheet(
 
         Text(
             textAlign = TextAlign.Center,
-            text = Texts.FindId.FIND_ID_RESULT,
+            text = stringResource(Res.string.find_id_result),
             style = Typography.T2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -62,7 +64,7 @@ fun FindIdBottomSheet(
         PButton(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
-            text = Texts.FindPassword.CHANGE_PASSWORD,
+            text = stringResource(Res.string.find_password_change_password),
             onClick = {
                 onClickFindPassword()
             }
@@ -75,7 +77,7 @@ fun FindIdBottomSheet(
                 .clickableWithNoRipple {
                     onClickLogin()
                 },
-            text = Texts.FindPassword.DO_LOGIN,
+            text = stringResource(Res.string.find_password_do_login),
             style = Typography.B2.copy(
                 fontWeight = FontWeight.Medium
             ),
