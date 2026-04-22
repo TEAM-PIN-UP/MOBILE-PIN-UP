@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Word -->
+    <string name="word_start">Get Started</string>
+    <string name="word_id">ID</string>
+    <string name="word_password">Password</string>
+    <string name="word_login">Log In</string>
+    <string name="word_next">Next</string>
+    <string name="word_skip">Skip</string>
+    <string name="word_do_go">Continue</string>
+    <string name="word_email">Email</string>
+    <string name="word_confirm">Confirm</string>
+    <string name="word_do_confirm">Confirm</string>
+    <string name="word_verify">Verify</string>
+    <string name="word_pin_map">Pin Map</string>
+    <string name="word_pinlog">Pin Log</string>
+    <string name="word_feed">Feed</string>
+    <string name="word_article">Article</string>
+    <string name="word_my">My</string>
+    <string name="word_rating">Rating</string>
+    <string name="word_do_return">Go Back</string>
+    <string name="word_delete">Delete</string>
+    <string name="word_do_delete">Delete</string>
+    <string name="word_comment">Comment</string>
+    <string name="word_do_reply_comment">Reply</string>
+    <string name="word_do_register">Register</string>
+    <string name="word_see_more">See More</string>
+    <string name="word_pin_buddy">Pin Buddy</string>
+    <string name="word_pinch">Pints</string>
+    <string name="word_scrap">Save</string>
+    <string name="word_accept">Accept</string>
+    <string name="word_refuse">Decline</string>
+    <string name="word_close">Close</string>
+    <string name="word_setting">Settings</string>
+    <string name="word_etc">Other</string>
+    <string name="word_complete">Done</string>
+    <string name="word_nickname">Nickname</string>
+    <string name="word_intro">Bio</string>
+    <string name="word_unregister">Delete Account</string>
+    <string name="word_sign_up">Sign Up</string>
+    <string name="word_do_block">Block</string>
+    <string name="word_do_release">Unblock</string>
+    <string name="word_notification">Notifications</string>
+</resources>
