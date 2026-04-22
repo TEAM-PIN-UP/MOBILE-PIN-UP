@@ -247,7 +247,7 @@ fun UserProfileScreen(
                                 Text(
                                     modifier = Modifier
                                         .padding(top = 4.dp),
-                                    text = Texts.PROFILE.AVERAGE_STAR_RATING,
+                                    text = stringResource(Res.string.profile_average_star_rating),
                                     color = Colors.Gray400,
                                     style = Typography.B3.copy(
                                         fontWeight = FontWeight.SemiBold
@@ -380,8 +380,8 @@ fun UserProfileScreen(
 
     if (isShowDeleteDialog) {
         PDialog(
-            titleText = Texts.PROFILE.REMOVE_PIN_BUDDY_DIALOG_TITLE,
-            descriptionText = Texts.PROFILE.REMOVE_PIN_BUDDY_DIALOG_DESCRIPTION,
+            titleText = stringResource(Res.string.profile_remove_pin_buddy_dialog_title),
+            descriptionText = stringResource(Res.string.profile_remove_pin_buddy_dialog_description),
             leftButtonText = stringResource(Res.string.word_do_return),
             rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
@@ -569,7 +569,7 @@ private fun RowScope.ProfileShareButton(
             Text(
                 modifier = Modifier
                     .padding(start = 6.dp),
-                text = Texts.PROFILE.SHARE_PROFILE,
+                text = stringResource(Res.string.profile_share_profile),
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -598,7 +598,7 @@ private fun RowScope.RejectButton(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = Texts.PROFILE.REJECT_PIN_BUDDY,
+                text = stringResource(Res.string.profile_reject_pin_buddy),
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -638,7 +638,7 @@ private fun RowScope.StrangerButton(
             Spacer(modifier = Modifier.width(6.dp))
 
             Text(
-                text = Texts.PROFILE.REQUEST_PIN_BUDDY,
+                text = stringResource(Res.string.profile_request_pin_buddy),
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -678,7 +678,7 @@ private fun RowScope.PendingButton(
             Spacer(modifier = Modifier.width(6.dp))
 
             Text(
-                text = Texts.PROFILE.ALREADY_REQUEST_PIN_BUDDY,
+                text = stringResource(Res.string.profile_already_request_pin_buddy),
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -708,7 +708,7 @@ private fun RowScope.ReceivedButton(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = Texts.PROFILE.ACCEPT_PIN_BUDDY,
+                text = stringResource(Res.string.profile_accept_pin_buddy),
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -783,7 +783,7 @@ private fun LockReviewScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = Colors.White),
-            text = Texts.PROFILE.ROCK_PROFILE,
+            text = stringResource(Res.string.profile_rock_profile),
             color = Colors.Gray400,
             style = Typography.B1.copy(
                 fontWeight = FontWeight.SemiBold
@@ -872,7 +872,7 @@ fun LazyListScope.UserPinchList(
             Text(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = Texts.PROFILE.EMPTY_USER_PINTS,
+                text = stringResource(Res.string.profile_empty_user_pints),
                 style = Typography.B1.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -913,7 +913,7 @@ private fun ReviewEmptyScreen() {
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = Texts.PROFILE.EMPTY_USER_PINLOG,
+            text = stringResource(Res.string.profile_empty_user_pinlog),
             color = Colors.Gray400,
             style = Typography.B1.copy(
                 fontWeight = FontWeight.Medium

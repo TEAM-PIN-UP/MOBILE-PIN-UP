@@ -15,7 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -35,7 +34,7 @@ fun PinBuddyBottomSheet(
                 .clickableWithNoRipple {
                     onClickRequestCancel()
                 },
-            text = Texts.PROFILE.CANCEL_PIN_BUDDY_REQUEST,
+            text = stringResource(Res.string.profile_cancel_pin_buddy_request),
             color = Colors.Negative,
             style = Typography.T2.copy(
                 fontWeight = FontWeight.Medium

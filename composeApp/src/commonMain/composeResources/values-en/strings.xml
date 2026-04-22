@@ -94,4 +94,37 @@
     <string name="pin_log_delete_comment_dialog_description">Deleted comments cannot be recovered.</string>
     <string name="pin_log_select_date_prefix">When did you visit\n</string>
     <string name="pin_log_select_date_suffix">?</string>
+
+    <!-- Profile -->
+    <string name="profile_my">MY</string>
+    <string name="profile_average_star_rating">Avg. Rating</string>
+    <string name="profile_share_profile">Share Profile</string>
+    <string name="profile_add_pin_buddy">Add Pin Buddy</string>
+    <string name="profile_accept_pin_buddy">Accept Pin Buddy</string>
+    <string name="profile_reject_pin_buddy">Decline Pin Buddy</string>
+    <string name="profile_receive_request">Received</string>
+    <string name="profile_sent_request">Sent</string>
+    <string name="profile_cancel_sent_request">Cancel Request</string>
+    <string name="profile_dialog_delete_pin_buddy_title">Remove this Pin Buddy?</string>
+    <string name="profile_dialog_delete_pin_buddy_description">You can always send a new Pin Buddy\nrequest to them later.</string>
+    <string name="profile_empty_pin_buddy">No Pin Buddies yet!\nWhy not send a request first?</string>
+    <string name="profile_empty_receive_pin_buddy">No Pin Buddy requests received.\nRequests will appear here when they arrive!</string>
+    <string name="profile_empty_sent_pin_buddy">No sent requests.\nFind a Pin Buddy with similar tastes!</string>
+    <string name="profile_empty_my_pinlog">No Pin Logs yet!\nPin up your favorite places :)</string>
+    <string name="profile_empty_user_pinlog">This Pin Buddy hasn\'t written any Pin Logs!\nCheck back soon.</string>
+    <string name="profile_search_result">Search Results</string>
+    <string name="profile_already_request_pin_buddy">Request Pending</string>
+    <string name="profile_request_pin_buddy">Add Pin Buddy</string>
+    <string name="profile_cancel_pin_buddy_request">Cancel Pin Buddy Request</string>
+    <string name="profile_remove_pin_buddy_dialog_title">Remove this Pin Buddy?</string>
+    <string name="profile_remove_pin_buddy_dialog_description">You can always send a new Pin Buddy\nrequest to them later.</string>
+    <string name="profile_rock_profile">Send a Pin Buddy request\nto see their Pin Logs!</string>
+    <string name="profile_write_first_pinlog">Write Your First Pin Log</string>
+    <string name="profile_empty_scrap">No saved places yet!\nBrowse Pin Logs to find places you love.</string>
+    <string name="profile_go_pinlog">Go to Pin Logs</string>
+    <string name="profile_empty_pinch">Create %1$s\'s very own Pints course.</string>
+    <string name="profile_empty_user_pints">No Pints written\nyet!</string>
+    <string name="profile_go_pinch_create">Create Pints</string>
+    <string name="profile_pick_library">Choose from Library</string>
+    <string name="profile_delete_profile_image">Delete Profile Image</string>
 </resources>

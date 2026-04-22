@@ -54,7 +54,6 @@ import androidx.compose.ui.text.font.FontWeight
 import com.pinup.placePinup.domain.model.PagingPinBuddy
 import com.pinup.placePinup.domain.model.PagingPinBuddyRequest
 import com.pinup.placePinup.extentions.ScrollToEndCallback
-import com.pinup.placePinup.ui.theme.Texts
 import kotlinx.collections.immutable.toPersistentList
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -80,7 +79,11 @@ fun PinBuddyScreen(
 ) {
     val isShowCompleteDialog = remember { mutableStateOf<Pair<Boolean, Int?>>(false to null) }
     val pinBuddyLabel = stringResource(Res.string.word_pin_buddy)
-    val pages = remember(pinBuddyLabel) { listOf(pinBuddyLabel, Texts.PROFILE.RECEIVE_REQUEST, Texts.PROFILE.SENT_REQUEST) }
+    val receiveRequestLabel = stringResource(Res.string.profile_receive_request)
+    val sentRequestLabel = stringResource(Res.string.profile_sent_request)
+    val pages = remember(pinBuddyLabel, receiveRequestLabel, sentRequestLabel) {
+        listOf(pinBuddyLabel, receiveRequestLabel, sentRequestLabel)
+    }
     val listSize = listOf(pinBuddies.totalElements, receivePinBuddyRequests.totalElements, sentPinBuddyRequests.totalElements)
     val pagerState = rememberPagerState{ pages.size }
     val pullRefreshState = rememberPullRefreshState(
@@ -212,8 +215,8 @@ fun PinBuddyScreen(
 
     if (isShowCompleteDialog.value.first) {
         PDialog(
-            titleText = Texts.PROFILE.DIALOG_DELETE_PIN_BUDDY_TITLE,
-            descriptionText = Texts.PROFILE.DIALOG_DELETE_PIN_BUDDY_DESCRIPTION,
+            titleText = stringResource(Res.string.profile_dialog_delete_pin_buddy_title),
+            descriptionText = stringResource(Res.string.profile_dialog_delete_pin_buddy_description),
             leftButtonText = stringResource(Res.string.word_do_return),
             rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
@@ -257,7 +260,7 @@ private fun PinBuddyList(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = Texts.PROFILE.EMPTY_PIN_BUDDY,
+                text = stringResource(Res.string.profile_empty_pin_buddy),
                 color = Colors.Gray400,
                 style = Typography.B1.copy(
                     fontWeight = FontWeight.SemiBold
@@ -339,7 +342,7 @@ private fun SentPinBuddyRequestList(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = Texts.PROFILE.EMPTY_SENT_PIN_BUDDY,
+                text = stringResource(Res.string.profile_empty_sent_pin_buddy),
                 color = Colors.Gray400,
                 style = Typography.B1.copy(
                     fontWeight = FontWeight.SemiBold
@@ -375,7 +378,7 @@ private fun SentPinBuddyRequestList(
                             Text(
                                 modifier = Modifier
                                     .padding(vertical = 8.dp, horizontal = 12.dp),
-                                text = Texts.PROFILE.CANCEL_SENT_REQUEST,
+                                text = stringResource(Res.string.profile_cancel_sent_request),
                                 color = Colors.Gray500,
                                 style = Typography.L1.copy(
                                     fontWeight = FontWeight.SemiBold
@@ -422,7 +425,7 @@ private fun ReceivePinBuddyRequestList(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = Texts.PROFILE.EMPTY_RECEIVE_PIN_BUDDY,
+                text = stringResource(Res.string.profile_empty_receive_pin_buddy),
                 color = Colors.Gray400,
                 style = Typography.B1.copy(
                     fontWeight = FontWeight.SemiBold

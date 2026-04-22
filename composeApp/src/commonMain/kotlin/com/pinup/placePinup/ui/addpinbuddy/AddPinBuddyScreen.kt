@@ -182,7 +182,7 @@ fun AddPinBuddyScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = Texts.PROFILE.SEARCH_RESULT,
+                        text = stringResource(Res.string.profile_search_result),
                         style = Typography.B2.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -297,7 +297,7 @@ fun AlreadyRequestButton() {
             Spacer(modifier = Modifier.width(6.dp))
 
             Text(
-                text = Texts.PROFILE.ALREADY_REQUEST_PIN_BUDDY,
+                text = stringResource(Res.string.profile_already_request_pin_buddy),
                 color = Colors.Gray800,
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold

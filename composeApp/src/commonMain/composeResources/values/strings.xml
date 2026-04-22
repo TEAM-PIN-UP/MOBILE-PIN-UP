@@ -94,4 +94,37 @@
     <string name="pin_log_delete_comment_dialog_description">삭제된 댓글은 복구할 수 없습니다.</string>
     <string name="pin_log_select_date_prefix"></string>
     <string name="pin_log_select_date_suffix">은\n 언제 방문하셨나요?</string>
+
+    <!-- Profile -->
+    <string name="profile_my">MY</string>
+    <string name="profile_average_star_rating">평균 별점</string>
+    <string name="profile_share_profile">프로필 공유</string>
+    <string name="profile_add_pin_buddy">핀버디 추가</string>
+    <string name="profile_accept_pin_buddy">핀버디 수락</string>
+    <string name="profile_reject_pin_buddy">핀버디 거절</string>
+    <string name="profile_receive_request">받은 신청</string>
+    <string name="profile_sent_request">보낸 신청</string>
+    <string name="profile_cancel_sent_request">신청 취소</string>
+    <string name="profile_dialog_delete_pin_buddy_title">핀버디를 삭제할까요?</string>
+    <string name="profile_dialog_delete_pin_buddy_description">삭제한 핀버디에게 언제든지\n다시 핀버디를 신청할 수 있습니다.</string>
+    <string name="profile_empty_pin_buddy">아직 핀버디가 없어요!\n먼저 핀버디를 신청해 보는 건 어때요?</string>
+    <string name="profile_empty_receive_pin_buddy">받은 핀버디 신청이 없어요.\n핀버디 신청이 오면 이곳에 표시돼요!</string>
+    <string name="profile_empty_sent_pin_buddy">보낸 신청이 없어요.\n나와 취향이 비슷한 핀버디를 찾아보세요!</string>
+    <string name="profile_empty_my_pinlog">아직 핀로그가 없어요!\n나만의 장소를 핀업해보세요:)</string>
+    <string name="profile_empty_user_pinlog">핀버디가 작성한 핀로그가 없어요!\n조금만 더 기다려볼까요?</string>
+    <string name="profile_search_result">검색 결과</string>
+    <string name="profile_already_request_pin_buddy">요청 진행중</string>
+    <string name="profile_request_pin_buddy">핀버디 신청</string>
+    <string name="profile_cancel_pin_buddy_request">핀버디 신청 취소하기</string>
+    <string name="profile_remove_pin_buddy_dialog_title">핀버디를 삭제할까요?</string>
+    <string name="profile_remove_pin_buddy_dialog_description">삭제한 핀버디에게 언제든지\n다시 핀버디를 신청할 수 있습니다.</string>
+    <string name="profile_rock_profile">작성된 핀로그가 궁금하다면\n핀버디를 신청해 주세요!</string>
+    <string name="profile_write_first_pinlog">첫 핀로그 작성하기</string>
+    <string name="profile_empty_scrap">저장된 장소가 없어요!\n핀로그를 살펴보며 장소를 살펴보아요.</string>
+    <string name="profile_go_pinlog">핀로그 보러가기</string>
+    <string name="profile_empty_pinch">%1$s님 만의 코스로 핀츠를 만들어보아요.</string>
+    <string name="profile_empty_user_pints">작성된 핀츠가\n아직 없습니다!</string>
+    <string name="profile_go_pinch_create">핀츠 만들러 가기</string>
+    <string name="profile_pick_library">라이브러리에서 선택</string>
+    <string name="profile_delete_profile_image">프로필 이미지 삭제</string>
 </resources>
