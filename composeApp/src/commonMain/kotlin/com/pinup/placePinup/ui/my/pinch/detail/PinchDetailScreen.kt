@@ -39,7 +39,6 @@ import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.component.RoundedBox
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -99,7 +98,7 @@ fun PinchDetailScreen(
                 .padding(horizontal = 20.dp)
         ) {
             TitleBar(
-                title = Texts.Pinch.PINCH_DETAIL,
+                title = stringResource(Res.string.pinch_detail),
                 onLeftButtonClick = onBackPressed,
                 rightIcon = painterResource(Res.drawable.ic_menu_dot),
                 onRightButtonClick = {
@@ -172,7 +171,7 @@ fun PinchDetailScreen(
                         Spacer(modifier = Modifier.width(9.dp))
 
                         Text(
-                            text = Texts.Pinch.PLACE_LIST,
+                            text = stringResource(Res.string.pinch_place_list),
                             style = Typography.T1.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
@@ -211,8 +210,8 @@ fun PinchDetailScreen(
 
     if (isShowDeleteDialog.value) {
         PDialog(
-            titleText = Texts.Pinch.PINCH_DELETE_DIALOG_TITLE,
-            descriptionText = Texts.Pinch.PINCH_DELETE_DIALOG_CONTENT,
+            titleText = stringResource(Res.string.pinch_delete_dialog_title),
+            descriptionText = stringResource(Res.string.pinch_delete_dialog_content),
             leftButtonText = stringResource(Res.string.word_do_return),
             rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {

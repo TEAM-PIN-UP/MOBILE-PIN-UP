@@ -12,7 +12,6 @@ import androidx.navigation.NavHostController
 import com.pinup.placePinup.domain.model.Place
 import com.pinup.placePinup.domain.model.Position
 import com.pinup.placePinup.ui.component.PDialog
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.util.Const
 import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
 import dev.icerock.moko.geo.compose.LocationTrackerAccuracy
@@ -78,8 +77,8 @@ fun PinchWriteRoute(
 
     if (isShowCompleteDialog.value.first) {
         PDialog(
-            titleText = Texts.Pinch.PINTS_WRITE_COMPLETE_DIALOG_TITLE,
-            descriptionText = Texts.Pinch.PINTS_WRITE_COMPLETE_DIALOG_CONTENT,
+            titleText = stringResource(Res.string.pinch_write_complete_dialog_title),
+            descriptionText = stringResource(Res.string.pinch_write_complete_dialog_content),
             leftButtonText = stringResource(Res.string.word_do_return),
             rightButtonText = stringResource(Res.string.word_do_confirm),
             onLeftButtonClick = {

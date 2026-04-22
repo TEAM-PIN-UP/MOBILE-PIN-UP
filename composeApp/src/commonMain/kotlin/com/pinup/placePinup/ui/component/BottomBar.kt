@@ -35,7 +35,6 @@ import com.pinup.placePinup.extentions.clickableSingleWithNoRipple
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -109,7 +108,7 @@ fun BottomBar(
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = Texts.Pinch.CREATE_MY_PINCH,
+                            text = stringResource(Res.string.pinch_create_my),
                             color = Colors.Gray600,
                             style = Typography.B3.copy(
                                 fontWeight = FontWeight.SemiBold

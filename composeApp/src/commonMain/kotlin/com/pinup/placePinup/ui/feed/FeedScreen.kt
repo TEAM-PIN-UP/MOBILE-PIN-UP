@@ -44,7 +44,6 @@ import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -146,7 +145,7 @@ fun FeedScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = Texts.FEED.EMPTY_FEED,
+                        text = stringResource(Res.string.feed_empty_feed),
                         color = Colors.Gray400,
                         style = Typography.B1.copy(
                             fontWeight = FontWeight.SemiBold

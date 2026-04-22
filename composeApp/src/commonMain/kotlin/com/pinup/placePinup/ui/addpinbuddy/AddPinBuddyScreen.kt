@@ -38,7 +38,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import com.pinup.placePinup.domain.model.RelationType
 import com.pinup.placePinup.extentions.clickableWithNoRipple
-import com.pinup.placePinup.ui.theme.Texts
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 
@@ -128,7 +127,7 @@ fun AddPinBuddyScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = Texts.FEED.RECENT_SEARCH,
+                    text = stringResource(Res.string.feed_recent_search),
                     color = Colors.Gray800,
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.Medium

@@ -127,4 +127,36 @@
     <string name="profile_go_pinch_create">Create Pints</string>
     <string name="profile_pick_library">Choose from Library</string>
     <string name="profile_delete_profile_image">Delete Profile Image</string>
+
+    <!-- PinMap -->
+    <string name="pin_map_search_button">Search this area</string>
+    <string name="pin_map_search_hint">Search places or locations</string>
+    <string name="pin_map_empty_pinlog">No Pin Logs yet!\nPin up your favorite places :)</string>
+    <string name="pin_map_search_result">Search Results</string>
+    <string name="pin_map_go_article">Go to Articles</string>
+
+    <!-- Feed -->
+    <string name="feed_recent_search">Recent Searches</string>
+    <string name="feed_empty_feed">Your Pin Buddies haven\'t posted any Pin Logs yet!</string>
+
+    <!-- Article -->
+    <string name="article_title">PIN-UP Articles</string>
+    <string name="article_recommend">Discover more courses\ncurated by PIN-UP editors.</string>
+
+    <!-- Pinch -->
+    <string name="pinch_write">Write Pints</string>
+    <string name="pinch_detail">Pints Details</string>
+    <string name="pinch_title_hint">Enter a title</string>
+    <string name="pinch_description_hint">Describe your Pints (0/120)</string>
+    <string name="pinch_create">Create Pints</string>
+    <string name="pinch_create_my">Create My Pints</string>
+    <string name="pinch_place_list">Place List</string>
+    <string name="pinch_edit">Edit Pints</string>
+    <string name="pinch_delete">Delete Pints</string>
+    <string name="pinch_no_pinlog_dialog_title">No Pin Log written for this place.</string>
+    <string name="pinch_no_pinlog_dialog_content">Only places with a Pin Log can be added to Pints.\nWould you like to write a Pin Log?</string>
+    <string name="pinch_delete_dialog_title">Are you sure you want to delete this Pints?</string>
+    <string name="pinch_delete_dialog_content">This action cannot be undone.\nDelete anyway?</string>
+    <string name="pinch_write_complete_dialog_title">My Pints Created!</string>
+    <string name="pinch_write_complete_dialog_content">Would you like to check\nyour new Pints?</string>
 </resources>

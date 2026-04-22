@@ -134,14 +134,6 @@ object Texts {
         const val PROFILE_SELECT = "사진 선택하기"
     }
 
-    object PinMap {
-        const val SEARCH_BUTTON = "현 지도에서 검색"
-        const val SEARCH_HINT = "장소/위치 검색하기"
-        const val EMPTY_PINLOG = "아직 핀로그가 없어요!\n나만의 장소를 핀업해보세요:)"
-        const val SEARCH_RESULT = "검색 결과"
-        const val GO_ARTICLE = "아티클 바로가기"
-    }
-
     object PinLog {
         fun getSelectDateTitle(place: String, prefix: String, suffix: String) = buildAnnotatedString {
             if (prefix.isNotEmpty()) {
@@ -150,34 +142,6 @@ object Texts {
             withStyle(style = SpanStyle(color = Colors.Main)) { append("’$place’") }
             withStyle(style = SpanStyle(color = Colors.Gray800)) { append(suffix) }
         }
-    }
-
-    object FEED {
-        const val RECENT_SEARCH = "최근 검색어"
-        const val EMPTY_FEED = "아직 핀버디들의 핀로그가 없어요!"
-    }
-
-    object Article {
-        const val TITLE = "핀업 아티클"
-        const val RECOMMEND_ARTICLE = "핀업 에디터가 찾아낸\n또 다른 코스를 만나보세요."
-    }
-
-    object Pinch {
-        const val PINCH_WRITE = "핀츠 작성"
-        const val PINCH_DETAIL = "핀츠 상세"
-        const val TITLE_HINT = "제목을 입력하세요"
-        const val DESCRIPTION_HINT = "핀츠의 설명을 적어주세요(0/120)"
-        const val CREATE_PINCH = "핀츠 등록하기"
-        const val CREATE_MY_PINCH = "마이핀츠 작성"
-        const val PLACE_LIST = "장소목록"
-        const val EDIT_PINTS = "핀츠 수정"
-        const val DELETE_PINTS = "핀츠 삭제"
-        const val NO_PINLOG_DIALOG_TITLE = "핀로그가 작성되지 않은 장소입니다."
-        const val NO_PINLOG_DIALOG_CONTENT = "핀로그 작성한 장소만 핀츠에 등록 할 수 있어요.\n핀로그를 등록할까요?"
-        const val PINCH_DELETE_DIALOG_TITLE = "핀츠를 정말 삭제할건가요?"
-        const val PINCH_DELETE_DIALOG_CONTENT = "한 번 삭제하면 되돌릴 수 없어요.\n삭제하시겠습니까?"
-        const val PINTS_WRITE_COMPLETE_DIALOG_TITLE = "마이핀츠 작성 완료!"
-        const val PINTS_WRITE_COMPLETE_DIALOG_CONTENT = "등록한 마이핀츠를\n확인하시겠어요?"
     }
 
     object Report {

@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.map
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,11 +43,11 @@ import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.SearchedPlaceCard
 import com.pinup.placePinup.ui.model.ChipState
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_chevron_bottom
 import pinup.composeapp.generated.resources.ic_close
 import pinup.composeapp.generated.resources.ic_search
@@ -88,7 +89,7 @@ fun MapBottomSheetSearchScreen(
                 fontWeight = FontWeight.Medium
             ),
             onValueChange = onValueChange,
-            placeholder = Texts.PinMap.SEARCH_HINT,
+            placeholder = stringResource(Res.string.pin_map_search_hint),
             placeholderStyle = Typography.T2.copy(
                 fontWeight = FontWeight.Medium
             ),
@@ -211,7 +212,7 @@ fun NonFocusScreen(
                 .padding(top = 80.dp)
                 .fillMaxWidth()
                 .background(color = Colors.White),
-            text = Texts.PinMap.EMPTY_PINLOG,
+            text = stringResource(Res.string.pin_map_empty_pinlog),
             color = Colors.Neutral500,
             style = Typography.C2,
             textAlign = TextAlign.Center
@@ -268,7 +269,7 @@ fun FocusScreen(
         Spacer(modifier = Modifier.height(28.dp))
 
         Text(
-            text = Texts.PinMap.SEARCH_RESULT,
+            text = stringResource(Res.string.pin_map_search_result),
             color = Colors.Neutral800,
             style = Typography.B2.copy(
                 fontWeight = FontWeight.Medium
