@@ -193,7 +193,7 @@ fun NonFocusScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = sortType.text,
+                text = stringResource(sortType.textRes),
                 style = Typography.B4
             )
 

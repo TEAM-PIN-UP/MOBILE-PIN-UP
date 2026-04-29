@@ -257,6 +257,23 @@
     <string name="update_check_confirm">업데이트</string>
     <string name="update_check_optional_cancel">다음에 하기</string>
 
+    <!-- Sort -->
+    <string name="sort_near">가까운 순</string>
+    <string name="sort_latest">최신 순</string>
+    <string name="sort_star_high">별점 높은 순</string>
+    <string name="sort_star_low">별점 낮은 순</string>
+
+    <!-- Category -->
+    <string name="category_all">전체</string>
+    <string name="category_restaurant">음식점</string>
+    <string name="category_cafe">카페</string>
+
+    <!-- PintsCategory -->
+    <string name="pints_category_all">전체</string>
+    <string name="pints_category_jeju">제주</string>
+    <string name="pints_category_seoul">서울</string>
+    <string name="pints_category_none">없음</string>
+
     <!-- Report -->
     <string name="report_type_comment">댓글 신고</string>
     <string name="report_type_pinlog">핀로그 신고</string>

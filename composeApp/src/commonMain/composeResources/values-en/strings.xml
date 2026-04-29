@@ -257,6 +257,23 @@
     <string name="update_check_confirm">Update</string>
     <string name="update_check_optional_cancel">Later</string>
 
+    <!-- Sort -->
+    <string name="sort_near">Nearest</string>
+    <string name="sort_latest">Latest</string>
+    <string name="sort_star_high">Highest Rating</string>
+    <string name="sort_star_low">Lowest Rating</string>
+
+    <!-- Category -->
+    <string name="category_all">All</string>
+    <string name="category_restaurant">Restaurant</string>
+    <string name="category_cafe">Cafe</string>
+
+    <!-- PintsCategory -->
+    <string name="pints_category_all">All</string>
+    <string name="pints_category_jeju">Jeju</string>
+    <string name="pints_category_seoul">Seoul</string>
+    <string name="pints_category_none">None</string>
+
     <!-- Report -->
     <string name="report_type_comment">Report Comment</string>
     <string name="report_type_pinlog">Report Pin Log</string>
