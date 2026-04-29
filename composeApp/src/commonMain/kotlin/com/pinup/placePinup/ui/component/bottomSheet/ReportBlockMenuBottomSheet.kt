@@ -1,5 +1,7 @@
 package com.pinup.placePinup.ui.component.bottomSheet
 
+import org.jetbrains.compose.resources.stringResource
+import pinup.composeapp.generated.resources.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -86,7 +88,7 @@ fun ReportBlockMenuBottomSheet(
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = Texts.Block.USER_BLOCK,
+                text = stringResource(Res.string.block_user_block),
                 color = Colors.Gray800,
                 style = Typography.T2.copy(
                     fontWeight = FontWeight.Medium

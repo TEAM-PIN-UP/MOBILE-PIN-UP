@@ -37,13 +37,15 @@ fun PinlogDetailRoute(
 
     var clickedTargetId by remember { mutableStateOf(0) }
     var clickedTargetName by remember { mutableStateOf("") }
-
+    val deletePinlogText = stringResource(Res.string.toast_delete_pinlog)
+    val blockSuccessTemplate = stringResource(Res.string.toast_block_success)
+    val alreadyBlockText = stringResource(Res.string.toast_already_block_user)
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
             when(it) {
                 PinlogUiEvent.SuccessDelete -> {
-                    toast.show(Texts.Toast.DELETE_PINLOG)
+                    toast.show(deletePinlogText)
                     onBackPressed()
                 }
 
@@ -52,11 +54,11 @@ fun PinlogDetailRoute(
                 }
 
                 PinlogUiEvent.SuccessBlockUser -> {
-                    toast.show(Texts.Toast.blockSuccessToast(clickedTargetName))
+                    toast.show(blockSuccessTemplate.replace("%s", clickedTargetName))
                 }
 
                 PinlogUiEvent.ErrorBlockUser -> {
-                    toast.show(Texts.Toast.ALREADY_BLOCK_USER)
+                    toast.show(alreadyBlockText)
                 }
             }
         }

@@ -1,7 +1,4 @@
 package com.pinup.placePinup.ui.my
-import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.*
-import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -10,9 +7,13 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.ui.component.PDialog
+import com.pinup.placePinup.ui.login.sns.rememberKakaoShareStrings
 import com.pinup.placePinup.ui.main.compose.MainDestination
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun MyRoute(
@@ -35,6 +36,10 @@ fun MyRoute(
     val uiState = myViewModel.uiState.collectAsStateWithLifecycle()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
     val isClickedFeedId = remember { mutableStateOf(-1) }
+    val kakaoStrings = rememberKakaoShareStrings(uiState.value.member.profile.nickname)
+    val onClickShare = remember(kakaoStrings) {
+        { myViewModel.shareMyProfile(kakaoStrings.title, kakaoStrings.content, kakaoStrings.button) }
+    }
 
     LifecycleResumeEffect(Unit) {
         myViewModel.initMyInfo()
@@ -78,7 +83,7 @@ fun MyRoute(
         onClickPinLog = onClickPinLog,
         onClickLike = myViewModel::likeChanged,
         onClickDetail = onClickDetail,
-        onClickShare = myViewModel::shareMyProfile,
+        onClickShare = onClickShare,
         onClickMoreScrap = onClickMoreScrap,
         onMovePlaceDetail = onMovePlaceDetail,
         onMovePints = onMovePints,

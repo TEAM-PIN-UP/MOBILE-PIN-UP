@@ -118,11 +118,14 @@ class MyViewModel (
         )
     }
 
-    fun shareMyProfile(){
+    fun shareMyProfile(shareTitle: String, shareContent: String, shareButton: String) {
         kaKaoShareController.kakaoShare(
             context = contextFactory.getActivity(),
             memberId = uiState.value.member.profile.memberId,
-            memberName = uiState.value.member.profile.nickname
+            memberName = uiState.value.member.profile.nickname,
+            shareTitle = shareTitle,
+            shareContent = shareContent,
+            shareButton = shareButton,
         )
     }
 

@@ -223,4 +223,32 @@
     <string name="signup_profile_title">프로필에 사용 될\n이미지를 골라주세요.</string>
     <string name="signup_profile_register">멋진 프로필\n사진이 등록되었어요!</string>
     <string name="signup_profile_select">사진 선택하기</string>
+
+    <!-- Block -->
+    <string name="block_user_block">계정 차단</string>
+
+    <!-- Toast -->
+    <string name="toast_delete_pinlog">핀로그가 삭제되었어요.</string>
+    <string name="toast_delete_pin_buddy">해당 핀버디가 삭제되었어요</string>
+    <string name="toast_accept_pin_buddy">핀버디 신청을 수락했어요</string>
+    <string name="toast_refuse_pin_buddy">핀버디 신청을 거절했어요</string>
+    <string name="toast_cancel_pin_buddy_request">핀버디 신청을 취소했어요</string>
+    <string name="toast_empty_pinlog">핀로그가 작성되지 않은 장소입니다.</string>
+    <string name="toast_block_success">%s님이 차단되었습니다.</string>
+    <string name="toast_already_block_user">이미 차단된 유저입니다.</string>
+
+    <!-- Notification -->
+    <string name="notification_all_read">모두 읽음</string>
+    <string name="notification_unread">안읽음 %d</string>
+
+    <!-- Kakao -->
+    <string name="kakao_profile_share_title">%s 님의 핀업 계정</string>
+    <string name="kakao_profile_share_content">핀업에서 %s 님의 핀들을 구경해 보세요.</string>
+    <string name="kakao_profile_share_button">핀업으로 이동하기</string>
+
+    <!-- Update -->
+    <string name="update_check_title">업데이트 알림</string>
+    <string name="update_check_description">더 나은 서비스를 위해 핀업이 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요</string>
+    <string name="update_check_confirm">업데이트</string>
+    <string name="update_check_optional_cancel">다음에 하기</string>
 </resources>

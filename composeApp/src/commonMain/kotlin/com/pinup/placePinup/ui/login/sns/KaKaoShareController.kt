@@ -5,5 +5,8 @@ interface KaKaoShareController {
         context: Any,
         memberId: Int,
         memberName: String,
+        shareTitle: String,
+        shareContent: String,
+        shareButton: String,
     )
 }

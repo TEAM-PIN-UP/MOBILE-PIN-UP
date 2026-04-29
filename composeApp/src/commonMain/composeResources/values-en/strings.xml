@@ -223,4 +223,32 @@
     <string name="signup_profile_title">Please choose an image\nfor your profile.</string>
     <string name="signup_profile_register">Your awesome profile\nphoto has been registered!</string>
     <string name="signup_profile_select">Select Photo</string>
+
+    <!-- Block -->
+    <string name="block_user_block">Block Account</string>
+
+    <!-- Toast -->
+    <string name="toast_delete_pinlog">The Pin Log has been deleted.</string>
+    <string name="toast_delete_pin_buddy">The Pin Buddy has been removed.</string>
+    <string name="toast_accept_pin_buddy">Pin Buddy request accepted.</string>
+    <string name="toast_refuse_pin_buddy">Pin Buddy request declined.</string>
+    <string name="toast_cancel_pin_buddy_request">Pin Buddy request canceled.</string>
+    <string name="toast_empty_pinlog">No Pin Log has been written for this place.</string>
+    <string name="toast_block_success">%s has been blocked.</string>
+    <string name="toast_already_block_user">This user is already blocked.</string>
+
+    <!-- Notification -->
+    <string name="notification_all_read">All Read</string>
+    <string name="notification_unread">Unread %d</string>
+
+    <!-- Kakao -->
+    <string name="kakao_profile_share_title">%s's PIN-UP Account</string>
+    <string name="kakao_profile_share_content">Check out %s's pins on PIN-UP.</string>
+    <string name="kakao_profile_share_button">Go to PIN-UP</string>
+
+    <!-- Update -->
+    <string name="update_check_title">Update Available</string>
+    <string name="update_check_description">PIN-UP has been updated for a better experience! Update now to enjoy the latest features.</string>
+    <string name="update_check_confirm">Update</string>
+    <string name="update_check_optional_cancel">Later</string>
 </resources>

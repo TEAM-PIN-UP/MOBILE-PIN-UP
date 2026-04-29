@@ -114,36 +114,4 @@ object Texts {
         const val UNDO_BLOCK_DIALOG_CONTENT = "차단 해제 시, 해당 계정에 친구 추가, 댓글 등의 상호작용이 가능합니다."
     }
 
-    object Block {
-        const val USER_BLOCK = "계정 차단"
-    }
-
-    object Toast {
-        const val DELETE_PINLOG = "핀로그가 삭제되었어요."
-        const val DELETE_PIN_BUDDY = "해당 핀버디가 삭제되었어요"
-        const val ACCEPT_PIN_BUDDY = "핀버디 신청을 수락했어요"
-        const val REFUSE_PIN_BUDDY = "핀버디 신청을 거절했어요"
-        const val CANCEL_PIN_BUDDY_REQEUST = "핀버디 신청을 취소했어요"
-        const val EMPTY_PINLOG = "핀로그가 작성되지 않은 장소입니다."
-        fun blockSuccessToast(name: String) = "${name}님이 차단되었습니다."
-        const val ALREADY_BLOCK_USER = "이미 차단된 유저입니다."
-    }
-
-    object Kakao {
-        fun getProfileShareTitle(name: String) = "$name 님의 핀업 계정"
-        fun getProfileShareContent(name: String) = "핀업에서 $name 님의 핀들을 구경해 보세요."
-        const val PROFILE_SHARE_BUTTON = "핀업으로 이동하기"
-    }
-
-    object Notification {
-        const val ALL_READ = "모두 읽음"
-        fun getUnRead(count: Int) = "읽음 $count"
-    }
-
-    object Update {
-        const val CHECK_UPDATE_TITLE = "업데이트 알림"
-        const val CHECK_UPDATE_DESCRIPTION = "더 나은 서비스를 위해 핀업이 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요"
-        const val CHECK_UPDATE_CONFIRM = "업데이트"
-        const val CHECK_UPDATE_OPTIONAL_CANCEL = "다음에 하기"
-    }
 }
