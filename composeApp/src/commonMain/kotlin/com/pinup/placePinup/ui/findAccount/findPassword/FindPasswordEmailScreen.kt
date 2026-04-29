@@ -20,7 +20,6 @@ import com.pinup.placePinup.ui.component.PButton
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -78,7 +77,7 @@ fun FindPasswordEmailScreen(
                 .fillMaxWidth(),
             text = email,
             onValueChange = onEmailChanged,
-            placeholder = Texts.SignupEmail.HINT,
+            placeholder = stringResource(Res.string.signup_email_hint),
             cornerRounded = 100,
             backgroundColor = Colors.White,
             isError = isEmailValid,
@@ -86,7 +85,7 @@ fun FindPasswordEmailScreen(
 
         if (isEmailValid) {
             Spacer(modifier = Modifier.height(8.dp))
-            ErrorText(Texts.SignupEmail.INVALID)
+            ErrorText(stringResource(Res.string.signup_email_invalid))
         }
 
         Spacer(modifier = Modifier.weight(1f))

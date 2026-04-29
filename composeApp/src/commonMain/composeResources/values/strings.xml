@@ -186,4 +186,41 @@
     <string name="find_id_not_exist_nickname">존재하지 않는 닉네임입니다.</string>
     <string name="find_id_nick_name_title_prefix">안녕하세요\n</string>
     <string name="find_id_nick_name_title_suffix">님!</string>
+
+    <!-- SignupEmail -->
+    <string name="signup_email_title">로그인에 사용할\n이메일을 입력해주세요.</string>
+    <string name="signup_email_hint">이메일 주소를 입력해주세요.</string>
+    <string name="signup_email_invalid">유효한 이메일 주소가 아닙니다.</string>
+    <string name="signup_email_duplicate">동일한 이메일 주소로 가입된 계정이 있습니다.\n기존 계정을 확인해주세요.</string>
+    <string name="signup_email_code_hint">인증번호를 입력해주세요.</string>
+    <string name="signup_email_code_invalid">인증번호가 일치하지 않습니다.</string>
+    <string name="signup_email_code_valid">인증번호가 일치합니다.</string>
+    <string name="signup_email_send_code">인증번호가 전송되었습니다.</string>
+
+    <!-- SignupPassword -->
+    <string name="signup_password_title">사용하실 비밀번호를\n입력해주세요.</string>
+    <string name="signup_password_hint">비밀번호 입력 (8자이상 + 특수문자 포함)</string>
+    <string name="signup_password_invalid">비밀번호는 8~20자, 특수문자 포함 필수입니다.</string>
+    <string name="signup_password_confirm">비밀번호 확인</string>
+    <string name="signup_password_not_match">입력된 비밀번호가 일치하지 않습니다.</string>
+
+    <!-- SignupTerms -->
+    <string name="signup_terms_title">서비스 이용약관에\n동의해주세요.</string>
+    <string name="signup_terms_all_agree">약관 전체 동의</string>
+    <string name="signup_terms_service_agree">이용약관 동의 (필수)</string>
+    <string name="signup_terms_private_info_agree">개인정보 수집 및 이용 동의 (필수)</string>
+    <string name="signup_terms_location_info_agree">위치정보 이용 동의 (필수)</string>
+    <string name="signup_terms_marketing_agree">홍보 및 마케팅 이용 동의 (선택)</string>
+
+    <!-- SignupNickname -->
+    <string name="signup_nickname_title">반가워요!\n닉네임을 만들어볼까요?</string>
+    <string name="signup_nickname_input">닉네임 입력</string>
+    <string name="signup_nickname_hint">닉네임은 나중에 언제든지 변경가능해요.</string>
+    <string name="signup_nickname_condition">한글, 영문만 입력 가능</string>
+    <string name="signup_nickname_duplicate">중복되는 닉네임이에요.</string>
+
+    <!-- SignupProfile -->
+    <string name="signup_profile_title">프로필에 사용 될\n이미지를 골라주세요.</string>
+    <string name="signup_profile_register">멋진 프로필\n사진이 등록되었어요!</string>
+    <string name="signup_profile_select">사진 선택하기</string>
 </resources>

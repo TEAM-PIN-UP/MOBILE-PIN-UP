@@ -19,7 +19,6 @@ import com.pinup.placePinup.ui.component.PButton
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
@@ -52,7 +51,7 @@ fun InputNameScreen(
 
         Text(
             modifier = Modifier.padding(top = 40.dp),
-            text = Texts.SignupNickname.NICKNAME_TITLE,
+            text = stringResource(Res.string.signup_nickname_title),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -63,7 +62,7 @@ fun InputNameScreen(
 
         Text(
             modifier = Modifier.padding(top = 40.dp),
-            text = Texts.SignupNickname.INPUT_NICKNAME,
+            text = stringResource(Res.string.signup_nickname_input),
             style = Typography.B1.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -80,7 +79,7 @@ fun InputNameScreen(
                 onValueChange(it)
             },
             cornerRounded = 100,
-            placeholder = Texts.SignupNickname.NICKNAME_HINT,
+            placeholder = stringResource(Res.string.signup_nickname_hint),
             isError = isNicknameUsed,
             tailIcon = if(isNicknameUsed) null else painterResource(Res.drawable.ic_check_circle_black)
         )
@@ -91,7 +90,7 @@ fun InputNameScreen(
             verticalAlignment = Alignment.CenterVertically
         ){
             ErrorText(
-                text = if (isNicknameUsed) Texts.SignupNickname.DUPLICATE_NICKNAME else Texts.SignupNickname.CONDITION_NICKNAME,
+                text = if (isNicknameUsed) stringResource(Res.string.signup_nickname_duplicate) else stringResource(Res.string.signup_nickname_condition),
                 isNotError = !isNicknameUsed
             )
 

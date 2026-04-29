@@ -28,7 +28,6 @@ import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.signup.PasswordState
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
@@ -60,7 +59,7 @@ fun InputPasswordScreen(
 
         Spacer(modifier = Modifier.height(49.dp))
         Text(
-            text = Texts.SignupPassword.TITLE,
+            text = stringResource(Res.string.signup_password_title),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -91,7 +90,7 @@ fun InputPasswordScreen(
                 },
                 cornerRounded = 100,
                 visualTransformation = if(passwordState.isShowFirstPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                placeholder = Texts.SignupPassword.HINT,
+                placeholder = stringResource(Res.string.signup_password_hint),
                 isError = !passwordState.isPasswordValid,
             )
 
@@ -117,7 +116,7 @@ fun InputPasswordScreen(
         if(!passwordState.isPasswordValid){
             Spacer(modifier = Modifier.height(8.dp))
 
-            ErrorText(Texts.SignupPassword.INVALID)
+            ErrorText(stringResource(Res.string.signup_password_invalid))
 
             Spacer(modifier = Modifier.height(14.dp))
         }
@@ -126,7 +125,7 @@ fun InputPasswordScreen(
         }
 
         Text(
-            text = Texts.SignupPassword.CONFIRM,
+            text = stringResource(Res.string.signup_password_confirm),
             style = Typography.B1.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -172,7 +171,7 @@ fun InputPasswordScreen(
         if(!passwordState.isPasswordMatched){
             Spacer(modifier = Modifier.height(8.dp))
 
-            ErrorText(Texts.SignupPassword.NOT_MATCH)
+            ErrorText(stringResource(Res.string.signup_password_not_match))
         }
 
         Spacer(modifier = Modifier.weight(1f))

@@ -34,7 +34,6 @@ import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.signup.EmailVerifyType
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
@@ -172,7 +171,7 @@ fun FindIdScreen(
                             .fillMaxWidth(),
                         text = email,
                         onValueChange = onEmailChanged,
-                        placeholder = Texts.SignupEmail.HINT,
+                        placeholder = stringResource(Res.string.signup_email_hint),
                         cornerRounded = 100,
                         backgroundColor = Colors.White,
                         isError = !isEmailValid,
@@ -212,7 +211,7 @@ fun FindIdScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 if (!isEmailValid) {
-                    ErrorText(Texts.SignupEmail.INVALID)
+                    ErrorText(stringResource(Res.string.signup_email_invalid))
 
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -223,7 +222,7 @@ fun FindIdScreen(
                             .fillMaxWidth(),
                         text = verificationCode,
                         onValueChange = onCodeChanged,
-                        placeholder = Texts.SignupEmail.CODE_HINT,
+                        placeholder = stringResource(Res.string.signup_email_code_hint),
                         cornerRounded = 100,
                         backgroundColor = Colors.White,
                         isError = emailVerifyType == EmailVerifyType.NOT_VERIFIED,
@@ -250,7 +249,7 @@ fun FindIdScreen(
 
                 if (emailVerifyType == EmailVerifyType.NOT_VERIFIED) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    ErrorText(Texts.SignupEmail.CODE_INVALID)
+                    ErrorText(stringResource(Res.string.signup_email_code_invalid))
                 }
             } else {
                 Text(
@@ -270,7 +269,7 @@ fun FindIdScreen(
                         onNickNameChanged(it)
                     },
                     cornerRounded = 100,
-                    placeholder = Texts.SignupNickname.NICKNAME_HINT,
+                    placeholder = stringResource(Res.string.signup_nickname_hint),
                     isError = !isNicknameUsed && nickname.isNotEmpty(),
                     tailIcon = if(!isNicknameUsed) null else painterResource(Res.drawable.ic_check_circle_black)
                 )

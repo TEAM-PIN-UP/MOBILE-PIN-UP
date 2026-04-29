@@ -29,7 +29,6 @@ import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.signup.EmailState
 import com.pinup.placePinup.ui.signup.EmailVerifyType
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -56,7 +55,7 @@ fun InputEmailScreen(
         Spacer(modifier = Modifier.height(49.dp))
 
         Text(
-            text = Texts.SignupEmail.TITLE,
+            text = stringResource(Res.string.signup_email_title),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -81,7 +80,7 @@ fun InputEmailScreen(
                     .fillMaxWidth(),
                 text = emailState.email,
                 onValueChange = onEmailChanged,
-                placeholder = Texts.SignupEmail.HINT,
+                placeholder = stringResource(Res.string.signup_email_hint),
                 cornerRounded = 100,
                 backgroundColor = Colors.White,
                 isError = !emailState.isEmailValid || emailState.isEmailUsed,
@@ -123,9 +122,9 @@ fun InputEmailScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         if (!emailState.isEmailValid) {
-            ErrorText(Texts.SignupEmail.INVALID)
+            ErrorText(stringResource(Res.string.signup_email_invalid))
         } else if (emailState.isEmailUsed) {
-            ErrorText(Texts.SignupEmail.DUPLICATE)
+            ErrorText(stringResource(Res.string.signup_email_duplicate))
         }
 
         if (emailState.isClickedVerify) {
@@ -135,7 +134,7 @@ fun InputEmailScreen(
                         .fillMaxWidth(),
                     text = emailState.verificationCode,
                     onValueChange = onCodeChanged,
-                    placeholder = Texts.SignupEmail.CODE_HINT,
+                    placeholder = stringResource(Res.string.signup_email_code_hint),
                     cornerRounded = 100,
                     backgroundColor = Colors.White,
                     isError = emailState.emailVerifyType == EmailVerifyType.NOT_VERIFIED,
@@ -163,10 +162,10 @@ fun InputEmailScreen(
 
             if (emailState.emailVerifyType == EmailVerifyType.NOT_VERIFIED) {
                 Spacer(modifier = Modifier.height(8.dp))
-                ErrorText(Texts.SignupEmail.CODE_INVALID)
+                ErrorText(stringResource(Res.string.signup_email_code_invalid))
             } else if (emailState.emailVerifyType == EmailVerifyType.VERIFIED){
                 Spacer(modifier = Modifier.height(8.dp))
-                ErrorText(Texts.SignupEmail.CODE_VALID, isNotError = true)
+                ErrorText(stringResource(Res.string.signup_email_code_valid), isNotError = true)
             }
         }
 

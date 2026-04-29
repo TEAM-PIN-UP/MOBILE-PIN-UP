@@ -32,7 +32,6 @@ import pinup.composeapp.generated.resources.*
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.text.font.FontWeight
 import com.pinup.placePinup.ui.component.TitleBar
-import com.pinup.placePinup.ui.theme.Texts
 
 @Composable
 fun SelectProfileImageScreen(
@@ -68,7 +67,7 @@ fun SelectProfileImageScreen(
         Spacer(modifier = Modifier.height(49.dp))
 
         Text(
-            text = if (profileImage.isEmpty()) Texts.SignupProfile.PROFILE_TITLE else Texts.SignupProfile.PROFILE_REGISTER,
+            text = if (profileImage.isEmpty()) stringResource(Res.string.signup_profile_title) else stringResource(Res.string.signup_profile_register),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -119,7 +118,7 @@ fun SelectProfileImageScreen(
 
         if (profileImage.isEmpty()) {
             PButton(
-                text = Texts.SignupProfile.PROFILE_SELECT,
+                text = stringResource(Res.string.signup_profile_select),
                 onClick = {
                     singleImagePicker.launch()
                 }

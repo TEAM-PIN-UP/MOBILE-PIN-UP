@@ -27,7 +27,6 @@ import com.pinup.placePinup.ui.component.PButton
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
@@ -129,7 +128,7 @@ fun ChangePasswordScreen(
         if(!isPasswordValid){
             Spacer(modifier = Modifier.height(8.dp))
 
-            ErrorText(Texts.SignupPassword.INVALID)
+            ErrorText(stringResource(Res.string.signup_password_invalid))
         }
 
         Spacer(modifier = Modifier.height(15.dp))
@@ -179,7 +178,7 @@ fun ChangePasswordScreen(
         if(!isPasswordMatched){
             Spacer(modifier = Modifier.height(8.dp))
 
-            ErrorText(Texts.SignupPassword.NOT_MATCH)
+            ErrorText(stringResource(Res.string.signup_password_not_match))
         }
 
         Spacer(modifier = Modifier.weight(1f))
