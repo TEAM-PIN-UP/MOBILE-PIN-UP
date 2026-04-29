@@ -13,7 +13,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.placePinup.domain.model.ReportType
 import com.pinup.placePinup.ui.component.PDialog
-import com.pinup.placePinup.ui.theme.Texts
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
 import rememberToastState
@@ -84,8 +83,8 @@ fun PinlogDetailRoute(
 
     if (isShowBlockUserDialog.value) {
         PDialog(
-            titleText = Texts.Report.getBlockUserDialogTitle(clickedTargetName),
-            descriptionText = Texts.Report.BLOCK_USER_DIALOG_CONTENT,
+            titleText = stringResource(Res.string.report_block_dialog_title, clickedTargetName),
+            descriptionText = stringResource(Res.string.report_block_dialog_content),
             leftButtonText = stringResource(Res.string.word_do_return),
             rightButtonText = stringResource(Res.string.word_do_block),
             onLeftButtonClick = {

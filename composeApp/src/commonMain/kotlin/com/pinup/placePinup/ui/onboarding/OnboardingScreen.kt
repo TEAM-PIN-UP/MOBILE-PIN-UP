@@ -18,12 +18,14 @@ import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_onboarding_logo
-import pinup.composeapp.generated.resources.splash_image
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun OnboardingScreen() {
+    val onboardingPrefix = stringResource(Res.string.onboarding_title_prefix)
+    val onboardingHighlight = stringResource(Res.string.onboarding_title_highlight)
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -56,7 +58,7 @@ fun OnboardingScreen() {
 
             Text(
                 modifier = Modifier,
-                text = Texts.Onboarding.ONBOARDING_TEXT,
+                text = Texts.Onboarding.getText(onboardingPrefix, onboardingHighlight),
                 style = Typography.H1
             )
         }

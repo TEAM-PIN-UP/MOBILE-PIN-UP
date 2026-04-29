@@ -58,6 +58,9 @@ fun LoginScreen(
     onIdChanged : (String) -> Unit = {},
     onPasswordChanged : (String) -> Unit = {},
 ) {
+    val onboardingPrefix = stringResource(Res.string.onboarding_title_prefix)
+    val onboardingHighlight = stringResource(Res.string.onboarding_title_highlight)
+    val onboardingLoginText = stringResource(Res.string.onboarding_login_text)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -69,7 +72,7 @@ fun LoginScreen(
 
         Text(
             modifier = Modifier,
-            text = Texts.Onboarding.ONBOARDING_LOGIN_TITLE,
+            text = Texts.Onboarding.getLoginTitle(onboardingPrefix, onboardingHighlight),
             style = Typography.D2
         )
 
@@ -77,7 +80,7 @@ fun LoginScreen(
 
         Text(
             modifier = Modifier,
-            text = Texts.Onboarding.ONBOARDING_LOGIN_TEXT,
+            text = onboardingLoginText,
             style = Typography.B1.copy(
                 fontWeight = FontWeight.Medium
             ),

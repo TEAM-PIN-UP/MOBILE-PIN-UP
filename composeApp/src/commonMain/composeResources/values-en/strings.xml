@@ -177,6 +177,11 @@
     <string name="find_password_sent_hint">Please log in with the temporary password sent to your email.</string>
     <string name="find_password_do_login">Log In</string>
 
+    <!-- Onboarding -->
+    <string name="onboarding_title_prefix">Our local archive, </string>
+    <string name="onboarding_title_highlight">PIN-UP</string>
+    <string name="onboarding_login_text">Log in and share your own space!</string>
+
     <!-- FindId -->
     <string name="find_id_find_id">Find ID</string>
     <string name="find_id_input_nickname">Enter Nickname</string>
@@ -251,4 +256,25 @@
     <string name="update_check_description">PIN-UP has been updated for a better experience! Update now to enjoy the latest features.</string>
     <string name="update_check_confirm">Update</string>
     <string name="update_check_optional_cancel">Later</string>
+
+    <!-- Report -->
+    <string name="report_type_comment">Report Comment</string>
+    <string name="report_type_pinlog">Report Pin Log</string>
+    <string name="report_type_user">Report Account</string>
+    <string name="report_description_comment">Please select a reason for reporting this comment.</string>
+    <string name="report_description_pinlog">Please select a reason for reporting this Pin Log.</string>
+    <string name="report_description_user">Please select a reason for reporting this account.</string>
+    <string name="report_reason_harmful_content">This content is abusive or harmful.</string>
+    <string name="report_reason_false_info">This content contains false information.</string>
+    <string name="report_reason_hate_speech">This content promotes hatred.</string>
+    <string name="report_reason_user_impersonation">This account is impersonating someone else.</string>
+    <string name="report_reason_user_harmful">This account contains harmful content.</string>
+    <string name="report_reason_etc">Other</string>
+    <string name="report_block_dialog_title">Block %s?</string>
+    <string name="report_block_dialog_content">Once blocked, you will no longer see this user\'s Pin Logs and comments, and you will not be able to interact with them.</string>
+    <string name="report_success_dialog_title">Report Submitted!</string>
+    <string name="report_success_dialog_content">The reported Pin Log will be reviewed within 24 hours. Accounts that receive repeated reports may be deleted.</string>
+    <string name="report_undo_block">Unblock</string>
+    <string name="report_undo_block_dialog_title">Unblock this user?</string>
+    <string name="report_undo_block_dialog_content">Once unblocked, you can send a Pin Buddy request, leave comments, and interact with this account again.</string>
 </resources>

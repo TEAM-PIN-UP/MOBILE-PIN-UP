@@ -60,7 +60,6 @@ import com.pinup.placePinup.ui.component.ProfileImageView
 import com.pinup.placePinup.ui.component.RoundedBox
 import com.pinup.placePinup.ui.component.bottomSheet.ReportBlockMenuBottomSheet
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -396,8 +395,8 @@ fun UserProfileScreen(
 
     if (isShowBlockUserDialog) {
         PDialog(
-            titleText = Texts.Report.getBlockUserDialogTitle(member.profile.nickname),
-            descriptionText = Texts.Report.BLOCK_USER_DIALOG_CONTENT,
+            titleText = stringResource(Res.string.report_block_dialog_title, member.profile.nickname),
+            descriptionText = stringResource(Res.string.report_block_dialog_content),
             leftButtonText = stringResource(Res.string.word_do_return),
             rightButtonText = stringResource(Res.string.word_do_block),
             onLeftButtonClick = {
@@ -412,8 +411,8 @@ fun UserProfileScreen(
 
     if (isShowUnBlockUserDialog) {
         PDialog(
-            titleText = Texts.Report.UNDO_BLOCK_DIALOG_TITLE,
-            descriptionText = Texts.Report.UNDO_BLOCK_DIALOG_CONTENT,
+            titleText = stringResource(Res.string.report_undo_block_dialog_title),
+            descriptionText = stringResource(Res.string.report_undo_block_dialog_content),
             leftButtonText = stringResource(Res.string.word_do_return),
             rightButtonText = stringResource(Res.string.word_do_release),
             onLeftButtonClick = {
@@ -532,7 +531,7 @@ private fun BlockedButton(
             Text(
                 modifier = Modifier
                     .padding(start = 6.dp),
-                text = Texts.Report.UNDO_BLOCK,
+                text = stringResource(Res.string.report_undo_block),
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),

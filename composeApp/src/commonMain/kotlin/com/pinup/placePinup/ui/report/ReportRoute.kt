@@ -10,7 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.placePinup.ui.component.PDialog
-import com.pinup.placePinup.ui.theme.Texts
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -40,8 +39,8 @@ fun ReportRoute(
 
     if (isShowReportDialog.value) {
         PDialog(
-            titleText = Texts.Report.REPORT_SUCCESS_DIALOG_TITLE,
-            descriptionText = Texts.Report.REPORT_SUCCESS_DIALOG_CONTENT,
+            titleText = stringResource(Res.string.report_success_dialog_title),
+            descriptionText = stringResource(Res.string.report_success_dialog_content),
             rightButtonText = stringResource(Res.string.word_do_return),
             onRightButtonClick = {
                 onBackPressed()

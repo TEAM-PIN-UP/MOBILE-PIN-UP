@@ -20,7 +20,6 @@ import com.pinup.placePinup.domain.model.ReportType
 import com.pinup.placePinup.domain.model.ReportType.*
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
@@ -34,9 +33,9 @@ fun ReportBlockMenuBottomSheet(
     onClickBlock: () -> Unit = {},
 ) {
     val reportText = when(reportType) {
-        COMMENT -> Texts.Report.COMMENT_REPORT
-        PINLOG -> Texts.Report.PINLOG_REPORT
-        USER -> Texts.Report.USER_REPORT
+        COMMENT -> stringResource(Res.string.report_type_comment)
+        PINLOG -> stringResource(Res.string.report_type_pinlog)
+        USER -> stringResource(Res.string.report_type_user)
     }
 
     Spacer(Modifier.height(40.dp))
