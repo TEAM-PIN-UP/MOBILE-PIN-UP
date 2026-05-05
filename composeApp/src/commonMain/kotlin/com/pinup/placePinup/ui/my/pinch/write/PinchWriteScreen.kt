@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.my.pinch.write
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -68,7 +69,6 @@ import com.pinup.placePinup.ui.component.RoundedBox
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.dragModifier
 import com.pinup.placePinup.util.rememberDragAndDropListState
@@ -86,6 +86,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_map_off
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -174,7 +175,7 @@ fun PinchWriteScreen(
             .padding(horizontal = 20.dp)
     ) {
         TitleBar(
-            title = Texts.Pinch.PINCH_WRITE,
+            title = stringResource(Res.string.pinch_write),
             onLeftButtonClick = onBackPressed,
         )
 
@@ -210,7 +211,7 @@ fun PinchWriteScreen(
                                 focusRequester.requestFocus()
                                 //keyboard?.show()
                             },
-                        text = Texts.Pinch.TITLE_HINT,
+                        text = stringResource(Res.string.pinch_title_hint),
                         style = Typography.H1.copy(fontWeight = FontWeight.SemiBold),
                         color = Colors.Gray500,
                         maxLines = 1,
@@ -233,7 +234,7 @@ fun PinchWriteScreen(
         RoundedTextField(
             text = description,
             onValueChange = onDescriptionChanged,
-            placeholder = Texts.Pinch.DESCRIPTION_HINT,
+            placeholder = stringResource(Res.string.pinch_description_hint),
             textStyle = Typography.B2.copy(
                 fontWeight = FontWeight.Medium
             ),
@@ -272,7 +273,7 @@ fun PinchWriteScreen(
             Spacer(modifier = Modifier.width(9.dp))
 
             Text(
-                text = Texts.Pinch.PLACE_LIST,
+                text = stringResource(Res.string.pinch_place_list),
                 style = Typography.T1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -366,7 +367,7 @@ fun PinchWriteScreen(
                             ) {
                                 Text(
                                     modifier = Modifier.padding(vertical = 7.dp, horizontal = 17.dp),
-                                    text = Texts.Word.DELETE,
+                                    text = stringResource(Res.string.word_delete),
                                     color = Colors.White,
                                     style = Typography.L3.copy(fontWeight = FontWeight.SemiBold),
                                     textAlign = TextAlign.Center
@@ -443,7 +444,7 @@ fun PinchWriteScreen(
             PButton(
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                text = Texts.Pinch.CREATE_PINCH,
+                text = stringResource(Res.string.pinch_create),
                 onClick = {
                     registerPints()
                 },

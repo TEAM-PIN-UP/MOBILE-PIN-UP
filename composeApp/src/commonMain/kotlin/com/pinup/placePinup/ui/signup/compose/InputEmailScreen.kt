@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.signup.compose
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +29,6 @@ import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.signup.EmailState
 import com.pinup.placePinup.ui.signup.EmailVerifyType
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -53,7 +55,7 @@ fun InputEmailScreen(
         Spacer(modifier = Modifier.height(49.dp))
 
         Text(
-            text = Texts.SignupEmail.TITLE,
+            text = stringResource(Res.string.signup_email_title),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -63,7 +65,7 @@ fun InputEmailScreen(
         Spacer(modifier = Modifier.height(31.dp))
 
         Text(
-            text = Texts.Word.EMAIL,
+            text = stringResource(Res.string.word_email),
             style = Typography.B1.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -78,7 +80,7 @@ fun InputEmailScreen(
                     .fillMaxWidth(),
                 text = emailState.email,
                 onValueChange = onEmailChanged,
-                placeholder = Texts.SignupEmail.HINT,
+                placeholder = stringResource(Res.string.signup_email_hint),
                 cornerRounded = 100,
                 backgroundColor = Colors.White,
                 isError = !emailState.isEmailValid || emailState.isEmailUsed,
@@ -104,7 +106,7 @@ fun InputEmailScreen(
                             modifier = Modifier
                                 .padding(horizontal = 12.dp, vertical = 6.dp)
                                 .align(Alignment.Center),
-                            text = Texts.Word.VERIFY,
+                            text = stringResource(Res.string.word_verify),
                             style = Typography.L3.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
@@ -120,9 +122,9 @@ fun InputEmailScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         if (!emailState.isEmailValid) {
-            ErrorText(Texts.SignupEmail.INVALID)
+            ErrorText(stringResource(Res.string.signup_email_invalid))
         } else if (emailState.isEmailUsed) {
-            ErrorText(Texts.SignupEmail.DUPLICATE)
+            ErrorText(stringResource(Res.string.signup_email_duplicate))
         }
 
         if (emailState.isClickedVerify) {
@@ -132,7 +134,7 @@ fun InputEmailScreen(
                         .fillMaxWidth(),
                     text = emailState.verificationCode,
                     onValueChange = onCodeChanged,
-                    placeholder = Texts.SignupEmail.CODE_HINT,
+                    placeholder = stringResource(Res.string.signup_email_code_hint),
                     cornerRounded = 100,
                     backgroundColor = Colors.White,
                     isError = emailState.emailVerifyType == EmailVerifyType.NOT_VERIFIED,
@@ -160,10 +162,10 @@ fun InputEmailScreen(
 
             if (emailState.emailVerifyType == EmailVerifyType.NOT_VERIFIED) {
                 Spacer(modifier = Modifier.height(8.dp))
-                ErrorText(Texts.SignupEmail.CODE_INVALID)
+                ErrorText(stringResource(Res.string.signup_email_code_invalid))
             } else if (emailState.emailVerifyType == EmailVerifyType.VERIFIED){
                 Spacer(modifier = Modifier.height(8.dp))
-                ErrorText(Texts.SignupEmail.CODE_VALID, isNotError = true)
+                ErrorText(stringResource(Res.string.signup_email_code_valid), isNotError = true)
             }
         }
 
@@ -172,7 +174,7 @@ fun InputEmailScreen(
         PButton(
             modifier = Modifier
                 .padding(bottom = 28.dp),
-            text = Texts.Word.CONFIRM,
+            text = stringResource(Res.string.word_confirm),
             onClick = {
                 onMovePassword()
             },

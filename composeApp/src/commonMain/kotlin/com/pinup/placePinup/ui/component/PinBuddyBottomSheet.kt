@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.component
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,7 +15,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -32,7 +34,7 @@ fun PinBuddyBottomSheet(
                 .clickableWithNoRipple {
                     onClickRequestCancel()
                 },
-            text = Texts.PROFILE.CANCEL_PIN_BUDDY_REQUEST,
+            text = stringResource(Res.string.profile_cancel_pin_buddy_request),
             color = Colors.Negative,
             style = Typography.T2.copy(
                 fontWeight = FontWeight.Medium
@@ -47,7 +49,7 @@ fun PinBuddyBottomSheet(
                 .clickableWithNoRipple {
                     onClickClose()
                 },
-            text = Texts.Word.CLOSE,
+            text = stringResource(Res.string.word_close),
             color = Colors.Gray500,
             style = Typography.T2.copy(
                 fontWeight = FontWeight.Medium

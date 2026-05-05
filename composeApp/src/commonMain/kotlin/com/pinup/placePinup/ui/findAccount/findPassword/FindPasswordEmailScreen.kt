@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.findAccount.findPassword
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,7 +20,6 @@ import com.pinup.placePinup.ui.component.PButton
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -41,7 +43,7 @@ fun FindPasswordEmailScreen(
         Spacer(modifier = Modifier.height(49.dp))
 
         Text(
-            text = Texts.FindPassword.FIND_PASSWORD,
+            text = stringResource(Res.string.find_password_find_password),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -51,7 +53,7 @@ fun FindPasswordEmailScreen(
         Spacer(modifier = Modifier.height(13.dp))
 
         Text(
-            text = Texts.FindPassword.FIND_PASSWORD,
+            text = stringResource(Res.string.find_password_find_password),
             style = Typography.B2.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -61,7 +63,7 @@ fun FindPasswordEmailScreen(
         Spacer(modifier = Modifier.height(38.dp))
 
         Text(
-            text = Texts.Word.EMAIL,
+            text = stringResource(Res.string.word_email),
             style = Typography.B1.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -75,7 +77,7 @@ fun FindPasswordEmailScreen(
                 .fillMaxWidth(),
             text = email,
             onValueChange = onEmailChanged,
-            placeholder = Texts.SignupEmail.HINT,
+            placeholder = stringResource(Res.string.signup_email_hint),
             cornerRounded = 100,
             backgroundColor = Colors.White,
             isError = isEmailValid,
@@ -83,7 +85,7 @@ fun FindPasswordEmailScreen(
 
         if (isEmailValid) {
             Spacer(modifier = Modifier.height(8.dp))
-            ErrorText(Texts.SignupEmail.INVALID)
+            ErrorText(stringResource(Res.string.signup_email_invalid))
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -91,7 +93,7 @@ fun FindPasswordEmailScreen(
         PButton(
             modifier = Modifier
                 .padding(bottom = 28.dp),
-            text = Texts.FindPassword.SEND_PASSWORD,
+            text = stringResource(Res.string.find_password_send_password),
             onClick = {
                 onClickSendPassword()
             },

@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.reviewwrite.compose
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -49,7 +51,6 @@ import com.pinup.placePinup.ui.component.ReviewTextField
 import com.pinup.placePinup.ui.component.RoundedBox
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
@@ -141,7 +142,7 @@ fun WriteReviewScreen(
         TitleBar(
             modifier = Modifier
                 .padding(start = 20.dp),
-            title = Texts.PinLog.WRITE_PINLOG,
+            title = stringResource(Res.string.pin_log_write_pinlog),
             onLeftButtonClick = onBackPressed
         )
 
@@ -198,7 +199,7 @@ fun WriteReviewScreen(
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = Texts.Word.PINLOG,
+                            text = stringResource(Res.string.word_pinlog),
                             style = Typography.L1.copy(
                                 fontWeight = FontWeight.Medium
                             ),
@@ -235,7 +236,7 @@ fun WriteReviewScreen(
                         .padding(start = 20.dp)
                 ) {
                     Text(
-                        text = Texts.PinLog.IMAGE_UPLOAD,
+                        text = stringResource(Res.string.pin_log_image_upload),
                         style = Typography.B2.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -336,7 +337,7 @@ fun WriteReviewScreen(
                         .fillMaxWidth()
                 ) {
                     Text(
-                        text = Texts.Word.RATING,
+                        text = stringResource(Res.string.word_rating),
                         style = Typography.B2.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -370,7 +371,7 @@ fun WriteReviewScreen(
                         .padding(horizontal = 20.dp)
                 ) {
                     Text(
-                        text = Texts.PinLog.WRITE_PINLOG_TITLE,
+                        text = stringResource(Res.string.pin_log_write_pinlog_title),
                         style = Typography.B2.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -385,7 +386,7 @@ fun WriteReviewScreen(
                         textStyle = Typography.B3.copy(
                             fontWeight = FontWeight.Medium
                         ),
-                        placeholder = Texts.PinLog.PINLOG_HINT,
+                        placeholder = stringResource(Res.string.pin_log_hint),
                         onValueChange = onValueChange,
                         maxLength = maxLength,
                         keyboardOptions = KeyboardOptions(
@@ -398,7 +399,7 @@ fun WriteReviewScreen(
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = if (reviewText.length < minLength) Texts.PinLog.PINLOG_MORE_LENGTH else Texts.PinLog.PINLOG_TOO_MUCH_LENGTH,
+                            text = if (reviewText.length < minLength) stringResource(Res.string.pin_log_more_length) else stringResource(Res.string.pin_log_too_much_length),
                             style = Typography.L1.copy(
                                 fontWeight = FontWeight.Medium
                             ),
@@ -419,7 +420,7 @@ fun WriteReviewScreen(
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
                     .padding(top = 8.dp, bottom = 14.dp),
-                text = Texts.PinLog.REGISTER_PINLOG,
+                text = stringResource(Res.string.pin_log_register_pinlog),
                 onClick = {
                     onRegisterClick()
                 },

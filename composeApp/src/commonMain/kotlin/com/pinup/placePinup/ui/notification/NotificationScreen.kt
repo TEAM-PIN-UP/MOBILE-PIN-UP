@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.notification
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,10 +34,10 @@ import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.component.NotificationView
 import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_back
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -92,7 +93,7 @@ fun NotificationScreen(
                         .clickableWithNoRipple {
                             onClickAllReadNotification()
                         },
-                    text = if (unReadCount == 0) Texts.Notification.ALL_READ else "안읽음 $unReadCount",
+                    text = if (unReadCount == 0) stringResource(Res.string.notification_all_read) else stringResource(Res.string.notification_unread, unReadCount),
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.Medium
                     ),
@@ -108,7 +109,7 @@ fun NotificationScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = Texts.Word.NOTIFICATION,
+                    text = stringResource(Res.string.word_notification),
                     style = Typography.B1.copy(
                         fontWeight = FontWeight.SemiBold
                     ),

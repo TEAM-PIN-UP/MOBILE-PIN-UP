@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.findAccount.findPassword
+import org.jetbrains.compose.resources.stringResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -16,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.ui.component.PButton
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -38,7 +40,7 @@ fun SentPasswordScreen(
         Spacer(modifier = Modifier.height(44.dp))
 
         Text(
-            text = Texts.FindPassword.SENT_PASSWORD_TITLE,
+            text = stringResource(Res.string.find_password_sent_title),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -48,7 +50,7 @@ fun SentPasswordScreen(
         Spacer(modifier = Modifier.height(18.dp))
 
         Text(
-            text = Texts.FindPassword.SENT_PASSWORD_HINT,
+            text = stringResource(Res.string.find_password_sent_hint),
             style = Typography.B2.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -73,7 +75,7 @@ fun SentPasswordScreen(
         PButton(
             modifier = Modifier
                 .padding(bottom = 28.dp),
-            text = Texts.FindPassword.DO_LOGIN,
+            text = stringResource(Res.string.find_password_do_login),
             onClick = {
                 onClickLogin()
             },

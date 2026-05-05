@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.findAccount.changePassword
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,10 +27,10 @@ import com.pinup.placePinup.ui.component.PButton
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_password_show_enable
 import pinup.composeapp.generated.resources.ic_password_show_unable
 
@@ -61,7 +62,7 @@ fun ChangePasswordScreen(
         Spacer(modifier = Modifier.height(44.dp))
 
         Text(
-            text = Texts.FindPassword.CHANGE_PASSWORD,
+            text = stringResource(Res.string.find_password_change_password),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -71,7 +72,7 @@ fun ChangePasswordScreen(
         Spacer(modifier = Modifier.height(18.dp))
 
         Text(
-            text = Texts.FindPassword.CHANGE_PASSWORD_HINT,
+            text = stringResource(Res.string.find_password_change_password_hint),
             style = Typography.B2.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -81,7 +82,7 @@ fun ChangePasswordScreen(
         Spacer(modifier = Modifier.height(38.dp))
 
         Text(
-            text = Texts.Word.WORD_PASSWORD,
+            text = stringResource(Res.string.word_password),
             style = Typography.B1.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -99,7 +100,7 @@ fun ChangePasswordScreen(
                 },
                 cornerRounded = 100,
                 visualTransformation = if(isShowFirstPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                placeholder = Texts.FindPassword.PASSWORD_HINT,
+                placeholder = stringResource(Res.string.find_password_hint),
                 textStyle = Typography.B3,
                 isError = !isPasswordValid,
             )
@@ -127,13 +128,13 @@ fun ChangePasswordScreen(
         if(!isPasswordValid){
             Spacer(modifier = Modifier.height(8.dp))
 
-            ErrorText(Texts.SignupPassword.INVALID)
+            ErrorText(stringResource(Res.string.signup_password_invalid))
         }
 
         Spacer(modifier = Modifier.height(15.dp))
 
         Text(
-            text = Texts.FindPassword.PASSWORD_AGAIN_HINT,
+            text = stringResource(Res.string.find_password_again_hint),
             style = Typography.B1.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -177,13 +178,13 @@ fun ChangePasswordScreen(
         if(!isPasswordMatched){
             Spacer(modifier = Modifier.height(8.dp))
 
-            ErrorText(Texts.SignupPassword.NOT_MATCH)
+            ErrorText(stringResource(Res.string.signup_password_not_match))
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
         PButton(
-            text = Texts.FindPassword.CHANGE_PASSWORD,
+            text = stringResource(Res.string.find_password_change_password),
             isEnable = isPasswordValid && isPasswordMatched && password.isNotEmpty() && passwordAgain.isNotEmpty(),
             onClick = {
                 onClickConfirm()

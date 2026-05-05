@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Word -->
+    <string name="word_start">Get Started</string>
+    <string name="word_id">ID</string>
+    <string name="word_password">Password</string>
+    <string name="word_login">Log In</string>
+    <string name="word_next">Next</string>
+    <string name="word_skip">Skip</string>
+    <string name="word_do_go">Continue</string>
+    <string name="word_email">Email</string>
+    <string name="word_confirm">Confirm</string>
+    <string name="word_do_confirm">Confirm</string>
+    <string name="word_verify">Verify</string>
+    <string name="word_pin_map">Pin Map</string>
+    <string name="word_pinlog">Pin Log</string>
+    <string name="word_feed">Feed</string>
+    <string name="word_article">Article</string>
+    <string name="word_my">My</string>
+    <string name="word_rating">Rating</string>
+    <string name="word_do_return">Go Back</string>
+    <string name="word_delete">Delete</string>
+    <string name="word_do_delete">Delete</string>
+    <string name="word_comment">Comment</string>
+    <string name="word_do_reply_comment">Reply</string>
+    <string name="word_do_register">Register</string>
+    <string name="word_see_more">See More</string>
+    <string name="word_pin_buddy">Pin Buddy</string>
+    <string name="word_pinch">Pints</string>
+    <string name="word_scrap">Save</string>
+    <string name="word_accept">Accept</string>
+    <string name="word_refuse">Decline</string>
+    <string name="word_close">Close</string>
+    <string name="word_setting">Settings</string>
+    <string name="word_etc">Other</string>
+    <string name="word_complete">Done</string>
+    <string name="word_nickname">Nickname</string>
+    <string name="word_intro">Bio</string>
+    <string name="word_unregister">Delete Account</string>
+    <string name="word_sign_up">Sign Up</string>
+    <string name="word_do_block">Block</string>
+    <string name="word_do_release">Unblock</string>
+    <string name="word_notification">Notifications</string>
+
+    <!-- Setting -->
+    <string name="setting_profile_setting_title">Account Settings</string>
+    <string name="setting_profile_setting">Edit Profile</string>
+    <string name="setting_profile_info">Account Info</string>
+    <string name="setting_change_password">Change Password</string>
+    <string name="setting_cs_title">Customer Support</string>
+    <string name="setting_qa">Contact Us</string>
+    <string name="setting_suggest">Suggestions</string>
+    <string name="setting_service_term">Terms of Service</string>
+    <string name="setting_personal_term">Privacy Policy</string>
+    <string name="setting_version">App Version</string>
+    <string name="setting_logout">Log Out</string>
+    <string name="setting_unregister">Delete Account</string>
+    <string name="setting_hint_bio_change">Introduce yourself in 60 characters or less.</string>
+    <string name="setting_hint_nickname_change">*Nickname can be changed every 30 days.</string>
+    <string name="setting_logout_dialog_title">Are you sure you want to log out?</string>
+    <string name="setting_logout_dialog_description">We'll miss you 😥\nCome back anytime!</string>
+    <string name="setting_unregister_title">Are you sure you want\nto leave PIN-UP?</string>
+    <string name="setting_unregister_description">Deleted information cannot be recovered after withdrawal.</string>
+    <string name="setting_unregister_check_comment">I have read all the information above and agree.</string>
+    <string name="setting_unregister_dialog_title">Are you sure you want to delete your account?</string>
+    <string name="setting_unregister_dialog_description">Once deleted, you will no longer\nbe able to access your\nprevious service history.</string>
+    <string name="setting_unregister_complete">Thank you for using PIN-UP :)\nSee you again!</string>
+
+    <!-- PinLog -->
+    <string name="pin_log_write_pinlog">Write Pin Log</string>
+    <string name="pin_log_write_pinlog_title">Write a Pin Log</string>
+    <string name="pin_log_register_pinlog">Register Pin Log</string>
+    <string name="pin_log_write_title">Which place would you like\nto write a Pin Log about?</string>
+    <string name="pin_log_write_description">Your Pin Log is only visible to your Pin Buddies</string>
+    <string name="pin_log_search_hint">Search for a place</string>
+    <string name="pin_log_search_result">Search Results</string>
+    <string name="pin_log_select_date_hint">Select a date</string>
+    <string name="pin_log_image_upload">Upload Photos</string>
+    <string name="pin_log_hint">Your Pin Log is only visible to your Pin Buddies!\n\n*Note: Content containing profanity, slander, or defamation may be deleted.</string>
+    <string name="pin_log_more_length">Please write at least 10 characters.</string>
+    <string name="pin_log_too_much_length">You have exceeded the maximum character limit.</string>
+    <string name="pin_log_dialog_title">Pin Log Created!</string>
+    <string name="pin_log_dialog_body">Would you like to check\nyour new Pin Log?</string>
+    <string name="pin_log_detail_title">Pin Log Details</string>
+    <string name="pin_log_comment_hint">Write a comment</string>
+    <string name="pin_log_comment_reply_hint">Write a reply</string>
+    <string name="pin_log_edit_pinlog">Edit Pin Log</string>
+    <string name="pin_log_delete_pinlog">Delete Pin Log</string>
+    <string name="pin_log_edit_comment">Edit Comment</string>
+    <string name="pin_log_delete_comment">Delete Comment</string>
+    <string name="pin_log_delete_dialog_title">Delete this Pin Log?</string>
+    <string name="pin_log_delete_dialog_description">Deleted Pin Logs cannot be recovered.</string>
+    <string name="pin_log_delete_comment_dialog_title">Delete this comment?</string>
+    <string name="pin_log_delete_comment_dialog_description">Deleted comments cannot be recovered.</string>
+    <string name="pin_log_select_date_prefix">When did you visit\n</string>
+    <string name="pin_log_select_date_suffix">?</string>
+
+    <!-- Profile -->
+    <string name="profile_my">MY</string>
+    <string name="profile_average_star_rating">Avg. Rating</string>
+    <string name="profile_share_profile">Share Profile</string>
+    <string name="profile_add_pin_buddy">Add Pin Buddy</string>
+    <string name="profile_accept_pin_buddy">Accept Pin Buddy</string>
+    <string name="profile_reject_pin_buddy">Decline Pin Buddy</string>
+    <string name="profile_receive_request">Received</string>
+    <string name="profile_sent_request">Sent</string>
+    <string name="profile_cancel_sent_request">Cancel Request</string>
+    <string name="profile_dialog_delete_pin_buddy_title">Remove this Pin Buddy?</string>
+    <string name="profile_dialog_delete_pin_buddy_description">You can always send a new Pin Buddy\nrequest to them later.</string>
+    <string name="profile_empty_pin_buddy">No Pin Buddies yet!\nWhy not send a request first?</string>
+    <string name="profile_empty_receive_pin_buddy">No Pin Buddy requests received.\nRequests will appear here when they arrive!</string>
+    <string name="profile_empty_sent_pin_buddy">No sent requests.\nFind a Pin Buddy with similar tastes!</string>
+    <string name="profile_empty_my_pinlog">No Pin Logs yet!\nPin up your favorite places :)</string>
+    <string name="profile_empty_user_pinlog">This Pin Buddy hasn't written any Pin Logs!\nCheck back soon.</string>
+    <string name="profile_search_result">Search Results</string>
+    <string name="profile_already_request_pin_buddy">Request Pending</string>
+    <string name="profile_request_pin_buddy">Add Pin Buddy</string>
+    <string name="profile_cancel_pin_buddy_request">Cancel Pin Buddy Request</string>
+    <string name="profile_remove_pin_buddy_dialog_title">Remove this Pin Buddy?</string>
+    <string name="profile_remove_pin_buddy_dialog_description">You can always send a new Pin Buddy\nrequest to them later.</string>
+    <string name="profile_rock_profile">Send a Pin Buddy request\nto see their Pin Logs!</string>
+    <string name="profile_write_first_pinlog">Write Your First Pin Log</string>
+    <string name="profile_empty_scrap">No saved places yet!\nBrowse Pin Logs to find places you love.</string>
+    <string name="profile_go_pinlog">Go to Pin Logs</string>
+    <string name="profile_empty_pinch">Create %1$s's very own Pints course.</string>
+    <string name="profile_empty_user_pints">No Pints written\nyet!</string>
+    <string name="profile_go_pinch_create">Create Pints</string>
+    <string name="profile_pick_library">Choose from Library</string>
+    <string name="profile_delete_profile_image">Delete Profile Image</string>
+
+    <!-- PinMap -->
+    <string name="pin_map_search_button">Search this area</string>
+    <string name="pin_map_search_hint">Search places or locations</string>
+    <string name="pin_map_empty_pinlog">No Pin Logs yet!\nPin up your favorite places :)</string>
+    <string name="pin_map_search_result">Search Results</string>
+    <string name="pin_map_go_article">Go to Articles</string>
+
+    <!-- Feed -->
+    <string name="feed_recent_search">Recent Searches</string>
+    <string name="feed_empty_feed">Your Pin Buddies haven't posted any Pin Logs yet!</string>
+
+    <!-- Article -->
+    <string name="article_title">PIN-UP Articles</string>
+    <string name="article_recommend">Discover more courses\ncurated by PIN-UP editors.</string>
+
+    <!-- Pinch -->
+    <string name="pinch_write">Write Pints</string>
+    <string name="pinch_detail">Pints Details</string>
+    <string name="pinch_title_hint">Enter a title</string>
+    <string name="pinch_description_hint">Describe your Pints (0/120)</string>
+    <string name="pinch_create">Create Pints</string>
+    <string name="pinch_create_my">Create My Pints</string>
+    <string name="pinch_place_list">Place List</string>
+    <string name="pinch_edit">Edit Pints</string>
+    <string name="pinch_delete">Delete Pints</string>
+    <string name="pinch_no_pinlog_dialog_title">No Pin Log written for this place.</string>
+    <string name="pinch_no_pinlog_dialog_content">Only places with a Pin Log can be added to Pints.\nWould you like to write a Pin Log?</string>
+    <string name="pinch_delete_dialog_title">Are you sure you want to delete this Pints?</string>
+    <string name="pinch_delete_dialog_content">This action cannot be undone.\nDelete anyway?</string>
+    <string name="pinch_write_complete_dialog_title">My Pints Created!</string>
+    <string name="pinch_write_complete_dialog_content">Would you like to check\nyour new Pints?</string>
+
+    <!-- Login -->
+    <string name="login_id_find">Find ID</string>
+    <string name="login_sns">Social Login</string>
+    <string name="login_incorrect_id">Incorrect ID or password.</string>
+
+    <!-- FindPassword -->
+    <string name="find_password_hint">Password must be 8–20 characters and include a special character.</string>
+    <string name="find_password_change_password">Change Password</string>
+    <string name="find_password_change_password_hint">You must change your password when logging in with a temporary password.</string>
+    <string name="find_password_send_password">Send Password</string>
+    <string name="find_password_again_hint">Confirm Password</string>
+    <string name="find_password_find_password">Find Password</string>
+    <string name="find_password_find_password_hint">A temporary password will be sent to the entered address.</string>
+    <string name="find_password_sent_title">Email Sent!</string>
+    <string name="find_password_sent_hint">Please log in with the temporary password sent to your email.</string>
+    <string name="find_password_do_login">Log In</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_prefix">Our local archive, </string>
+    <string name="onboarding_title_highlight">PIN-UP</string>
+    <string name="onboarding_login_text">Log in and share your own space!</string>
+
+    <!-- FindId -->
+    <string name="find_id_find_id">Find ID</string>
+    <string name="find_id_input_nickname">Enter Nickname</string>
+    <string name="find_id_by_email">Find by Email</string>
+    <string name="find_id_by_nickname">Find by Nickname</string>
+    <string name="find_id_result">An account with this email exists.\nWould you like to change your password?</string>
+    <string name="find_id_not_exist_nickname">This nickname does not exist.</string>
+    <string name="find_id_nick_name_title_prefix">Hello,\n</string>
+    <string name="find_id_nick_name_title_suffix">!</string>
+
+    <!-- SignupEmail -->
+    <string name="signup_email_title">Please enter the email\nyou'll use to log in.</string>
+    <string name="signup_email_hint">Enter your email address.</string>
+    <string name="signup_email_invalid">This is not a valid email address.</string>
+    <string name="signup_email_duplicate">An account with this email already exists.\nPlease check your existing account.</string>
+    <string name="signup_email_code_hint">Enter the verification code.</string>
+    <string name="signup_email_code_invalid">The verification code does not match.</string>
+    <string name="signup_email_code_valid">The verification code matches.</string>
+    <string name="signup_email_send_code">A verification code has been sent.</string>
+
+    <!-- SignupPassword -->
+    <string name="signup_password_title">Please enter the password\nyou'd like to use.</string>
+    <string name="signup_password_hint">Password (8+ characters + special character)</string>
+    <string name="signup_password_invalid">Password must be 8–20 characters and include a special character.</string>
+    <string name="signup_password_confirm">Confirm Password</string>
+    <string name="signup_password_not_match">The passwords do not match.</string>
+
+    <!-- SignupTerms -->
+    <string name="signup_terms_title">Please agree to the\nterms of service.</string>
+    <string name="signup_terms_all_agree">Agree to all terms</string>
+    <string name="signup_terms_service_agree">Terms of Service (Required)</string>
+    <string name="signup_terms_private_info_agree">Personal Information Collection &amp; Use (Required)</string>
+    <string name="signup_terms_location_info_agree">Location Information Use (Required)</string>
+    <string name="signup_terms_marketing_agree">Promotions &amp; Marketing (Optional)</string>
+
+    <!-- SignupNickname -->
+    <string name="signup_nickname_title">Nice to meet you!\nLet's create your nickname.</string>
+    <string name="signup_nickname_input">Enter Nickname</string>
+    <string name="signup_nickname_hint">You can change your nickname anytime later.</string>
+    <string name="signup_nickname_condition">Korean and English only</string>
+    <string name="signup_nickname_duplicate">This nickname is already taken.</string>
+
+    <!-- SignupProfile -->
+    <string name="signup_profile_title">Please choose an image\nfor your profile.</string>
+    <string name="signup_profile_register">Your awesome profile\nphoto has been registered!</string>
+    <string name="signup_profile_select">Select Photo</string>
+
+    <!-- Block -->
+    <string name="block_user_block">Block Account</string>
+
+    <!-- Toast -->
+    <string name="toast_delete_pinlog">The Pin Log has been deleted.</string>
+    <string name="toast_delete_pin_buddy">The Pin Buddy has been removed.</string>
+    <string name="toast_accept_pin_buddy">Pin Buddy request accepted.</string>
+    <string name="toast_refuse_pin_buddy">Pin Buddy request declined.</string>
+    <string name="toast_cancel_pin_buddy_request">Pin Buddy request canceled.</string>
+    <string name="toast_empty_pinlog">No Pin Log has been written for this place.</string>
+    <string name="toast_block_success">%s has been blocked.</string>
+    <string name="toast_already_block_user">This user is already blocked.</string>
+
+    <!-- Notification -->
+    <string name="notification_all_read">All Read</string>
+    <string name="notification_unread">Unread %d</string>
+
+    <!-- Kakao -->
+    <string name="kakao_profile_share_title">%s's PIN-UP Account</string>
+    <string name="kakao_profile_share_content">Check out %s's pins on PIN-UP.</string>
+    <string name="kakao_profile_share_button">Go to PIN-UP</string>
+
+    <!-- Update -->
+    <string name="update_check_title">Update Available</string>
+    <string name="update_check_description">PIN-UP has been updated for a better experience! Update now to enjoy the latest features.</string>
+    <string name="update_check_confirm">Update</string>
+    <string name="update_check_optional_cancel">Later</string>
+
+    <!-- Sort -->
+    <string name="sort_near">Nearest</string>
+    <string name="sort_latest">Latest</string>
+    <string name="sort_star_high">Highest Rating</string>
+    <string name="sort_star_low">Lowest Rating</string>
+
+    <!-- Category -->
+    <string name="category_all">All</string>
+    <string name="category_restaurant">Restaurant</string>
+    <string name="category_cafe">Cafe</string>
+
+    <!-- PintsCategory -->
+    <string name="pints_category_all">All</string>
+    <string name="pints_category_jeju">Jeju</string>
+    <string name="pints_category_seoul">Seoul</string>
+    <string name="pints_category_none">None</string>
+
+    <!-- Report -->
+    <string name="report_type_comment">Report Comment</string>
+    <string name="report_type_pinlog">Report Pin Log</string>
+    <string name="report_type_user">Report Account</string>
+    <string name="report_description_comment">Please select a reason for reporting this comment.</string>
+    <string name="report_description_pinlog">Please select a reason for reporting this Pin Log.</string>
+    <string name="report_description_user">Please select a reason for reporting this account.</string>
+    <string name="report_reason_harmful_content">This content is abusive or harmful.</string>
+    <string name="report_reason_false_info">This content contains false information.</string>
+    <string name="report_reason_hate_speech">This content promotes hatred.</string>
+    <string name="report_reason_user_impersonation">This account is impersonating someone else.</string>
+    <string name="report_reason_user_harmful">This account contains harmful content.</string>
+    <string name="report_reason_etc">Other</string>
+    <string name="report_block_dialog_title">Block %s?</string>
+    <string name="report_block_dialog_content">Once blocked, you will no longer see this user\'s Pin Logs and comments, and you will not be able to interact with them.</string>
+    <string name="report_success_dialog_title">Report Submitted!</string>
+    <string name="report_success_dialog_content">The reported Pin Log will be reviewed within 24 hours. Accounts that receive repeated reports may be deleted.</string>
+    <string name="report_undo_block">Unblock</string>
+    <string name="report_undo_block_dialog_title">Unblock this user?</string>
+    <string name="report_undo_block_dialog_content">Once unblocked, you can send a Pin Buddy request, leave comments, and interact with this account again.</string>
+</resources>

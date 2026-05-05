@@ -2,19 +2,21 @@ package com.pinup.placePinup.ui.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.DialogProperties
-import com.pinup.placePinup.ui.theme.Texts
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun ForcedCheckUpdateDialog(
-    title: String = Texts.Update.CHECK_UPDATE_TITLE,
-    description: String = Texts.Update.CHECK_UPDATE_DESCRIPTION,
+    title: String,
+    description: String,
     onConfirm: () -> Unit,
 ) {
     PDialog(
-        titleText = title,
-        descriptionText = description,
-        rightButtonText = Texts.Update.CHECK_UPDATE_CONFIRM,
+        titleText = title.ifEmpty { stringResource(Res.string.update_check_title) },
+        descriptionText = description.ifEmpty { stringResource(Res.string.update_check_description) },
+        rightButtonText = stringResource(Res.string.update_check_confirm),
         onRightButtonClick = onConfirm,
         properties = DialogProperties(
             usePlatformDefaultWidth = false,
@@ -26,17 +28,17 @@ fun ForcedCheckUpdateDialog(
 
 @Composable
 fun OptionalCheckUpdateDialog(
-    title: String = Texts.Update.CHECK_UPDATE_TITLE,
-    description: String = Texts.Update.CHECK_UPDATE_DESCRIPTION,
+    title: String,
+    description: String,
     onConfirm: () -> Unit,
     onRemindLater: () -> Unit,
     onDismiss: () -> Unit,
 ) {
     PDialog(
-        titleText = title,
-        descriptionText = description,
-        leftButtonText = Texts.Update.CHECK_UPDATE_OPTIONAL_CANCEL,
-        rightButtonText = Texts.Update.CHECK_UPDATE_CONFIRM,
+        titleText = title.ifEmpty { stringResource(Res.string.update_check_title) },
+        descriptionText = description.ifEmpty { stringResource(Res.string.update_check_description) },
+        leftButtonText = stringResource(Res.string.update_check_optional_cancel),
+        rightButtonText = stringResource(Res.string.update_check_confirm),
         onDismissRequest = onDismiss,
         onLeftButtonClick = onRemindLater,
         onRightButtonClick = onConfirm,
@@ -50,6 +52,8 @@ fun OptionalCheckUpdateDialog(
 @Composable
 fun ForcedCheckUpdateDialogPreview() {
     ForcedCheckUpdateDialog(
+        title = "",
+        description = "",
         onConfirm = {}
     )
 }
@@ -58,6 +62,8 @@ fun ForcedCheckUpdateDialogPreview() {
 @Composable
 fun OptionalCheckUpdateDialogPreview() {
     OptionalCheckUpdateDialog(
+        title = "",
+        description = "",
         onConfirm = {},
         onDismiss = {},
         onRemindLater = {}

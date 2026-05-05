@@ -1,7 +1,9 @@
 package com.pinup.placePinup.ui.userprofile
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pinup.placePinup.ui.login.sns.rememberKakaoShareStrings
 import com.pinup.placePinup.domain.model.ReportType
 import com.pinup.placePinup.platform.ContextFactory
 import org.koin.compose.viewmodel.koinViewModel
@@ -18,6 +20,10 @@ fun UserProfileRoute(
     viewModel: UserProfileViewModel = koinViewModel(parameters = { parametersOf(contextFactory) })
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val kakaoStrings = rememberKakaoShareStrings(uiState.value.member.profile.nickname)
+    val onClickShare = remember(kakaoStrings) {
+        { viewModel.shareMyProfile(kakaoStrings.title, kakaoStrings.content, kakaoStrings.button) }
+    }
     UserProfileScreen(
         member = uiState.value.member,
         photoReviews = uiState.value.pagingReview.reviews,
@@ -30,7 +36,7 @@ fun UserProfileRoute(
         onClickLike = viewModel::likeChanged,
         onClickDetail = onClickDetail,
         onMovePints = onMovePints,
-        onClickShare = viewModel::shareMyProfile,
+        onClickShare = onClickShare,
         onMoveDetail = onMovePintsDetail,
         getMorePints = viewModel::getMorePints,
         onClickBack = onClickBack,
