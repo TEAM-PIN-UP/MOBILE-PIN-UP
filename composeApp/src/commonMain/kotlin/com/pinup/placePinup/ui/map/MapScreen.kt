@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -78,6 +79,7 @@ import pinup.composeapp.generated.resources.ic_focus
 import pinup.composeapp.generated.resources.ic_pinch_off
 import pinup.composeapp.generated.resources.ic_pinch_on
 import pinup.composeapp.generated.resources.ic_rotate
+import pinup.composeapp.generated.resources.ic_search
 
 @Composable
 fun MapScreen(
@@ -94,7 +96,6 @@ fun MapScreen(
     cameraPosition: Position? = null,
     profileImage: String = "",
     onCameraStateChange: (CameraState) -> Unit = { },
-    onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
     onPintsChipClick: (ChipState) -> Unit = {},
     onPlaceClick: (String) -> Unit = { },
@@ -105,7 +106,7 @@ fun MapScreen(
     onUpdatePosition: () -> Unit = {},
     onUpdateShowBookmarks: () -> Unit = {},
     onUpdateFocusLocation: (Boolean) -> Unit = {},
-    onFocusChange: (Boolean) -> Unit = {},
+    onClickSearch: () -> Unit = {},
     onClickBottomNav: (MainDestination) -> Unit,
     consumeDetailClicked: () -> Unit = {},
     onClickGetPlace: () -> Unit = {},
@@ -116,7 +117,6 @@ fun MapScreen(
     onMoveWriteReview: (String) -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {},
     onClickArticle: (Int) -> Unit = {},
-    showEmptyToast: () -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -405,7 +405,7 @@ fun MapScreen(
                         consumeDetailClicked = consumeDetailClicked,
                         isMoving = isCameraMoving,
                         isDetailClicked = isDetailClicked,
-                        isFocusSearch = searchUiState.isFocus,
+                        isFocusSearch = false,
                         isShowPinch = isShowPinch,
                         isMapClicked = isMapClicked.value,
                         consumeMapClicked = { isMapClicked.value = false },
@@ -415,7 +415,6 @@ fun MapScreen(
                             placeDetailUiState = placeDetailUiState,
                             pinchUiState = pinchUiState,
                             isScrollable = alpha == 0f,
-                            onValueChange = onValueChange,
                             onChipClick = onChipClick,
                             onPintsChipClick = onPintsChipClick,
                             isShowPinch = isShowPinch,
@@ -433,15 +432,41 @@ fun MapScreen(
                                 clickedPinlogId = it
                                 sheetState.show()
                             } },
-                            onFocusChange = onFocusChange,
                             onClickLike = onClickLike,
                             onMovePinlogDetail = onMovePinlogDetail,
                             onMoveWriteReview = onMoveWriteReview,
                             onMoveUserProfile = onMoveUserProfile,
                             onClickArticle = onClickArticle,
-                            showEmptyToast = showEmptyToast
                         )
                     }
+                }
+            }
+
+            Card(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .statusBarsPadding()
+                    .padding(horizontal = 20.dp, vertical = 8.dp)
+                    .fillMaxWidth()
+                    .clickableWithNoRipple { onClickSearch() },
+                shape = RoundedCornerShape(100.dp),
+                backgroundColor = Colors.White,
+                elevation = 2.dp
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(Res.drawable.ic_search),
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = Texts.PinMap.SEARCH_HINT,
+                        color = Colors.Gray400,
+                        style = Typography.T2.copy(fontWeight = FontWeight.Medium)
+                    )
                 }
             }
         }

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -24,10 +23,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,7 +35,6 @@ import com.pinup.placePinup.domain.model.SortType
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.component.Chips
 import com.pinup.placePinup.ui.component.ReviewedPlaceCard
-import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.SearchedPlaceCard
 import com.pinup.placePinup.ui.model.ChipState
 import com.pinup.placePinup.ui.theme.Colors
@@ -48,95 +44,26 @@ import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_chevron_bottom
-import pinup.composeapp.generated.resources.ic_close
-import pinup.composeapp.generated.resources.ic_search
-import pinup.composeapp.generated.resources.ic_search_back
 
 @Composable
 fun MapBottomSheetSearchScreen(
     reviewedPlaces: PersistentList<ReviewedPlace>,
-    query: String,
     chipStates: PersistentList<ChipState>,
     sortType: SortType,
     isExpanded: Boolean,
-    places: List<Place>,
-    onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
     onPlaceClick: (String) -> Unit = {},
     onSelectSortTypeClick: () -> Unit = {},
-    onFocusChange: (Boolean) -> Unit = {},
-    showEmptyToast: () -> Unit = {},
 ) {
-    val focusManager = LocalFocusManager.current
-    val focusRequester = remember { FocusRequester() }
-    var isFocusSearch by remember {
-        mutableStateOf(false)
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                color = Colors.White
-            )
-    ) {
-        RoundedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            text = query,
-            textStyle = Typography.B1.copy(
-                fontWeight = FontWeight.Medium
-            ),
-            onValueChange = onValueChange,
-            placeholder = Texts.PinMap.SEARCH_HINT,
-            placeholderStyle = Typography.T2.copy(
-                fontWeight = FontWeight.Medium
-            ),
-            placeholderTextColor = Colors.Gray400,
-            cornerRounded = 100,
-            leadingIcon = if (isFocusSearch) painterResource(Res.drawable.ic_search_back) else painterResource(
-                Res.drawable.ic_search
-            ),
-            onLeadingIconClick = {
-                focusManager.clearFocus(force = true)
-            },
-            tailIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_close) else null,
-            tailIconSize = 20,
-            onTailIconClick = {
-                onValueChange("")
-            },
-            fixedBorderColor = Colors.Transparency,
-            backgroundColor = Colors.Gray50,
-            onFocusChange = {
-                isFocusSearch = it
-                onFocusChange(it)
-            },
-            focusRequester = focusRequester
-        )
-
-        if (isFocusSearch) {
-            FocusScreen(
-                places = places,
-                onPlaceClick = {
-                    if (it.reviewCount == 0) showEmptyToast()
-                    else onPlaceClick(it.kakaoPlaceId)
-                }
-            )
-        } else {
-            NonFocusScreen(
-                reviewedPlaces = reviewedPlaces,
-                chipStates = chipStates,
-                sortType = sortType,
-                isExpanded = isExpanded,
-                onChipClick = onChipClick,
-                onPlaceClick = {
-                    onPlaceClick(it.kakaoPlaceId)
-                },
-                onSelectSortTypeClick = onSelectSortTypeClick
-            )
-        }
-
-    }
+    NonFocusScreen(
+        reviewedPlaces = reviewedPlaces,
+        chipStates = chipStates,
+        sortType = sortType,
+        isExpanded = isExpanded,
+        onChipClick = onChipClick,
+        onPlaceClick = { onPlaceClick(it.kakaoPlaceId) },
+        onSelectSortTypeClick = onSelectSortTypeClick
+    )
 }
 
 @Composable

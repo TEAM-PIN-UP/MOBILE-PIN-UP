@@ -398,6 +398,15 @@ class MapViewModel (
         }
     }
 
+    fun updateSearchMode() {
+        updateState {
+            copy(
+                isSearchMode = !isSearchMode,
+                searchUiState = if (isSearchMode) searchUiState.copy(query = "") else searchUiState
+            )
+        }
+    }
+
     fun getPinchDetailList(id : Int) = viewModelScope.launch {
         resultResponse(
             response = getEditorPintsDetailUseCase(id),
@@ -478,6 +487,7 @@ data class PinchUiState(
 
 data class MapUiState(
     var locationBound: LocationBound = LocationBound(),
+    val isSearchMode: Boolean = false,
     val searchUiState: SearchUiState = SearchUiState(),
     val placeDetailUiState: PlaceDetailUiState = PlaceDetailUiState(),
     val pinchUiState: PinchUiState = PinchUiState(),

@@ -20,7 +20,6 @@ fun MapBottomSheetNavHost(
     clearPinchList: () -> Unit = {},
     isShowPinch: Boolean = false,
     isScrollable: Boolean,
-    onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
     onPintsChipClick: (ChipState) -> Unit = {},
     onPlaceClick: (String) -> Unit = {},
@@ -28,15 +27,13 @@ fun MapBottomSheetNavHost(
     onClearDetailPlace: () -> Unit = {},
     onUpdateBookmark: (String, Boolean) -> Unit = { _, _ -> },
     onSelectSortTypeClick: () -> Unit = {},
-    onFocusChange: (Boolean) -> Unit,
     navHostController: NavHostController = rememberNavController(),
     onClickMenu: (Int) -> Unit = {},
-    onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
+    onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
     onMovePinlogDetail: (Int) -> Unit = {},
     onMoveWriteReview: (String) -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {},
     onClickArticle: (Int) -> Unit = {},
-    showEmptyToast: () -> Unit = {},
 ) {
     val pinchRoute = MapBottomSheetDestination.Pinch::class.qualifiedName
     val detailRoute = MapBottomSheetDestination.Detail::class.qualifiedName
@@ -84,17 +81,12 @@ fun MapBottomSheetNavHost(
         composable<MapBottomSheetDestination.Search> {
             MapBottomSheetSearchScreen(
                 reviewedPlaces = searchUiState.reviewedPlaces.toPersistentList(),
-                query = searchUiState.query,
                 chipStates = searchUiState.chipStates.toPersistentList(),
                 sortType = searchUiState.sortType,
-                places = searchUiState.places,
                 isExpanded = isScrollable,
-                onValueChange = onValueChange,
                 onChipClick = onChipClick,
                 onPlaceClick = onPlaceClick,
                 onSelectSortTypeClick = onSelectSortTypeClick,
-                onFocusChange = onFocusChange,
-                showEmptyToast = showEmptyToast
             )
         }
 
