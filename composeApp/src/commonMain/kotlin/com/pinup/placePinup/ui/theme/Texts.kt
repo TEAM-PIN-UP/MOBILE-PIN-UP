@@ -87,10 +87,10 @@ object Texts {
         }
         val ONBOARDING_LOGIN_TITLE = buildAnnotatedString {
             withStyle(style = SpanStyle(color = Colors.Gray800)) {
-                append("우리의 로컬 아카이브, ")
+                append("Pin Your Moment, ")
             }
             withStyle(style = SpanStyle(color = Colors.Main)) {
-                append("핀업")
+                append("핀유트 Pinyut")
             }
         }
         const val ONBOARDING_LOGIN_TEXT = "로그인하고 나만의 공간을 공유해보세요!"

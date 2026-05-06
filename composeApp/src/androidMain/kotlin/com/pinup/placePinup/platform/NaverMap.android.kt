@@ -21,6 +21,9 @@ import com.naver.maps.geometry.LatLngBounds
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.compose.CameraUpdateReason
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.clustering.Clusterer
+import com.naver.maps.map.clustering.ClusteringKey
+import com.naver.maps.map.compose.DisposableMapEffect
 import com.naver.maps.map.compose.LocationOverlay
 import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
@@ -30,6 +33,7 @@ import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.PolylineOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
+import com.pinup.placePinup.R
 import com.pinup.placePinup.domain.model.CameraState
 import com.pinup.placePinup.domain.model.Category
 import com.pinup.placePinup.domain.model.Position
@@ -45,12 +49,36 @@ import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_cafe_marker
 import pinup.composeapp.generated.resources.ic_cafe_marker_on
 import pinup.composeapp.generated.resources.ic_cafe_marker_pinch
-import pinup.composeapp.generated.resources.ic_food_marker
 import pinup.composeapp.generated.resources.ic_food_marker_on
 import pinup.composeapp.generated.resources.ic_food_marker_pinch
+
+private data class ClusterPlaceItem(
+    val kakaoPlaceId: String,
+    val name: String,
+    val latitude: Double,
+    val longitude: Double,
+    val markerResId: Int,
+    val selectedMarkerResId: Int,
+    val isSelected: Boolean,
+) : ClusteringKey {
+    override fun getPosition(): LatLng = LatLng(latitude, longitude)
+}
+
+private fun markerResIdByCategory(category: Category): Int {
+    return when (category) {
+        Category.RESTAURANT -> R.drawable.ic_food_marker
+        else -> R.drawable.ic_cafe_marker
+    }
+}
+
+private fun selectedMarkerResIdByCategory(category: Category): Int {
+    return when (category) {
+        Category.RESTAURANT -> R.drawable.ic_food_marker_on
+        else -> R.drawable.ic_cafe_marker_on
+    }
+}
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
@@ -115,6 +143,23 @@ actual fun PlatformNaverMap(
                 )
             )
         }
+    }
+
+    val selectedPlaceId = placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId
+    val clusterItems = if (!isShowPinch) {
+        searchUiState.reviewedPlaces.map {
+            ClusterPlaceItem(
+                kakaoPlaceId = it.kakaoPlaceId,
+                name = it.name,
+                latitude = it.latitude,
+                longitude = it.longitude,
+                markerResId = markerResIdByCategory(it.placeCategory),
+                selectedMarkerResId = selectedMarkerResIdByCategory(it.placeCategory),
+                isSelected = it.kakaoPlaceId == selectedPlaceId,
+            )
+        }
+    } else {
+        emptyList()
     }
 
     NaverMap(
@@ -226,73 +271,37 @@ actual fun PlatformNaverMap(
             }
         }
 
-        if(!isShowPinch) {
-            searchUiState.reviewedPlaces.forEach {
-                key(
-                    it.kakaoPlaceId,
-                    it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId
-                ) {
-                    MarkerComposable(
-                        keys = arrayOf(it.kakaoPlaceId),
-                        state = MarkerState(
-                            position = LatLng(it.latitude, it.longitude),
-                        ),
-                        anchor = Offset(0.5f, 0.25f),
-                        onClick = { _ ->
-                            onPlaceClick(it.kakaoPlaceId)
+        if (!isShowPinch) {
+            DisposableMapEffect(clusterItems, selectedPlaceId) { naverMap ->
+                val clusterer = Clusterer.Builder<ClusterPlaceItem>()
+                    .leafMarkerUpdater { info, marker ->
+                        val item = info.tag as? ClusterPlaceItem ?: return@leafMarkerUpdater
+                        marker.icon = com.naver.maps.map.overlay.OverlayImage.fromResource(
+                            if (item.isSelected) item.selectedMarkerResId else item.markerResId
+                        )
+                        marker.iconTintColor = android.graphics.Color.TRANSPARENT
+                        marker.anchor = android.graphics.PointF(0.5f, 0.25f)
+                        marker.captionText = item.name
+                        marker.captionColor = android.graphics.Color.WHITE
+                        marker.captionHaloColor = android.graphics.Color.parseColor("#40000000")
+                        marker.captionRequestedWidth = 240
+                        marker.captionTextSize = 11f
+                        marker.setOnClickListener {
+                            onPlaceClick(item.kakaoPlaceId)
                             true
                         }
-                    ) {
-                        Column(
-                            modifier = Modifier,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            if (it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
-                                Image(
-                                    painter = when (it.placeCategory) {
-                                        Category.RESTAURANT -> {
-                                            painterResource(Res.drawable.ic_food_marker_on)
-                                        }
-
-                                        else -> {
-                                            painterResource(Res.drawable.ic_cafe_marker_on)
-                                        }
-                                    },
-                                    contentDescription = "marker"
-                                )
-                            } else {
-                                Image(
-                                    painter = when (it.placeCategory) {
-                                        Category.RESTAURANT -> {
-                                            painterResource(Res.drawable.ic_food_marker)
-                                        }
-
-                                        else -> {
-                                            painterResource(Res.drawable.ic_cafe_marker)
-                                        }
-                                    },
-                                    contentDescription = "marker"
-                                )
-                            }
-
-                            RoundedBox(
-                                modifier = Modifier,
-                                backgroundColor = Colors.Black_25,
-                                cornerRounded = 100
-                            ) {
-                                Text(
-                                    modifier = Modifier
-                                        .padding(vertical = 2.dp, horizontal = 6.dp)
-                                        .widthIn(max = 72.dp),
-                                    text = it.name,
-                                    style = Typography.B6,
-                                    color = Colors.White,
-                                    overflow = TextOverflow.Ellipsis,
-                                    maxLines = 1
-                                )
-                            }
-                        }
                     }
+                    .build()
+
+                clusterer.setMap(naverMap)
+
+                val mapItems = clusterItems.associateWith { item -> item }
+                clusterer.clear()
+                clusterer.addAll(mapItems)
+
+                onDispose {
+                    clusterer.clear()
+                    clusterer.setMap(null)
                 }
             }
         }
