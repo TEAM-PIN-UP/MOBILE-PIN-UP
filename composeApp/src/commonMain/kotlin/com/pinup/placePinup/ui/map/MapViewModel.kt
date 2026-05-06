@@ -136,6 +136,12 @@ class MapViewModel (
             getPlaces()
             getEditorPints()
             initPlace = false
+            return
+        }
+
+        if (!cameraState.isMoving && uiState.value.needsMapRefresh) {
+            updateState { copy(needsMapRefresh = false) }
+            getPlaces()
         }
     }
 
@@ -399,9 +405,11 @@ class MapViewModel (
     }
 
     fun updateSearchMode() {
+        val exitingSearch = uiState.value.isSearchMode
         updateState {
             copy(
                 isSearchMode = !isSearchMode,
+                needsMapRefresh = exitingSearch,
                 searchUiState = if (isSearchMode) searchUiState.copy(query = "") else searchUiState
             )
         }
@@ -488,6 +496,7 @@ data class PinchUiState(
 data class MapUiState(
     var locationBound: LocationBound = LocationBound(),
     val isSearchMode: Boolean = false,
+    val needsMapRefresh: Boolean = false,
     val searchUiState: SearchUiState = SearchUiState(),
     val placeDetailUiState: PlaceDetailUiState = PlaceDetailUiState(),
     val pinchUiState: PinchUiState = PinchUiState(),

@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.domain.model.Place
@@ -45,6 +47,11 @@ fun MapSearchScreen(
     showEmptyToast: () -> Unit = {},
 ) {
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
     Column(
         modifier = Modifier
@@ -78,8 +85,9 @@ fun MapSearchScreen(
                 tailIcon = if (query.isNotEmpty()) painterResource(Res.drawable.ic_close) else null,
                 tailIconSize = 20,
                 onTailIconClick = { onValueChange("") },
-                fixedBorderColor = Colors.Transparency,
-                backgroundColor = Colors.Gray50,
+                fixedBorderColor = Colors.Gray900,
+                backgroundColor = Colors.White,
+                focusRequester = focusRequester,
             )
         }
 

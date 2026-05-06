@@ -55,6 +55,7 @@ import com.pinup.placePinup.ui.component.PBottomSheet
 import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.placePinup.ui.component.RoundedBox
+import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.SortBottomSheet
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.model.ChipState
@@ -442,30 +443,32 @@ fun MapScreen(
                 }
             }
 
-            Card(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .statusBarsPadding()
-                    .padding(horizontal = 20.dp, vertical = 8.dp)
-                    .fillMaxWidth()
-                    .clickableWithNoRipple { onClickSearch() },
-                shape = RoundedCornerShape(100.dp),
-                backgroundColor = Colors.White,
-                elevation = 2.dp
-            ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
+            if (alpha > 0f) {
+                Box(
+                    modifier = Modifier
+                        .alpha(alpha)
+                        .align(Alignment.TopCenter)
+                        .statusBarsPadding()
+                        .padding(horizontal = 20.dp, vertical = 8.dp)
+                        .fillMaxWidth()
                 ) {
-                    Image(
-                        painter = painterResource(Res.drawable.ic_search),
-                        contentDescription = null
+                    RoundedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "",
+                        placeholder = Texts.PinMap.SEARCH_HINT,
+                        onValueChange = {},
+                        leadingIcon = painterResource(Res.drawable.ic_search),
+                        cornerRounded = 100,
+                        fixedBorderColor = Colors.Gray900,
+                        backgroundColor = Colors.White,
+                        placeholderStyle = Typography.T2.copy(fontWeight = FontWeight.Medium),
+                        placeholderTextColor = Colors.Gray400,
+                        enabled = false,
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = Texts.PinMap.SEARCH_HINT,
-                        color = Colors.Gray400,
-                        style = Typography.T2.copy(fontWeight = FontWeight.Medium)
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clickableWithNoRipple { onClickSearch() }
                     )
                 }
             }
