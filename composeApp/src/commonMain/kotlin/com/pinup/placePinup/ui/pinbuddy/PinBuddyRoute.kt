@@ -1,10 +1,12 @@
 package com.pinup.placePinup.ui.pinbuddy
 
 import PToastHost
+import org.jetbrains.compose.resources.stringResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.pinup.placePinup.ui.theme.Texts
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
@@ -19,21 +21,25 @@ fun PinBuddyRoute(
 ) {
     val uiState = pinBuddyViewModel.uiState.collectAsStateWithLifecycle()
     val toast = rememberToastState()
+    val acceptText = stringResource(Res.string.toast_accept_pin_buddy)
+    val cancelText = stringResource(Res.string.toast_cancel_pin_buddy_request)
+    val deleteText = stringResource(Res.string.toast_delete_pin_buddy)
+    val refuseText = stringResource(Res.string.toast_refuse_pin_buddy)
 
     LaunchedEffect(Unit) {
         pinBuddyViewModel.uiEvent.collectLatest {
             when(it) {
                 PinBuddyUiEvent.SuccessAccept -> {
-                    toast.show(Texts.Toast.ACCEPT_PIN_BUDDY)
+                    toast.show(acceptText)
                 }
                 PinBuddyUiEvent.SuccessCancel -> {
-                    toast.show(Texts.Toast.CANCEL_PIN_BUDDY_REQEUST)
+                    toast.show(cancelText)
                 }
                 PinBuddyUiEvent.SuccessDelete -> {
-                    toast.show(Texts.Toast.DELETE_PIN_BUDDY)
+                    toast.show(deleteText)
                 }
                 PinBuddyUiEvent.SuccessRefuse -> {
-                    toast.show(Texts.Toast.REFUSE_PIN_BUDDY)
+                    toast.show(refuseText)
                 }
             }
         }

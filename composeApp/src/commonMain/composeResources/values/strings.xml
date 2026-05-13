@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Word -->
+    <string name="word_start">시작하기</string>
+    <string name="word_id">아이디</string>
+    <string name="word_password">비밀번호</string>
+    <string name="word_login">로그인</string>
+    <string name="word_next">다음</string>
+    <string name="word_skip">건너뛰기</string>
+    <string name="word_do_go">계속하기</string>
+    <string name="word_email">이메일</string>
+    <string name="word_confirm">확인</string>
+    <string name="word_do_confirm">확인하기</string>
+    <string name="word_verify">인증하기</string>
+    <string name="word_pin_map">핀맵</string>
+    <string name="word_pinlog">핀로그</string>
+    <string name="word_feed">피드</string>
+    <string name="word_article">아티클</string>
+    <string name="word_my">마이</string>
+    <string name="word_rating">별점</string>
+    <string name="word_do_return">돌아가기</string>
+    <string name="word_delete">삭제</string>
+    <string name="word_do_delete">삭제하기</string>
+    <string name="word_comment">댓글</string>
+    <string name="word_do_reply_comment">답글달기</string>
+    <string name="word_do_register">등록하기</string>
+    <string name="word_see_more">자세히 보기</string>
+    <string name="word_pin_buddy">핀버디</string>
+    <string name="word_pinch">핀츠</string>
+    <string name="word_scrap">스크랩</string>
+    <string name="word_accept">수락</string>
+    <string name="word_refuse">거절</string>
+    <string name="word_close">닫기</string>
+    <string name="word_setting">설정</string>
+    <string name="word_etc">기타</string>
+    <string name="word_complete">완료</string>
+    <string name="word_nickname">닉네임</string>
+    <string name="word_intro">소개</string>
+    <string name="word_unregister">탈퇴하기</string>
+    <string name="word_sign_up">회원가입</string>
+    <string name="word_do_block">차단하기</string>
+    <string name="word_do_release">해제하기</string>
+    <string name="word_notification">알림</string>
+
+    <!-- Setting -->
+    <string name="setting_profile_setting_title">계정 설정</string>
+    <string name="setting_profile_setting">프로필 편집</string>
+    <string name="setting_profile_info">계정 정보</string>
+    <string name="setting_change_password">비밀번호 변경</string>
+    <string name="setting_cs_title">고객센터</string>
+    <string name="setting_qa">문의하기</string>
+    <string name="setting_suggest">건의하기</string>
+    <string name="setting_service_term">이용약관</string>
+    <string name="setting_personal_term">개인정보처리방침</string>
+    <string name="setting_version">앱버전</string>
+    <string name="setting_logout">로그아웃</string>
+    <string name="setting_unregister">회원탈퇴</string>
+    <string name="setting_hint_bio_change">60자 이내로 나를 소개해 보세요.</string>
+    <string name="setting_hint_nickname_change">*닉네임은 30일마다 변경 가능해요.</string>
+    <string name="setting_logout_dialog_title">로그아웃 하시겠어요?</string>
+    <string name="setting_logout_dialog_description">아쉬워요😥\n언제든 다시 놀러오세요!</string>
+    <string name="setting_unregister_title">정말 핀업과\n함께하지 않으실건가요?</string>
+    <string name="setting_unregister_description">회원탈퇴시 삭제된 정보는 복구가 불가능합니다.</string>
+    <string name="setting_unregister_check_comment">안내사항을 모두 확인하였으며, 이에 동의합니다.</string>
+    <string name="setting_unregister_dialog_title">정말 탈퇴하시겠습니까?</string>
+    <string name="setting_unregister_dialog_description">회원 탈퇴시, 이전까지 사용하셨던\n서비스 기록들을 더 이상\n사용하실 수 없습니다.</string>
+    <string name="setting_unregister_complete">그동안 핀업을 이용해주셔서\n감사합니다 :) \n다음에 또 만나요!</string>
+
+    <!-- PinLog -->
+    <string name="pin_log_write_pinlog">핀로그 작성</string>
+    <string name="pin_log_write_pinlog_title">핀로그 작성하기</string>
+    <string name="pin_log_register_pinlog">핀로그 등록하기</string>
+    <string name="pin_log_write_title">어떤 장소의 핀로그를\n작성할까요?</string>
+    <string name="pin_log_write_description">작성된 핀로그는 핀버디만 볼 수 있어요</string>
+    <string name="pin_log_search_hint">장소 검색하기</string>
+    <string name="pin_log_search_result">검색 결과</string>
+    <string name="pin_log_select_date_hint">날짜 선택</string>
+    <string name="pin_log_image_upload">사진 업로드</string>
+    <string name="pin_log_hint">작성된 핀로그는 나의 핀버디들에게만 보여요!\n\n*주의: 욕설, 비방 목적 혹은 명예 훼손성 내용은 작성 시 삭제 처리 될 수 있습니다.</string>
+    <string name="pin_log_more_length">10자 이상 작성해 주세요.</string>
+    <string name="pin_log_too_much_length">입력 가능 글자 수를 초과했어요.</string>
+    <string name="pin_log_dialog_title">핀로그 작성 완료!</string>
+    <string name="pin_log_dialog_body">등록한 핀로그를\n확인하시겠어요?</string>
+    <string name="pin_log_detail_title">핀로그 상세</string>
+    <string name="pin_log_comment_hint">댓글을 입력하세요</string>
+    <string name="pin_log_comment_reply_hint">답글을 입력하세요</string>
+    <string name="pin_log_edit_pinlog">핀로그 수정</string>
+    <string name="pin_log_delete_pinlog">핀로그 삭제</string>
+    <string name="pin_log_edit_comment">댓글 수정</string>
+    <string name="pin_log_delete_comment">댓글 삭제</string>
+    <string name="pin_log_delete_dialog_title">핀로그를 삭제할까요?</string>
+    <string name="pin_log_delete_dialog_description">삭제된 핀로그는 복구할 수 없습니다.</string>
+    <string name="pin_log_delete_comment_dialog_title">댓글을 삭제할까요?</string>
+    <string name="pin_log_delete_comment_dialog_description">삭제된 댓글은 복구할 수 없습니다.</string>
+    <string name="pin_log_select_date_prefix"></string>
+    <string name="pin_log_select_date_suffix">은\n 언제 방문하셨나요?</string>
+
+    <!-- Profile -->
+    <string name="profile_my">MY</string>
+    <string name="profile_average_star_rating">평균 별점</string>
+    <string name="profile_share_profile">프로필 공유</string>
+    <string name="profile_add_pin_buddy">핀버디 추가</string>
+    <string name="profile_accept_pin_buddy">핀버디 수락</string>
+    <string name="profile_reject_pin_buddy">핀버디 거절</string>
+    <string name="profile_receive_request">받은 신청</string>
+    <string name="profile_sent_request">보낸 신청</string>
+    <string name="profile_cancel_sent_request">신청 취소</string>
+    <string name="profile_dialog_delete_pin_buddy_title">핀버디를 삭제할까요?</string>
+    <string name="profile_dialog_delete_pin_buddy_description">삭제한 핀버디에게 언제든지\n다시 핀버디를 신청할 수 있습니다.</string>
+    <string name="profile_empty_pin_buddy">아직 핀버디가 없어요!\n먼저 핀버디를 신청해 보는 건 어때요?</string>
+    <string name="profile_empty_receive_pin_buddy">받은 핀버디 신청이 없어요.\n핀버디 신청이 오면 이곳에 표시돼요!</string>
+    <string name="profile_empty_sent_pin_buddy">보낸 신청이 없어요.\n나와 취향이 비슷한 핀버디를 찾아보세요!</string>
+    <string name="profile_empty_my_pinlog">아직 핀로그가 없어요!\n나만의 장소를 핀업해보세요:)</string>
+    <string name="profile_empty_user_pinlog">핀버디가 작성한 핀로그가 없어요!\n조금만 더 기다려볼까요?</string>
+    <string name="profile_search_result">검색 결과</string>
+    <string name="profile_already_request_pin_buddy">요청 진행중</string>
+    <string name="profile_request_pin_buddy">핀버디 신청</string>
+    <string name="profile_cancel_pin_buddy_request">핀버디 신청 취소하기</string>
+    <string name="profile_remove_pin_buddy_dialog_title">핀버디를 삭제할까요?</string>
+    <string name="profile_remove_pin_buddy_dialog_description">삭제한 핀버디에게 언제든지\n다시 핀버디를 신청할 수 있습니다.</string>
+    <string name="profile_rock_profile">작성된 핀로그가 궁금하다면\n핀버디를 신청해 주세요!</string>
+    <string name="profile_write_first_pinlog">첫 핀로그 작성하기</string>
+    <string name="profile_empty_scrap">저장된 장소가 없어요!\n핀로그를 살펴보며 장소를 살펴보아요.</string>
+    <string name="profile_go_pinlog">핀로그 보러가기</string>
+    <string name="profile_empty_pinch">%1$s님 만의 코스로 핀츠를 만들어보아요.</string>
+    <string name="profile_empty_user_pints">작성된 핀츠가\n아직 없습니다!</string>
+    <string name="profile_go_pinch_create">핀츠 만들러 가기</string>
+    <string name="profile_pick_library">라이브러리에서 선택</string>
+    <string name="profile_delete_profile_image">프로필 이미지 삭제</string>
+
+    <!-- PinMap -->
+    <string name="pin_map_search_button">현 지도에서 검색</string>
+    <string name="pin_map_search_hint">장소/위치 검색하기</string>
+    <string name="pin_map_empty_pinlog">아직 핀로그가 없어요!\n나만의 장소를 핀업해보세요:)</string>
+    <string name="pin_map_search_result">검색 결과</string>
+    <string name="pin_map_go_article">아티클 바로가기</string>
+
+    <!-- Feed -->
+    <string name="feed_recent_search">최근 검색어</string>
+    <string name="feed_empty_feed">아직 핀버디들의 핀로그가 없어요!</string>
+
+    <!-- Article -->
+    <string name="article_title">핀업 아티클</string>
+    <string name="article_recommend">핀업 에디터가 찾아낸\n또 다른 코스를 만나보세요.</string>
+
+    <!-- Pinch -->
+    <string name="pinch_write">핀츠 작성</string>
+    <string name="pinch_detail">핀츠 상세</string>
+    <string name="pinch_title_hint">제목을 입력하세요</string>
+    <string name="pinch_description_hint">핀츠의 설명을 적어주세요(0/120)</string>
+    <string name="pinch_create">핀츠 등록하기</string>
+    <string name="pinch_create_my">마이핀츠 작성</string>
+    <string name="pinch_place_list">장소목록</string>
+    <string name="pinch_edit">핀츠 수정</string>
+    <string name="pinch_delete">핀츠 삭제</string>
+    <string name="pinch_no_pinlog_dialog_title">핀로그가 작성되지 않은 장소입니다.</string>
+    <string name="pinch_no_pinlog_dialog_content">핀로그 작성한 장소만 핀츠에 등록 할 수 있어요.\n핀로그를 등록할까요?</string>
+    <string name="pinch_delete_dialog_title">핀츠를 정말 삭제할건가요?</string>
+    <string name="pinch_delete_dialog_content">한 번 삭제하면 되돌릴 수 없어요.\n삭제하시겠습니까?</string>
+    <string name="pinch_write_complete_dialog_title">마이핀츠 작성 완료!</string>
+    <string name="pinch_write_complete_dialog_content">등록한 마이핀츠를\n확인하시겠어요?</string>
+
+    <!-- Login -->
+    <string name="login_id_find">아이디 찾기</string>
+    <string name="login_sns">SNS 로그인</string>
+    <string name="login_incorrect_id">아이디 혹은 비밀번호가 일치하지 않습니다.</string>
+
+    <!-- FindPassword -->
+    <string name="find_password_hint">비밀번호는 8~20자, 특수문자 포함 필수입니다.</string>
+    <string name="find_password_change_password">비밀번호 변경하기</string>
+    <string name="find_password_change_password_hint">임시 비밀번호로 로그인 시, 비밀번호 변경이 필요합니다.</string>
+    <string name="find_password_send_password">비밀번호 발송</string>
+    <string name="find_password_again_hint">비밀번호 확인</string>
+    <string name="find_password_find_password">비밀번호 찾기</string>
+    <string name="find_password_find_password_hint">입력한 주소로 임시 비밀번호가 전송됩니다.</string>
+    <string name="find_password_sent_title">이메일이 전송되었습니다!</string>
+    <string name="find_password_sent_hint">이메일로 전송 받은 임시 비밀번호로 로그인 해주세요.</string>
+    <string name="find_password_do_login">로그인하기</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title_prefix">우리의 로컬 아카이브, </string>
+    <string name="onboarding_title_highlight">핀업</string>
+    <string name="onboarding_login_text">로그인하고 나만의 공간을 공유해보세요!</string>
+
+    <!-- FindId -->
+    <string name="find_id_find_id">아이디 찾기</string>
+    <string name="find_id_input_nickname">닉네임 입력</string>
+    <string name="find_id_by_email">이메일 주소로 찾기</string>
+    <string name="find_id_by_nickname">닉네임으로 찾기</string>
+    <string name="find_id_result">해당 이메일로 가입된 계정이 있습니다.\n비밀번호를 변경하고 싶으신가요?</string>
+    <string name="find_id_not_exist_nickname">존재하지 않는 닉네임입니다.</string>
+    <string name="find_id_nick_name_title_prefix">안녕하세요\n</string>
+    <string name="find_id_nick_name_title_suffix">님!</string>
+
+    <!-- SignupEmail -->
+    <string name="signup_email_title">로그인에 사용할\n이메일을 입력해주세요.</string>
+    <string name="signup_email_hint">이메일 주소를 입력해주세요.</string>
+    <string name="signup_email_invalid">유효한 이메일 주소가 아닙니다.</string>
+    <string name="signup_email_duplicate">동일한 이메일 주소로 가입된 계정이 있습니다.\n기존 계정을 확인해주세요.</string>
+    <string name="signup_email_code_hint">인증번호를 입력해주세요.</string>
+    <string name="signup_email_code_invalid">인증번호가 일치하지 않습니다.</string>
+    <string name="signup_email_code_valid">인증번호가 일치합니다.</string>
+    <string name="signup_email_send_code">인증번호가 전송되었습니다.</string>
+
+    <!-- SignupPassword -->
+    <string name="signup_password_title">사용하실 비밀번호를\n입력해주세요.</string>
+    <string name="signup_password_hint">비밀번호 입력 (8자이상 + 특수문자 포함)</string>
+    <string name="signup_password_invalid">비밀번호는 8~20자, 특수문자 포함 필수입니다.</string>
+    <string name="signup_password_confirm">비밀번호 확인</string>
+    <string name="signup_password_not_match">입력된 비밀번호가 일치하지 않습니다.</string>
+
+    <!-- SignupTerms -->
+    <string name="signup_terms_title">서비스 이용약관에\n동의해주세요.</string>
+    <string name="signup_terms_all_agree">약관 전체 동의</string>
+    <string name="signup_terms_service_agree">이용약관 동의 (필수)</string>
+    <string name="signup_terms_private_info_agree">개인정보 수집 및 이용 동의 (필수)</string>
+    <string name="signup_terms_location_info_agree">위치정보 이용 동의 (필수)</string>
+    <string name="signup_terms_marketing_agree">홍보 및 마케팅 이용 동의 (선택)</string>
+
+    <!-- SignupNickname -->
+    <string name="signup_nickname_title">반가워요!\n닉네임을 만들어볼까요?</string>
+    <string name="signup_nickname_input">닉네임 입력</string>
+    <string name="signup_nickname_hint">닉네임은 나중에 언제든지 변경가능해요.</string>
+    <string name="signup_nickname_condition">한글, 영문만 입력 가능</string>
+    <string name="signup_nickname_duplicate">중복되는 닉네임이에요.</string>
+
+    <!-- SignupProfile -->
+    <string name="signup_profile_title">프로필에 사용 될\n이미지를 골라주세요.</string>
+    <string name="signup_profile_register">멋진 프로필\n사진이 등록되었어요!</string>
+    <string name="signup_profile_select">사진 선택하기</string>
+
+    <!-- Block -->
+    <string name="block_user_block">계정 차단</string>
+
+    <!-- Toast -->
+    <string name="toast_delete_pinlog">핀로그가 삭제되었어요.</string>
+    <string name="toast_delete_pin_buddy">해당 핀버디가 삭제되었어요</string>
+    <string name="toast_accept_pin_buddy">핀버디 신청을 수락했어요</string>
+    <string name="toast_refuse_pin_buddy">핀버디 신청을 거절했어요</string>
+    <string name="toast_cancel_pin_buddy_request">핀버디 신청을 취소했어요</string>
+    <string name="toast_empty_pinlog">핀로그가 작성되지 않은 장소입니다.</string>
+    <string name="toast_block_success">%s님이 차단되었습니다.</string>
+    <string name="toast_already_block_user">이미 차단된 유저입니다.</string>
+
+    <!-- Notification -->
+    <string name="notification_all_read">모두 읽음</string>
+    <string name="notification_unread">안읽음 %d</string>
+
+    <!-- Kakao -->
+    <string name="kakao_profile_share_title">%s 님의 핀업 계정</string>
+    <string name="kakao_profile_share_content">핀업에서 %s 님의 핀들을 구경해 보세요.</string>
+    <string name="kakao_profile_share_button">핀업으로 이동하기</string>
+
+    <!-- Update -->
+    <string name="update_check_title">업데이트 알림</string>
+    <string name="update_check_description">더 나은 서비스를 위해 핀업이 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요</string>
+    <string name="update_check_confirm">업데이트</string>
+    <string name="update_check_optional_cancel">다음에 하기</string>
+
+    <!-- Sort -->
+    <string name="sort_near">가까운 순</string>
+    <string name="sort_latest">최신 순</string>
+    <string name="sort_star_high">별점 높은 순</string>
+    <string name="sort_star_low">별점 낮은 순</string>
+
+    <!-- Category -->
+    <string name="category_all">전체</string>
+    <string name="category_restaurant">음식점</string>
+    <string name="category_cafe">카페</string>
+
+    <!-- PintsCategory -->
+    <string name="pints_category_all">전체</string>
+    <string name="pints_category_jeju">제주</string>
+    <string name="pints_category_seoul">서울</string>
+    <string name="pints_category_none">없음</string>
+
+    <!-- Report -->
+    <string name="report_type_comment">댓글 신고</string>
+    <string name="report_type_pinlog">핀로그 신고</string>
+    <string name="report_type_user">계정 신고</string>
+    <string name="report_description_comment">해당 댓글을 신고하는 사유를 선택해 주세요.</string>
+    <string name="report_description_pinlog">해당 핀로그를 신고하는 사유를 선택해 주세요.</string>
+    <string name="report_description_user">해당 계정을 신고하는 사유를 선택해 주세요.</string>
+    <string name="report_reason_harmful_content">가학적이거나 유해한 내용입니다.</string>
+    <string name="report_reason_false_info">허위사실을 포함하는 내용입니다.</string>
+    <string name="report_reason_hate_speech">혐오를 조장하는 내용입니다.</string>
+    <string name="report_reason_user_impersonation">다른 사람을 사칭하는 계정입니다.</string>
+    <string name="report_reason_user_harmful">유해한 내용을 포함하는 계정입니다.</string>
+    <string name="report_reason_etc">기타</string>
+    <string name="report_block_dialog_title">%s님을 차단하시겠습니까?</string>
+    <string name="report_block_dialog_content">계정 차단 시, 더 이상 해당 사용자의 핀로그와 댓글이 보이지 않으며 상호 작용할 수 없습니다.</string>
+    <string name="report_success_dialog_title">신고가 완료 되었습니다.</string>
+    <string name="report_success_dialog_content">신고 접수된 핀로그는 24시간 이내에 검토되며, 지속적인 신고를 받은 계정은 계정 삭제 처리될 수 있습니다.</string>
+    <string name="report_undo_block">차단 해제하기</string>
+    <string name="report_undo_block_dialog_title">차단을 해제하시겠습니까?</string>
+    <string name="report_undo_block_dialog_content">차단 해제 시, 해당 계정에 친구 추가, 댓글 등의 상호작용이 가능합니다.</string>
+</resources>

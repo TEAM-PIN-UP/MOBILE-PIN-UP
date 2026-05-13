@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.component
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -16,10 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_delete
 import pinup.composeapp.generated.resources.ic_write
 
@@ -50,7 +51,7 @@ fun CommentMenuBottomSheet(
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = Texts.PinLog.EDIT_COMMENT,
+                text = stringResource(Res.string.pin_log_edit_comment),
                 color = Colors.Gray800,
                 style = Typography.T2.copy(
                     fontWeight = FontWeight.Medium
@@ -77,7 +78,7 @@ fun CommentMenuBottomSheet(
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = Texts.PinLog.DELETE_COMMENT,
+                text = stringResource(Res.string.pin_log_delete_comment),
                 color = Colors.Gray800,
                 style = Typography.T2.copy(
                     fontWeight = FontWeight.Medium

@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.login.compose
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,6 +39,7 @@ import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_apple
 import pinup.composeapp.generated.resources.ic_google
 import pinup.composeapp.generated.resources.ic_kakao
@@ -56,6 +58,9 @@ fun LoginScreen(
     onIdChanged : (String) -> Unit = {},
     onPasswordChanged : (String) -> Unit = {},
 ) {
+    val onboardingPrefix = stringResource(Res.string.onboarding_title_prefix)
+    val onboardingHighlight = stringResource(Res.string.onboarding_title_highlight)
+    val onboardingLoginText = stringResource(Res.string.onboarding_login_text)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,7 +72,7 @@ fun LoginScreen(
 
         Text(
             modifier = Modifier,
-            text = Texts.Onboarding.ONBOARDING_LOGIN_TITLE,
+            text = Texts.Onboarding.getLoginTitle(onboardingPrefix, onboardingHighlight),
             style = Typography.D2
         )
 
@@ -75,7 +80,7 @@ fun LoginScreen(
 
         Text(
             modifier = Modifier,
-            text = Texts.Onboarding.ONBOARDING_LOGIN_TEXT,
+            text = onboardingLoginText,
             style = Typography.B1.copy(
                 fontWeight = FontWeight.Medium
             ),
@@ -90,7 +95,7 @@ fun LoginScreen(
                 .fillMaxWidth(),
             text = id,
             onValueChange = onIdChanged,
-            placeholder = Texts.Word.WORD_ID,
+            placeholder = stringResource(Res.string.word_id),
             textStyle = Typography.B2.copy(
                 fontWeight = FontWeight.Medium
             ),
@@ -106,7 +111,7 @@ fun LoginScreen(
                 .fillMaxWidth(),
             text = password,
             onValueChange = onPasswordChanged,
-            placeholder = Texts.Word.WORD_PASSWORD,
+            placeholder = stringResource(Res.string.word_password),
             textStyle = Typography.B2.copy(
                 fontWeight = FontWeight.Medium
             ),
@@ -120,7 +125,7 @@ fun LoginScreen(
         PButton(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
-            text = Texts.Word.WORD_LOGIN,
+            text = stringResource(Res.string.word_login),
             onClick = {
                 onSnsLoginClick(SNSType.PINUP)
             }
@@ -131,7 +136,7 @@ fun LoginScreen(
 
             Text(
                 modifier = Modifier,
-                text = Texts.Login.INCORRECT_ID,
+                text = stringResource(Res.string.login_incorrect_id),
                 style = Typography.B2.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -153,7 +158,7 @@ fun LoginScreen(
                     .clickableSingleWithNoRipple {
                         onCLickFindEmail()
                     },
-                text = Texts.Login.LOGIN_ID_FIND,
+                text = stringResource(Res.string.login_id_find),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -167,7 +172,7 @@ fun LoginScreen(
                     .clickableSingleWithNoRipple {
                         onClickFindPassword()
                     },
-                text = Texts.FindPassword.CHANGE_PASSWORD,
+                text = stringResource(Res.string.find_password_change_password),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -181,7 +186,7 @@ fun LoginScreen(
                     .clickableSingleWithNoRipple {
                         onMoveSignUp()
                     },
-                text = Texts.Word.SIGN_UP,
+                text = stringResource(Res.string.word_sign_up),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -206,7 +211,7 @@ fun LoginScreen(
 
             Text(
                 modifier = Modifier.padding(horizontal = 14.dp),
-                text = Texts.Login.LOGIN_SNS,
+                text = stringResource(Res.string.login_sns),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),

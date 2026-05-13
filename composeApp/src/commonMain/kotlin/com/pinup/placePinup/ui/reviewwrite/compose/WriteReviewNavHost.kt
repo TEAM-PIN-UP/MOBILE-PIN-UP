@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.reviewwrite.compose
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -19,7 +22,6 @@ import com.pinup.placePinup.ui.reviewwrite.WriteReviewUiEvent
 import com.pinup.placePinup.ui.reviewwrite.WriteReviewViewModel
 import com.pinup.placePinup.ui.reviewwrite.searchplace.SearchPlaceRoute
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -123,10 +125,10 @@ fun WriteReviewNavHost(
 
     if (isShowCompleteDialog.value) {
         PDialog(
-            titleText = Texts.PinLog.PINLOG_DIALOG_TITLE,
-            descriptionText = Texts.PinLog.PINLOG_DIALOG_BODY,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_CONFiRM,
+            titleText = stringResource(Res.string.pin_log_dialog_title),
+            descriptionText = stringResource(Res.string.pin_log_dialog_body),
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_confirm),
             onLeftButtonClick = {
                 isShowCompleteDialog.value = false
                 onCompleteAndBackPressed()

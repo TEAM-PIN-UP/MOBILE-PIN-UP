@@ -49,6 +49,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_chevron_bottom
 
@@ -205,7 +206,7 @@ fun BookmarkedPlaceAll(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = sortType.text,
+                    text = stringResource(sortType.textRes),
                     style = Typography.B4
                 )
 

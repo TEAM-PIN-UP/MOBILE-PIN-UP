@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.findAccount.findId
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,10 +34,10 @@ import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.signup.EmailVerifyType
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_check_circle_black
 
 @Composable
@@ -89,7 +90,7 @@ fun FindIdScreen(
             Spacer(modifier = Modifier.height(44.dp))
 
             Text(
-                text = Texts.FindId.FIND_ID,
+                text = stringResource(Res.string.find_id_find_id),
                 style = Typography.D2.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -116,7 +117,7 @@ fun FindIdScreen(
                             .clickableWithNoRipple {
                                 onClickTabChanged(true)
                             },
-                        text = Texts.FindId.FIND_ID_BY_EMAIL,
+                        text = stringResource(Res.string.find_id_by_email),
                         color = if (isEmailFindClicked) Colors.White else Colors.Gray300,
                         style = Typography.L2.copy(
                             fontWeight = FontWeight.SemiBold
@@ -141,7 +142,7 @@ fun FindIdScreen(
                             .clickableWithNoRipple {
                                 onClickTabChanged(false)
                             },
-                        text = Texts.FindId.FIND_ID_BY_NICKNAME,
+                        text = stringResource(Res.string.find_id_by_nickname),
                         color = if (isEmailFindClicked) Colors.Gray300 else Colors.White,
                         style = Typography.L2.copy(
                             fontWeight = FontWeight.SemiBold
@@ -155,7 +156,7 @@ fun FindIdScreen(
 
             if (isEmailFindClicked) {
                 Text(
-                    text = Texts.Word.EMAIL,
+                    text = stringResource(Res.string.word_email),
                     style = Typography.B1.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -170,7 +171,7 @@ fun FindIdScreen(
                             .fillMaxWidth(),
                         text = email,
                         onValueChange = onEmailChanged,
-                        placeholder = Texts.SignupEmail.HINT,
+                        placeholder = stringResource(Res.string.signup_email_hint),
                         cornerRounded = 100,
                         backgroundColor = Colors.White,
                         isError = !isEmailValid,
@@ -195,7 +196,7 @@ fun FindIdScreen(
                                 modifier = Modifier
                                     .padding(horizontal = 12.dp, vertical = 6.dp)
                                     .align(Alignment.Center),
-                                text = Texts.Word.VERIFY,
+                                text = stringResource(Res.string.word_verify),
                                 style = Typography.L3.copy(
                                     fontWeight = FontWeight.SemiBold
                                 ),
@@ -210,7 +211,7 @@ fun FindIdScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 if (!isEmailValid) {
-                    ErrorText(Texts.SignupEmail.INVALID)
+                    ErrorText(stringResource(Res.string.signup_email_invalid))
 
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -221,7 +222,7 @@ fun FindIdScreen(
                             .fillMaxWidth(),
                         text = verificationCode,
                         onValueChange = onCodeChanged,
-                        placeholder = Texts.SignupEmail.CODE_HINT,
+                        placeholder = stringResource(Res.string.signup_email_code_hint),
                         cornerRounded = 100,
                         backgroundColor = Colors.White,
                         isError = emailVerifyType == EmailVerifyType.NOT_VERIFIED,
@@ -248,11 +249,11 @@ fun FindIdScreen(
 
                 if (emailVerifyType == EmailVerifyType.NOT_VERIFIED) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    ErrorText(Texts.SignupEmail.CODE_INVALID)
+                    ErrorText(stringResource(Res.string.signup_email_code_invalid))
                 }
             } else {
                 Text(
-                    text = Texts.FindId.INPUT_NICKNAME,
+                    text = stringResource(Res.string.find_id_input_nickname),
                     style = Typography.B1.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -268,7 +269,7 @@ fun FindIdScreen(
                         onNickNameChanged(it)
                     },
                     cornerRounded = 100,
-                    placeholder = Texts.SignupNickname.NICKNAME_HINT,
+                    placeholder = stringResource(Res.string.signup_nickname_hint),
                     isError = !isNicknameUsed && nickname.isNotEmpty(),
                     tailIcon = if(!isNicknameUsed) null else painterResource(Res.drawable.ic_check_circle_black)
                 )
@@ -277,7 +278,7 @@ fun FindIdScreen(
 
                 if (!isNicknameUsed && nickname.isNotEmpty()) {
                     ErrorText(
-                        text = Texts.FindId.NOT_EXIST_NICKNAME
+                        text = stringResource(Res.string.find_id_not_exist_nickname)
                     )
                 }
             }
@@ -287,7 +288,7 @@ fun FindIdScreen(
             PButton(
                 modifier = Modifier
                     .padding(bottom = 28.dp),
-                text = Texts.Word.CONFIRM,
+                text = stringResource(Res.string.word_confirm),
                 onClick = {
                     onClickConfirm()
                 },

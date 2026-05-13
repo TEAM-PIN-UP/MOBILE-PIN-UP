@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.map
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -60,7 +61,6 @@ import com.pinup.placePinup.ui.component.SortBottomSheet
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.model.ChipState
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import dev.icerock.moko.permissions.DeniedAlwaysException
 import dev.icerock.moko.permissions.DeniedException
@@ -76,6 +76,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_focus
 import pinup.composeapp.generated.resources.ic_pinch_off
 import pinup.composeapp.generated.resources.ic_pinch_on
@@ -324,7 +325,7 @@ fun MapScreen(
                         Spacer(modifier = Modifier.width(4.dp))
 
                         Text(
-                            text = Texts.PinMap.SEARCH_BUTTON,
+                            text = stringResource(Res.string.pin_map_search_button),
                             color = Colors.Gray800,
                             style = Typography.B3.copy(
                                 fontWeight = FontWeight.SemiBold

@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.profilesetting
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -44,13 +45,13 @@ import com.pinup.placePinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.bottomSheet.ProfileMenuBottomSheet
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_back
 import pinup.composeapp.generated.resources.ic_profile_select
 import pinup.composeapp.generated.resources.ic_profile_setting_image
@@ -131,7 +132,7 @@ fun ProfileSettingScreen(
                 Text(
                     modifier = Modifier
                         .align(Alignment.Center),
-                    text =  Texts.Setting.PROFILE_SETTING,
+                    text =  stringResource(Res.string.setting_profile_setting),
                     style = Typography.H3,
                     color = Colors.Neutral800
                 )
@@ -142,7 +143,7 @@ fun ProfileSettingScreen(
                             onClickModifyProfile()
                         }
                         .align(Alignment.CenterEnd),
-                    text = Texts.Word.COMPLETE,
+                    text = stringResource(Res.string.word_complete),
                     color = Colors.Main,
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.Medium
@@ -203,7 +204,7 @@ fun ProfileSettingScreen(
             ) {
                 Column {
                     Text(
-                        text = Texts.Word.NICKNAME,
+                        text = stringResource(Res.string.word_nickname),
                         color = Colors.Gray800,
                         style = Typography.B1.copy(
                             fontWeight = FontWeight.Medium
@@ -213,7 +214,7 @@ fun ProfileSettingScreen(
                     Spacer(modifier = Modifier.height(36.dp))
 
                     Text(
-                        text = Texts.Word.INTRO,
+                        text = stringResource(Res.string.word_intro),
                         color = Colors.Gray800,
                         style = Typography.B1.copy(
                             fontWeight = FontWeight.Medium
@@ -261,7 +262,7 @@ fun ProfileSettingScreen(
                         ),
                         contentPadding = PaddingValues(0.dp),
                         fixedBorderColor = Colors.Transparency,
-                        placeholder = Texts.Setting.HINT_BIO_CHANGE
+                        placeholder = stringResource(Res.string.setting_hint_bio_change)
                     )
 
                     Spacer(modifier = Modifier.height(10.dp))
@@ -277,7 +278,7 @@ fun ProfileSettingScreen(
             Text(
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                text = Texts.Setting.HINT_NICKNAME_CHANGE,
+                text = stringResource(Res.string.setting_hint_nickname_change),
                 color = Colors.Gray400,
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.Medium

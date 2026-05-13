@@ -19,6 +19,7 @@ import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_check_main
 
@@ -51,7 +52,7 @@ fun SortBottomSheet(
                 }
 
                 Text(
-                    text = it.text,
+                    text = stringResource(it.textRes),
                     color = Colors.Gray800,
                     style = Typography.T2.copy(
                         fontWeight = FontWeight.Medium

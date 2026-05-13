@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.setting.complete
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.ui.component.PButton
 import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -41,7 +43,7 @@ fun UnRegisterCompleteScreen(
             Text(
                 modifier = Modifier
                     .align(Alignment.Center),
-                text = Texts.Setting.UNREGISTER,
+                text = stringResource(Res.string.setting_unregister),
                 style = Typography.H3,
                 color = Colors.Neutral800
             )
@@ -55,7 +57,7 @@ fun UnRegisterCompleteScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.CenterHorizontally),
-            text = Texts.Setting.UNREGISTER_COMPLETE,
+            text = stringResource(Res.string.setting_unregister_complete),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -68,7 +70,7 @@ fun UnRegisterCompleteScreen(
         PButton(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
-            text = Texts.Word.CONFIRM,
+            text = stringResource(Res.string.word_confirm),
             onClick = {
                 onMoveOnboarding()
             },

@@ -2,6 +2,8 @@ package com.pinup.placePinup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pinup.placePinup.domain.model.UpdateMessage
+import com.pinup.placePinup.domain.model.UpdateStore
 import com.pinup.placePinup.domain.usecase.LogoutUseCase
 import com.pinup.placePinup.event.LogoutEventBus
 import com.pinup.placePinup.platform.KakaoDeepLinkStore
@@ -82,11 +84,30 @@ class StartAppViewModel(
         }
         KakaoDeepLinkStore.onNewParams(userId.toString())
     }
+
+    fun dismissUpdateDialog() {
+        _uiState.update {
+            it.copy(
+                updateDialogState = UpdateDialogState.NoUpdate
+            )
+        }
+    }
+
+    fun remindLaterUpdateDialog() {
+        // TODO 다음에 하기 처리
+
+        _uiState.update {
+            it.copy(
+                updateDialogState = UpdateDialogState.NoUpdate
+            )
+        }
+    }
 }
 
 data class StartAppUiState(
     val isLogin: Boolean? = null,
     val alertState: AlertState = AlertState(),
+    val updateDialogState: UpdateDialogState = UpdateDialogState.Loading,
     val userId: Int = -1,
     val errorMessage: String = "",
 )
@@ -99,4 +120,45 @@ data class AlertState(
     val rightButtonText: String = "",
     val onLeftButtonClick: () -> Unit = {},
     val onRightButtonClick: () -> Unit = {},
+)
+
+sealed interface UpdateDialogState {
+    data object Loading : UpdateDialogState
+    data object NoUpdate : UpdateDialogState
+    data class UpdateRequired(
+        val type: UpdateType,
+        val message: UpdateMessage,
+        val store: UpdateStore
+    ) : UpdateDialogState
+}
+
+enum class UpdateType {
+    OPTIONAL, FORCE
+}
+
+// TODO API 연동 후 삭제 예정
+val dummyForceUpdateState = UpdateDialogState.UpdateRequired(
+    type = UpdateType.FORCE,
+    message = UpdateMessage(
+        title = "업데이트 필요",
+        body = "더 나은 서비스를 위해 핀업이 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요"
+    ),
+    store = UpdateStore(
+        url = "https://play.google.com/store/apps/details?id=com.pinup.placePinup",
+        market = "playstore",
+        packageNameOrBundleId = "com.pinup.placePinup"
+    )
+)
+
+val dummyOptionalUpdateState = UpdateDialogState.UpdateRequired(
+    type = UpdateType.OPTIONAL,
+    message = UpdateMessage(
+        title = "업데이트 필요",
+        body = "더 나은 서비스를 위해 핀업이 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요"
+    ),
+    store = UpdateStore(
+        url = "https://play.google.com/store/apps/details?id=com.pinup.placePinup",
+        market = "playstore",
+        packageNameOrBundleId = "com.pinup.placePinup"
+    )
 )

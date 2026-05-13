@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.signup.compose
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,7 +25,6 @@ import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.signup.TermsOfService
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.Const
 import org.jetbrains.compose.resources.painterResource
@@ -61,7 +62,7 @@ fun TermsOfServiceScreen(
 
         Text(
             modifier = Modifier.padding(top = 40.dp),
-            text = Texts.SignupTerms.TITLE,
+            text = stringResource(Res.string.signup_terms_title),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -149,7 +150,7 @@ fun TermsOfServiceScreen(
         Spacer(Modifier.weight(1f))
 
         PButton(
-            text = Texts.Word.CONFIRM,
+            text = stringResource(Res.string.word_confirm),
             isEnable = isPassValidation,
             onClick = {
                 onMoveInputName()
@@ -168,11 +169,11 @@ fun TermRow(
     onClickDetail: (String) -> Unit = {},
 ){
     val text = when (type) {
-        TermsOfService.ALL -> Texts.SignupTerms.ALL_AGREE
-        TermsOfService.USING_SERVICE -> Texts.SignupTerms.SERVICE_AGREE
-        TermsOfService.COLLECT_DATA -> Texts.SignupTerms.PRIVATE_INFO_AGREE
-        TermsOfService.COLLECT_LOCATION -> Texts.SignupTerms.LOCATION_INFO_AGREE
-        TermsOfService.MARKETING -> Texts.SignupTerms.MARKETING_AGREE
+        TermsOfService.ALL -> stringResource(Res.string.signup_terms_all_agree)
+        TermsOfService.USING_SERVICE -> stringResource(Res.string.signup_terms_service_agree)
+        TermsOfService.COLLECT_DATA -> stringResource(Res.string.signup_terms_private_info_agree)
+        TermsOfService.COLLECT_LOCATION -> stringResource(Res.string.signup_terms_location_info_agree)
+        TermsOfService.MARKETING -> stringResource(Res.string.signup_terms_marketing_agree)
     }
 
     val url = when (type) {

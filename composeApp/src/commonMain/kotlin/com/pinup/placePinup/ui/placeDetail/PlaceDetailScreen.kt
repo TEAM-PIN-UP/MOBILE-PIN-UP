@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.placeDetail
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,7 +41,6 @@ import com.pinup.placePinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.placePinup.ui.component.ReviewCard
 import com.pinup.placePinup.ui.component.ReviewedPlaceCard
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -48,6 +48,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_back
 import pinup.composeapp.generated.resources.ic_bookmark_off
 import pinup.composeapp.generated.resources.ic_bookmark_on
@@ -177,7 +178,7 @@ fun PlaceDetailScreen(
                             .padding(start = 20.dp)
                     ) {
                         Text(
-                            text = Texts.Word.PINLOG + " " + detailPlace.mapPlace.reviewCount.toString(),
+                            text = stringResource(Res.string.word_pinlog) + " " + detailPlace.mapPlace.reviewCount.toString(),
                             style = Typography.B1.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),

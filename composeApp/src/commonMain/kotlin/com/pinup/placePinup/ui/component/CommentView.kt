@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.component
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -17,7 +20,6 @@ import com.pinup.placePinup.domain.model.AuthorInfo
 import com.pinup.placePinup.domain.model.Comment
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.relativeOrDate
 
@@ -96,7 +98,7 @@ fun CommentView(
                     .clickableWithNoRipple {
                         onReplyClick(comment.id)
                     },
-                text = Texts.Word.DO_REPLY_COMMENT,
+                text = stringResource(Res.string.word_do_reply_comment),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),

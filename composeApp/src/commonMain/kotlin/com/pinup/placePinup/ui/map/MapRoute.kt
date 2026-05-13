@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.map
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import PToastHost
 import androidx.compose.foundation.layout.padding
@@ -16,7 +19,6 @@ import com.pinup.placePinup.domain.model.Position
 import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.main.compose.MainDestination
-import com.pinup.placePinup.ui.theme.Texts
 import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
 import dev.icerock.moko.geo.compose.LocationTrackerAccuracy
 import dev.icerock.moko.geo.compose.LocationTrackerFactory
@@ -43,12 +45,14 @@ fun MapRoute(
     val toast = rememberToastState()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
     var clickedPinlog by remember { mutableStateOf(0) }
+    val deletePinlogText = stringResource(Res.string.toast_delete_pinlog)
+    val emptyPinlogText = stringResource(Res.string.toast_empty_pinlog)
 
     LaunchedEffect(Unit) {
         mapViewModel.uiEvent.collectLatest {
             when(it) {
                 MapUiEvent.SuccessDelete -> {
-                    toast.show(Texts.Toast.DELETE_PINLOG)
+                    toast.show(deletePinlogText)
                 }
                 is MapUiEvent.OnMoveUserProfile -> {
                     onMoveUserProfile(it.name)
@@ -63,10 +67,10 @@ fun MapRoute(
 
     if (isShowDeleteDialog.value) {
         PDialog(
-            titleText = Texts.PinLog.DELETE_DIALOG_TITLE,
-            descriptionText = Texts.PinLog.DELETE_DIALOG_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_DELETE,
+            titleText = stringResource(Res.string.pin_log_delete_dialog_title),
+            descriptionText = stringResource(Res.string.pin_log_delete_dialog_description),
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
                 isShowDeleteDialog.value = false
             },

@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.findAccount.findId
+import org.jetbrains.compose.resources.stringResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -44,8 +47,10 @@ fun SuccessFindIdScreen(
 
         Spacer(modifier = Modifier.height(44.dp))
 
+        val nickNamePrefix = stringResource(Res.string.find_id_nick_name_title_prefix)
+        val nickNameSuffix = stringResource(Res.string.find_id_nick_name_title_suffix)
         Text(
-            text = Texts.FindId.getNickNameTitle(nickName),
+            text = Texts.FindId.getNickNameTitle(nickName, nickNamePrefix, nickNameSuffix),
             style = Typography.D2.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -89,7 +94,7 @@ fun SuccessFindIdScreen(
         PButton(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
-            text = Texts.FindPassword.DO_LOGIN,
+            text = stringResource(Res.string.find_password_do_login),
             onClick = {
                 onClickLogin()
             }
@@ -103,7 +108,7 @@ fun SuccessFindIdScreen(
                 .clickableWithNoRipple {
                     onClickFindPassword()
                 },
-            text = Texts.FindPassword.CHANGE_PASSWORD,
+            text = stringResource(Res.string.find_password_change_password),
             style = Typography.B2.copy(
                 fontWeight = FontWeight.Medium
             ),

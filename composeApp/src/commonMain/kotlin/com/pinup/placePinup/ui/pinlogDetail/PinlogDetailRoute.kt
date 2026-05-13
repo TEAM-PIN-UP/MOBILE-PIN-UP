@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.pinlogDetail
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import PToastHost
 import androidx.compose.runtime.Composable
@@ -10,7 +13,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.placePinup.domain.model.ReportType
 import com.pinup.placePinup.ui.component.PDialog
-import com.pinup.placePinup.ui.theme.Texts
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
 import rememberToastState
@@ -34,13 +36,15 @@ fun PinlogDetailRoute(
 
     var clickedTargetId by remember { mutableStateOf(0) }
     var clickedTargetName by remember { mutableStateOf("") }
-
+    val deletePinlogText = stringResource(Res.string.toast_delete_pinlog)
+    val blockSuccessTemplate = stringResource(Res.string.toast_block_success)
+    val alreadyBlockText = stringResource(Res.string.toast_already_block_user)
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
             when(it) {
                 PinlogUiEvent.SuccessDelete -> {
-                    toast.show(Texts.Toast.DELETE_PINLOG)
+                    toast.show(deletePinlogText)
                     onBackPressed()
                 }
 
@@ -49,11 +53,11 @@ fun PinlogDetailRoute(
                 }
 
                 PinlogUiEvent.SuccessBlockUser -> {
-                    toast.show(Texts.Toast.blockSuccessToast(clickedTargetName))
+                    toast.show(blockSuccessTemplate.replace("%s", clickedTargetName))
                 }
 
                 PinlogUiEvent.ErrorBlockUser -> {
-                    toast.show(Texts.Toast.ALREADY_BLOCK_USER)
+                    toast.show(alreadyBlockText)
                 }
             }
         }
@@ -63,10 +67,10 @@ fun PinlogDetailRoute(
 
     if (isShowDeleteDialog.value) {
         PDialog(
-            titleText = Texts.PinLog.DELETE_DIALOG_TITLE,
-            descriptionText = Texts.PinLog.DELETE_DIALOG_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_DELETE,
+            titleText = stringResource(Res.string.pin_log_delete_dialog_title),
+            descriptionText = stringResource(Res.string.pin_log_delete_dialog_description),
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
                 isShowDeleteDialog.value = false
             },
@@ -79,10 +83,10 @@ fun PinlogDetailRoute(
 
     if (isShowBlockUserDialog.value) {
         PDialog(
-            titleText = Texts.Report.getBlockUserDialogTitle(clickedTargetName),
-            descriptionText = Texts.Report.BLOCK_USER_DIALOG_CONTENT,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_BLOCK,
+            titleText = stringResource(Res.string.report_block_dialog_title, clickedTargetName),
+            descriptionText = stringResource(Res.string.report_block_dialog_content),
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_block),
             onLeftButtonClick = {
                 isShowBlockUserDialog.value = false
             },
@@ -95,10 +99,10 @@ fun PinlogDetailRoute(
 
     if (isShowDeleteCommentDialog.value) {
         PDialog(
-            titleText = Texts.PinLog.DELETE_COMMENT_DIALOG_TITLE,
-            descriptionText = Texts.PinLog.DELETE_COMMENT_DIALOG_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_DELETE,
+            titleText = stringResource(Res.string.pin_log_delete_comment_dialog_title),
+            descriptionText = stringResource(Res.string.pin_log_delete_comment_dialog_description),
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
                 isShowDeleteCommentDialog.value = false
             },

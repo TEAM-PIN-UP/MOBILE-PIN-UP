@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.map
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,6 +44,7 @@ import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_chevron_bottom
 
 @Composable
@@ -119,7 +121,7 @@ fun NonFocusScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = sortType.text,
+                text = stringResource(sortType.textRes),
                 style = Typography.B4
             )
 
@@ -138,7 +140,7 @@ fun NonFocusScreen(
                 .padding(top = 80.dp)
                 .fillMaxWidth()
                 .background(color = Colors.White),
-            text = Texts.PinMap.EMPTY_PINLOG,
+            text = stringResource(Res.string.pin_map_empty_pinlog),
             color = Colors.Neutral500,
             style = Typography.C2,
             textAlign = TextAlign.Center
@@ -195,7 +197,7 @@ fun FocusScreen(
         Spacer(modifier = Modifier.height(28.dp))
 
         Text(
-            text = Texts.PinMap.SEARCH_RESULT,
+            text = stringResource(Res.string.pin_map_search_result),
             color = Colors.Neutral800,
             style = Typography.B2.copy(
                 fontWeight = FontWeight.Medium

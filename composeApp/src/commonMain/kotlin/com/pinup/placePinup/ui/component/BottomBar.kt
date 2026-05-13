@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.component
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,7 +35,6 @@ import com.pinup.placePinup.extentions.clickableSingleWithNoRipple
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -80,7 +81,7 @@ fun BottomBar(
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = Texts.PinLog.WRITE_PINLOG,
+                            text = stringResource(Res.string.pin_log_write_pinlog),
                             color = Colors.Gray600,
                             style = Typography.B3.copy(
                                 fontWeight = FontWeight.SemiBold
@@ -107,7 +108,7 @@ fun BottomBar(
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = Texts.Pinch.CREATE_MY_PINCH,
+                            text = stringResource(Res.string.pinch_create_my),
                             color = Colors.Gray600,
                             style = Typography.B3.copy(
                                 fontWeight = FontWeight.SemiBold
@@ -207,10 +208,10 @@ fun RowScope.BottomBarMenuItem(
     }
 
     val text = when(myMenu){
-        MainDestination.Article -> Texts.Word.ARTICLE
-        MainDestination.Feed -> Texts.Word.FEED
-        MainDestination.Map -> Texts.Word.PIN_MAP
-        MainDestination.My -> Texts.Word.MY
+        MainDestination.Article -> stringResource(Res.string.word_article)
+        MainDestination.Feed -> stringResource(Res.string.word_feed)
+        MainDestination.Map -> stringResource(Res.string.word_pin_map)
+        MainDestination.My -> stringResource(Res.string.word_my)
         is MainDestination.Upload -> ""
     }
 

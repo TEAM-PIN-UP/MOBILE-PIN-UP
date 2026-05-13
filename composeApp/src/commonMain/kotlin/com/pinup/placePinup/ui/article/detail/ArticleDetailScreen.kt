@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.article.detail
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,11 +39,11 @@ import com.pinup.placePinup.platform.PlatformWebView
 import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.coroutines.flow.first
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_bookmark_off
 import pinup.composeapp.generated.resources.ic_bookmark_on
 
@@ -188,7 +189,7 @@ fun ArticleDetailScreen(
                         Text(
                             modifier = Modifier
                                 .padding(start = 20.dp),
-                            text = Texts.Article.RECOMMEND_ARTICLE,
+                            text = stringResource(Res.string.article_recommend),
                             color = Colors.Gray100,
                             style = Typography.D2.copy(
                                 fontWeight = FontWeight.Bold
