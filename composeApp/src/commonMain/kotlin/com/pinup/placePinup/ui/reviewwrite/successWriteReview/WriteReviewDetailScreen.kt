@@ -106,7 +106,7 @@ fun PinlogDetailScreen(
                         Spacer(modifier = Modifier.height(6.dp))
 
                         Text(
-                            text = "${toShortDateXd(pinlogDetail.visitedDate)} 방문",
+                            text = stringResource(Res.string.review_visited_date, toShortDateXd(pinlogDetail.visitedDate)),
                             style = Typography.L2.copy(
                                 fontWeight = FontWeight.Medium
                             ),
@@ -209,7 +209,7 @@ fun PinlogDetailScreen(
                         Spacer(modifier = Modifier.weight(1f))
 
                         Text(
-                            text = "${pinlogDetail.createdAt[0]}.${pinlogDetail.createdAt[1]}.${pinlogDetail.createdAt[2]} 작성",
+                            text = stringResource(Res.string.review_written_date, "${pinlogDetail.createdAt[0]}.${pinlogDetail.createdAt[1]}.${pinlogDetail.createdAt[2]}"),
                             style = Typography.L2.copy(
                                 fontWeight = FontWeight.Medium
                             ),

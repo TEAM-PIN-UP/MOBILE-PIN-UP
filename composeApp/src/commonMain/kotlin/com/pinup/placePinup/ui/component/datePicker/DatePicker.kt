@@ -24,6 +24,9 @@ import com.pinup.placePinup.ui.component.datePicker.DateTimeOperations.subtractM
 import com.pinup.placePinup.ui.component.datePicker.DateTimeOperations.format
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.LocalDate
+import org.jetbrains.compose.resources.stringResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun DatePicker(
@@ -123,7 +126,10 @@ fun DatePicker(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = selectedMonth.getMonthName(),
+                    text = selectedMonth.getMonthName(
+                        yearSuffix = stringResource(Res.string.date_suffix_year),
+                        monthSuffix = stringResource(Res.string.date_suffix_month)
+                    ),
                     style = titleStyle,
                     color = titleColor,
                     modifier = Modifier.weight(1f)
@@ -172,7 +178,16 @@ fun DatePicker(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = getKorean(day),
+                            text = when (day) {
+                                DayOfWeek.MONDAY -> stringResource(Res.string.day_of_week_mon)
+                                DayOfWeek.TUESDAY -> stringResource(Res.string.day_of_week_tue)
+                                DayOfWeek.WEDNESDAY -> stringResource(Res.string.day_of_week_wed)
+                                DayOfWeek.THURSDAY -> stringResource(Res.string.day_of_week_thu)
+                                DayOfWeek.FRIDAY -> stringResource(Res.string.day_of_week_fri)
+                                DayOfWeek.SATURDAY -> stringResource(Res.string.day_of_week_sat)
+                                DayOfWeek.SUNDAY -> stringResource(Res.string.day_of_week_sun)
+                                else -> ""
+                            },
                             style = headStyle,
                             color = headColor,
                             textAlign = TextAlign.Center,
@@ -289,15 +304,3 @@ private fun Modifier.datePickerBoxSelectedRange(date: CalendarDate, dateTimePick
     }
 }
 
-private fun getKorean(day : DayOfWeek) : String {
-    return when(day){
-        DayOfWeek.MONDAY -> "월"
-        DayOfWeek.TUESDAY -> "화"
-        DayOfWeek.WEDNESDAY -> "수"
-        DayOfWeek.THURSDAY -> "목"
-        DayOfWeek.FRIDAY -> "금"
-        DayOfWeek.SATURDAY -> "토"
-        DayOfWeek.SUNDAY -> "일"
-        else -> ""
-    }
-}

@@ -53,6 +53,10 @@ fun FeedView(
     onClickDetail: (Int) -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {}
 ) {
+    val justNow = stringResource(Res.string.time_just_now)
+    val minuteSuffix = stringResource(Res.string.time_minute_suffix)
+    val hourSuffix = stringResource(Res.string.time_hour_suffix)
+    val daySuffix = stringResource(Res.string.time_day_suffix)
     var isOverflow by remember { mutableStateOf(false) }
     val pagerState = rememberPagerState(pageCount = { item.reviewImageUrls?.size ?: 0})
 
@@ -94,7 +98,7 @@ fun FeedView(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = relativeOrDate(item.createdAt),
+                    text = relativeOrDate(item.createdAt, justNow, minuteSuffix, hourSuffix, daySuffix),
                     style = Typography.L2.copy(
                         fontWeight = FontWeight.Medium
                     ),

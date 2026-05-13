@@ -492,10 +492,10 @@ fun MapScreen(
 
     if (isShowPermissionDialog.value) {
         PDialog(
-            titleText = "권한 필요",
-            descriptionText = "위치 권한 허용이 필요해요.\n확인을 누르시면 설정 화면으로 이동합니다",
-            leftButtonText = "취소",
-            rightButtonText = "확인",
+            titleText = stringResource(Res.string.permission_location_title),
+            descriptionText = stringResource(Res.string.permission_location_description),
+            leftButtonText = stringResource(Res.string.word_cancel),
+            rightButtonText = stringResource(Res.string.word_confirm),
             onLeftButtonClick = {
                 isShowPermissionDialog.value = false
             },

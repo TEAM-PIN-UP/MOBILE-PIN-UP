@@ -241,7 +241,7 @@ fun LoginScreen(
                         onSnsLoginClick(SNSType.KAKAO)
                     },
                 painter = painterResource(Res.drawable.ic_kakao),
-                contentDescription = "카카오 로그인"
+                contentDescription = stringResource(Res.string.login_kakao_content_description)
             )
 
             Image(
@@ -251,7 +251,7 @@ fun LoginScreen(
                         onSnsLoginClick(SNSType.NAVER)
                     },
                 painter = painterResource(Res.drawable.ic_naver),
-                contentDescription = "네이버 로그인"
+                contentDescription = stringResource(Res.string.login_naver_content_description)
             )
 
             Image(
@@ -261,7 +261,7 @@ fun LoginScreen(
                         onSnsLoginClick(SNSType.GOOGLE)
                     },
                 painter = painterResource(Res.drawable.ic_google),
-                contentDescription = "구글 로그인"
+                contentDescription = stringResource(Res.string.login_google_content_description)
             )
 
             if (getPlatformName() == PLATFORM_IOS) {
@@ -272,7 +272,7 @@ fun LoginScreen(
                             onSnsLoginClick(SNSType.APPLE)
                         },
                     painter = painterResource(Res.drawable.ic_apple),
-                    contentDescription = "애플 로그인"
+                    contentDescription = stringResource(Res.string.login_apple_content_description)
                 )
             }
         }

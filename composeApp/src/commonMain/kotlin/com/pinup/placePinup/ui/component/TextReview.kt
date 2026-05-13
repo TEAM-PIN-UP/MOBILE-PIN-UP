@@ -18,6 +18,7 @@ import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pinup.composeapp.generated.resources.*
 
 @Composable
@@ -93,7 +94,7 @@ fun TextReview(
                             onAdminClick()
                         },
                     painter = painterResource(Res.drawable.ic_review_admin),
-                    contentDescription = "더보기"
+                    contentDescription = stringResource(Res.string.word_see_more)
                 )
             }
             Text(
@@ -109,7 +110,7 @@ fun TextReview(
             modifier = Modifier
                 .padding(vertical = 4.dp)
                 .align(Alignment.End),
-            text = "방문 날짜 ${review.createdAt}",
+            text = stringResource(Res.string.review_visit_date_label, review.createdAt),
             style = Typography.B6,
             color = Colors.Neutral400,
         )

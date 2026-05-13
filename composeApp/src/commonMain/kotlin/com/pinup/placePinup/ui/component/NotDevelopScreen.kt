@@ -18,8 +18,9 @@ import androidx.compose.ui.unit.dp
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_now_develop
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun NotDevelopScreen(
@@ -66,7 +67,7 @@ fun NotDevelopScreen(
             Spacer(modifier = Modifier.height(9.dp))
 
             Text(
-                text = "아직 준비중인 화면입니다.\n조금만 기다려주세요.",
+                text = stringResource(Res.string.screen_preparing),
                 style = Typography.B2.copy(
                     fontWeight = FontWeight.Medium
                 ),

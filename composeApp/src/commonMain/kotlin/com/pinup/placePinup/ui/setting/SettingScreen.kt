@@ -88,7 +88,7 @@ fun SettingScreen(
                         horizontalAlignment = Alignment.End
                     ) {
                         Text(
-                            text = "SNS 로그인(${snsType?.value})",
+                            text = stringResource(Res.string.setting_sns_login_type, snsType?.value ?: ""),
                             style = Typography.L1.copy(
                                 fontWeight = FontWeight.Medium
                             ),

@@ -1,5 +1,6 @@
 package com.pinup.placePinup.ui.addpinbuddy
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
@@ -204,7 +205,7 @@ fun AddPinBuddyScreen(
                             Text(
                                 modifier = Modifier
                                     .padding(top = 12.dp),
-                                text = "검색 결과가 없어요",
+                                text = stringResource(Res.string.search_no_result),
                                 style = Typography.H3,
                                 color = Colors.Neutral800
                             )
@@ -212,7 +213,7 @@ fun AddPinBuddyScreen(
                             Text(
                                 modifier = Modifier
                                     .padding(top = 6.dp),
-                                text = "검색어를 확인해주세요.",
+                                text = stringResource(Res.string.search_check_keyword),
                                 style = Typography.B3,
                                 color = Colors.Neutral500
                             )

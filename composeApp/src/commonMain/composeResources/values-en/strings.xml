@@ -41,6 +41,10 @@
     <string name="word_do_block">Block</string>
     <string name="word_do_release">Unblock</string>
     <string name="word_notification">Notifications</string>
+    <string name="word_cancel">Cancel</string>
+
+    <!-- Error -->
+    <string name="error_session_expired">Your session has expired.\nPlease log in again.</string>
 
     <!-- Setting -->
     <string name="setting_profile_setting_title">Account Settings</string>
@@ -65,6 +69,7 @@
     <string name="setting_unregister_dialog_title">Are you sure you want to delete your account?</string>
     <string name="setting_unregister_dialog_description">Once deleted, you will no longer\nbe able to access your\nprevious service history.</string>
     <string name="setting_unregister_complete">Thank you for using PIN-UP :)\nSee you again!</string>
+    <string name="setting_sns_login_type">Social Login (%s)</string>
 
     <!-- PinLog -->
     <string name="pin_log_write_pinlog">Write Pin Log</string>
@@ -94,6 +99,10 @@
     <string name="pin_log_delete_comment_dialog_description">Deleted comments cannot be recovered.</string>
     <string name="pin_log_select_date_prefix">When did you visit\n</string>
     <string name="pin_log_select_date_suffix">?</string>
+    <string name="place_pinlog_count">Pin Logs: %d</string>
+    <string name="review_visited_date">Visited %s</string>
+    <string name="review_written_date">Created %s</string>
+    <string name="review_visit_date_label">Visit date %s</string>
 
     <!-- Profile -->
     <string name="profile_my">MY</string>
@@ -128,16 +137,24 @@
     <string name="profile_pick_library">Choose from Library</string>
     <string name="profile_delete_profile_image">Delete Profile Image</string>
 
+    <!-- Bookmark -->
+    <string name="bookmark_title">My Places</string>
+    <string name="bookmark_tab_by_region">By Region</string>
+
     <!-- PinMap -->
     <string name="pin_map_search_button">Search this area</string>
     <string name="pin_map_search_hint">Search places or locations</string>
     <string name="pin_map_empty_pinlog">No Pin Logs yet!\nPin up your favorite places :)</string>
     <string name="pin_map_search_result">Search Results</string>
     <string name="pin_map_go_article">Go to Articles</string>
+    <string name="permission_location_title">Permission Required</string>
+    <string name="permission_location_description">Location permission is required.\nTap Confirm to go to Settings.</string>
 
     <!-- Feed -->
     <string name="feed_recent_search">Recent Searches</string>
     <string name="feed_empty_feed">Your Pin Buddies haven't posted any Pin Logs yet!</string>
+    <string name="search_no_result">No results found</string>
+    <string name="search_check_keyword">Please check your search term.</string>
 
     <!-- Article -->
     <string name="article_title">PIN-UP Articles</string>
@@ -159,11 +176,17 @@
     <string name="pinch_delete_dialog_content">This action cannot be undone.\nDelete anyway?</string>
     <string name="pinch_write_complete_dialog_title">My Pints Created!</string>
     <string name="pinch_write_complete_dialog_content">Would you like to check\nyour new Pints?</string>
+    <string name="pinch_created_date">Created on %s</string>
+    <string name="pinch_place_name_hint">%d. Place name</string>
 
     <!-- Login -->
     <string name="login_id_find">Find ID</string>
     <string name="login_sns">Social Login</string>
     <string name="login_incorrect_id">Incorrect ID or password.</string>
+    <string name="login_kakao_content_description">Kakao Login</string>
+    <string name="login_naver_content_description">Naver Login</string>
+    <string name="login_google_content_description">Google Login</string>
+    <string name="login_apple_content_description">Apple Login</string>
 
     <!-- FindPassword -->
     <string name="find_password_hint">Password must be 8–20 characters and include a special character.</string>
@@ -231,6 +254,7 @@
 
     <!-- Block -->
     <string name="block_user_block">Block Account</string>
+    <string name="screen_preparing">This screen is still being prepared.\nPlease wait a little longer.</string>
 
     <!-- Toast -->
     <string name="toast_delete_pinlog">The Pin Log has been deleted.</string>
@@ -256,6 +280,24 @@
     <string name="update_check_description">PIN-UP has been updated for a better experience! Update now to enjoy the latest features.</string>
     <string name="update_check_confirm">Update</string>
     <string name="update_check_optional_cancel">Later</string>
+
+    <!-- Date -->
+    <string name="date_suffix_year"></string>
+    <string name="date_suffix_month"></string>
+    <string name="date_suffix_day"></string>
+    <string name="day_of_week_mon">Mon</string>
+    <string name="day_of_week_tue">Tue</string>
+    <string name="day_of_week_wed">Wed</string>
+    <string name="day_of_week_thu">Thu</string>
+    <string name="day_of_week_fri">Fri</string>
+    <string name="day_of_week_sat">Sat</string>
+    <string name="day_of_week_sun">Sun</string>
+
+    <!-- Time -->
+    <string name="time_just_now">Just now</string>
+    <string name="time_minute_suffix"> min ago</string>
+    <string name="time_hour_suffix"> hr ago</string>
+    <string name="time_day_suffix"> day ago</string>
 
     <!-- Sort -->
     <string name="sort_near">Nearest</string>

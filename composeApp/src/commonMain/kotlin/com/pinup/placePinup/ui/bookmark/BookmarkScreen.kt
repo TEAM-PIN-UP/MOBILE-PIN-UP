@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_chevron_bottom
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun BookmarkScreen(
@@ -69,7 +69,9 @@ fun BookmarkScreen(
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden
     )
-    val pages = remember { listOf("전체","지역별") }
+    val pageAll = stringResource(Res.string.category_all)
+    val pageByRegion = stringResource(Res.string.bookmark_tab_by_region)
+    val pages = remember(pageAll, pageByRegion) { listOf(pageAll, pageByRegion) }
     val pagerState = rememberPagerState{ pages.size }
 
     LifecycleResumeEffect(Unit) {
@@ -106,7 +108,7 @@ fun BookmarkScreen(
                 modifier = Modifier
                     .padding(vertical = 13.dp)
                     .padding(start = 20.dp),
-                text = "마이 플레이스",
+                text = stringResource(Res.string.bookmark_title),
                 style = Typography.H2,
                 color = Colors.Neutral800
             )
