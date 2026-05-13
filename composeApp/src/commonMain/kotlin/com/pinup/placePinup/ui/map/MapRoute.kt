@@ -95,7 +95,7 @@ fun MapRoute(
                 mapViewModel.updateSearchMode()
             },
             onClickBottomNav = onBottomMenuClick,
-            showEmptyToast = { toast.show(Texts.Toast.EMPTY_PINLOG) }
+            showEmptyToast = { toast.show(emptyPinlogText) }
         )
     } else {
         MapScreen(

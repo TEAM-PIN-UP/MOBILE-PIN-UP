@@ -28,12 +28,11 @@ import com.pinup.placePinup.ui.component.BottomBar
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_close
-import pinup.composeapp.generated.resources.ic_search_back
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun MapSearchScreen(
@@ -78,7 +77,7 @@ fun MapSearchScreen(
                 text = query,
                 textStyle = Typography.B1.copy(fontWeight = FontWeight.Medium),
                 onValueChange = onValueChange,
-                placeholder = Texts.PinMap.SEARCH_HINT,
+                placeholder = stringResource(Res.string.pin_map_search_hint),
                 placeholderStyle = Typography.T2.copy(fontWeight = FontWeight.Medium),
                 placeholderTextColor = Colors.Gray400,
                 cornerRounded = 100,

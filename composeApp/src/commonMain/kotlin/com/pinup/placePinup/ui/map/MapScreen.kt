@@ -456,7 +456,7 @@ fun MapScreen(
                     RoundedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         text = "",
-                        placeholder = Texts.PinMap.SEARCH_HINT,
+                        placeholder = stringResource(Res.string.pin_map_search_hint),
                         onValueChange = {},
                         leadingIcon = painterResource(Res.drawable.ic_search),
                         cornerRounded = 100,
