@@ -298,4 +298,6 @@
     <!-- Camera -->
     <string name="camera_permission_denied_title">Camera permission is required</string>
     <string name="camera_permission_denied_description">Please enable camera access in Settings.</string>
+    <string name="photo_source_gallery">Choose from Gallery</string>
+    <string name="photo_source_camera">Take a Photo</string>
 </resources>

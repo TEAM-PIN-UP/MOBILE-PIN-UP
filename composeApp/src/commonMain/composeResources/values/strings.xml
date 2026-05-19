@@ -298,4 +298,6 @@
     <!-- Camera -->
     <string name="camera_permission_denied_title">카메라 권한이 필요합니다</string>
     <string name="camera_permission_denied_description">설정에서 카메라 권한을 허용해주세요.</string>
+    <string name="photo_source_gallery">갤러리에서 선택</string>
+    <string name="photo_source_camera">카메라로 촬영</string>
 </resources>
