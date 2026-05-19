@@ -1,7 +1,4 @@
 package com.pinup.placePinup.ui.reviewwrite.compose
-import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.*
-import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -17,13 +14,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pinup.placePinup.ui.component.CameraView
 import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.reviewwrite.WriteReviewUiEvent
 import com.pinup.placePinup.ui.reviewwrite.WriteReviewViewModel
 import com.pinup.placePinup.ui.reviewwrite.searchplace.SearchPlaceRoute
 import com.pinup.placePinup.ui.theme.Colors
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.pin_log_dialog_body
+import pinup.composeapp.generated.resources.pin_log_dialog_title
+import pinup.composeapp.generated.resources.word_do_confirm
+import pinup.composeapp.generated.resources.word_do_return
 
 @Composable
 fun WriteReviewNavHost(
@@ -48,6 +52,10 @@ fun WriteReviewNavHost(
                     }
 
                     WriteReviewUiEvent.SuccessEditReview -> onBackPressed()
+
+                    WriteReviewUiEvent.FinishCamera -> {
+                        navHostController.popBackStack(WriteReviewDestination.Camera, inclusive = true)
+                    }
                 }
             }
     }
@@ -115,11 +123,21 @@ fun WriteReviewNavHost(
                         onClickImage = writeReviewViewModel::onClickedImage,
                         onRatingSelected = writeReviewViewModel::updateRating,
                         onRegisterClick = writeReviewViewModel::uploadPinLog,
+                        onClickCamera = {
+                            navHostController.navigate(WriteReviewDestination.Camera)
+                        },
                         onBackPressed = {
                             if (writeReviewViewModel.reviewId != 0) onBackPressed() else navHostController.popBackStack()
                         }
                     )
                 }
+            }
+
+            composable<WriteReviewDestination.Camera> {
+                CameraView(
+                    onCapture = writeReviewViewModel::uploadCameraImage,
+                    onDismiss = { navHostController.popBackStack() },
+                )
             }
         }
     }
@@ -151,4 +169,6 @@ sealed interface WriteReviewDestination {
     data object SelectDate : WriteReviewDestination
     @Serializable
     data object WriteReview : WriteReviewDestination
+    @Serializable
+    data object Camera : WriteReviewDestination
 }

@@ -132,6 +132,20 @@ class WriteReviewViewModel (
         )
     }
 
+    fun uploadCameraImage(imgPath: ByteArray) = viewModelScope.launch {
+        emitEvent(WriteReviewUiEvent.FinishCamera)
+        updateState { copy(isUploading = true) }
+
+        resultResponse(
+            response = imageUploadUseCase(
+                type = ImageUploadType.REVIEWS,
+                image = imgPath
+            ),
+            successCallback = ::addImage,
+            errorCallback = { updateState { copy(isUploading = false) } }
+        )
+    }
+
     private fun addImage(imgPath: String) = viewModelScope.launch {
         updateState {
             copy(
@@ -232,4 +246,5 @@ sealed interface WriteReviewUiEvent : UiEvent {
     data object MoveWriteReview : WriteReviewUiEvent
     data object SuccessWriteReview : WriteReviewUiEvent
     data object SuccessEditReview : WriteReviewUiEvent
+    data object FinishCamera : WriteReviewUiEvent
 }

@@ -47,7 +47,6 @@ import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import com.pinup.placePinup.extentions.clickableSingleWithNoRipple
 import com.pinup.placePinup.extentions.clickableWithNoRipple
-import com.pinup.placePinup.ui.component.CameraView
 import com.pinup.placePinup.ui.component.HalfStarRatingBar
 import com.pinup.placePinup.ui.component.PButton
 import com.pinup.placePinup.ui.component.PHorizontalDivider
@@ -60,6 +59,7 @@ import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Typography
 import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -97,6 +97,7 @@ fun WriteReviewScreen(
     onRemoveImage: (String) -> Unit = {},
     onClickImage: (String) -> Unit = {},
     onRegisterClick: () -> Unit = {},
+    onClickCamera: () -> Unit = {},
     onBackPressed: () -> Unit = {},
 ) {
     val minLength = 10
@@ -104,7 +105,6 @@ fun WriteReviewScreen(
     val maxImageSize = 3
     val scope = rememberCoroutineScope()
     var isShowImageDetailDialog by remember { mutableStateOf(false) }
-    var isShowCameraView by remember { mutableStateOf(false) }
     val photoSourceSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         skipHalfExpanded = true,
@@ -171,8 +171,10 @@ fun WriteReviewScreen(
                     singleImagePicker.launch()
                 },
                 onClickCamera = {
-                    scope.launch { photoSourceSheetState.hide() }
-                    isShowCameraView = true
+                    scope.launch {
+                        photoSourceSheetState.hide()
+                        onClickCamera()
+                    }
                 },
             )
         },
@@ -475,18 +477,6 @@ fun WriteReviewScreen(
                 Spacer(modifier = Modifier.height(42.dp))
             }
         }
-    }
-
-    if (isShowCameraView) {
-        CameraView(
-            onCapture = { byteArray ->
-                isShowCameraView = false
-                onAddImage(byteArray)
-            },
-            onDismiss = {
-                isShowCameraView = false
-            }
-        )
     }
 
     if (isUploading) {
