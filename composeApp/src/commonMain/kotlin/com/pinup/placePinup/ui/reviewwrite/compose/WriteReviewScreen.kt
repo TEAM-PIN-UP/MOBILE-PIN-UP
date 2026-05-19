@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
@@ -43,6 +45,7 @@ import androidx.compose.ui.window.DialogProperties
 import coil3.compose.AsyncImage
 import com.pinup.placePinup.extentions.clickableSingleWithNoRipple
 import com.pinup.placePinup.extentions.clickableWithNoRipple
+import com.pinup.placePinup.ui.component.CameraView
 import com.pinup.placePinup.ui.component.HalfStarRatingBar
 import com.pinup.placePinup.ui.component.PButton
 import com.pinup.placePinup.ui.component.PHorizontalDivider
@@ -68,6 +71,7 @@ fun WriteReviewScreen(
     myRating: Double,
     isEnableButton: Boolean,
     clickedImage: String,
+    isUploading: Boolean,
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit = {},
     onRatingSelected: (Double) -> Unit = {},
@@ -82,6 +86,8 @@ fun WriteReviewScreen(
     val maxImageSize = 3
     val scope = rememberCoroutineScope()
     var isShowImageDetailDialog by remember { mutableStateOf(false) }
+    var isShowCameraView by remember { mutableStateOf(false) }
+
     val singleImagePicker = rememberImagePickerLauncher(
         selectionMode = SelectionMode.Single,
         scope = scope,
@@ -429,5 +435,35 @@ fun WriteReviewScreen(
 
             Spacer(modifier = Modifier.height(42.dp))
         }
+    }
+
+    if(isShowCameraView) {
+        CameraView(
+            onCapture = { byteArray ->
+                isShowCameraView = false
+                onAddImage(byteArray)
+            },
+            onDismiss = {
+                isShowCameraView = false
+            }
+        )
+    }
+
+    if(isUploading) {
+        UploadingProgress()
+    }
+}
+
+@Composable
+fun UploadingProgress(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize().background(color = Color.Black.copy(alpha = 0.3f)),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            color = Colors.Main
+        )
     }
 }

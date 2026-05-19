@@ -108,6 +108,7 @@ fun WriteReviewNavHost(
                         myRating = uiState.value.starRating,
                         isEnableButton = uiState.value.isEnableRegister,
                         clickedImage = uiState.value.clickedImage,
+                        isUploading = uiState.value.isUploading,
                         onValueChange = writeReviewViewModel::updateContent,
                         onRemoveImage = writeReviewViewModel::removeImage,
                         onAddImage = writeReviewViewModel::uploadImage,

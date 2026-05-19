@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -159,7 +160,7 @@ private fun ShutterButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(
+    Spacer(
         modifier = modifier
             .size(72.dp)
             .clip(CircleShape)
@@ -168,16 +169,7 @@ private fun ShutterButton(
             .clip(CircleShape)
             .background(if (isCapturing) Colors.Gray400 else Colors.White)
             .clickableWithNoRipple(enabled = !isCapturing) { onClick() },
-        contentAlignment = Alignment.Center,
-    ) {
-        if (isCapturing) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(28.dp),
-                color = Colors.White,
-                strokeWidth = 3.dp,
-            )
-        }
-    }
+    )
 }
 
 @Composable
