@@ -69,7 +69,7 @@
     <string name="setting_unregister_dialog_title">정말 탈퇴하시겠습니까?</string>
     <string name="setting_unregister_dialog_description">회원 탈퇴시, 이전까지 사용하셨던\n서비스 기록들을 더 이상\n사용하실 수 없습니다.</string>
     <string name="setting_unregister_complete">그동안 핀업을 이용해주셔서\n감사합니다 :) \n다음에 또 만나요!</string>
-    <string name="setting_sns_login_type">SNS 로그인(%s)</string>
+    <string name="setting_sns_login_type">SNS 로그인(%1$s)</string>
 
     <!-- PinLog -->
     <string name="pin_log_write_pinlog">핀로그 작성</string>
@@ -99,10 +99,10 @@
     <string name="pin_log_delete_comment_dialog_description">삭제된 댓글은 복구할 수 없습니다.</string>
     <string name="pin_log_select_date_prefix"></string>
     <string name="pin_log_select_date_suffix">은\n 언제 방문하셨나요?</string>
-    <string name="place_pinlog_count">핀로그 %d</string>
-    <string name="review_visited_date">%s 방문</string>
-    <string name="review_written_date">%s 작성</string>
-    <string name="review_visit_date_label">방문 날짜 %s</string>
+    <string name="place_pinlog_count">핀로그 %1$d</string>
+    <string name="review_visited_date">%1$s 방문</string>
+    <string name="review_written_date">%1$s 작성</string>
+    <string name="review_visit_date_label">방문 날짜 %1$s</string>
 
     <!-- Profile -->
     <string name="profile_my">MY</string>
@@ -176,8 +176,8 @@
     <string name="pinch_delete_dialog_content">한 번 삭제하면 되돌릴 수 없어요.\n삭제하시겠습니까?</string>
     <string name="pinch_write_complete_dialog_title">마이핀츠 작성 완료!</string>
     <string name="pinch_write_complete_dialog_content">등록한 마이핀츠를\n확인하시겠어요?</string>
-    <string name="pinch_created_date">작성일자 %s</string>
-    <string name="pinch_place_name_hint">%d. 장소명</string>
+    <string name="pinch_created_date">작성일자 %1$s</string>
+    <string name="pinch_place_name_hint">%1$d. 장소명</string>
 
     <!-- Login -->
     <string name="login_id_find">아이디 찾기</string>
@@ -263,16 +263,16 @@
     <string name="toast_refuse_pin_buddy">핀버디 신청을 거절했어요</string>
     <string name="toast_cancel_pin_buddy_request">핀버디 신청을 취소했어요</string>
     <string name="toast_empty_pinlog">핀로그가 작성되지 않은 장소입니다.</string>
-    <string name="toast_block_success">%s님이 차단되었습니다.</string>
+    <string name="toast_block_success">%1$s님이 차단되었습니다.</string>
     <string name="toast_already_block_user">이미 차단된 유저입니다.</string>
 
     <!-- Notification -->
     <string name="notification_all_read">모두 읽음</string>
-    <string name="notification_unread">안읽음 %d</string>
+    <string name="notification_unread">안읽음 %1$d</string>
 
     <!-- Kakao -->
-    <string name="kakao_profile_share_title">%s 님의 핀업 계정</string>
-    <string name="kakao_profile_share_content">핀업에서 %s 님의 핀들을 구경해 보세요.</string>
+    <string name="kakao_profile_share_title">%1$s 님의 핀업 계정</string>
+    <string name="kakao_profile_share_content">핀업에서 %1$s 님의 핀들을 구경해 보세요.</string>
     <string name="kakao_profile_share_button">핀업으로 이동하기</string>
 
     <!-- Update -->
@@ -329,7 +329,7 @@
     <string name="report_reason_user_impersonation">다른 사람을 사칭하는 계정입니다.</string>
     <string name="report_reason_user_harmful">유해한 내용을 포함하는 계정입니다.</string>
     <string name="report_reason_etc">기타</string>
-    <string name="report_block_dialog_title">%s님을 차단하시겠습니까?</string>
+    <string name="report_block_dialog_title">%1$s님을 차단하시겠습니까?</string>
     <string name="report_block_dialog_content">계정 차단 시, 더 이상 해당 사용자의 핀로그와 댓글이 보이지 않으며 상호 작용할 수 없습니다.</string>
     <string name="report_success_dialog_title">신고가 완료 되었습니다.</string>
     <string name="report_success_dialog_content">신고 접수된 핀로그는 24시간 이내에 검토되며, 지속적인 신고를 받은 계정은 계정 삭제 처리될 수 있습니다.</string>

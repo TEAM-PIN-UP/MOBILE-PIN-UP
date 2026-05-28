@@ -69,7 +69,7 @@
     <string name="setting_unregister_dialog_title">Are you sure you want to delete your account?</string>
     <string name="setting_unregister_dialog_description">Once deleted, you will no longer\nbe able to access your\nprevious service history.</string>
     <string name="setting_unregister_complete">Thank you for using PIN-UP :)\nSee you again!</string>
-    <string name="setting_sns_login_type">Social Login (%s)</string>
+    <string name="setting_sns_login_type">Social Login (%1$s)</string>
 
     <!-- PinLog -->
     <string name="pin_log_write_pinlog">Write Pin Log</string>
@@ -99,10 +99,10 @@
     <string name="pin_log_delete_comment_dialog_description">Deleted comments cannot be recovered.</string>
     <string name="pin_log_select_date_prefix">When did you visit\n</string>
     <string name="pin_log_select_date_suffix">?</string>
-    <string name="place_pinlog_count">Pin Logs: %d</string>
-    <string name="review_visited_date">Visited %s</string>
-    <string name="review_written_date">Created %s</string>
-    <string name="review_visit_date_label">Visit date %s</string>
+    <string name="place_pinlog_count">Pin Logs: %1$d</string>
+    <string name="review_visited_date">Visited %1$s</string>
+    <string name="review_written_date">Created %1$s</string>
+    <string name="review_visit_date_label">Visit date %1$s</string>
 
     <!-- Profile -->
     <string name="profile_my">MY</string>
@@ -176,8 +176,8 @@
     <string name="pinch_delete_dialog_content">This action cannot be undone.\nDelete anyway?</string>
     <string name="pinch_write_complete_dialog_title">My Pints Created!</string>
     <string name="pinch_write_complete_dialog_content">Would you like to check\nyour new Pints?</string>
-    <string name="pinch_created_date">Created on %s</string>
-    <string name="pinch_place_name_hint">%d. Place name</string>
+    <string name="pinch_created_date">Created on %1$s</string>
+    <string name="pinch_place_name_hint">%1$d. Place name</string>
 
     <!-- Login -->
     <string name="login_id_find">Find ID</string>
@@ -263,16 +263,16 @@
     <string name="toast_refuse_pin_buddy">Pin Buddy request declined.</string>
     <string name="toast_cancel_pin_buddy_request">Pin Buddy request canceled.</string>
     <string name="toast_empty_pinlog">No Pin Log has been written for this place.</string>
-    <string name="toast_block_success">%s has been blocked.</string>
+    <string name="toast_block_success">%1$s has been blocked.</string>
     <string name="toast_already_block_user">This user is already blocked.</string>
 
     <!-- Notification -->
     <string name="notification_all_read">All Read</string>
-    <string name="notification_unread">Unread %d</string>
+    <string name="notification_unread">Unread %1$d</string>
 
     <!-- Kakao -->
-    <string name="kakao_profile_share_title">%s's PIN-UP Account</string>
-    <string name="kakao_profile_share_content">Check out %s's pins on PIN-UP.</string>
+    <string name="kakao_profile_share_title">%1$s's PIN-UP Account</string>
+    <string name="kakao_profile_share_content">Check out %1$s's pins on PIN-UP.</string>
     <string name="kakao_profile_share_button">Go to PIN-UP</string>
 
     <!-- Update -->
@@ -329,7 +329,7 @@
     <string name="report_reason_user_impersonation">This account is impersonating someone else.</string>
     <string name="report_reason_user_harmful">This account contains harmful content.</string>
     <string name="report_reason_etc">Other</string>
-    <string name="report_block_dialog_title">Block %s?</string>
+    <string name="report_block_dialog_title">Block %1$s?</string>
     <string name="report_block_dialog_content">Once blocked, you will no longer see this user\'s Pin Logs and comments, and you will not be able to interact with them.</string>
     <string name="report_success_dialog_title">Report Submitted!</string>
     <string name="report_success_dialog_content">The reported Pin Log will be reviewed within 24 hours. Accounts that receive repeated reports may be deleted.</string>
