@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_place_circle_red.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

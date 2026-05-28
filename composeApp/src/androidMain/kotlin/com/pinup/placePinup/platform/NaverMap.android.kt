@@ -3,7 +3,9 @@ package com.pinup.placePinup.platform
 import android.view.Gravity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Text
@@ -14,6 +16,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.naver.maps.geometry.LatLng
@@ -36,6 +41,7 @@ import com.naver.maps.map.compose.rememberCameraPositionState
 import com.pinup.placePinup.R
 import com.pinup.placePinup.domain.model.CameraState
 import com.pinup.placePinup.domain.model.Category
+import com.pinup.placePinup.domain.model.CategoryGroup
 import com.pinup.placePinup.domain.model.Position
 import com.pinup.placePinup.domain.model.PositionBounds
 import com.pinup.placePinup.extentions.toLatLng
@@ -67,17 +73,21 @@ private data class ClusterPlaceItem(
 }
 
 private fun markerResIdByCategory(category: Category): Int {
-    return when (category) {
-        Category.RESTAURANT -> R.drawable.ic_food_marker
-        else -> R.drawable.ic_cafe_marker
+    return when (category.group) {
+        CategoryGroup.FNB -> R.drawable.ic_place_circle_red
+        CategoryGroup.NATURE -> R.drawable.ic_place_circle_green
+        CategoryGroup.CULTURE -> R.drawable.ic_place_circle_blue
+        CategoryGroup.ETC -> R.drawable.ic_place_circle_black
     }
 }
 
-private fun selectedMarkerResIdByCategory(category: Category): Int {
-    return when (category) {
-        Category.RESTAURANT -> R.drawable.ic_food_marker_on
-        else -> R.drawable.ic_cafe_marker_on
-    }
+private fun selectedMarkerResIdByCategory(category: Category): Int = markerResIdByCategory(category)
+
+private fun markerTint(group: CategoryGroup): ColorFilter? = when (group) {
+    CategoryGroup.FNB -> null
+    CategoryGroup.NATURE -> ColorFilter.tint(Color(0xFF3AC510))
+    CategoryGroup.CULTURE -> ColorFilter.tint(Color(0xFF0096F3))
+    CategoryGroup.ETC -> ColorFilter.tint(Color(0xFF1A1A1A))
 }
 
 @OptIn(ExperimentalNaverMapApi::class)
@@ -221,37 +231,33 @@ actual fun PlatformNaverMap(
                             modifier = Modifier,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            val tint = markerTint(it.pintsPlaceCategory.group)
                             if (it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
                                 Image(
                                     painter = when (it.pintsPlaceCategory) {
-                                        Category.RESTAURANT -> {
-                                            painterResource(Res.drawable.ic_food_marker_on)
-                                        }
-
-                                        else -> {
-                                            painterResource(Res.drawable.ic_cafe_marker_on)
-                                        }
+                                        Category.CAFE -> painterResource(Res.drawable.ic_cafe_marker_on)
+                                        else -> painterResource(Res.drawable.ic_food_marker_on)
                                     },
+                                    colorFilter = tint,
                                     contentDescription = "marker"
                                 )
                             } else {
                                 Image(
                                     painter = when (it.pintsPlaceCategory) {
-                                        Category.RESTAURANT -> {
-                                            painterResource(Res.drawable.ic_food_marker_pinch)
-                                        }
-
-                                        else -> {
-                                            painterResource(Res.drawable.ic_cafe_marker_pinch)
-                                        }
+                                        Category.CAFE -> painterResource(Res.drawable.ic_cafe_marker_pinch)
+                                        else -> painterResource(Res.drawable.ic_food_marker_pinch)
                                     },
+                                    colorFilter = tint,
                                     contentDescription = "marker"
                                 )
                             }
 
+                            Spacer(modifier = Modifier.height(2.dp))
+
                             RoundedBox(
                                 modifier = Modifier,
                                 backgroundColor = Colors.Black_25,
+                                cornerColor = Color(0xFF3C3C3C),
                                 cornerRounded = 100
                             ) {
                                 Text(
@@ -259,7 +265,7 @@ actual fun PlatformNaverMap(
                                         .padding(vertical = 2.dp, horizontal = 6.dp)
                                         .widthIn(max = 72.dp),
                                     text = it.name,
-                                    style = Typography.B6,
+                                    style = Typography.L3.copy(fontWeight = FontWeight.W600),
                                     color = Colors.White,
                                     overflow = TextOverflow.Ellipsis,
                                     maxLines = 1
@@ -280,12 +286,13 @@ actual fun PlatformNaverMap(
                             if (item.isSelected) item.selectedMarkerResId else item.markerResId
                         )
                         marker.iconTintColor = android.graphics.Color.TRANSPARENT
-                        marker.anchor = android.graphics.PointF(0.5f, 0.25f)
+                        marker.anchor = android.graphics.PointF(0.5f, 0.5f)
                         marker.captionText = item.name
                         marker.captionColor = android.graphics.Color.WHITE
-                        marker.captionHaloColor = android.graphics.Color.parseColor("#40000000")
+                        marker.captionHaloColor = android.graphics.Color.parseColor("#3C3C3C")
+                        marker.captionOffset = 4
                         marker.captionRequestedWidth = 240
-                        marker.captionTextSize = 11f
+                        marker.captionTextSize = 10f
                         marker.setOnClickListener {
                             onPlaceClick(item.kakaoPlaceId)
                             true

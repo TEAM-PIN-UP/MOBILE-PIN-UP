@@ -59,7 +59,14 @@ class NaverMapViewModel: ObservableObject {
     /// Android: updateCameraState(cameraState) → getPlaces() 흐름을 동일하게 수행
     func onCameraStateChange(_ cameraState: CameraState) {
         viewModel.updateCameraState(cameraState: cameraState)
-        // viewModel.getPlaces()
+
+        // ✅ iOS Race Condition 보완:
+        // Kotlin에서 cameraPosition 업데이트(1st emit)와 currentPosition 업데이트(2nd emit)가
+        // 별도 StateFlow emit으로 분리되어 카메라 이동 시점에 currentPosition이 아직 null일 수 있음.
+        // → 카메라가 정지(idle)했을 때 데이터가 없으면 직접 getPlaces() 호출로 보완.
+        if !cameraState.isMoving && mapUiState.searchUiState.reviewedPlaces.isEmpty {
+            viewModel.getPlaces()
+        }
     }
 
     func updateShowPinch() {
