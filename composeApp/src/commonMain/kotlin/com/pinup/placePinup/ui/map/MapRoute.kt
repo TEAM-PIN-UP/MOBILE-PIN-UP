@@ -83,49 +83,61 @@ fun MapRoute(
 
     BindLocationTrackerEffect(mapViewModel.locationTracker)
 
-    MapScreen(
-        viewModel = mapViewModel,
-        searchUiState = mapUiState.value.searchUiState,
-        placeDetailUiState = mapUiState.value.placeDetailUiState,
-        position = mapUiState.value.currentPosition ?: Position.INVALID,
-        cameraPosition = mapUiState.value.cameraPosition,
-        isFocusLocation = mapUiState.value.isFocusLocation,
-        isShowPinch = mapUiState.value.isShowPinch,
-        isCameraMoving = mapUiState.value.isCameraMoving,
-        isDetailClicked = mapUiState.value.isDetailClicked,
-        pinchUiState = mapUiState.value.pinchUiState,
-        profileImage = mapUiState.value.profileImage,
-        clearPinchList = mapViewModel::clearPinchDetailList,
-        onClickBottomNav = onBottomMenuClick,
-        onCameraStateChange = mapViewModel::updateCameraState,
-        onChipClick = mapViewModel::updateChipState,
-        onPintsChipClick = mapViewModel::updatePintsChipState,
-        onValueChange = mapViewModel::updateSearchText,
-        onPlaceClick = mapViewModel::getDetailPlace,
-        onClearDetailPlace = mapViewModel::clearDetailPlace,
-        onPinchListClick = mapViewModel::getPinchDetailList,
-        onUpdateBookmark = mapViewModel::updateBookmark,
-        onUpdateSortType = mapViewModel::updateSortType,
-        onUpdatePosition = mapViewModel::collectPosition,
-        onUpdateShowBookmarks = mapViewModel::updateShowPinch,
-        onUpdateFocusLocation = mapViewModel::updateFocusLocation,
-        onFocusChange = mapViewModel::updateFocusSearch,
-        consumeDetailClicked = mapViewModel::consumedDetailClicked,
-        onClickGetPlace = mapViewModel::getPlaces,
-        onClickEdit = onClickEdit,
-        onClickDelete = {
-            clickedPinlog = it
-            isShowDeleteDialog.value = true
-        },
-        onMovePinlogDetail = onMovePinlogDetail,
-        onClickLike = mapViewModel::likeChanged,
-        onMoveWriteReview = onMoveWriteReview,
-        onMoveUserProfile = mapViewModel::onProfileClick,
-        onClickArticle = onClickArticle,
-        showEmptyToast = {
-            toast.show(emptyPinlogText)
-        }
-    )
+    if (mapUiState.value.isSearchMode) {
+        MapSearchScreen(
+            query = mapUiState.value.searchUiState.query,
+            places = mapUiState.value.searchUiState.places,
+            profileImage = mapUiState.value.profileImage,
+            onValueChange = mapViewModel::updateSearchText,
+            onClickBack = mapViewModel::updateSearchMode,
+            onPlaceClick = { kakaoPlaceId ->
+                mapViewModel.getDetailPlace(kakaoPlaceId)
+                mapViewModel.updateSearchMode()
+            },
+            onClickBottomNav = onBottomMenuClick,
+            showEmptyToast = { toast.show(emptyPinlogText) }
+        )
+    } else {
+        MapScreen(
+            viewModel = mapViewModel,
+            searchUiState = mapUiState.value.searchUiState,
+            placeDetailUiState = mapUiState.value.placeDetailUiState,
+            position = mapUiState.value.currentPosition ?: Position.INVALID,
+            cameraPosition = mapUiState.value.cameraPosition,
+            isFocusLocation = mapUiState.value.isFocusLocation,
+            isShowPinch = mapUiState.value.isShowPinch,
+            isCameraMoving = mapUiState.value.isCameraMoving,
+            isDetailClicked = mapUiState.value.isDetailClicked,
+            pinchUiState = mapUiState.value.pinchUiState,
+            profileImage = mapUiState.value.profileImage,
+            clearPinchList = mapViewModel::clearPinchDetailList,
+            onClickBottomNav = onBottomMenuClick,
+            onCameraStateChange = mapViewModel::updateCameraState,
+            onChipClick = mapViewModel::updateChipState,
+            onPintsChipClick = mapViewModel::updatePintsChipState,
+            onPlaceClick = mapViewModel::getDetailPlace,
+            onClearDetailPlace = mapViewModel::clearDetailPlace,
+            onPinchListClick = mapViewModel::getPinchDetailList,
+            onUpdateBookmark = mapViewModel::updateBookmark,
+            onUpdateSortType = mapViewModel::updateSortType,
+            onUpdatePosition = mapViewModel::collectPosition,
+            onUpdateShowBookmarks = mapViewModel::updateShowPinch,
+            onUpdateFocusLocation = mapViewModel::updateFocusLocation,
+            onClickSearch = mapViewModel::updateSearchMode,
+            consumeDetailClicked = mapViewModel::consumedDetailClicked,
+            onClickGetPlace = mapViewModel::getPlaces,
+            onClickEdit = onClickEdit,
+            onClickDelete = {
+                clickedPinlog = it
+                isShowDeleteDialog.value = true
+            },
+            onMovePinlogDetail = onMovePinlogDetail,
+            onClickLike = mapViewModel::likeChanged,
+            onMoveWriteReview = onMoveWriteReview,
+            onMoveUserProfile = mapViewModel::onProfileClick,
+            onClickArticle = onClickArticle,
+        )
+    }
 
     PToastHost(
         modifier = Modifier

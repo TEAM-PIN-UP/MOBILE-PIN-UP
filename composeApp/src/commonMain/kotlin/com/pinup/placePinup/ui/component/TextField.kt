@@ -36,7 +36,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -91,10 +90,6 @@ fun RoundedTextField(
         backgroundColor = cursorColor.copy(alpha = 0.4f)
     )
     val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
-    var textFieldValue by remember { mutableStateOf(TextFieldValue(text)) }
-    if (textFieldValue.text != text) {
-        textFieldValue = TextFieldValue(text)
-    }
 
     val textFieldColor = if (isError) {
         Colors.Negative
@@ -121,11 +116,10 @@ fun RoundedTextField(
             modifier = Modifier
                 .align(Alignment.Center)
                 .focusRequester(focusRequester),
-            value = textFieldValue,
+            value = text,
             onValueChange = {
-                if (it.text.length <= textLimit) {
-                    textFieldValue = it
-                    onValueChange.invoke(it.text)
+                if (it.length <= textLimit) {
+                    onValueChange.invoke(it)
                 }
             },
             cursorBrush = SolidColor(cursorColor),
@@ -141,7 +135,7 @@ fun RoundedTextField(
             interactionSource = interactionSource,
             decorationBox = @Composable { innerTextField ->
                 TextFieldDefaults.TextFieldDecorationBox(
-                    value = textFieldValue.text,
+                    value = text,
                     visualTransformation = visualTransformation,
                     innerTextField = @Composable {
                         Row(
@@ -169,7 +163,7 @@ fun RoundedTextField(
                             if (isTrailIconAlwaysShow) {
                                 Spacer(modifier = Modifier.width(12.dp))
 
-                                if (textFieldValue.text.isNotEmpty() && tailIcon != null) {
+                                if (text.isNotEmpty() && tailIcon != null) {
                                     Image(
                                         modifier = Modifier
                                             .size(tailIconSize.dp)
@@ -191,8 +185,9 @@ fun RoundedTextField(
                                     )
                                 }
                             } else if (tailIcon != null &&
-                                textFieldValue.text.isNotEmpty() &&
-                                isFocused && readOnly.not()
+                                text.isNotEmpty() &&
+                                isFocused &&
+                                readOnly.not()
                             ) {
                                 Spacer(modifier = Modifier.width(12.dp))
 
@@ -281,10 +276,6 @@ fun IndexedRoundedTextField(
         backgroundColor = cursorColor.copy(alpha = 0.4f)
     )
     val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
-    var textFieldValue by remember { mutableStateOf(TextFieldValue(text)) }
-    if (textFieldValue.text != text) {
-        textFieldValue = TextFieldValue(text)
-    }
 
     val textFieldColor = if (isError) {
         Colors.Negative
@@ -311,11 +302,10 @@ fun IndexedRoundedTextField(
             modifier = Modifier
                 .align(Alignment.Center)
                 .focusRequester(focusRequester),
-            value = textFieldValue,
+            value = text,
             onValueChange = {
-                if (it.text.length <= textLimit) {
-                    textFieldValue = it
-                    onValueChange.invoke(it.text)
+                if (it.length <= textLimit) {
+                    onValueChange.invoke(it)
                 }
             },
             cursorBrush = SolidColor(cursorColor),
@@ -331,7 +321,7 @@ fun IndexedRoundedTextField(
             interactionSource = interactionSource,
             decorationBox = @Composable { innerTextField ->
                 TextFieldDefaults.TextFieldDecorationBox(
-                    value = textFieldValue.text,
+                    value = text,
                     visualTransformation = visualTransformation,
                     innerTextField = @Composable {
                         Row(

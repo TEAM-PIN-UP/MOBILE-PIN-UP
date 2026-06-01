@@ -15,29 +15,27 @@ import KakaoSDKShare
 /// (필요 시 NSObject 상속을 권장: Obj‑C 런타임과 상호운용 안정)
 class IOSKaKaoShareController: NSObject, KaKaoShareController {
 
-  /// Kotlin expect/actual과 정확히 동일한 시그니처(Int32!!).
+  /// Kotlin 인터페이스와 정확히 동일한 시그니처
   func kakaoShare(
       context: Any,
       memberId: Int32,
-      memberName: String
+      memberName: String,
+      shareTitle: String,
+      shareContent: String,
+      shareButton: String
   ) {
     print("IOSKaKaoShareController call")
 
-    let title = "\(memberName) 님의 핀업 계정"
-    let desc = "핀업에서 \(memberName) 님의 핀들을 구경해 보세요."
-    let buttonTitle = "핀업으로 이동하기"
+    let title = shareTitle
+    let desc = shareContent
+    let buttonTitle = shareButton
 
-    let webLinkString = "https://www.youtube.com/watch?v=yWP--1gsr20&list=RDyWP--1gsr20&start_radio=1"
     let userIdParamKey = "userId"
 
     // ---------- 2) 템플릿 구성 (Android getFeed와 동등) ----------
     // Android 코드의 imageUrl과 동일
     let imageUrl = URL(string: "https://lh3.googleusercontent.com/d/1ui1iK7vFLd1wj8KuiCgXMQo3YFGMd4w-")!
 
-    // 안드로이드의 Content(link = Link())와 유사하게, iOS는 빈 Link()도 가능
-    // 만약 컴파일러가 빈 생성자를 허용하지 않으면 아래 한 줄을
-    //   Link(webUrl: URL(string: webLinkString), mobileWebUrl: URL(string: webLinkString))
-    // 로 바꿔도 됩니다.
     let content = Content(
         title: title,
         imageUrl: imageUrl,

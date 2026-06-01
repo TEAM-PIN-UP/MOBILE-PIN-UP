@@ -17,6 +17,7 @@ import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pinup.composeapp.generated.resources.*
 
 @Composable
@@ -71,7 +72,7 @@ fun SearchedPlaceCard(
         Spacer(Modifier.weight(1f))
 
         Text(
-            text = "핀로그 $reviewCount",
+            text = stringResource(Res.string.place_pinlog_count, reviewCount),
             style = Typography.B2.copy(
                 fontWeight = FontWeight.Medium
             ),

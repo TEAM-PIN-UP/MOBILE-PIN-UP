@@ -39,9 +39,8 @@ object DateTimeOperations {
         return format.format(this)
     }
 
-    fun LocalDate.getMonthName(): String {
-        return "${this.year}년 ${monthNumber}월"
-        //return dateTimePickerDefaults.monthNames.names[this.month.ordinal] + " " + this.year
+    fun LocalDate.getMonthName(yearSuffix: String = "년", monthSuffix: String = "월"): String {
+        return "${this.year}$yearSuffix ${monthNumber}$monthSuffix"
     }
 
     private fun getNumberOfDaysInMonth(localDate: LocalDate): Int {

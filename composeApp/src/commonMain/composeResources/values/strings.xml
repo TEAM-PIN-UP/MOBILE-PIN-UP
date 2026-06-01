@@ -41,6 +41,10 @@
     <string name="word_do_block">차단하기</string>
     <string name="word_do_release">해제하기</string>
     <string name="word_notification">알림</string>
+    <string name="word_cancel">취소</string>
+
+    <!-- Error -->
+    <string name="error_session_expired">세션이 만료되어 로그아웃 되었습니다.\n다시 로그인 해주세요.</string>
 
     <!-- Setting -->
     <string name="setting_profile_setting_title">계정 설정</string>
@@ -65,6 +69,7 @@
     <string name="setting_unregister_dialog_title">정말 탈퇴하시겠습니까?</string>
     <string name="setting_unregister_dialog_description">회원 탈퇴시, 이전까지 사용하셨던\n서비스 기록들을 더 이상\n사용하실 수 없습니다.</string>
     <string name="setting_unregister_complete">그동안 핀업을 이용해주셔서\n감사합니다 :) \n다음에 또 만나요!</string>
+    <string name="setting_sns_login_type">SNS 로그인(%1$s)</string>
 
     <!-- PinLog -->
     <string name="pin_log_write_pinlog">핀로그 작성</string>
@@ -94,6 +99,10 @@
     <string name="pin_log_delete_comment_dialog_description">삭제된 댓글은 복구할 수 없습니다.</string>
     <string name="pin_log_select_date_prefix"></string>
     <string name="pin_log_select_date_suffix">은\n 언제 방문하셨나요?</string>
+    <string name="place_pinlog_count">핀로그 %1$d</string>
+    <string name="review_visited_date">%1$s 방문</string>
+    <string name="review_written_date">%1$s 작성</string>
+    <string name="review_visit_date_label">방문 날짜 %1$s</string>
 
     <!-- Profile -->
     <string name="profile_my">MY</string>
@@ -128,16 +137,24 @@
     <string name="profile_pick_library">라이브러리에서 선택</string>
     <string name="profile_delete_profile_image">프로필 이미지 삭제</string>
 
+    <!-- Bookmark -->
+    <string name="bookmark_title">마이 플레이스</string>
+    <string name="bookmark_tab_by_region">지역별</string>
+
     <!-- PinMap -->
     <string name="pin_map_search_button">현 지도에서 검색</string>
     <string name="pin_map_search_hint">장소/위치 검색하기</string>
     <string name="pin_map_empty_pinlog">아직 핀로그가 없어요!\n나만의 장소를 핀업해보세요:)</string>
     <string name="pin_map_search_result">검색 결과</string>
     <string name="pin_map_go_article">아티클 바로가기</string>
+    <string name="permission_location_title">권한 필요</string>
+    <string name="permission_location_description">위치 권한 허용이 필요해요.\n확인을 누르시면 설정 화면으로 이동합니다</string>
 
     <!-- Feed -->
     <string name="feed_recent_search">최근 검색어</string>
     <string name="feed_empty_feed">아직 핀버디들의 핀로그가 없어요!</string>
+    <string name="search_no_result">검색 결과가 없어요</string>
+    <string name="search_check_keyword">검색어를 확인해주세요.</string>
 
     <!-- Article -->
     <string name="article_title">핀업 아티클</string>
@@ -159,11 +176,17 @@
     <string name="pinch_delete_dialog_content">한 번 삭제하면 되돌릴 수 없어요.\n삭제하시겠습니까?</string>
     <string name="pinch_write_complete_dialog_title">마이핀츠 작성 완료!</string>
     <string name="pinch_write_complete_dialog_content">등록한 마이핀츠를\n확인하시겠어요?</string>
+    <string name="pinch_created_date">작성일자 %1$s</string>
+    <string name="pinch_place_name_hint">%1$d. 장소명</string>
 
     <!-- Login -->
     <string name="login_id_find">아이디 찾기</string>
     <string name="login_sns">SNS 로그인</string>
     <string name="login_incorrect_id">아이디 혹은 비밀번호가 일치하지 않습니다.</string>
+    <string name="login_kakao_content_description">카카오 로그인</string>
+    <string name="login_naver_content_description">네이버 로그인</string>
+    <string name="login_google_content_description">구글 로그인</string>
+    <string name="login_apple_content_description">애플 로그인</string>
 
     <!-- FindPassword -->
     <string name="find_password_hint">비밀번호는 8~20자, 특수문자 포함 필수입니다.</string>
@@ -231,6 +254,7 @@
 
     <!-- Block -->
     <string name="block_user_block">계정 차단</string>
+    <string name="screen_preparing">아직 준비중인 화면입니다.\n조금만 기다려주세요.</string>
 
     <!-- Toast -->
     <string name="toast_delete_pinlog">핀로그가 삭제되었어요.</string>
@@ -239,16 +263,16 @@
     <string name="toast_refuse_pin_buddy">핀버디 신청을 거절했어요</string>
     <string name="toast_cancel_pin_buddy_request">핀버디 신청을 취소했어요</string>
     <string name="toast_empty_pinlog">핀로그가 작성되지 않은 장소입니다.</string>
-    <string name="toast_block_success">%s님이 차단되었습니다.</string>
+    <string name="toast_block_success">%1$s님이 차단되었습니다.</string>
     <string name="toast_already_block_user">이미 차단된 유저입니다.</string>
 
     <!-- Notification -->
     <string name="notification_all_read">모두 읽음</string>
-    <string name="notification_unread">안읽음 %d</string>
+    <string name="notification_unread">안읽음 %1$d</string>
 
     <!-- Kakao -->
-    <string name="kakao_profile_share_title">%s 님의 핀업 계정</string>
-    <string name="kakao_profile_share_content">핀업에서 %s 님의 핀들을 구경해 보세요.</string>
+    <string name="kakao_profile_share_title">%1$s 님의 핀업 계정</string>
+    <string name="kakao_profile_share_content">핀업에서 %1$s 님의 핀들을 구경해 보세요.</string>
     <string name="kakao_profile_share_button">핀업으로 이동하기</string>
 
     <!-- Update -->
@@ -256,6 +280,24 @@
     <string name="update_check_description">더 나은 서비스를 위해 핀업이 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요</string>
     <string name="update_check_confirm">업데이트</string>
     <string name="update_check_optional_cancel">다음에 하기</string>
+
+    <!-- Date -->
+    <string name="date_suffix_year">년</string>
+    <string name="date_suffix_month">월</string>
+    <string name="date_suffix_day">일</string>
+    <string name="day_of_week_mon">월</string>
+    <string name="day_of_week_tue">화</string>
+    <string name="day_of_week_wed">수</string>
+    <string name="day_of_week_thu">목</string>
+    <string name="day_of_week_fri">금</string>
+    <string name="day_of_week_sat">토</string>
+    <string name="day_of_week_sun">일</string>
+
+    <!-- Time -->
+    <string name="time_just_now">방금 전</string>
+    <string name="time_minute_suffix">분 전</string>
+    <string name="time_hour_suffix">시간 전</string>
+    <string name="time_day_suffix">일 전</string>
 
     <!-- Sort -->
     <string name="sort_near">가까운 순</string>
@@ -287,7 +329,7 @@
     <string name="report_reason_user_impersonation">다른 사람을 사칭하는 계정입니다.</string>
     <string name="report_reason_user_harmful">유해한 내용을 포함하는 계정입니다.</string>
     <string name="report_reason_etc">기타</string>
-    <string name="report_block_dialog_title">%s님을 차단하시겠습니까?</string>
+    <string name="report_block_dialog_title">%1$s님을 차단하시겠습니까?</string>
     <string name="report_block_dialog_content">계정 차단 시, 더 이상 해당 사용자의 핀로그와 댓글이 보이지 않으며 상호 작용할 수 없습니다.</string>
     <string name="report_success_dialog_title">신고가 완료 되었습니다.</string>
     <string name="report_success_dialog_content">신고 접수된 핀로그는 24시간 이내에 검토되며, 지속적인 신고를 받은 계정은 계정 삭제 처리될 수 있습니다.</string>

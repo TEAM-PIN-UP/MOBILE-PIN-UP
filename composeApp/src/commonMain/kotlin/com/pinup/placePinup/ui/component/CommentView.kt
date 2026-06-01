@@ -32,6 +32,11 @@ fun CommentView(
     onClickProfile: (String) -> Unit = {},
     onReplyClick: (Int) -> Unit = {},
 ) {
+    val justNow = stringResource(Res.string.time_just_now)
+    val minuteSuffix = stringResource(Res.string.time_minute_suffix)
+    val hourSuffix = stringResource(Res.string.time_hour_suffix)
+    val daySuffix = stringResource(Res.string.time_day_suffix)
+
     Row(
         modifier = modifier
     ) {
@@ -65,7 +70,7 @@ fun CommentView(
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
-                    text = relativeOrDate(comment.createdAt),
+                    text = relativeOrDate(comment.createdAt, justNow, minuteSuffix, hourSuffix, daySuffix),
                     style = Typography.L2.copy(
                         fontWeight = FontWeight.Medium
                     ),
@@ -142,7 +147,7 @@ fun CommentView(
                                 Spacer(modifier = Modifier.width(4.dp))
 
                                 Text(
-                                    text = relativeOrDate(it.createdAt),
+                                    text = relativeOrDate(it.createdAt, justNow, minuteSuffix, hourSuffix, daySuffix),
                                     style = Typography.L2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),

@@ -47,6 +47,9 @@ import com.pinup.placePinup.extentions.twoDigit
 import com.pinup.placePinup.ui.model.DateType
 import com.pinup.placePinup.ui.model.PickerState
 import com.pinup.placePinup.ui.model.rememberPickerState
+import org.jetbrains.compose.resources.stringResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.util.DATE_RANGE
 import com.pinup.placePinup.util.MONTH_RANGE
@@ -171,7 +174,7 @@ fun DatePicker(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 12.dp),
-            text = "선택 완료",
+            text = stringResource(Res.string.word_complete),
             onClick = {
                 val yyyyMMdd = yearPickerState.selectedItem.toString().substring(2, 4) + "." + monthPickerState.selectedItem.twoDigit() +
                         "." + datePickerState.selectedItem.twoDigit()
@@ -276,8 +279,13 @@ fun <T> Picker(
                     mutableStateOf(if (getItem(index) == null) "" else getItem(index).toString())
                 }
 
+                val dateSuffix = when (dateType) {
+                    DateType.YEAR -> stringResource(Res.string.date_suffix_year)
+                    DateType.MONTH -> stringResource(Res.string.date_suffix_month)
+                    DateType.DATE -> stringResource(Res.string.date_suffix_day)
+                }
                 Text(
-                    text = currentItemText + dateType.value,
+                    text = currentItemText + dateSuffix,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = textStyle.copy(

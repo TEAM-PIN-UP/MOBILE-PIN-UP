@@ -124,7 +124,7 @@ fun PinchDetailScreen(
                         Spacer(Modifier.width(6.dp))
 
                         Text(
-                            text = "작성일자 $createdAt",
+                            text = stringResource(Res.string.pinch_created_date, createdAt),
                             style = Typography.L2.copy(fontWeight = FontWeight.Medium),
                             color = Colors.Gray500
                         )

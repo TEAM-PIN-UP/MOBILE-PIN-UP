@@ -14,6 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.naver.maps.geometry.LatLng
@@ -30,6 +32,7 @@ import com.naver.maps.map.compose.PolylineOverlay
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.pinup.placePinup.domain.model.CameraState
 import com.pinup.placePinup.domain.model.Category
+import com.pinup.placePinup.domain.model.CategoryGroup
 import com.pinup.placePinup.domain.model.Place
 import com.pinup.placePinup.domain.model.Position
 import com.pinup.placePinup.extentions.toLatLng
@@ -40,6 +43,13 @@ import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
 import pinup.composeapp.generated.resources.ic_cafe_marker
 import pinup.composeapp.generated.resources.ic_food_marker
+
+private fun markerTint(group: CategoryGroup): ColorFilter? = when (group) {
+    CategoryGroup.FNB -> null
+    CategoryGroup.NATURE -> ColorFilter.tint(Color(0xFF3AC510))
+    CategoryGroup.CULTURE -> ColorFilter.tint(Color(0xFF0096F3))
+    CategoryGroup.ETC -> ColorFilter.tint(Color(0xFF1A1A1A))
+}
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
@@ -133,16 +143,13 @@ actual fun PinchNaverMap(
                         modifier = Modifier,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        val category = Category.of(it.categoryCode)
                         Image(
-                            painter = when (Category.of(it.categoryCode)) {
-                                Category.RESTAURANT -> {
-                                    painterResource(Res.drawable.ic_food_marker)
-                                }
-
-                                else -> {
-                                    painterResource(Res.drawable.ic_cafe_marker)
-                                }
+                            painter = when (category) {
+                                Category.CAFE -> painterResource(Res.drawable.ic_cafe_marker)
+                                else -> painterResource(Res.drawable.ic_food_marker)
                             },
+                            colorFilter = markerTint(category.group),
                             contentDescription = "marker"
                         )
 

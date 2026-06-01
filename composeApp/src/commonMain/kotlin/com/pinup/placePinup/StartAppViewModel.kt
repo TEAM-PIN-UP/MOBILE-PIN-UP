@@ -40,7 +40,7 @@ class StartAppViewModel(
                 _uiState.update {
                     it.copy(
                         alertState = it.alertState.copy(
-                            title = message ?: "세션이 만료되어 로그아웃 되었습니다.\n다시 로그인 해주세요.",
+                            title = message ?: "",
                             isShow = true
                         )
                     )
@@ -140,8 +140,8 @@ enum class UpdateType {
 val dummyForceUpdateState = UpdateDialogState.UpdateRequired(
     type = UpdateType.FORCE,
     message = UpdateMessage(
-        title = "업데이트 필요",
-        body = "더 나은 서비스를 위해 핀업이 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요"
+        title = "",
+        body = ""
     ),
     store = UpdateStore(
         url = "https://play.google.com/store/apps/details?id=com.pinup.placePinup",
@@ -153,8 +153,8 @@ val dummyForceUpdateState = UpdateDialogState.UpdateRequired(
 val dummyOptionalUpdateState = UpdateDialogState.UpdateRequired(
     type = UpdateType.OPTIONAL,
     message = UpdateMessage(
-        title = "업데이트 필요",
-        body = "더 나은 서비스를 위해 핀업이 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요"
+        title = "",
+        body = ""
     ),
     store = UpdateStore(
         url = "https://play.google.com/store/apps/details?id=com.pinup.placePinup",

@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pinup.composeapp.generated.resources.*
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -90,7 +91,7 @@ fun ReviewCard(
                     Spacer(modifier = Modifier.width(8.dp))
 
                     Text(
-                        text = "${placeReview.visitedDate} 방문",
+                        text = stringResource(Res.string.review_visited_date, placeReview.visitedDate),
                         style = Typography.L2.copy(
                             fontWeight = FontWeight.Medium
                         ),

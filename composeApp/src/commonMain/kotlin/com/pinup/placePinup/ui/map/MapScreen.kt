@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -55,6 +56,7 @@ import com.pinup.placePinup.ui.component.PBottomSheet
 import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.placePinup.ui.component.RoundedBox
+import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.SortBottomSheet
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.model.ChipState
@@ -79,6 +81,7 @@ import pinup.composeapp.generated.resources.ic_focus
 import pinup.composeapp.generated.resources.ic_pinch_off
 import pinup.composeapp.generated.resources.ic_pinch_on
 import pinup.composeapp.generated.resources.ic_rotate
+import pinup.composeapp.generated.resources.ic_search
 
 @Composable
 fun MapScreen(
@@ -95,7 +98,6 @@ fun MapScreen(
     cameraPosition: Position? = null,
     profileImage: String = "",
     onCameraStateChange: (CameraState) -> Unit = { },
-    onValueChange: (String) -> Unit = {},
     onChipClick: (ChipState) -> Unit = {},
     onPintsChipClick: (ChipState) -> Unit = {},
     onPlaceClick: (String) -> Unit = { },
@@ -106,7 +108,7 @@ fun MapScreen(
     onUpdatePosition: () -> Unit = {},
     onUpdateShowBookmarks: () -> Unit = {},
     onUpdateFocusLocation: (Boolean) -> Unit = {},
-    onFocusChange: (Boolean) -> Unit = {},
+    onClickSearch: () -> Unit = {},
     onClickBottomNav: (MainDestination) -> Unit,
     consumeDetailClicked: () -> Unit = {},
     onClickGetPlace: () -> Unit = {},
@@ -117,7 +119,6 @@ fun MapScreen(
     onMoveWriteReview: (String) -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {},
     onClickArticle: (Int) -> Unit = {},
-    showEmptyToast: () -> Unit = {},
 ) {
     val scope: CoroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(
@@ -406,7 +407,7 @@ fun MapScreen(
                         consumeDetailClicked = consumeDetailClicked,
                         isMoving = isCameraMoving,
                         isDetailClicked = isDetailClicked,
-                        isFocusSearch = searchUiState.isFocus,
+                        isFocusSearch = false,
                         isShowPinch = isShowPinch,
                         isMapClicked = isMapClicked.value,
                         consumeMapClicked = { isMapClicked.value = false },
@@ -416,7 +417,6 @@ fun MapScreen(
                             placeDetailUiState = placeDetailUiState,
                             pinchUiState = pinchUiState,
                             isScrollable = alpha == 0f,
-                            onValueChange = onValueChange,
                             onChipClick = onChipClick,
                             onPintsChipClick = onPintsChipClick,
                             isShowPinch = isShowPinch,
@@ -434,15 +434,43 @@ fun MapScreen(
                                 clickedPinlogId = it
                                 sheetState.show()
                             } },
-                            onFocusChange = onFocusChange,
                             onClickLike = onClickLike,
                             onMovePinlogDetail = onMovePinlogDetail,
                             onMoveWriteReview = onMoveWriteReview,
                             onMoveUserProfile = onMoveUserProfile,
                             onClickArticle = onClickArticle,
-                            showEmptyToast = showEmptyToast
                         )
                     }
+                }
+            }
+
+            if (alpha > 0f) {
+                Box(
+                    modifier = Modifier
+                        .alpha(alpha)
+                        .align(Alignment.TopCenter)
+                        .statusBarsPadding()
+                        .padding(horizontal = 20.dp, vertical = 8.dp)
+                        .fillMaxWidth()
+                ) {
+                    RoundedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "",
+                        placeholder = stringResource(Res.string.pin_map_search_hint),
+                        onValueChange = {},
+                        leadingIcon = painterResource(Res.drawable.ic_search),
+                        cornerRounded = 100,
+                        fixedBorderColor = Colors.Gray900,
+                        backgroundColor = Colors.White,
+                        placeholderStyle = Typography.T2.copy(fontWeight = FontWeight.Medium),
+                        placeholderTextColor = Colors.Gray400,
+                        enabled = false,
+                    )
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clickableWithNoRipple { onClickSearch() }
+                    )
                 }
             }
         }
@@ -464,10 +492,10 @@ fun MapScreen(
 
     if (isShowPermissionDialog.value) {
         PDialog(
-            titleText = "권한 필요",
-            descriptionText = "위치 권한 허용이 필요해요.\n확인을 누르시면 설정 화면으로 이동합니다",
-            leftButtonText = "취소",
-            rightButtonText = "확인",
+            titleText = stringResource(Res.string.permission_location_title),
+            descriptionText = stringResource(Res.string.permission_location_description),
+            leftButtonText = stringResource(Res.string.word_cancel),
+            rightButtonText = stringResource(Res.string.word_confirm),
             onLeftButtonClick = {
                 isShowPermissionDialog.value = false
             },

@@ -222,7 +222,7 @@ fun PinchWriteScreen(
             Spacer(Modifier.width(6.dp))
 
             Text(
-                text = "작성일자 $createdAt",
+                text = stringResource(Res.string.pinch_created_date, createdAt),
                 style = Typography.L2.copy(fontWeight = FontWeight.Medium),
                 color = Colors.Gray500
             )
@@ -339,7 +339,7 @@ fun PinchWriteScreen(
                                     text = item.name,
                                     onValueChange = { onNameChanged(index, it) },
                                     index = index,
-                                    placeholder = "${index + 1}. 장소명",
+                                    placeholder = stringResource(Res.string.pinch_place_name_hint, index + 1),
                                     placeholderStyle = Typography.B2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),
@@ -458,10 +458,10 @@ fun PinchWriteScreen(
 
     if (isShowPermissionDialog.value) {
         PDialog(
-            titleText = "권한 필요",
-            descriptionText = "위치 권한 허용이 필요해요.\n확인을 누르시면 설정 화면으로 이동합니다",
-            leftButtonText = "취소",
-            rightButtonText = "확인",
+            titleText = stringResource(Res.string.permission_location_title),
+            descriptionText = stringResource(Res.string.permission_location_description),
+            leftButtonText = stringResource(Res.string.word_cancel),
+            rightButtonText = stringResource(Res.string.word_confirm),
             onLeftButtonClick = {
                 isShowPermissionDialog.value = false
             },

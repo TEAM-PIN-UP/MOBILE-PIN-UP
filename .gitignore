@@ -183,3 +183,18 @@ fabric.properties
 *.klib
 
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio,android,xcode
+
+# macOS
+.DS_Store
+
+# Kotlin compiler cache
+.kotlin/
+
+# KMM generated CocoaPods spec
+*.podspec
+
+# Release build outputs
+composeApp/release/
+
+# CocoaPods dependencies
+iosApp/Pods/
