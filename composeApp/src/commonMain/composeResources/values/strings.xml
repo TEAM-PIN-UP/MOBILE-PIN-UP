@@ -336,4 +336,10 @@
     <string name="report_undo_block">차단 해제하기</string>
     <string name="report_undo_block_dialog_title">차단을 해제하시겠습니까?</string>
     <string name="report_undo_block_dialog_content">차단 해제 시, 해당 계정에 친구 추가, 댓글 등의 상호작용이 가능합니다.</string>
+
+    <!-- Camera -->
+    <string name="camera_permission_denied_title">카메라 권한이 필요합니다</string>
+    <string name="camera_permission_denied_description">설정에서 카메라 권한을 허용해주세요.</string>
+    <string name="photo_source_gallery">갤러리에서 선택</string>
+    <string name="photo_source_camera">카메라로 촬영</string>
 </resources>
