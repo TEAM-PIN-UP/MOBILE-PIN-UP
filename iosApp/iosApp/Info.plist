@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.14</string>
+	<string>1.1.1</string>
 	<key>CFBundleURLSchemes</key>
 	<array>
 		<string>com.googleusercontent.apps.260271399045-hju2qsak4evpvic6u4qq77qo0d3k1ggi</string>
@@ -56,7 +56,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>12</string>
+	<string>14</string>
 	<key>GIDClientID</key>
 	<string>260271399045-hju2qsak4evpvic6u4qq77qo0d3k1ggi.apps.googleusercontent.com</string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -90,7 +90,7 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>moko-media demo usage</string>
 	<key>NidAppName</key>
-	<string>PinUp</string>
+	<string>PinYut</string>
 	<key>NidClientID</key>
 	<string>pq5e9ZctR6BjVodHiFWx</string>
 	<key>NidClientSecret</key>
@@ -126,8 +126,6 @@
 	</array>
 	<key>UIStatusBarStyle</key>
 	<string></string>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -141,5 +139,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>
