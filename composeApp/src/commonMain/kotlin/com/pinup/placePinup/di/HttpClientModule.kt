@@ -97,7 +97,7 @@ val httpClientModule = module {
             ignoreUnknownKeys = true
         }
         Ktorfit.Builder()
-            .baseUrl("http://43.200.161.96:8080/")
+            .baseUrl("http://101.79.30.115:8080/")
             .httpClient(client)
             .converterFactories(PResultConverterFactory(json))
             .build()
@@ -132,7 +132,7 @@ fun getKtorfit(): Ktorfit {
         ignoreUnknownKeys = true
     }
     return Ktorfit.Builder()
-        .baseUrl("http://43.200.161.96:8080/")
+        .baseUrl("http://101.79.30.115:8080/")
         .httpClient(client)
         .converterFactories(PResultConverterFactory(json))
         .build()
