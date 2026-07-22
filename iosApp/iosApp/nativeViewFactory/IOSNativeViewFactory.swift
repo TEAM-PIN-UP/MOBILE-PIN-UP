@@ -275,24 +275,19 @@ struct PintsNaverMap: UIViewRepresentable {
 
         print("[하이] PintsNaverMap.updateUIView filtered count=\(filtered.count) mapView=\(String(describing: uiView.mapView))")
         for p in filtered {
+            // ✅ MapScreen(NaverMap) 핀치 마커와 동일하게 일반 마커(원형)로 통일
+            //    이름 라벨(캡슐)을 포함한 CustomMarker 를 이미지로 그린다.
+            let category = ComposeApp.Category.companion.of(value: p.categoryCode)
+            let iconName: String
+            switch category {
+            case .cafe: iconName = "ic_cafe_marker"
+            default:    iconName = "ic_food_marker"
+            }
+            let markerView = CustomMarker(name: p.name, iconName: iconName)
             let marker = NMFMarker()
             marker.position = NMGLatLng(lat: p.latitude, lng: p.longitude)
-            // ✅ 카테고리 그룹별 색상 마커
-            let category = ComposeApp.Category.companion.of(value: p.categoryCode)
-            print("[하이] PintsNaverMap marker name=\(p.name) lat=\(p.latitude) lng=\(p.longitude) category=\(category) group=\(category.group)")
-            if let img = markerImage(for: category.group) {
-                marker.iconImage = NMFOverlayImage(image: img)
-                marker.width = 36
-                marker.height = 36
-                marker.anchor = CGPoint(x: 0.5, y: 0.5)
-            }
-            // ✅ Android와 동일한 캡션
-            marker.captionText = p.name
-            marker.captionColor = .white
-            marker.captionHaloColor = UIColor(red: 60/255, green: 60/255, blue: 60/255, alpha: 1.0)
-            marker.captionTextSize = 10
-            marker.captionOffset = 4
-            marker.captionRequestedWidth = 240
+            marker.iconImage = NMFOverlayImage(image: markerView.asImage())
+            marker.anchor = CGPoint(x: 0.5, y: 0.75)
             marker.touchHandler = { _ in true }
             marker.mapView = uiView.mapView
             context.coordinator.markers.append(marker)
@@ -402,25 +397,12 @@ struct NaverMap: UIViewRepresentable {
                 }
 
                 for p in pinchUiState.editorPintsDetail.pintsPlaceList {
-                    let selected = (p.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace.kakaoPlaceId)
-                    // F&B 는 기존 food/cafe 마커, 그 외 그룹은 색상 원형 마커 사용
-                    let group = p.pintsPlaceCategory.group
-                    let useFnbMarker = (group == .fnb)
-                    let iconName: String = {
-                        if useFnbMarker {
-                            switch p.pintsPlaceCategory {
-                            case .cafe: return selected ? "ic_cafe_marker_on" : "ic_cafe_marker_pints"
-                            default:    return selected ? "ic_food_marker_on" : "ic_food_marker_pints"
-                            }
-                        } else {
-                            switch group {
-                            case .nature:  return "ic_place_circle_green"
-                            case .culture: return "ic_place_circle_blue"
-                            default:       return "ic_place_circle_red" // ETC → red(검정 tint 는 makeMarker 외부에서 별도 처리 필요시 추가)
-                            }
-                        }
-                    }()
-                    print("[하이] Pinch marker name=\(p.name) lat=\(p.latitude) lng=\(p.longitude) category=\(p.pintsPlaceCategory) group=\(group) icon=\(iconName)")
+                    // ✅ 일반 마커(원형)로 통일 (선택 상태 구분 없음)
+                    let iconName: String
+                    switch p.pintsPlaceCategory {
+                    case .cafe: iconName = "ic_cafe_marker"
+                    default:    iconName = "ic_food_marker"
+                    }
                     let marker = makeMarker(name: p.name, iconName: iconName, lat: p.latitude, lng: p.longitude)
                     marker.userInfo = ["kakaoPlaceId": p.kakaoPlaceId]
                     marker.touchHandler = { _ in

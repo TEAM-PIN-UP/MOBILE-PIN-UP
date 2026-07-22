@@ -55,10 +55,8 @@ import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_cafe_marker_on
-import pinup.composeapp.generated.resources.ic_cafe_marker_pinch
-import pinup.composeapp.generated.resources.ic_food_marker_on
-import pinup.composeapp.generated.resources.ic_food_marker_pinch
+import pinup.composeapp.generated.resources.ic_cafe_marker
+import pinup.composeapp.generated.resources.ic_food_marker
 
 private data class ClusterPlaceItem(
     val kakaoPlaceId: String,
@@ -212,10 +210,7 @@ actual fun PlatformNaverMap(
                 pattern = arrayOf(1.dp, 3.dp)
             )
             pinchUiState.editorPintsDetail.pintsPlaceList.forEach {
-                key(
-                    it.kakaoPlaceId,
-                    it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId
-                ) {
+                key(it.kakaoPlaceId) {
                     MarkerComposable(
                         keys = arrayOf(it.kakaoPlaceId),
                         state = MarkerState(
@@ -231,26 +226,14 @@ actual fun PlatformNaverMap(
                             modifier = Modifier,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            val tint = markerTint(it.pintsPlaceCategory.group)
-                            if (it.kakaoPlaceId == placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId) {
-                                Image(
-                                    painter = when (it.pintsPlaceCategory) {
-                                        Category.CAFE -> painterResource(Res.drawable.ic_cafe_marker_on)
-                                        else -> painterResource(Res.drawable.ic_food_marker_on)
-                                    },
-                                    colorFilter = tint,
-                                    contentDescription = "marker"
-                                )
-                            } else {
-                                Image(
-                                    painter = when (it.pintsPlaceCategory) {
-                                        Category.CAFE -> painterResource(Res.drawable.ic_cafe_marker_pinch)
-                                        else -> painterResource(Res.drawable.ic_food_marker_pinch)
-                                    },
-                                    colorFilter = tint,
-                                    contentDescription = "marker"
-                                )
-                            }
+                            Image(
+                                painter = when (it.pintsPlaceCategory) {
+                                    Category.CAFE -> painterResource(Res.drawable.ic_cafe_marker)
+                                    else -> painterResource(Res.drawable.ic_food_marker)
+                                },
+                                colorFilter = markerTint(it.pintsPlaceCategory.group),
+                                contentDescription = "marker"
+                            )
 
                             Spacer(modifier = Modifier.height(2.dp))
 
