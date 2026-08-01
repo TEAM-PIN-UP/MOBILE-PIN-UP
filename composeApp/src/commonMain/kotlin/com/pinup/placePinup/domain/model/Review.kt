@@ -4,6 +4,7 @@ data class Review(
     val id: Int,
     val writerName: String = "",
     val placeName: String,
+    val kakaoPlaceId: String = "",
     val content: String,
     val createdAt: List<Int>,
     val starRating: Double,

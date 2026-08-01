@@ -10,6 +10,7 @@ import com.pinup.placePinup.domain.usecase.GetPinlogDetailUseCase
 import com.pinup.placePinup.domain.usecase.GetRecentSearchUseCase
 import com.pinup.placePinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.placePinup.domain.usecase.SaveRecentSearchUseCase
+import com.pinup.placePinup.event.DetailPlaceEventBus
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
 import com.pinup.placePinup.ui.base.UiState
@@ -193,6 +194,12 @@ class FeedViewModel(
         getMyProfileUseCase().collectLatest {
             if(it.nickname != name) emitEvent(FeedUiEvent.OnMoveUserProfile(name))
         }
+    }
+
+    // 피드 장소 뱃지 탭 -> 핀맵 탭이 구독 중인 이벤트버스로 kakaoPlaceId 전달.
+    // MapViewModel(앱 시작부터 상주)이 이를 받아 getDetailPlace 호출 -> 장소 상세 바텀시트 + 카메라 포커싱.
+    fun moveToPlaceOnMap(kakaoPlaceId: String) = viewModelScope.launch {
+        DetailPlaceEventBus.sendEvent(kakaoPlaceId)
     }
 }
 

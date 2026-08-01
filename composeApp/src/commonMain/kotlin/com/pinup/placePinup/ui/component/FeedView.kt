@@ -51,6 +51,7 @@ fun FeedView(
     onClickMenu: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
+    onClickPlace: (String) -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {}
 ) {
     var isOverflow by remember { mutableStateOf(false) }
@@ -118,7 +119,10 @@ fun FeedView(
 
         RoundedBox(
             modifier = Modifier
-                .padding(start = 20.dp),
+                .padding(start = 20.dp)
+                .clickableWithNoRipple {
+                    if (item.kakaoPlaceId.isNotBlank()) onClickPlace(item.kakaoPlaceId)
+                },
             cornerColor = Colors.Main,
         ) {
             Row(
