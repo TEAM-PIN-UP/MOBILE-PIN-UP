@@ -58,6 +58,10 @@ class MapViewModel (
 
     private var initPlace: Boolean = false
 
+    // 피드 뱃지 등으로 진입 시, 카메라가 대상 장소에 안착하면 그 지역 장소 목록을 강제로 로드하기 위한 예약 플래그.
+    // (내 위치 근접 게이트를 우회 → 멀리 있는 장소로 진입해도 목록/마커가 채워지고, 상세를 닫아도 지도가 비지 않음)
+    private var forceLoadPlaces: Boolean = false
+
     init {
         initDetailPlaceEventBus()
         initCollectLocation()
@@ -81,6 +85,8 @@ class MapViewModel (
         DetailPlaceEventBus.detailPlaceEvent
             .debounce(300)
             .collectLatest { kakaoId ->
+                // 피드 등 외부 진입: 대상 지역 장소 목록을 강제 로드하도록 예약 후 상세 조회.
+                forceLoadPlaces = true
                 getDetailPlace(kakaoId)
             }
     }
@@ -128,11 +134,14 @@ class MapViewModel (
         updateState {
             copy(
                 cameraState = cameraState,
-                isCameraMoving = cameraState.isMoving
+                // 시트 접힘(hidden)은 "사용자가 제스처로 지도를 움직였을 때"만 의도된 동작이다.
+                // Follow 모드의 GPS 추적이나 상세 진입 등 프로그램적 카메라 이동으로는 접히지 않도록 제스처 이동만 반영.
+                isCameraMoving = cameraState.isMoving && cameraState.reason == CameraState.Reason.GESTURE
             )
         }
 
-        if (uiState.value.currentPosition?.near(cameraState.position, 10.0) == true && initPlace) {
+        // 피드 진입 로드가 진행 중이면(forceLoadPlaces) 근접 게이트 로드가 그 결과를 덮어쓰지 않도록 건너뛴다.
+        if (!forceLoadPlaces && uiState.value.currentPosition?.near(cameraState.position, 10.0) == true && initPlace) {
             getPlaces()
             getEditorPints()
             initPlace = false
@@ -298,8 +307,47 @@ class MapViewModel (
                         isDetailClicked = true
                     )
                 }
+                // 피드 등 외부 진입인 경우, 대상 지역 장소를 로드해 목록/마커를 채운다.
+                // (forceLoadPlaces 는 로드 완료 후 loadReviewedPlacesAround 내부에서 해제)
+                if (forceLoadPlaces) {
+                    loadReviewedPlacesAround(it.mapPlace)
+                }
             }
         )
+    }
+
+    // 대상 장소 주변(고정 박스)의 리뷰 장소를 로드해 지도 마커/바텀시트 목록을 채운다.
+    // 로드 결과에 대상이 없거나(필터/일시적 누락) 로드가 실패해도 대상 핀은 항상 보이도록 보장한다.
+    private fun loadReviewedPlacesAround(target: ReviewedPlace) = viewModelScope.launch {
+        // 1) 대상 장소를 먼저 표시해 선택 핀을 즉시 보장(로드 실패/지연에도 유지).
+        updateState {
+            copy(searchUiState = searchUiState.copy(reviewedPlaces = listOf(target)))
+        }
+        // 2) 대상 주변 지역 장소 로드.
+        val delta = 0.02
+        val request = uiState.value.locationBound.copy(
+            neLatitude = (target.latitude + delta).toString(),
+            neLongitude = (target.longitude + delta).toString(),
+            swLatitude = (target.latitude - delta).toString(),
+            swLongitude = (target.longitude - delta).toString(),
+        )
+        uiState.value.locationBound = request
+        val filter = uiState.value.searchUiState.chipStates.find { it.isSelected }?.type ?: Category.ALL
+        val sortType = uiState.value.searchUiState.sortType
+        val currentLatLng = if (sortType == SortType.NEAR) uiState.value.currentPosition else null
+        resultResponse(
+            response = getReviewedPlacesUseCase(request, currentLatLng, sortType, filter),
+            successCallback = { places ->
+                // 주변 로드 결과에 대상이 없어도 항상 포함해 선택 핀을 유지.
+                val merged = if (places.any { it.kakaoPlaceId == target.kakaoPlaceId }) places
+                             else places + target
+                updateState {
+                    copy(searchUiState = searchUiState.copy(reviewedPlaces = merged))
+                }
+            }
+        )
+        // 3) 로드 완료(성공/실패) 후 근접 게이트 재허용.
+        forceLoadPlaces = false
     }
 
     fun clearDetailPlace() {

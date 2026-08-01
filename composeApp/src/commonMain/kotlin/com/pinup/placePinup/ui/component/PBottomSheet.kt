@@ -85,6 +85,15 @@ fun PBottomSheet(
         }
     }
 
+    // 상세(detail)가 열리면 카메라 이동 타이밍과 무관하게 시트를 half로 올린다.
+    // (피드 뱃지/검색으로 진입 시, 진입 시점에 카메라가 이미 이동 중이면 isMoving 이 새로 토글되지 않아
+    //  위의 isMoving 이펙트만으로는 시트가 올라오지 않는 케이스 대응)
+    LaunchedEffect(isDetailClicked) {
+        if (isDetailClicked) {
+            realHeight = halfHeight
+        }
+    }
+
     LaunchedEffect(isFocusSearch){
         if (isFocusSearch) realHeight = expandedHeight
     }
