@@ -18,6 +18,7 @@ import com.pinup.placePinup.domain.usecase.GetMemberInfoUseCase
 import com.pinup.placePinup.domain.usecase.GetPinlogDetailUseCase
 import com.pinup.placePinup.domain.usecase.GetPintsUseCase
 import com.pinup.placePinup.domain.usecase.PostReviewLikeChangeUseCase
+import com.pinup.placePinup.event.DetailPlaceEventBus
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
@@ -83,6 +84,11 @@ class MyViewModel (
                 }
             }
         )
+    }
+
+    // 마이 프로필 핀로그 장소 뱃지 탭 -> 핀맵 탭으로 이동해 장소 상세 표시(내 리뷰라 게이트는 통과).
+    fun moveToPlaceOnMap(kakaoPlaceId: String, reviewId: Int) = viewModelScope.launch {
+        DetailPlaceEventBus.sendEvent(kakaoPlaceId, reviewId)
     }
 
     fun likeChanged(id: Int, isLike: Boolean) = viewModelScope.launch {

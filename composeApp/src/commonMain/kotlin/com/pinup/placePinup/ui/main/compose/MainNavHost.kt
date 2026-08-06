@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.pinup.placePinup.domain.model.FCMType
+import com.pinup.placePinup.event.MapTabBridge
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.platform.FcmBridgeStore
 import com.pinup.placePinup.ui.article.ArticleRoute
@@ -128,6 +129,21 @@ fun MainNavHost(
                 FCMType.DORMANT_USER_REENGAGEMENT -> {}
             }
             FcmBridgeStore.consume()
+        }
+    }
+
+    // 앱 레벨 푸시 화면(유저 프로필 등)에서의 Map 탭 전환 요청 처리.
+    LaunchedEffect(Unit) {
+        MapTabBridge.pending.collect { pending ->
+            if (!pending) return@collect
+            navHostController.navigate(MainDestination.Map) {
+                launchSingleTop = true
+                restoreState = true
+                popUpTo(navHostController.graph.startDestinationId) {
+                    saveState = true
+                }
+            }
+            MapTabBridge.consume()
         }
     }
 

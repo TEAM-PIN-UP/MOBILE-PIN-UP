@@ -79,6 +79,7 @@ fun UserProfileScreen(
     onReceivedReject: () -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
     onClickShare: () -> Unit = {},
     onMovePints: (Int) -> Unit = {},
     getMorePints: () -> Unit = {},
@@ -363,6 +364,7 @@ fun UserProfileScreen(
                             reviewList = photoReviews,
                             onClickDetail = onClickDetail,
                             onClickLike = onClickLike,
+                            onClickPlace = onClickPlace,
                         )
                     } else {
                         this.UserPinchList(
@@ -796,6 +798,7 @@ fun LazyListScope.UserPinlogList(
     reviewList: List<Review>,
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
 ) {
     if (reviewList.isEmpty()) {
         item {
@@ -811,6 +814,7 @@ fun LazyListScope.UserPinlogList(
                 item = it,
                 onClickLike = onClickLike,
                 onClickDetail = onClickDetail,
+                onClickPlace = onClickPlace,
             )
 
             PHorizontalDivider()

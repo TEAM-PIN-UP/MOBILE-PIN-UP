@@ -23,6 +23,7 @@ import com.pinup.placePinup.domain.usecase.PostUserUnBlockUseCase
 import com.pinup.placePinup.domain.usecase.RejectPinBuddyUseCase
 import com.pinup.placePinup.domain.usecase.RequestPinBuddyUseCase
 import com.pinup.placePinup.domain.usecase.SearchUserUseCase
+import com.pinup.placePinup.event.DetailPlaceEventBus
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.base.BaseViewModel
@@ -146,6 +147,12 @@ class UserProfileViewModel (
                 updateUserProfile()
             }
         )
+    }
+
+    // 유저 프로필 핀로그 장소 뱃지 탭 -> 핀맵 탭으로 이동해 장소 상세 표시.
+    // (목록은 relationType==FRIEND 일 때만 노출되므로 작성자는 항상 친구 -> 게이트 통과)
+    fun moveToPlaceOnMap(kakaoPlaceId: String, reviewId: Int) = viewModelScope.launch {
+        DetailPlaceEventBus.sendEvent(kakaoPlaceId, reviewId)
     }
 
     fun likeChanged(id: Int, isLike: Boolean) = viewModelScope.launch {

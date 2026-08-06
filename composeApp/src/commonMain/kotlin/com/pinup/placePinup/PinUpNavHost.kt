@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
+import com.pinup.placePinup.event.MapTabBridge
 import com.pinup.placePinup.extentions.jsonToArg
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.ui.addpinbuddy.AddPinBuddyRoute
@@ -450,6 +451,14 @@ fun PinUpNavHost(
                 },
                 onMoveReport = { id, type ->
                     navHostController.navigate(PinUpAppDestination.Report(id, type.name))
+                },
+                onMoveMap = {
+                    // 기존 Main 위 화면들만 pop(살아있는 MapViewModel 유지), Main 재구성 시 Map 탭 전환 요청.
+                    MapTabBridge.request()
+                    navHostController.navigate(PinUpAppDestination.Main()) {
+                        popUpTo<PinUpAppDestination.Main> { inclusive = false }
+                        launchSingleTop = true
+                    }
                 }
             )
         }
