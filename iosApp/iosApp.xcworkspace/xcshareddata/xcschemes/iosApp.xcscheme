@@ -25,7 +25,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7555FF7A242A565900829871"
-               BuildableName = "PinUp.app"
+               BuildableName = "Pinyut.app"
                BlueprintName = "iosApp"
                ReferencedContainer = "container:iosApp.xcodeproj">
             </BuildableReference>
@@ -54,7 +54,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7555FF7A242A565900829871"
-            BuildableName = "PinUp.app"
+            BuildableName = "Pinyut.app"
             BlueprintName = "iosApp"
             ReferencedContainer = "container:iosApp.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7555FF7A242A565900829871"
-            BuildableName = "PinUp.app"
+            BuildableName = "Pinyut.app"
             BlueprintName = "iosApp"
             ReferencedContainer = "container:iosApp.xcodeproj">
          </BuildableReference>

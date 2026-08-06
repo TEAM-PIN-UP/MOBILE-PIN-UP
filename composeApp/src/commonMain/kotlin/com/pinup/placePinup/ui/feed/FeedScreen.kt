@@ -210,7 +210,14 @@ fun FeedScreen(
             BottomBar(
                 selectedMenu = MainDestination.Feed,
                 profileImage = profile,
-                onBottomMenuClick = onClickBottomNav,
+                onBottomMenuClick = { destination ->
+                    if (destination == MainDestination.Feed) {
+                        // 이미 피드 화면일 때 피드 메뉴를 다시 누르면 맨 위로 이동
+                        scope.launch { scrollState.animateScrollToItem(0) }
+                    } else {
+                        onClickBottomNav(destination)
+                    }
+                },
                 onSizeChanged = { bottomBarHeight = it }
             )
         }

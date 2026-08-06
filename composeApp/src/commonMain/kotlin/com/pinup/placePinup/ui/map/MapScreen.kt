@@ -96,6 +96,7 @@ fun MapScreen(
     clearPinchList: () -> Unit = {},
     position: Position = Position.INVALID,
     cameraPosition: Position? = null,
+    cameraZoom: Double? = null,
     profileImage: String = "",
     onCameraStateChange: (CameraState) -> Unit = { },
     onChipClick: (ChipState) -> Unit = {},
@@ -288,6 +289,7 @@ fun MapScreen(
                 pinchUiState = pinchUiState,
                 isShowPinch = isShowPinch,
                 cameraPosition = cameraPosition,
+                cameraZoom = cameraZoom,
                 onPlaceClick = onPlaceClick,
                 onCameraStateChange = onCameraStateChange,
                 onMapClick = { isMapClicked.value = true }

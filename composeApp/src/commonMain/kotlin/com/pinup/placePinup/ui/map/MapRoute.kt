@@ -36,6 +36,8 @@ fun MapRoute(
     onMoveWriteReview: (String) -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {},
     onClickArticle: (Int) -> Unit = {},
+    focusPlaceId: String? = null,
+    onConsumeFocusPlace: () -> Unit = {},
 ) {
     val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
         accuracy = LocationTrackerAccuracy.Best
@@ -63,6 +65,13 @@ fun MapRoute(
 
     LaunchedEffect(Unit) {
         mapViewModel.getMyProfileImage()
+    }
+
+    // 핀로그 상세 등에서 넘어온 장소 센터링 요청 처리
+    LaunchedEffect(focusPlaceId) {
+        if (focusPlaceId == null) return@LaunchedEffect
+        mapViewModel.getDetailPlace(focusPlaceId)
+        onConsumeFocusPlace()
     }
 
     if (isShowDeleteDialog.value) {
@@ -104,6 +113,7 @@ fun MapRoute(
             placeDetailUiState = mapUiState.value.placeDetailUiState,
             position = mapUiState.value.currentPosition ?: Position.INVALID,
             cameraPosition = mapUiState.value.cameraPosition,
+            cameraZoom = mapUiState.value.cameraZoom,
             isFocusLocation = mapUiState.value.isFocusLocation,
             isShowPinch = mapUiState.value.isShowPinch,
             isCameraMoving = mapUiState.value.isCameraMoving,

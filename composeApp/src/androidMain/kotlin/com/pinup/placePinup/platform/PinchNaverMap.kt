@@ -2,6 +2,7 @@ package com.pinup.placePinup.platform
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.naver.maps.geometry.LatLng
@@ -153,9 +155,12 @@ actual fun PinchNaverMap(
                             contentDescription = "marker"
                         )
 
+                        Spacer(modifier = Modifier.height(2.dp))
+
                         RoundedBox(
                             modifier = Modifier,
                             backgroundColor = Colors.Black_25,
+                            cornerColor = Color(0xFF3C3C3C),
                             cornerRounded = 100
                         ) {
                             Text(
@@ -163,7 +168,7 @@ actual fun PinchNaverMap(
                                     .padding(vertical = 2.dp, horizontal = 6.dp)
                                     .widthIn(max = 72.dp),
                                 text = it.name,
-                                style = Typography.B6,
+                                style = Typography.L3.copy(fontWeight = FontWeight.W600),
                                 color = Colors.White,
                                 overflow = TextOverflow.Ellipsis,
                                 maxLines = 1

@@ -5,6 +5,7 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -15,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.pinup.placePinup.domain.model.FCMType
+import com.pinup.placePinup.event.DetailPlaceEventBus
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.platform.FcmBridgeStore
 import com.pinup.placePinup.ui.article.ArticleRoute
@@ -54,6 +56,20 @@ fun MainNavHost(
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
     val selectedMenuBar = remember { mutableStateOf<MainDestination>(MainDestination.Map) }
     val currentDestination = navHostController.currentBackStackEntryAsState().value?.destination
+    val focusPlace by DetailPlaceEventBus.focusPlace.collectAsStateWithLifecycle()
+
+    // 지도 밖에서 장소 센터링 요청이 들어오면 어느 탭에 있든 지도 탭으로 전환한다.
+    LaunchedEffect(focusPlace) {
+        if (focusPlace == null) return@LaunchedEffect
+        navHostController.navigate(MainDestination.Map) {
+            launchSingleTop = true
+            restoreState = true
+            popUpTo(navHostController.graph.startDestinationId) {
+                saveState = true
+            }
+        }
+    }
+
     LaunchedEffect(currentDestination) {
         if (MainDestination.Map::class.qualifiedName == currentDestination?.route) {
             selectedMenuBar.value = MainDestination.Map
@@ -144,6 +160,8 @@ fun MainNavHost(
         ) {
             composable<MainDestination.Map> {
                 MapRoute(
+                    focusPlaceId = focusPlace,
+                    onConsumeFocusPlace = DetailPlaceEventBus::consumeFocusPlace,
                     onBottomMenuClick = {
                         if (it is MainDestination.Upload) {
                             if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()

@@ -85,13 +85,13 @@ class PinUpFCM : FirebaseMessagingService() {
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-                description = "PinUp 푸시 알림"
+                description = "Pinyut 푸시 알림"
             }
             notificationManager.createNotificationChannel(channel)
         }
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setContentTitle("핀업")
+            .setContentTitle("핀유트")
             .setContentText(body)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

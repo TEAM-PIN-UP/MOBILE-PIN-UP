@@ -31,6 +31,7 @@ import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
 import com.pinup.placePinup.ui.base.UiState
 import com.pinup.placePinup.ui.model.ChipState
+import com.pinup.placePinup.util.MapZoom
 import dev.icerock.moko.geo.LocationTracker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
@@ -69,7 +70,9 @@ class MapViewModel (
             .distinctUntilChanged()
             .collectLatest {
                 val myLocation = Position(it.latitude, it.longitude)
-                if (uiState.value.currentPosition == null || uiState.value.isFocusLocation) {
+                // 특정 장소를 이미 센터링한 상태라면 최초 내 위치 센터링으로 덮어쓰지 않는다.
+                val hasFocusedPlace = uiState.value.placeDetailUiState.detailPlace != null
+                if ((uiState.value.currentPosition == null && !hasFocusedPlace) || uiState.value.isFocusLocation) {
                     updateCameraPosition(myLocation)
                 }
                 updatePosition(myLocation)
@@ -119,7 +122,8 @@ class MapViewModel (
     private fun updateCameraPosition(position: Position?) {
         updateState {
             copy(
-                cameraPosition = position
+                cameraPosition = position,
+                cameraZoom = null
             )
         }
     }
@@ -300,6 +304,8 @@ class MapViewModel (
                     copy(
                         placeDetailUiState = PlaceDetailUiState(it),
                         cameraPosition = Position(it.mapPlace.latitude - 0.0078, it.mapPlace.longitude),
+                        // 해당 장소가 클러스터에 묶이지 않고 개별 핀으로 보이는 축척까지 확대한다.
+                        cameraZoom = MapZoom.PLACE_FOCUS,
                         isFocusLocation = false,
                         isDetailClicked = true
                     )
@@ -504,6 +510,8 @@ data class MapUiState(
     val isShowPinch: Boolean = false,
     val currentPosition: Position? = null,
     val cameraPosition: Position? = null,
+    /** 카메라 이동 시 보장할 최소 줌. null 이면 현재 줌을 유지한다. */
+    val cameraZoom: Double? = null,
     val isCameraMoving: Boolean = false,
     val isDetailClicked: Boolean = false,
     val cameraState: CameraState? = null,

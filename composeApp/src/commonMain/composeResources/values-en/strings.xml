@@ -63,12 +63,12 @@
     <string name="setting_hint_nickname_change">*Nickname can be changed every 30 days.</string>
     <string name="setting_logout_dialog_title">Are you sure you want to log out?</string>
     <string name="setting_logout_dialog_description">We'll miss you 😥\nCome back anytime!</string>
-    <string name="setting_unregister_title">Are you sure you want\nto leave PIN-UP?</string>
+    <string name="setting_unregister_title">Are you sure you want\nto leave Pinyut?</string>
     <string name="setting_unregister_description">Deleted information cannot be recovered after withdrawal.</string>
     <string name="setting_unregister_check_comment">I have read all the information above and agree.</string>
     <string name="setting_unregister_dialog_title">Are you sure you want to delete your account?</string>
     <string name="setting_unregister_dialog_description">Once deleted, you will no longer\nbe able to access your\nprevious service history.</string>
-    <string name="setting_unregister_complete">Thank you for using PIN-UP :)\nSee you again!</string>
+    <string name="setting_unregister_complete">Thank you for using Pinyut :)\nSee you again!</string>
     <string name="setting_sns_login_type">Social Login (%1$s)</string>
 
     <!-- PinLog -->
@@ -119,7 +119,7 @@
     <string name="profile_empty_pin_buddy">No Pin Buddies yet!\nWhy not send a request first?</string>
     <string name="profile_empty_receive_pin_buddy">No Pin Buddy requests received.\nRequests will appear here when they arrive!</string>
     <string name="profile_empty_sent_pin_buddy">No sent requests.\nFind a Pin Buddy with similar tastes!</string>
-    <string name="profile_empty_my_pinlog">No Pin Logs yet!\nPin up your favorite places :)</string>
+    <string name="profile_empty_my_pinlog">No Pin Logs yet!\nPinyut your favorite places :)</string>
     <string name="profile_empty_user_pinlog">This Pin Buddy hasn't written any Pin Logs!\nCheck back soon.</string>
     <string name="profile_search_result">Search Results</string>
     <string name="profile_already_request_pin_buddy">Request Pending</string>
@@ -144,7 +144,7 @@
     <!-- PinMap -->
     <string name="pin_map_search_button">Search this area</string>
     <string name="pin_map_search_hint">Search places or locations</string>
-    <string name="pin_map_empty_pinlog">No Pin Logs yet!\nPin up your favorite places :)</string>
+    <string name="pin_map_empty_pinlog">No Pin Logs yet!\nPinyut your favorite places :)</string>
     <string name="pin_map_search_result">Search Results</string>
     <string name="pin_map_go_article">Go to Articles</string>
     <string name="permission_location_title">Permission Required</string>
@@ -157,8 +157,8 @@
     <string name="search_check_keyword">Please check your search term.</string>
 
     <!-- Article -->
-    <string name="article_title">PIN-UP Articles</string>
-    <string name="article_recommend">Discover more courses\ncurated by PIN-UP editors.</string>
+    <string name="article_title">Pinyut Articles</string>
+    <string name="article_recommend">Discover more courses\ncurated by Pinyut editors.</string>
 
     <!-- Pinch -->
     <string name="pinch_write">Write Pints</string>
@@ -202,7 +202,7 @@
 
     <!-- Onboarding -->
     <string name="onboarding_title_prefix">Our local archive, </string>
-    <string name="onboarding_title_highlight">PIN-UP</string>
+    <string name="onboarding_title_highlight">Pinyut</string>
     <string name="onboarding_login_text">Log in and share your own space!</string>
 
     <!-- FindId -->
@@ -271,13 +271,13 @@
     <string name="notification_unread">Unread %1$d</string>
 
     <!-- Kakao -->
-    <string name="kakao_profile_share_title">%1$s's PIN-UP Account</string>
-    <string name="kakao_profile_share_content">Check out %1$s's pins on PIN-UP.</string>
-    <string name="kakao_profile_share_button">Go to PIN-UP</string>
+    <string name="kakao_profile_share_title">%1$s's Pinyut Account</string>
+    <string name="kakao_profile_share_content">Check out %1$s's pins on Pinyut.</string>
+    <string name="kakao_profile_share_button">Go to Pinyut</string>
 
     <!-- Update -->
     <string name="update_check_title">Update Available</string>
-    <string name="update_check_description">PIN-UP has been updated for a better experience! Update now to enjoy the latest features.</string>
+    <string name="update_check_description">Pinyut has been updated for a better experience! Update now to enjoy the latest features.</string>
     <string name="update_check_confirm">Update</string>
     <string name="update_check_optional_cancel">Later</string>
 
