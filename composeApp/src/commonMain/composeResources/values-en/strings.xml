@@ -336,4 +336,10 @@
     <string name="report_undo_block">Unblock</string>
     <string name="report_undo_block_dialog_title">Unblock this user?</string>
     <string name="report_undo_block_dialog_content">Once unblocked, you can send a Pin Buddy request, leave comments, and interact with this account again.</string>
+
+    <!-- Camera -->
+    <string name="camera_permission_denied_title">Camera permission is required</string>
+    <string name="camera_permission_denied_description">Please enable camera access in Settings.</string>
+    <string name="photo_source_gallery">Choose from Gallery</string>
+    <string name="photo_source_camera">Take a Photo</string>
 </resources>
