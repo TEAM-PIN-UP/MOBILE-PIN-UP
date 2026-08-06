@@ -134,6 +134,8 @@
     <string name="pin_map_empty_pinlog">아직 핀로그가 없어요!\n나만의 장소를 핀업해보세요:)</string>
     <string name="pin_map_search_result">검색 결과</string>
     <string name="pin_map_go_article">아티클 바로가기</string>
+    <string name="pin_map_friend_gate_dialog_title">핀버디 신청이 필요합니다</string>
+    <string name="pin_map_friend_gate_dialog_description">핀버디 신청을 하러 가시겠습니까?</string>
 
     <!-- Feed -->
     <string name="feed_recent_search">최근 검색어</string>

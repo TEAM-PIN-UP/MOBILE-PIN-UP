@@ -196,10 +196,11 @@ class FeedViewModel(
         }
     }
 
-    // 피드 장소 뱃지 탭 -> 핀맵 탭이 구독 중인 이벤트버스로 kakaoPlaceId 전달.
+    // 피드 장소 뱃지 탭 -> 핀맵 탭이 구독 중인 이벤트버스로 kakaoPlaceId + reviewId 전달.
     // MapViewModel(앱 시작부터 상주)이 이를 받아 getDetailPlace 호출 -> 장소 상세 바텀시트 + 카메라 포커싱.
-    fun moveToPlaceOnMap(kakaoPlaceId: String) = viewModelScope.launch {
-        DetailPlaceEventBus.sendEvent(kakaoPlaceId)
+    // reviewId 는 지도 상세에서 작성자 핀로그 노출 여부(=친구 여부) 판별에 사용.
+    fun moveToPlaceOnMap(kakaoPlaceId: String, reviewId: Int) = viewModelScope.launch {
+        DetailPlaceEventBus.sendEvent(kakaoPlaceId, reviewId)
     }
 }
 

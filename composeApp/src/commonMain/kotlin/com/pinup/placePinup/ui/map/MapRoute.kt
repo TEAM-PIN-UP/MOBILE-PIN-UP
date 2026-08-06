@@ -35,6 +35,7 @@ fun MapRoute(
     onMovePinlogDetail: (Int) -> Unit = {},
     onMoveWriteReview: (String) -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {},
+    onMoveUserProfileWithId: (Int) -> Unit = {},
     onClickArticle: (Int) -> Unit = {},
 ) {
     val locationTrackerFactory: LocationTrackerFactory = rememberLocationTrackerFactory(
@@ -44,6 +45,7 @@ fun MapRoute(
     val mapUiState = mapViewModel.uiState.collectAsStateWithLifecycle()
     val toast = rememberToastState()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
+    val isShowFriendGateDialog = remember { mutableStateOf(false) }
     var clickedPinlog by remember { mutableStateOf(0) }
     val deletePinlogText = stringResource(Res.string.toast_delete_pinlog)
     val emptyPinlogText = stringResource(Res.string.toast_empty_pinlog)
@@ -56,6 +58,12 @@ fun MapRoute(
                 }
                 is MapUiEvent.OnMoveUserProfile -> {
                     onMoveUserProfile(it.name)
+                }
+                MapUiEvent.ShowFriendGate -> {
+                    isShowFriendGateDialog.value = true
+                }
+                is MapUiEvent.OnMoveUserProfileWithId -> {
+                    onMoveUserProfileWithId(it.memberId)
                 }
             }
         }
@@ -77,6 +85,22 @@ fun MapRoute(
             onRightButtonClick = {
                 isShowDeleteDialog.value = false
                 mapViewModel.deleteReview(clickedPinlog)
+            },
+        )
+    }
+
+    if (isShowFriendGateDialog.value) {
+        PDialog(
+            titleText = stringResource(Res.string.pin_map_friend_gate_dialog_title),
+            descriptionText = stringResource(Res.string.pin_map_friend_gate_dialog_description),
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.profile_request_pin_buddy),
+            onLeftButtonClick = {
+                isShowFriendGateDialog.value = false
+            },
+            onRightButtonClick = {
+                isShowFriendGateDialog.value = false
+                mapViewModel.gotoWriterProfile()
             },
         )
     }

@@ -51,7 +51,7 @@ fun FeedView(
     onClickMenu: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
-    onClickPlace: (String) -> Unit = {},
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
     onMoveUserProfile: (String) -> Unit = {}
 ) {
     var isOverflow by remember { mutableStateOf(false) }
@@ -121,7 +121,7 @@ fun FeedView(
             modifier = Modifier
                 .padding(start = 20.dp)
                 .clickableWithNoRipple {
-                    if (item.kakaoPlaceId.isNotBlank()) onClickPlace(item.kakaoPlaceId)
+                    if (item.kakaoPlaceId.isNotBlank()) onClickPlace(item.kakaoPlaceId, item.id)
                 },
             cornerColor = Colors.Main,
         ) {

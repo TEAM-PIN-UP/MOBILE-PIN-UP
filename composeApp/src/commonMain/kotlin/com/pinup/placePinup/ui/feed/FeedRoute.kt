@@ -95,8 +95,8 @@ fun FeedRoute(
             },
             onClickDetail = onClickDetail,
             onClickLike = viewModel::likeChanged,
-            onClickPlace = { kakaoPlaceId ->
-                viewModel.moveToPlaceOnMap(kakaoPlaceId)
+            onClickPlace = { kakaoPlaceId, reviewId ->
+                viewModel.moveToPlaceOnMap(kakaoPlaceId, reviewId)
                 onClickBottomNav(MainDestination.Map)
             },
             onRefresh = viewModel::refreshView,

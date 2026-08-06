@@ -22,6 +22,7 @@ import com.pinup.placePinup.domain.usecase.GetEditorPintsCategoryUseCase
 import com.pinup.placePinup.domain.usecase.GetEditorPintsDetailUseCase
 import com.pinup.placePinup.domain.usecase.GetEditorPintsUseCase
 import com.pinup.placePinup.domain.usecase.GetMyProfileUseCase
+import com.pinup.placePinup.domain.usecase.GetPinlogDetailUseCase
 import com.pinup.placePinup.domain.usecase.GetReviewedPlacesUseCase
 import com.pinup.placePinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.placePinup.domain.usecase.SearchPlacesUseCase
@@ -53,10 +54,15 @@ class MapViewModel (
     private val getEditorPintsCategoryUseCase: GetEditorPintsCategoryUseCase,
     private val getEditorPintsDetailUseCase: GetEditorPintsDetailUseCase,
     private val postReviewLikeChangeUseCase: PostReviewLikeChangeUseCase,
+    private val getPinlogDetailUseCase: GetPinlogDetailUseCase,
     val locationTracker: LocationTracker
 ) : BaseViewModel<MapUiState, MapUiEvent>(MapUiState()) {
 
     private var initPlace: Boolean = false
+
+    // 피드 뱃지로 진입한 리뷰의 id. 지도 상세 리뷰 목록에 이 id가 없으면(친구 필터링됨) 비친구로 판단.
+    // 게이트 다이얼로그 "예" 시 이 id로 핀로그 상세를 조회해 작성자 memberId -> 프로필 이동에 사용.
+    private var feedReviewId: Int = -1
 
     // 피드 뱃지 등으로 진입 시, 카메라가 대상 장소에 안착하면 그 지역 장소 목록을 강제로 로드하기 위한 예약 플래그.
     // (내 위치 근접 게이트를 우회 → 멀리 있는 장소로 진입해도 목록/마커가 채워지고, 상세를 닫아도 지도가 비지 않음)
@@ -84,10 +90,11 @@ class MapViewModel (
     private fun initDetailPlaceEventBus() = viewModelScope.launch {
         DetailPlaceEventBus.detailPlaceEvent
             .debounce(300)
-            .collectLatest { kakaoId ->
+            .collectLatest { event ->
                 // 피드 등 외부 진입: 대상 지역 장소 목록을 강제 로드하도록 예약 후 상세 조회.
                 forceLoadPlaces = true
-                getDetailPlace(kakaoId)
+                feedReviewId = event.reviewId
+                getDetailPlace(event.kakaoPlaceId)
             }
     }
 
@@ -298,19 +305,29 @@ class MapViewModel (
                 currentLatitude = uiState.value.currentPosition?.latitude?.toString(),
                 currentLongitude = uiState.value.currentPosition?.longitude?.toString()
             ),
-            successCallback = {
-                updateState {
-                    copy(
-                        placeDetailUiState = PlaceDetailUiState(it),
-                        cameraPosition = Position(it.mapPlace.latitude - 0.0078, it.mapPlace.longitude),
-                        isFocusLocation = false,
-                        isDetailClicked = true
-                    )
-                }
-                // 피드 등 외부 진입인 경우, 대상 지역 장소를 로드해 목록/마커를 채운다.
-                // (forceLoadPlaces 는 로드 완료 후 loadReviewedPlacesAround 내부에서 해제)
-                if (forceLoadPlaces) {
-                    loadReviewedPlacesAround(it.mapPlace)
+            successCallback = { detail ->
+                // 피드 뱃지 진입 & 지도 상세 리뷰 목록에 진입 리뷰가 없음
+                //  = 백엔드가 비친구 핀로그를 필터링한 것 → "반쪽 지도" 방지를 위해 상세 대신 친구 신청 유도.
+                val writerHidden = forceLoadPlaces && feedReviewId != -1 &&
+                    detail.placeReviews.none { it.reviewId == feedReviewId }
+                if (writerHidden) {
+                    forceLoadPlaces = false
+                    emitEvent(MapUiEvent.ShowFriendGate)
+                } else {
+                    feedReviewId = -1
+                    updateState {
+                        copy(
+                            placeDetailUiState = PlaceDetailUiState(detail),
+                            cameraPosition = Position(detail.mapPlace.latitude - 0.0078, detail.mapPlace.longitude),
+                            isFocusLocation = false,
+                            isDetailClicked = true
+                        )
+                    }
+                    // 피드 등 외부 진입인 경우, 대상 지역 장소를 로드해 목록/마커를 채운다.
+                    // (forceLoadPlaces 는 로드 완료 후 loadReviewedPlacesAround 내부에서 해제)
+                    if (forceLoadPlaces) {
+                        loadReviewedPlacesAround(detail.mapPlace)
+                    }
                 }
             }
         )
@@ -503,6 +520,20 @@ class MapViewModel (
             if(it.nickname != name) emitEvent(MapUiEvent.OnMoveUserProfile(name))
         }
     }
+
+    // 친구 게이트 다이얼로그 "예" -> 진입 리뷰 id로 핀로그 상세 조회해 작성자 memberId 확보 후 프로필로 이동.
+    // (memberId 기반이라 동명이인 오이동 없음. relationType 은 프로필 화면이 자체 조회.)
+    fun gotoWriterProfile() = viewModelScope.launch {
+        val reviewId = feedReviewId
+        feedReviewId = -1
+        if (reviewId == -1) return@launch
+        resultResponse(
+            response = getPinlogDetailUseCase(reviewId),
+            successCallback = {
+                emitEvent(MapUiEvent.OnMoveUserProfileWithId(it.memberId))
+            }
+        )
+    }
 }
 
 data class SearchUiState(
@@ -542,4 +573,8 @@ data class MapUiState(
 sealed interface MapUiEvent : UiEvent {
     data object SuccessDelete : MapUiEvent
     data class OnMoveUserProfile(val name: String): MapUiEvent
+    // 피드 진입 작성자가 비친구 -> 친구 신청 유도 다이얼로그 표시.
+    data object ShowFriendGate : MapUiEvent
+    // 친구 신청 유도 수락 -> 작성자 memberId 로 프로필 이동.
+    data class OnMoveUserProfileWithId(val memberId: Int): MapUiEvent
 }

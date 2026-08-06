@@ -134,6 +134,8 @@
     <string name="pin_map_empty_pinlog">No Pin Logs yet!\nPin up your favorite places :)</string>
     <string name="pin_map_search_result">Search Results</string>
     <string name="pin_map_go_article">Go to Articles</string>
+    <string name="pin_map_friend_gate_dialog_title">A Pin Buddy request is required</string>
+    <string name="pin_map_friend_gate_dialog_description">Would you like to send a Pin Buddy request?</string>
 
     <!-- Feed -->
     <string name="feed_recent_search">Recent Searches</string>

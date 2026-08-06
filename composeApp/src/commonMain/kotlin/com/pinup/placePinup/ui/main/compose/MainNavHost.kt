@@ -165,6 +165,9 @@ fun MainNavHost(
                     onMoveUserProfile = {
                         onMoveUserProfileWithName(it)
                     },
+                    onMoveUserProfileWithId = {
+                        onMoveUserProfileWithId(it)
+                    },
                     onClickArticle = onClickArticle
                 )
             }
