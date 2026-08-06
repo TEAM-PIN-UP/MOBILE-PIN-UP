@@ -188,6 +188,7 @@ struct MapView: View {
         NaverMap(
             position: viewModel.mapUiState.currentPosition,
             cameraPosition: viewModel.mapUiState.cameraPosition,
+            cameraZoom: viewModel.mapUiState.cameraZoom,
             searchUiState: viewModel.mapUiState.searchUiState,
             pinchUiState: viewModel.mapUiState.pinchUiState,
             placeDetailUiState: viewModel.mapUiState.placeDetailUiState,
@@ -303,8 +304,15 @@ struct PintsNaverMap: UIViewRepresentable {
 // MARK: - NaverMap (메인 지도 뷰, 클러스터링 지원)
 
 struct NaverMap: UIViewRepresentable {
+    /// 지도 기본 줌. Kotlin 이 줌을 지정하지 않은 카메라 이동에 사용한다.
+    static let defaultZoom: Double = 14.0
+    /// 클러스터링을 수행할 최대 줌. Kotlin `MapZoom.MAX_CLUSTERING` 과 동일해야 한다.
+    /// 이 값보다 확대하면(= 줌 16, 축척 100m부터) 모든 핀이 개별 노출된다.
+    static let maxClusteringZoom: Int = 15
+
     var position: Position?
     var cameraPosition: Position?
+    var cameraZoom: KotlinDouble?
     var searchUiState: SearchUiState
     var pinchUiState: PinchUiState
     var placeDetailUiState: PlaceDetailUiState
@@ -350,6 +358,8 @@ struct NaverMap: UIViewRepresentable {
         let builder = NMCBuilder<PlaceClusteringKey>()
         builder.leafMarkerUpdater = leafUpdater
         builder.clusterMarkerUpdater = clusterUpdater
+        // 축척 100m(줌 16)부터는 클러스터링 없이 모든 핀을 개별 노출
+        builder.maxZoom = Self.maxClusteringZoom
         let clusterer = builder.build()
         clusterer.mapView = view.mapView
         print("[하이] Clusterer built and attached to mapView=\(String(describing: view.mapView))")
@@ -371,13 +381,18 @@ struct NaverMap: UIViewRepresentable {
             uiView.mapView.locationOverlay.location = NMGLatLng(lat: p.latitude, lng: p.longitude)
         }
 
+        // Kotlin 이 최소 줌을 지정한 경우(장소 포커싱)엔 이미 더 확대돼 있으면 현재 줌을 유지한다.
+        let requestedZoom = cameraZoom?.doubleValue
+        let targetZoom = requestedZoom.map { max($0, uiView.mapView.cameraPosition.zoom) } ?? Self.defaultZoom
+
         if let cp = cameraPosition, cp.isValid,
-           context.coordinator.shouldApplyCamera(to: cp, on: uiView.mapView) {
-            let pos = NMFCameraPosition(NMGLatLng(lat: cp.latitude, lng: cp.longitude), zoom: 14.0)
+           context.coordinator.shouldApplyCamera(to: cp, requestedZoom: requestedZoom, on: uiView.mapView) {
+            let pos = NMFCameraPosition(NMGLatLng(lat: cp.latitude, lng: cp.longitude), zoom: targetZoom)
             let update = NMFCameraUpdate(position: pos)
             update.animation = .easeIn
             uiView.mapView.moveCamera(update)
             context.coordinator.lastAppliedCamera = cp
+            context.coordinator.lastAppliedZoom = requestedZoom
         }
 
         if isShowPinch {
@@ -489,6 +504,8 @@ struct NaverMap: UIViewRepresentable {
         var onPlaceClick: ((String) -> Void)?
         var polyline: NMFPolylineOverlay?
         var lastAppliedCamera: Position?
+        /// 마지막으로 반영한 요청 줌. nil 은 줌 지정이 없던 요청.
+        var lastAppliedZoom: Double?
 
         // ✅ 클러스터러 + 두 updater 강한 참조 (ARC 해제 방지)
         var clusterer: NMCClusterer<PlaceClusteringKey>?
@@ -511,10 +528,14 @@ struct NaverMap: UIViewRepresentable {
             polyline = nil
         }
 
-        func shouldApplyCamera(to target: Position, on mapView: NMFMapView) -> Bool {
+        func shouldApplyCamera(to target: Position, requestedZoom: Double?, on mapView: NMFMapView) -> Bool {
+            // 이미 반영한 요청이면 무시한다. (반영 후 사용자가 직접 확대/축소한 것을 되돌리지 않기 위해)
             if let last = lastAppliedCamera,
                abs(last.latitude - target.latitude) < 1e-6,
-               abs(last.longitude - target.longitude) < 1e-6 { return false }
+               abs(last.longitude - target.longitude) < 1e-6,
+               lastAppliedZoom == requestedZoom { return false }
+            // 좌표가 같아도 요청 줌이 현재보다 크면 확대는 적용해야 한다.
+            if let requestedZoom, requestedZoom > mapView.cameraPosition.zoom { return true }
             let cur = mapView.cameraPosition.target
             if abs(cur.lat - target.latitude) < 1e-6,
                abs(cur.lng - target.longitude) < 1e-6 { return false }

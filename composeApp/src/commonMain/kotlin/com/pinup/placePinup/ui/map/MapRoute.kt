@@ -104,6 +104,7 @@ fun MapRoute(
             placeDetailUiState = mapUiState.value.placeDetailUiState,
             position = mapUiState.value.currentPosition ?: Position.INVALID,
             cameraPosition = mapUiState.value.cameraPosition,
+            cameraZoom = mapUiState.value.cameraZoom,
             isFocusLocation = mapUiState.value.isFocusLocation,
             isShowPinch = mapUiState.value.isShowPinch,
             isCameraMoving = mapUiState.value.isCameraMoving,

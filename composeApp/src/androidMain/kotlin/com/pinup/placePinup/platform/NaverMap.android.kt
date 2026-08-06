@@ -52,6 +52,7 @@ import com.pinup.placePinup.ui.map.PlaceDetailUiState
 import com.pinup.placePinup.ui.map.SearchUiState
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Typography
+import com.pinup.placePinup.util.MapZoom
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
@@ -99,13 +100,14 @@ actual fun PlatformNaverMap(
     placeDetailUiState: PlaceDetailUiState,
     isShowPinch: Boolean,
     cameraPosition: Position?,
+    cameraZoom: Double?,
     onPlaceClick: (String) -> Unit,
     onCameraStateChange: (CameraState) -> Unit,
     onMapClick: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val cameraPositionState = rememberCameraPositionState()
-    LaunchedEffect(cameraPosition) {
+    LaunchedEffect(cameraPosition, cameraZoom) {
         cameraPosition?.let {
             val nowCameraPosition = Position(
                 latitude = cameraPositionState.position.target.latitude,
@@ -114,10 +116,16 @@ actual fun PlatformNaverMap(
 //            hLog("카메라 이동됨 >>> 현재 카메라: $nowCameraPosition")
 //            hLog("카메라 이동됨 >>> 바뀐 카메라: $cameraPosition")
 //            hLog("카메라 이동됨 >>> 결과: ${if (it == nowCameraPosition) "같음, 취소 됨" else "다름, 이동 됨"}")
-            if (it == nowCameraPosition) return@let
+            // 요청된 줌이 현재보다 클 때만 확대한다. (이미 더 확대돼 있으면 현재 줌 유지)
+            val targetZoom = cameraZoom?.takeIf { zoom -> zoom > cameraPositionState.position.zoom }
+            if (it == nowCameraPosition && targetZoom == null) return@let
             scope.launch {
                 cameraPositionState.animate(
-                    CameraUpdate.scrollTo(it.toLatLng())
+                    if (targetZoom != null) {
+                        CameraUpdate.scrollAndZoomTo(it.toLatLng(), targetZoom)
+                    } else {
+                        CameraUpdate.scrollTo(it.toLatLng())
+                    }
                 )
             }
         }
@@ -263,6 +271,8 @@ actual fun PlatformNaverMap(
         if (!isShowPinch) {
             DisposableMapEffect(clusterItems, selectedPlaceId) { naverMap ->
                 val clusterer = Clusterer.Builder<ClusterPlaceItem>()
+                    // 축척 100m(줌 16)부터는 클러스터링 없이 모든 핀을 개별 노출
+                    .maxZoom(MapZoom.MAX_CLUSTERING)
                     .leafMarkerUpdater { info, marker ->
                         val item = info.tag as? ClusterPlaceItem ?: return@leafMarkerUpdater
                         marker.icon = com.naver.maps.map.overlay.OverlayImage.fromResource(
