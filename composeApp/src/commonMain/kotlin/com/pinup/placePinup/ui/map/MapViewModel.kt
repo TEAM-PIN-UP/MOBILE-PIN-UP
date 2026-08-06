@@ -70,7 +70,9 @@ class MapViewModel (
             .distinctUntilChanged()
             .collectLatest {
                 val myLocation = Position(it.latitude, it.longitude)
-                if (uiState.value.currentPosition == null || uiState.value.isFocusLocation) {
+                // 특정 장소를 이미 센터링한 상태라면 최초 내 위치 센터링으로 덮어쓰지 않는다.
+                val hasFocusedPlace = uiState.value.placeDetailUiState.detailPlace != null
+                if ((uiState.value.currentPosition == null && !hasFocusedPlace) || uiState.value.isFocusLocation) {
                     updateCameraPosition(myLocation)
                 }
                 updatePosition(myLocation)

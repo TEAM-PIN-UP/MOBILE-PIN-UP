@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
+import com.pinup.placePinup.event.DetailPlaceEventBus
 import com.pinup.placePinup.extentions.jsonToArg
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.ui.addpinbuddy.AddPinBuddyRoute
@@ -313,8 +314,15 @@ fun PinUpNavHost(
                 onClickEdit = {
                     navHostController.navigate(PinUpAppDestination.WriteReview(it, null))
                 },
-                onMovePlaceDetail = {
-                    navHostController.navigate(PinUpAppDestination.PlaceDetail(it))
+                onMovePlaceDetail = { kakaoPlaceId ->
+                    // 장소 상세가 아니라 지도로 이동해서 해당 장소를 센터링한다.
+                    DetailPlaceEventBus.requestFocusPlace(kakaoPlaceId)
+                    navHostController.navigate(PinUpAppDestination.Main()) {
+                        launchSingleTop = true
+                        popUpTo<PinUpAppDestination.Main> {
+                            inclusive = false
+                        }
+                    }
                 },
                 onMoveUserProfile = {
                     navHostController.navigate(PinUpAppDestination.UserProfile(name = it))
