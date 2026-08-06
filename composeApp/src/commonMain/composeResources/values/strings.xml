@@ -273,11 +273,11 @@
     <!-- Kakao -->
     <string name="kakao_profile_share_title">%1$s 님의 핀유트 계정</string>
     <string name="kakao_profile_share_content">핀유트에서 %1$s 님의 핀들을 구경해 보세요.</string>
-    <string name="kakao_profile_share_button">핀유트으로 이동하기</string>
+    <string name="kakao_profile_share_button">핀유트로 이동하기</string>
 
     <!-- Update -->
     <string name="update_check_title">업데이트 알림</string>
-    <string name="update_check_description">더 나은 서비스를 위해 핀유트이 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요</string>
+    <string name="update_check_description">더 나은 서비스를 위해 핀유트가 업데이트되었어요! 지금 업데이트하고 더 편리하게 사용해주세요</string>
     <string name="update_check_confirm">업데이트</string>
     <string name="update_check_optional_cancel">다음에 하기</string>
 

@@ -97,7 +97,7 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>moko-media demo usage</string>
 	<key>NidAppName</key>
-	<string>PinYut</string>
+	<string>Pinyut</string>
 	<key>NidClientID</key>
 	<string>pq5e9ZctR6BjVodHiFWx</string>
 	<key>NidClientSecret</key>
