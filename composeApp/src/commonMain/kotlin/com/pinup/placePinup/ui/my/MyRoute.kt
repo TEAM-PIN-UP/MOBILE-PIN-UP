@@ -83,6 +83,10 @@ fun MyRoute(
         onClickPinLog = onClickPinLog,
         onClickLike = myViewModel::likeChanged,
         onClickDetail = onClickDetail,
+        onClickPlace = { kakaoPlaceId, reviewId ->
+            myViewModel.moveToPlaceOnMap(kakaoPlaceId, reviewId)
+            onClickBottomNav(MainDestination.Map)
+        },
         onClickShare = onClickShare,
         onClickMoreScrap = onClickMoreScrap,
         onMovePlaceDetail = onMovePlaceDetail,

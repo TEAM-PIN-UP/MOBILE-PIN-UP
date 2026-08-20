@@ -17,6 +17,7 @@ fun UserProfileRoute(
     onMovePintsDetail: (Int) -> Unit = {},
     onClickBack: () -> Unit = {},
     onMoveReport: (Int, ReportType) -> Unit = {_, _ -> },
+    onMoveMap: () -> Unit = {},
     viewModel: UserProfileViewModel = koinViewModel(parameters = { parametersOf(contextFactory) })
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
@@ -35,6 +36,10 @@ fun UserProfileRoute(
         onReceivedReject = viewModel::rejectPinBuddy,
         onClickLike = viewModel::likeChanged,
         onClickDetail = onClickDetail,
+        onClickPlace = { kakaoPlaceId, reviewId ->
+            viewModel.moveToPlaceOnMap(kakaoPlaceId, reviewId)
+            onMoveMap()
+        },
         onMovePints = onMovePints,
         onClickShare = onClickShare,
         onMoveDetail = onMovePintsDetail,

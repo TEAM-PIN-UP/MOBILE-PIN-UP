@@ -74,6 +74,7 @@ fun FeedSearchScreen(
     onClickDetail: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onMoveUserProfile: (String) -> Unit = {},
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
 ) {
 
     val scope: CoroutineScope = rememberCoroutineScope()
@@ -244,7 +245,8 @@ fun FeedSearchScreen(
                             },
                             onClickLike = onClickLike,
                             onClickDetail = onClickDetail,
-                            onMoveUserProfile = onMoveUserProfile
+                            onMoveUserProfile = onMoveUserProfile,
+                            onClickPlace = onClickPlace
                         )
 
                         PHorizontalDivider(modifier = Modifier.height(10.dp))

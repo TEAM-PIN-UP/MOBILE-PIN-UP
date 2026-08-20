@@ -76,7 +76,11 @@ fun FeedRoute(
             onClickDelete = viewModel::deleteReview,
             onClickDetail = onClickDetail,
             onClickLike = viewModel::likeChanged,
-            onMoveUserProfile = viewModel::onProfileClick
+            onMoveUserProfile = viewModel::onProfileClick,
+            onClickPlace = { kakaoPlaceId, reviewId ->
+                viewModel.moveToPlaceOnMap(kakaoPlaceId, reviewId)
+                onClickBottomNav(MainDestination.Map)
+            },
         )
     } else {
         FeedScreen(
@@ -95,6 +99,10 @@ fun FeedRoute(
             },
             onClickDetail = onClickDetail,
             onClickLike = viewModel::likeChanged,
+            onClickPlace = { kakaoPlaceId, reviewId ->
+                viewModel.moveToPlaceOnMap(kakaoPlaceId, reviewId)
+                onClickBottomNav(MainDestination.Map)
+            },
             onRefresh = viewModel::refreshView,
             onMoveUserProfile = viewModel::onProfileClick
         )
