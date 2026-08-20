@@ -305,7 +305,10 @@ class MapViewModel (
                 updateState {
                     copy(
                         placeDetailUiState = PlaceDetailUiState(it),
-                        cameraPosition = Position(it.mapPlace.latitude - 0.0078, it.mapPlace.longitude),
+                        // 카메라를 장소보다 남쪽으로 살짝 내려, 핀이 하단 상세 시트 위 영역에 오도록 한다.
+                        // 이 오프셋은 PLACE_FOCUS(줌16, 80dp=100m) 기준 약 220m. (기존 0.0078은 줌14 기준이라
+                        //  줌16에서는 핀이 화면 밖으로 밀려 "엉뚱한 곳"으로 보이던 문제를 바로잡음)
+                        cameraPosition = Position(it.mapPlace.latitude - 0.002, it.mapPlace.longitude),
                         // 해당 장소가 클러스터에 묶이지 않고 개별 핀으로 보이는 축척까지 확대한다.
                         cameraZoom = MapZoom.PLACE_FOCUS,
                         isFocusLocation = false,
