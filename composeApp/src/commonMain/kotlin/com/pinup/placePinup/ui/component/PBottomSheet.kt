@@ -93,6 +93,9 @@ fun PBottomSheet(
     LaunchedEffect(isDetailClicked, halfHeight) {
         if (isDetailClicked && halfHeight > hiddenHeight) {
             realHeight = halfHeight
+            // 시트를 올린 뒤 신호를 소비한다. (제스처 게이팅으로 isMoving 이 안 떠 소비가 안 되면,
+            //  뒤로가기 등으로 재구성될 때 isDetailClicked 가 남아 내용이 빈 시트를 다시 띄우는 문제 방지)
+            consumeDetailClicked()
         }
     }
 

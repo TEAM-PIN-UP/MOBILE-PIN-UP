@@ -52,6 +52,13 @@ fun MapBottomSheetNavHost(
         if (!isShowPinch && route == searchRoute && placeDetailUiState.detailPlace != null) {
             onClearDetailPlace()
         }
+        // 방어: back 등으로 detailPlace 가 없는 Detail 엔트리에 도달하면 상세 화면이 빈(흰) 시트가 되므로 Search 로 되돌린다.
+        if (route == detailRoute && placeDetailUiState.detailPlace == null) {
+            navHostController.popBackStack(
+                route = MapBottomSheetDestination.Search,
+                inclusive = false
+            )
+        }
     }
 
     LaunchedEffect(placeDetailUiState.detailPlace) {
@@ -64,9 +71,13 @@ fun MapBottomSheetNavHost(
             }
         } else {
             if (isShowPinch) return@LaunchedEffect
-            navHostController.navigate(MapBottomSheetDestination.Search) {
-                launchSingleTop = true
-            }
+            // 상세가 비워지면 Detail 엔트리를 스택에 남기지 않고 Search 로 pop 한다.
+            // navigate() 로 Search 를 새로 쌓으면 [Search, Detail, Search] 가 되어, 이후 back 시
+            // detailPlace=null 인 Detail 로 돌아가 빈(흰) 시트가 뜨던 문제를 방지.
+            navHostController.popBackStack(
+                route = MapBottomSheetDestination.Search,
+                inclusive = false
+            )
         }
     }
 
