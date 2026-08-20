@@ -85,6 +85,16 @@ fun PBottomSheet(
         }
     }
 
+    // 지도 밖(핀로그 상세 등)에서 focusPlace 로 진입해 상세가 열리는 경우,
+    // 진입 시점의 카메라 이동(isMoving) 토글 타이밍과 무관하게 시트를 half 로 올린다.
+    // halfHeight 를 key 에 포함: 진입 시점에 부모 레이아웃이 아직 측정되지 않아 halfHeight==0 이면
+    // 측정 완료로 halfHeight 가 갱신될 때 다시 실행돼 시트가 확실히 올라온다(간헐적 미상승 방지).
+    LaunchedEffect(isDetailClicked, halfHeight) {
+        if (isDetailClicked && halfHeight > hiddenHeight) {
+            realHeight = halfHeight
+        }
+    }
+
     LaunchedEffect(isFocusSearch){
         if (isFocusSearch) realHeight = expandedHeight
     }

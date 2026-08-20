@@ -132,7 +132,9 @@ class MapViewModel (
         updateState {
             copy(
                 cameraState = cameraState,
-                isCameraMoving = cameraState.isMoving
+                // 바텀시트 접힘은 사용자가 직접 지도를 움직였을 때만.
+                // Follow 모드의 GPS 지터로 인한 미세 카메라 이동에는 상세 시트가 닫히지 않도록 제스처로 한정.
+                isCameraMoving = cameraState.isMoving && cameraState.reason == CameraState.Reason.GESTURE
             )
         }
 
