@@ -57,6 +57,7 @@ fun MainNavHost(
     val selectedMenuBar = remember { mutableStateOf<MainDestination>(MainDestination.Map) }
     val currentDestination = navHostController.currentBackStackEntryAsState().value?.destination
     val focusPlace by DetailPlaceEventBus.focusPlace.collectAsStateWithLifecycle()
+    val focusReviewId by DetailPlaceEventBus.focusReviewId.collectAsStateWithLifecycle()
 
     // 지도 밖에서 장소 센터링 요청이 들어오면 어느 탭에 있든 지도 탭으로 전환한다.
     LaunchedEffect(focusPlace) {
@@ -161,6 +162,7 @@ fun MainNavHost(
             composable<MainDestination.Map> {
                 MapRoute(
                     focusPlaceId = focusPlace,
+                    focusReviewId = focusReviewId,
                     onConsumeFocusPlace = DetailPlaceEventBus::consumeFocusPlace,
                     onBottomMenuClick = {
                         if (it is MainDestination.Upload) {
@@ -182,6 +184,9 @@ fun MainNavHost(
                     onMoveWriteReview = onMoveNewWriteReview,
                     onMoveUserProfile = {
                         onMoveUserProfileWithName(it)
+                    },
+                    onMoveUserProfileWithId = {
+                        onMoveUserProfileWithId(it)
                     },
                     onClickArticle = onClickArticle
                 )

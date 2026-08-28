@@ -90,6 +90,7 @@ fun MyScreen(
     onClickPinLog: () -> Unit = {},
     onClickDetail: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
     onClickShare: () -> Unit = {},
     onClickMoreScrap: () -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
@@ -190,7 +191,8 @@ fun MyScreen(
                         },
                         onClickPinLog = onClickPinLog,
                         onClickLike = onClickLike,
-                        onClickDetail = onClickDetail
+                        onClickDetail = onClickDetail,
+                        onClickPlace = onClickPlace
                     )
                 } else {
                     this.MyScrapList(
@@ -564,6 +566,7 @@ fun LazyListScope.MyPinLogList(
     onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
     onClickDetail: (Int) -> Unit = {},
     onClickPinLog: () -> Unit = {},
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
 ) {
     if (reviewList.isEmpty()) {
         item {
@@ -582,6 +585,7 @@ fun LazyListScope.MyPinLogList(
                 onClickMenu = onClickMenu,
                 onClickLike = onClickLike,
                 onClickDetail = onClickDetail,
+                onClickPlace = onClickPlace,
             )
 
             PHorizontalDivider()

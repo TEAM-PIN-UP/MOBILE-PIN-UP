@@ -10,6 +10,7 @@ import com.pinup.placePinup.domain.usecase.GetPinlogDetailUseCase
 import com.pinup.placePinup.domain.usecase.GetRecentSearchUseCase
 import com.pinup.placePinup.domain.usecase.PostReviewLikeChangeUseCase
 import com.pinup.placePinup.domain.usecase.SaveRecentSearchUseCase
+import com.pinup.placePinup.event.DetailPlaceEventBus
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
 import com.pinup.placePinup.ui.base.UiState
@@ -193,6 +194,13 @@ class FeedViewModel(
         getMyProfileUseCase().collectLatest {
             if(it.nickname != name) emitEvent(FeedUiEvent.OnMoveUserProfile(name))
         }
+    }
+
+    // 피드 장소 뱃지 탭 -> 유지형 focusPlace 요청(kakaoPlaceId + reviewId).
+    // MainNavHost 가 focusPlace 를 관찰해 Map 탭으로 전환하고, MapRoute 가 getDetailPlace 호출 -> 상세 바텀시트 + 카메라 포커싱.
+    // reviewId 는 지도 상세에서 작성자 핀로그 노출 여부(=친구 여부) 판별에 사용.
+    fun moveToPlaceOnMap(kakaoPlaceId: String, reviewId: Int) {
+        DetailPlaceEventBus.requestFocusPlace(kakaoPlaceId, reviewId)
     }
 }
 

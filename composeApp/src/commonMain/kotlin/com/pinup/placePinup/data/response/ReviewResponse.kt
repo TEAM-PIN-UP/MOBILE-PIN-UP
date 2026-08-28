@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class ReviewResponse(
     val id: Int,
     val placeName: String,
+    val kakaoPlaceId: String? = null,
     val content: String,
     val createdAt: List<Int> = emptyList(),
     val starRating: Double,
@@ -24,6 +25,7 @@ data class ReviewResponse(
             return Review(
                 id = id,
                 placeName = placeName,
+                kakaoPlaceId = kakaoPlaceId ?: "",
                 content = content,
                 createdAt = createdAt,
                 starRating = starRating,
