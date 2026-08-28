@@ -23,6 +23,7 @@ import com.pinup.placePinup.domain.usecase.PostUserUnBlockUseCase
 import com.pinup.placePinup.domain.usecase.RejectPinBuddyUseCase
 import com.pinup.placePinup.domain.usecase.RequestPinBuddyUseCase
 import com.pinup.placePinup.domain.usecase.SearchUserUseCase
+import com.pinup.placePinup.event.DetailPlaceEventBus
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.base.BaseViewModel
@@ -146,6 +147,12 @@ class UserProfileViewModel (
                 updateUserProfile()
             }
         )
+    }
+
+    // 유저 프로필 핀로그 장소 뱃지 탭 -> 유지형 focusPlace 요청. 이어서 onMoveMap 이 Main 으로 복귀하면 focusPlace 관찰자가 Map 탭 전환.
+    // (목록은 relationType==FRIEND 일 때만 노출되므로 작성자는 항상 친구 -> 게이트 통과)
+    fun moveToPlaceOnMap(kakaoPlaceId: String, reviewId: Int) {
+        DetailPlaceEventBus.requestFocusPlace(kakaoPlaceId, reviewId)
     }
 
     fun likeChanged(id: Int, isLike: Boolean) = viewModelScope.launch {

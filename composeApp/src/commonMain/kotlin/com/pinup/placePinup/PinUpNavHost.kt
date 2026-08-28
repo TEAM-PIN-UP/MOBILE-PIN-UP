@@ -458,6 +458,14 @@ fun PinUpNavHost(
                 },
                 onMoveReport = { id, type ->
                     navHostController.navigate(PinUpAppDestination.Report(id, type.name))
+                },
+                onMoveMap = {
+                    // 뱃지 탭 시 VM 이 requestFocusPlace 로 focusPlace 를 세팅해둔 상태.
+                    // Main 위 화면들만 pop 하고 Main 으로 복귀하면, MainNavHost 의 focusPlace 관찰자가 Map 탭으로 전환한다.
+                    navHostController.navigate(PinUpAppDestination.Main()) {
+                        popUpTo<PinUpAppDestination.Main> { inclusive = false }
+                        launchSingleTop = true
+                    }
                 }
             )
         }

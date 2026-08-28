@@ -65,6 +65,7 @@ fun FeedScreen(
     onClickDelete: (Int) -> Unit = {},
     onClickDetail: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
     onRefresh: () -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {},
 ) {
@@ -182,6 +183,7 @@ fun FeedScreen(
                                 },
                                 onClickLike = onClickLike,
                                 onClickDetail = onClickDetail,
+                                onClickPlace = onClickPlace,
                                 onMoveUserProfile = onMoveUserProfile
                             )
 

@@ -51,6 +51,7 @@ fun FeedView(
     onClickMenu: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
     onMoveUserProfile: (String) -> Unit = {}
 ) {
     val justNow = stringResource(Res.string.time_just_now)
@@ -122,7 +123,10 @@ fun FeedView(
 
         RoundedBox(
             modifier = Modifier
-                .padding(start = 20.dp),
+                .padding(start = 20.dp)
+                .clickableWithNoRipple {
+                    if (item.kakaoPlaceId.isNotBlank()) onClickPlace(item.kakaoPlaceId, item.id)
+                },
             cornerColor = Colors.Main,
         ) {
             Row(

@@ -147,6 +147,8 @@
     <string name="pin_map_empty_pinlog">아직 핀로그가 없어요!\n나만의 장소를 핀유트해보세요:)</string>
     <string name="pin_map_search_result">검색 결과</string>
     <string name="pin_map_go_article">아티클 바로가기</string>
+    <string name="pin_map_friend_gate_dialog_title">핀버디 신청이 필요합니다</string>
+    <string name="pin_map_friend_gate_dialog_description">핀버디 신청을 하러 가시겠습니까?</string>
     <string name="permission_location_title">권한 필요</string>
     <string name="permission_location_description">위치 권한 허용이 필요해요.\n확인을 누르시면 설정 화면으로 이동합니다</string>
 
