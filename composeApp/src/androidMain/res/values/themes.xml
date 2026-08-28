@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.PinUp" parent="android:Theme.Material.Light.NoActionBar" >
-        <item name="android:windowIsTranslucent">true</item>
+    <style name="Theme.PinUp" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- 콜드 스타트 시작 윈도우: 탭 즉시 브랜드 톤으로 표시 후 Compose 스플래시로 전환 -->
+    <style name="Theme.PinUp.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#191919</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.PinUp</item>
     </style>
 </resources>
