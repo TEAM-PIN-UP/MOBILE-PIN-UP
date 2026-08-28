@@ -390,6 +390,12 @@ struct NaverMap: UIViewRepresentable {
             let pos = NMFCameraPosition(NMGLatLng(lat: cp.latitude, lng: cp.longitude), zoom: targetZoom)
             let update = NMFCameraUpdate(position: pos)
             update.animation = .easeIn
+            // 상세·핀츠 시트가 떠 있으면 대상 좌표를 '시트 위로 보이는 영역'의 중앙(높이 1/4 지점)에
+            // 오도록 화면 좌표 pivot 으로 보정한다. Android 의 DETAIL_FOCUS_PIVOT_Y 와 동일 값.
+            // (기존 위도 -0.0078 고정 오프셋은 특정 줌에서만 맞아 제거됨 — MapViewModel 참고)
+            if placeDetailUiState.detailPlace != nil || isShowPinch {
+                update.pivot = CGPoint(x: 0.5, y: 0.25)
+            }
             uiView.mapView.moveCamera(update)
             context.coordinator.lastAppliedCamera = cp
             context.coordinator.lastAppliedZoom = requestedZoom
