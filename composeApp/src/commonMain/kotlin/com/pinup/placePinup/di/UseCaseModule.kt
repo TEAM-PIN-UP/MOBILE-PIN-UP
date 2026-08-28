@@ -55,14 +55,14 @@ val useCaseModule = module {
     single<PostSeveralImagesUploadUseCase> { PostSeveralImagesUploadUseCase(get()) }
     single<SocialLoginUseCase> { SocialLoginUseCase(get(), get(), get()) }
     single<EmailLoginUseCase> { EmailLoginUseCase(get(), get(), get()) }
-    single<LogoutUseCase> { LogoutUseCase(get(), get()) }
+    single<LogoutUseCase> { LogoutUseCase(get(), get(), get()) }
     single<RegisterReviewUseCase> { RegisterReviewUseCase(get()) }
     single<RegisterPintsUseCase> { RegisterPintsUseCase(get()) }
     single<RejectPinBuddyUseCase> { RejectPinBuddyUseCase(get()) }
     single<RequestPinBuddyUseCase> { RequestPinBuddyUseCase(get()) }
     single<SaveRecentSearchUseCase> { SaveRecentSearchUseCase(get()) }
     single<SaveRecentPinBuddySearchUseCase> { SaveRecentPinBuddySearchUseCase(get()) }
-    single<SaveTokenUseCase> { SaveTokenUseCase(get()) }
+    single<SaveTokenUseCase> { SaveTokenUseCase(get(), get()) }
     single<SaveUserInfoUseCase> { SaveUserInfoUseCase(get()) }
     single<SearchPlacesUseCase> { SearchPlacesUseCase(get()) }
     single<SearchUserUseCase> { SearchUserUseCase(get()) }
