@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.runtime.rememberCoroutineScope
@@ -89,6 +90,9 @@ private fun markerTint(group: CategoryGroup): ColorFilter? = when (group) {
     CategoryGroup.ETC -> ColorFilter.tint(Color(0xFF1A1A1A))
 }
 
+// 상세 시트가 화면 하단 약 절반을 덮으므로, 보이는 지도 영역(상단부)의 중앙은 전체 높이의 1/4 지점이다.
+private const val DETAIL_FOCUS_PIVOT_Y = 0.25f
+
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 actual fun PlatformNaverMap(
@@ -119,12 +123,21 @@ actual fun PlatformNaverMap(
             // 요청된 줌이 현재보다 클 때만 확대한다. (이미 더 확대돼 있으면 현재 줌 유지)
             val targetZoom = cameraZoom?.takeIf { zoom -> zoom > cameraPositionState.position.zoom }
             if (it == nowCameraPosition && targetZoom == null) return@let
+            // 상세·핀츠 시트가 떠 있으면 대상 좌표가 '시트 위로 보이는 영역'의 중앙에 오도록
+            // 화면 좌표 pivot으로 보정한다. 기존의 위도 -0.0078 고정 오프셋(약 867m)은
+            // 특정 줌에서만 맞아, 줌이 낮으면 마커가 시트 뒤로 숨고 높으면 화면 밖으로 나갔다.
+            val focusOnVisibleArea = placeDetailUiState.detailPlace != null || isShowPinch
             scope.launch {
+                val update = if (targetZoom != null) {
+                    CameraUpdate.scrollAndZoomTo(it.toLatLng(), targetZoom)
+                } else {
+                    CameraUpdate.scrollTo(it.toLatLng())
+                }
                 cameraPositionState.animate(
-                    if (targetZoom != null) {
-                        CameraUpdate.scrollAndZoomTo(it.toLatLng(), targetZoom)
+                    if (focusOnVisibleArea) {
+                        update.pivot(android.graphics.PointF(0.5f, DETAIL_FOCUS_PIVOT_Y))
                     } else {
-                        CameraUpdate.scrollTo(it.toLatLng())
+                        update
                     }
                 )
             }
@@ -162,20 +175,25 @@ actual fun PlatformNaverMap(
     }
 
     val selectedPlaceId = placeDetailUiState.detailPlace?.mapPlace?.kakaoPlaceId
-    val clusterItems = if (!isShowPinch) {
-        searchUiState.reviewedPlaces.map {
-            ClusterPlaceItem(
-                kakaoPlaceId = it.kakaoPlaceId,
-                name = it.name,
-                latitude = it.latitude,
-                longitude = it.longitude,
-                markerResId = markerResIdByCategory(it.placeCategory),
-                selectedMarkerResId = selectedMarkerResIdByCategory(it.placeCategory),
-                isSelected = it.kakaoPlaceId == selectedPlaceId,
-            )
+    // remember 없이 매 리컴포지션마다 새 리스트를 만들면, 아래 DisposableMapEffect의 key가
+    // 매번 달라져 지도를 드래그·줌할 때마다 Clusterer가 통째로 파괴·재생성되고 전체 마커를
+    // 다시 addAll 하게 된다. 실제로 바뀔 때(장소 목록·선택 변경)만 새 리스트가 되도록 고정한다.
+    val clusterItems = remember(searchUiState.reviewedPlaces, selectedPlaceId, isShowPinch) {
+        if (!isShowPinch) {
+            searchUiState.reviewedPlaces.map {
+                ClusterPlaceItem(
+                    kakaoPlaceId = it.kakaoPlaceId,
+                    name = it.name,
+                    latitude = it.latitude,
+                    longitude = it.longitude,
+                    markerResId = markerResIdByCategory(it.placeCategory),
+                    selectedMarkerResId = selectedMarkerResIdByCategory(it.placeCategory),
+                    isSelected = it.kakaoPlaceId == selectedPlaceId,
+                )
+            }
+        } else {
+            emptyList()
         }
-    } else {
-        emptyList()
     }
 
     NaverMap(
@@ -269,7 +287,7 @@ actual fun PlatformNaverMap(
         }
 
         if (!isShowPinch) {
-            DisposableMapEffect(clusterItems, selectedPlaceId) { naverMap ->
+            DisposableMapEffect(clusterItems) { naverMap ->
                 val clusterer = Clusterer.Builder<ClusterPlaceItem>()
                     // 축척 100m(줌 16)부터는 클러스터링 없이 모든 핀을 개별 노출
                     .maxZoom(MapZoom.MAX_CLUSTERING)
@@ -295,7 +313,7 @@ actual fun PlatformNaverMap(
 
                 clusterer.setMap(naverMap)
 
-                val mapItems = clusterItems.associateWith { item -> item }
+                val mapItems = clusterItems.associateWith { item: ClusterPlaceItem -> item }
                 clusterer.clear()
                 clusterer.addAll(mapItems)
 

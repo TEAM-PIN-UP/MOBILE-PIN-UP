@@ -303,7 +303,7 @@ class MapViewModel (
                 updateState {
                     copy(
                         placeDetailUiState = PlaceDetailUiState(it),
-                        cameraPosition = Position(it.mapPlace.latitude - 0.0078, it.mapPlace.longitude),
+                        cameraPosition = Position(it.mapPlace.latitude, it.mapPlace.longitude),
                         // 해당 장소가 클러스터에 묶이지 않고 개별 핀으로 보이는 축척까지 확대한다.
                         cameraZoom = MapZoom.PLACE_FOCUS,
                         isFocusLocation = false,
@@ -427,7 +427,7 @@ class MapViewModel (
             successCallback = {
                 updateState {
                     copy(
-                        cameraPosition = Position(it.pintsPlaceList[0].latitude - 0.0078, it.pintsPlaceList[0].longitude),
+                        cameraPosition = Position(it.pintsPlaceList[0].latitude, it.pintsPlaceList[0].longitude),
                         isFocusLocation = false,
                         isDetailClicked = true,
                         pinchUiState = pinchUiState.copy(
