@@ -79,24 +79,27 @@ fun MapBottomSheetPinchDetailScreen(
                 overflow = TextOverflow.Ellipsis
             )
 
-            Spacer(modifier = Modifier.width(8.dp))
-
-            RoundedBox(
-                modifier = Modifier
-                    .clickableWithNoRipple {
-                        onClickArticle(id)
-                    },
-                cornerRounded = 8,
-                backgroundColor = Colors.Gray50,
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp, vertical = 10.dp),
-                    text = stringResource(Res.string.pin_map_go_article),
-                    color = Colors.Gray500,
-                    style = Typography.L1
-                )
-            }
+            // 아티클 준비중 처리로 '아티클 보러가기' 버튼을 숨겨 둔다.
+            // 되돌릴 때는 아래 블록의 주석을 풀면 된다. (onClickArticle / id 인자는 그대로 연결돼 있다)
+            //
+            // Spacer(modifier = Modifier.width(8.dp))
+            //
+            // RoundedBox(
+            //     modifier = Modifier
+            //         .clickableWithNoRipple {
+            //             onClickArticle(id)
+            //         },
+            //     cornerRounded = 8,
+            //     backgroundColor = Colors.Gray50,
+            // ) {
+            //     Text(
+            //         modifier = Modifier
+            //             .padding(horizontal = 8.dp, vertical = 10.dp),
+            //         text = stringResource(Res.string.pin_map_go_article),
+            //         color = Colors.Gray500,
+            //         style = Typography.L1
+            //     )
+            // }
         }
 
         Spacer(modifier = Modifier.height(16.dp))

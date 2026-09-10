@@ -19,13 +19,16 @@ import com.pinup.placePinup.domain.model.FCMType
 import com.pinup.placePinup.event.DetailPlaceEventBus
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.platform.FcmBridgeStore
-import com.pinup.placePinup.ui.article.ArticleRoute
 import com.pinup.placePinup.ui.feed.FeedRoute
+import com.pinup.placePinup.ui.component.NotDevelopTabScreen
 import com.pinup.placePinup.ui.main.MainViewModel
 import com.pinup.placePinup.ui.map.MapRoute
 import com.pinup.placePinup.ui.my.MyRoute
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.article_title
 
 @Composable
 fun MainNavHost(
@@ -219,9 +222,14 @@ fun MainNavHost(
                 )
             }
 
+            // 아티클 준비중 처리: 하단 탭은 그대로 두고 진입 시 준비중 화면만 보여준다.
+            // 되돌릴 때는 아래 블록을 ArticleRoute(onClickBottomNav = ..., onClickDetail = onClickArticleDetail) 로 되돌리면 된다.
             composable<MainDestination.Article> {
-                ArticleRoute(
-                    onClickBottomNav = {
+                NotDevelopTabScreen(
+                    selectedMenu = MainDestination.Article,
+                    profileImage = uiState.value.profileImage,
+                    title = stringResource(Res.string.article_title),
+                    onBottomMenuClick = {
                         if (it is MainDestination.Upload) {
                             if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()
                         } else {
@@ -233,8 +241,7 @@ fun MainNavHost(
                                 }
                             }
                         }
-                    },
-                    onClickDetail = onClickArticleDetail
+                    }
                 )
             }
 
