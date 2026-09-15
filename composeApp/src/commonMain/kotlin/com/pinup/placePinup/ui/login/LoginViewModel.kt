@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.placePinup.data.request.EmailLoginRequest
 import com.pinup.placePinup.data.request.fcm.SetDeviceTokenRequest
 import com.pinup.placePinup.domain.model.StatusCode
+import com.pinup.placePinup.domain.model.isSuccess
 import com.pinup.placePinup.domain.usecase.EmailLoginUseCase
 import com.pinup.placePinup.domain.usecase.PostSetDeviceTokenUseCase
 import com.pinup.placePinup.domain.usecase.SocialLoginUseCase
@@ -42,6 +43,9 @@ class LoginViewModel (
 
     }
     fun doSNSLogin(snsType: SNSType) {
+        // 요청 중 연타로 로그인이 중복으로 나가지 않게 막는다.
+        if (isLoading.value) return
+
         if (snsType == SNSType.PINUP) {
             emailLogin()
             return
@@ -50,17 +54,24 @@ class LoginViewModel (
         snsLoginFactory.doLogin(snsType, contextFactory, loginResultListener)
     }
 
+    // SNS SDK 화면이 끝나고 우리 서버와 통신할 때부터 로딩을 띄운다.
+    // (SDK 인증 화면 위에 띄우면 취소 콜백이 안 오는 경우 다이얼로그가 남을 수 있다)
     private fun login(snsLoginInfo: SNSUserInfo) {
         viewModelScope.launch {
-            resultResponse(
-                response = socialLoginUseCase(snsLoginInfo),
-                successCallback = {
-                    setDeviceToken()
-                },
-                errorCallback = {
-                    handleFailSocialLogin(it, snsLoginInfo)
-                }
-            )
+            // SDK 콜백이 백그라운드 스레드에서 연달아 올 수 있어 Main 에서 한 번 더 막는다.
+            if (isLoading.value) return@launch
+            withLoading {
+                val result = socialLoginUseCase(snsLoginInfo)
+                resultResponse(
+                    response = result,
+                    successCallback = {},
+                    errorCallback = {
+                        handleFailSocialLogin(it, snsLoginInfo)
+                    }
+                )
+                // 기기 토큰 등록까지 끝나야 메인으로 이동하므로 같은 로딩 안에서 이어서 호출한다.
+                if (result.isSuccess()) setDeviceToken()
+            }
         }
     }
 
@@ -70,13 +81,15 @@ class LoginViewModel (
             password = uiState.value.password
         )
         viewModelScope.launch {
-            resultResponse(
-                response = emailLoginUseCase(request),
-                successCallback = {
-                    setDeviceToken()
-                },
-                errorCallback = ::handleFailEmailLogin
-            )
+            withLoading {
+                val result = emailLoginUseCase(request)
+                resultResponse(
+                    response = result,
+                    successCallback = {},
+                    errorCallback = ::handleFailEmailLogin
+                )
+                if (result.isSuccess()) setDeviceToken()
+            }
         }
     }
 
@@ -114,7 +127,7 @@ class LoginViewModel (
         }
     }
 
-    private fun setDeviceToken() = viewModelScope.launch {
+    private suspend fun setDeviceToken() {
         val token = FcmBridgeStore.getFcmToken()
         val request = SetDeviceTokenRequest(
             token = token,

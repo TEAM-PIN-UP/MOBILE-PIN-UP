@@ -6,6 +6,7 @@ import com.pinup.placePinup.data.request.EmailVerifyRequest
 import com.pinup.placePinup.data.request.SendVerifyCodeRequest
 import com.pinup.placePinup.domain.model.ImageUploadType
 import com.pinup.placePinup.domain.model.SignUpInfo
+import com.pinup.placePinup.domain.model.getSuccessOrNull
 import com.pinup.placePinup.domain.usecase.CheckNickNameUseCase
 import com.pinup.placePinup.domain.usecase.PostEmailVerifyUseCase
 import com.pinup.placePinup.domain.usecase.PostSendVerifyCodeUseCase
@@ -146,23 +147,27 @@ class SignUpViewModel (
     }
 
     fun onClickVerify() = viewModelScope.launch {
+        // 인증 메일 발송은 응답이 느려 연타하면 메일이 여러 통 나가므로 요청 중엔 막는다.
+        if (isLoading.value) return@launch
         if (isValidEmail()) {
             val request = SendVerifyCodeRequest(
                 email = uiState.value.emailState.email
             )
-            resultResponse(
-                response = sendVerifyCodeUseCase(request),
-                successCallback = {
-                    updateState {
-                        copy(
-                            emailState = emailState.copy(
-                                isClickedVerify = true
+            withLoading {
+                resultResponse(
+                    response = sendVerifyCodeUseCase(request),
+                    successCallback = {
+                        updateState {
+                            copy(
+                                emailState = emailState.copy(
+                                    isClickedVerify = true
+                                )
                             )
-                        )
+                        }
+                        startTimer()
                     }
-                    startTimer()
-                }
-            )
+                )
+            }
         }
     }
 
@@ -276,27 +281,30 @@ class SignUpViewModel (
     }
 
     fun signUp() = viewModelScope.launch {
-        if(uiState.value.profileUrl.isEmpty()) {
-            if (uiState.value.snsType == SNSType.PINUP) {
-                emailSignUp(null)
+        // 가입 요청이 중복으로 나가면 두 번째 요청이 '이미 가입된 회원' 오류가 되므로 요청 중엔 막는다.
+        if (isLoading.value) return@launch
+        // 프로필 업로드와 가입 요청을 순서대로 한 로딩 안에서 처리한다.
+        withLoading {
+            val profile = if (uiState.value.profileUrl.isEmpty()) {
+                null
             } else {
-                socialSignUp(null)
+                val upload = uploadImageUploadUseCase(ImageUploadType.PROFILES, uiState.value.profileUrl)
+                resultResponse(
+                    response = upload,
+                    successCallback = {}
+                )
+                upload.getSuccessOrNull() ?: return@withLoading
             }
-        } else {
-            resultResponse(
-                response = uploadImageUploadUseCase(ImageUploadType.PROFILES, uiState.value.profileUrl),
-                successCallback = {
-                    if (uiState.value.snsType == SNSType.PINUP) {
-                        emailSignUp(it)
-                    } else {
-                        socialSignUp(it)
-                    }
-                }
-            )
+
+            if (uiState.value.snsType == SNSType.PINUP) {
+                emailSignUp(profile)
+            } else {
+                socialSignUp(profile)
+            }
         }
     }
 
-    private fun socialSignUp(profile: String?) = viewModelScope.launch {
+    private suspend fun socialSignUp(profile: String?) {
         val request = SignUpInfo(
             email = uiState.value.emailState.email,
             socialId = uiState.value.socialId,
@@ -312,7 +320,7 @@ class SignUpViewModel (
         )
     }
 
-    private fun emailSignUp(profile: String?) = viewModelScope.launch {
+    private suspend fun emailSignUp(profile: String?) {
         val request = SignUpInfo(
             email = uiState.value.emailState.email,
             nickname = uiState.value.nicknameState.nickname,
