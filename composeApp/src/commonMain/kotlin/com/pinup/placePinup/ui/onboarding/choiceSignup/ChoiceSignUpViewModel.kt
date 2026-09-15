@@ -3,6 +3,8 @@ package com.pinup.placePinup.ui.onboarding.choiceSignup
 
 import androidx.lifecycle.viewModelScope
 import com.pinup.placePinup.domain.model.StatusCode
+import com.pinup.placePinup.domain.model.isSuccess
+import com.pinup.placePinup.domain.usecase.RegisterDeviceTokenUseCase
 import com.pinup.placePinup.domain.usecase.SocialLoginUseCase
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.platform.hLog
@@ -18,7 +20,8 @@ import kotlinx.coroutines.launch
 class ChoiceSignUpViewModel (
     private val contextFactory: ContextFactory,
     private val socialLoginUseCase: SocialLoginUseCase,
-    private val snsLoginFactory: SNSLoginFactory
+    private val snsLoginFactory: SNSLoginFactory,
+    private val registerDeviceTokenUseCase: RegisterDeviceTokenUseCase
 ) : BaseViewModel<UiState, ChoiceSignUpUiEvent>(UiState.Default) {
     private val loginResultListener = object : SNSLoginResultListener {
         override fun onCancel() {
@@ -52,15 +55,19 @@ class ChoiceSignUpViewModel (
             // SDK 콜백이 백그라운드 스레드에서 연달아 올 수 있어 Main 에서 한 번 더 막는다.
             if (isLoading.value) return@launch
             withLoading {
+                val result = socialLoginUseCase(snsLoginInfo)
                 resultResponse(
-                    response = socialLoginUseCase(snsLoginInfo),
-                    successCallback = {
-                        emitEvent( ChoiceSignUpUiEvent.MoveMain )
-                    },
+                    response = result,
+                    successCallback = {},
                     errorCallback = {
                         handleLoginError(it, snsLoginInfo)
                     }
                 )
+                // 기기 토큰 등록까지 같은 로딩 안에서 끝낸 뒤 이동한다. 실패해도 이동은 막지 않는다.
+                if (result.isSuccess()) {
+                    registerDeviceTokenUseCase()
+                    emitEvent(ChoiceSignUpUiEvent.MoveMain)
+                }
             }
         }
     }

@@ -5,13 +5,16 @@ import androidx.lifecycle.viewModelScope
 import com.pinup.placePinup.data.request.EmailVerifyRequest
 import com.pinup.placePinup.data.request.SendVerifyCodeRequest
 import com.pinup.placePinup.domain.model.ImageUploadType
+import com.pinup.placePinup.domain.model.PResult
 import com.pinup.placePinup.domain.model.SignUpInfo
 import com.pinup.placePinup.domain.model.getSuccessOrNull
+import com.pinup.placePinup.domain.model.isSuccess
 import com.pinup.placePinup.domain.usecase.CheckNickNameUseCase
 import com.pinup.placePinup.domain.usecase.PostEmailVerifyUseCase
 import com.pinup.placePinup.domain.usecase.PostSendVerifyCodeUseCase
 import com.pinup.placePinup.domain.usecase.EmailSignUpUseCase
 import com.pinup.placePinup.domain.usecase.PostImageUploadUseCase
+import com.pinup.placePinup.domain.usecase.RegisterDeviceTokenUseCase
 import com.pinup.placePinup.domain.usecase.SocialSignUpUseCase
 import com.pinup.placePinup.domain.validator.NickNameValidator
 import com.pinup.placePinup.ui.base.BaseViewModel
@@ -39,7 +42,8 @@ class SignUpViewModel (
     private val emailVerifyUseCase: PostEmailVerifyUseCase,
     private val socialSignUpUseCase: SocialSignUpUseCase,
     private val emailSignUpUseCase: EmailSignUpUseCase,
-    private val uploadImageUploadUseCase: PostImageUploadUseCase
+    private val uploadImageUploadUseCase: PostImageUploadUseCase,
+    private val registerDeviceTokenUseCase: RegisterDeviceTokenUseCase
 ) : BaseViewModel<SignUpUiState, SignUpUiEvent>(SignUpUiState()) {
 
     private val snsUserInfo = Json.decodeFromString<SNSUserInfo>(savedStateHandle.get<String>(SNS_USER_INFO) ?: "")
@@ -296,15 +300,25 @@ class SignUpViewModel (
                 upload.getSuccessOrNull() ?: return@withLoading
             }
 
-            if (uiState.value.snsType == SNSType.PINUP) {
+            val result = if (uiState.value.snsType == SNSType.PINUP) {
                 emailSignUp(profile)
             } else {
                 socialSignUp(profile)
             }
+            resultResponse(
+                response = result,
+                successCallback = {}
+            )
+            // 가입이 끝나면 이미 로그인 상태이므로 기기 토큰 등록까지 같은 로딩 안에서 끝낸 뒤 이동한다.
+            // 등록에 실패해도 가입 화면에 남기면 재시도가 '이미 가입된 회원' 오류가 되므로 이동은 막지 않는다.
+            if (result.isSuccess()) {
+                registerDeviceTokenUseCase()
+                emitEvent(SignUpUiEvent.MoveMain)
+            }
         }
     }
 
-    private suspend fun socialSignUp(profile: String?) {
+    private suspend fun socialSignUp(profile: String?): PResult<Unit> {
         val request = SignUpInfo(
             email = uiState.value.emailState.email,
             socialId = uiState.value.socialId,
@@ -314,13 +328,10 @@ class SignUpViewModel (
             termsOfMarketing = uiState.value.termsOfServiceState.isMarketingAgreeAgree,
             profileImageUrl = profile
         )
-        resultResponse(
-            response = socialSignUpUseCase(request),
-            successCallback = { emitEvent(SignUpUiEvent.MoveMain) }
-        )
+        return socialSignUpUseCase(request)
     }
 
-    private suspend fun emailSignUp(profile: String?) {
+    private suspend fun emailSignUp(profile: String?): PResult<Unit> {
         val request = SignUpInfo(
             email = uiState.value.emailState.email,
             nickname = uiState.value.nicknameState.nickname,
@@ -330,10 +341,7 @@ class SignUpViewModel (
             termsOfMarketing = uiState.value.termsOfServiceState.isMarketingAgreeAgree,
             profileImageUrl = profile
         )
-        resultResponse(
-            response = emailSignUpUseCase(request),
-            successCallback = { emitEvent(SignUpUiEvent.MoveMain) }
-        )
+        return emailSignUpUseCase(request)
     }
 
     private fun startTimer() {

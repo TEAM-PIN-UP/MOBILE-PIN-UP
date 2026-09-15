@@ -2,15 +2,12 @@ package com.pinup.placePinup.ui.login
 
 import androidx.lifecycle.viewModelScope
 import com.pinup.placePinup.data.request.EmailLoginRequest
-import com.pinup.placePinup.data.request.fcm.SetDeviceTokenRequest
 import com.pinup.placePinup.domain.model.StatusCode
 import com.pinup.placePinup.domain.model.isSuccess
 import com.pinup.placePinup.domain.usecase.EmailLoginUseCase
-import com.pinup.placePinup.domain.usecase.PostSetDeviceTokenUseCase
+import com.pinup.placePinup.domain.usecase.RegisterDeviceTokenUseCase
 import com.pinup.placePinup.domain.usecase.SocialLoginUseCase
 import com.pinup.placePinup.platform.ContextFactory
-import com.pinup.placePinup.platform.FcmBridgeStore
-import com.pinup.placePinup.platform.getPlatformName
 import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
@@ -26,7 +23,7 @@ class LoginViewModel (
     private val emailLoginUseCase: EmailLoginUseCase,
     private val socialLoginUseCase: SocialLoginUseCase,
     private val snsLoginFactory: SNSLoginFactory,
-    private val postSetDeviceTokenUseCase: PostSetDeviceTokenUseCase
+    private val registerDeviceTokenUseCase: RegisterDeviceTokenUseCase
 ) : BaseViewModel<LoginUiState, LoginUiEvent>(LoginUiState()) {
     private val loginResultListener = object : SNSLoginResultListener {
         override fun onCancel() {
@@ -69,8 +66,7 @@ class LoginViewModel (
                         handleFailSocialLogin(it, snsLoginInfo)
                     }
                 )
-                // 기기 토큰 등록까지 끝나야 메인으로 이동하므로 같은 로딩 안에서 이어서 호출한다.
-                if (result.isSuccess()) setDeviceToken()
+                if (result.isSuccess()) registerDeviceTokenAndMoveMain()
             }
         }
     }
@@ -88,7 +84,7 @@ class LoginViewModel (
                     successCallback = {},
                     errorCallback = ::handleFailEmailLogin
                 )
-                if (result.isSuccess()) setDeviceToken()
+                if (result.isSuccess()) registerDeviceTokenAndMoveMain()
             }
         }
     }
@@ -127,22 +123,11 @@ class LoginViewModel (
         }
     }
 
-    private suspend fun setDeviceToken() {
-        val token = FcmBridgeStore.getFcmToken()
-        val request = SetDeviceTokenRequest(
-            token = token,
-            platform = getPlatformName()
-        )
-
-        resultResponse(
-            response = postSetDeviceTokenUseCase(request),
-            successCallback = {
-                emitEvent(LoginUiEvent.MoveMain)
-            },
-            errorCallback = {
-                emitEvent(LoginUiEvent.TestError("fcm 오류"))
-            }
-        )
+    // 기기 토큰 등록까지 같은 로딩 안에서 끝낸 뒤 메인으로 이동한다.
+    // 등록 실패는 푸시만 못 받을 뿐이라 이동을 막지 않는다. (다음 자동 로그인에서 재등록)
+    private suspend fun registerDeviceTokenAndMoveMain() {
+        registerDeviceTokenUseCase()
+        emitEvent(LoginUiEvent.MoveMain)
     }
 }
 

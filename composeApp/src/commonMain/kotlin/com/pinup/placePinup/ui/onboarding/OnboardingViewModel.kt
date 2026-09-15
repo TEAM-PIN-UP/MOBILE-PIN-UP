@@ -2,6 +2,7 @@ package com.pinup.placePinup.ui.onboarding
 
 import androidx.lifecycle.viewModelScope
 import com.pinup.placePinup.domain.usecase.IsLoginUseCase
+import com.pinup.placePinup.domain.usecase.RegisterDeviceTokenUseCase
 import com.pinup.placePinup.ui.base.BaseViewModel
 import com.pinup.placePinup.ui.base.UiEvent
 import com.pinup.placePinup.ui.base.UiState
@@ -13,6 +14,7 @@ private const val MIN_SPLASH_MS = 500L
 
 class OnboardingViewModel (
     private val isLoginUseCase: IsLoginUseCase,
+    private val registerDeviceTokenUseCase: RegisterDeviceTokenUseCase,
 ) : BaseViewModel<UiState, OnboardingUiEvent>(UiState.Default) {
 
     init {
@@ -26,6 +28,9 @@ class OnboardingViewModel (
         delay(MIN_SPLASH_MS)
         val (isMember, isLogin) = decision.await()
         if (isMember) {
+            // 자동 로그인도 기기 토큰을 등록해야 앱 재설치·토큰 갱신 후에도 푸시가 온다.
+            // 스플래시를 늘리지 않도록 기다리지 않고 백그라운드로 보낸다.
+            if (isLogin) registerDeviceTokenUseCase.launchInBackground()
             emitEvent(if(isLogin) OnboardingUiEvent.MoveMain else OnboardingUiEvent.MoveLogin)
         } else {
             emitEvent(OnboardingUiEvent.MoveSignUpOnboarding)
