@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.pinup.placePinup.ui.component.CameraView
+import com.pinup.placePinup.ui.component.LoadingDialog
 import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.reviewwrite.WriteReviewUiEvent
 import com.pinup.placePinup.ui.reviewwrite.WriteReviewViewModel
@@ -37,6 +38,7 @@ fun WriteReviewNavHost(
     onMoveDetailPlace: (Int) -> Unit,
 ) {
     val uiState = writeReviewViewModel.uiState.collectAsStateWithLifecycle()
+    val isLoading = writeReviewViewModel.isLoading.collectAsStateWithLifecycle()
     val navHostController = rememberNavController()
     val isShowCompleteDialog = remember { mutableStateOf(false) }
 
@@ -140,6 +142,10 @@ fun WriteReviewNavHost(
                 )
             }
         }
+    }
+
+    if (isLoading.value) {
+        LoadingDialog()
     }
 
     if (isShowCompleteDialog.value) {

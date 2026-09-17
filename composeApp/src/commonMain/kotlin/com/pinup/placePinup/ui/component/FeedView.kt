@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.pinup.placePinup.domain.model.Review
+import com.pinup.placePinup.extentions.clickableSingleWithNoRipple
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Texts
@@ -239,7 +240,7 @@ fun FeedView(
         ) {
             Image(
                 modifier = Modifier
-                    .clickableWithNoRipple {
+                    .clickableSingleWithNoRipple {
                         onClickLike(item.id, item.isLikedByUser)
                     },
                 painter = painterResource(if (item.isLikedByUser) Res.drawable.ic_heat_on else Res.drawable.ic_heart_off),

@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.pinup.placePinup.ui.component.LoadingDialog
 import com.pinup.placePinup.ui.component.PDialog
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
@@ -20,6 +21,7 @@ fun ReportRoute(
 ) {
     val isShowReportDialog = remember { mutableStateOf(false) }
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
@@ -36,6 +38,10 @@ fun ReportRoute(
             viewModel.report(it)
         }
     )
+
+    if (isLoading) {
+        LoadingDialog()
+    }
 
     if (isShowReportDialog.value) {
         PDialog(

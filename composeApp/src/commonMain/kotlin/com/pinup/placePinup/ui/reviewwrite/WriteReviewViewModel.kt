@@ -181,11 +181,15 @@ class WriteReviewViewModel (
     }
 
     fun uploadPinLog() = viewModelScope.launch {
-        if (reviewId != 0) {
-            editPinlog()
-            return@launch
+        // 응답 전에 다시 누르면 같은 핀로그가 두 번 저장되므로 요청 중엔 막는다.
+        if (isLoading.value) return@launch
+        withLoading {
+            if (reviewId != 0) editPinlog() else registerPinlog()
         }
-        val place = uiState.value.selectedPlace ?: return@launch
+    }
+
+    private suspend fun registerPinlog() {
+        val place = uiState.value.selectedPlace ?: return
         val request = AddReviewRequest(
             reviewRequest = ReviewRequest(
                 content = uiState.value.content,
@@ -213,7 +217,7 @@ class WriteReviewViewModel (
         )
     }
 
-    private fun editPinlog() = viewModelScope.launch {
+    private suspend fun editPinlog() {
         val request = ReviewRequest(
             content = uiState.value.content,
             starRating = uiState.value.starRating,

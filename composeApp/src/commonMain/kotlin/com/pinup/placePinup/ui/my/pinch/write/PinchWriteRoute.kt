@@ -11,6 +11,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.pinup.placePinup.domain.model.Place
 import com.pinup.placePinup.domain.model.Position
+import com.pinup.placePinup.ui.component.LoadingDialog
 import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.util.Const
 import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
@@ -34,6 +35,7 @@ fun PinchWriteRoute(
     )
     val viewModel: PinchWriteViewModel = koinViewModel(parameters = { parametersOf(locationTrackerFactory.createLocationTracker()) })
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
     val isShowCompleteDialog = remember { mutableStateOf(false to 0) }
 
     LaunchedEffect(Unit) {
@@ -74,6 +76,10 @@ fun PinchWriteRoute(
         registerPints = viewModel::registerPints,
         initCollectLocation = viewModel::initCollectLocation
     )
+
+    if (isLoading.value) {
+        LoadingDialog()
+    }
 
     if (isShowCompleteDialog.value.first) {
         PDialog(

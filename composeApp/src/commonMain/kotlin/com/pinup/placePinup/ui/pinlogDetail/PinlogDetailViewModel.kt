@@ -109,25 +109,30 @@ class PinlogDetailViewModel(
     }
 
     fun uploadComment() = viewModelScope.launch {
-        if (uiState.value.isEditComment) {
-            editComment()
-        } else {
-            val request = CommentRequest(
-                content = uiState.value.myComment,
-                parentId = uiState.value.clickedReplyId
-            )
-            resultResponse(
-                response = uploadCommentUseCase(reviewId, request),
-                successCallback = {
-                    updateMyComment("")
-                    updateClickedReplyId(null)
-                    getPinlogDetail()
-                }
-            )
+        // 입력창은 성공해야 비워지므로 응답 전에 다시 누르면 같은 댓글이 두 번 저장된다. 요청 중엔 막는다.
+        // (입력 중인 화면이라 로딩 다이얼로그는 띄우지 않는다)
+        if (isLoading.value) return@launch
+        withLoading {
+            if (uiState.value.isEditComment) {
+                editComment()
+            } else {
+                val request = CommentRequest(
+                    content = uiState.value.myComment,
+                    parentId = uiState.value.clickedReplyId
+                )
+                resultResponse(
+                    response = uploadCommentUseCase(reviewId, request),
+                    successCallback = {
+                        updateMyComment("")
+                        updateClickedReplyId(null)
+                        getPinlogDetail()
+                    }
+                )
+            }
         }
     }
 
-    private fun editComment() = viewModelScope.launch {
+    private suspend fun editComment() {
         resultResponse(
             response = editCommentUseCase(reviewId, commentId, uiState.value.myComment),
             successCallback = {
