@@ -1,0 +1,175 @@
+name: Release iOS
+
+# master 에 코드가 올라오면 App Store 에 올리고 심사 제출한다 (승인되면 자동 출시).
+# develop 은 macOS 러너 비용 때문에 매일 1번, 새 커밋이 있을 때만 TestFlight 로 올린다.
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "composeApp/src/androidMain/**"
+      - ".github/workflows/release-android.yml"
+  schedule:
+    # 매일 03:00 KST (UTC 18:00). 스케줄 실행은 master 에 있는 이 파일 기준으로 돈다.
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+    inputs:
+      lane:
+        description: "beta = TestFlight 업로드, release = App Store 심사 제출"
+        type: choice
+        options:
+          - beta
+          - release
+        default: beta
+
+concurrency:
+  group: release-ios
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Decide lane & commit
+    runs-on: ubuntu-latest
+    outputs:
+      lane: ${{ steps.decide.outputs.lane }}
+      ref: ${{ steps.decide.outputs.ref }}
+      already-built: ${{ steps.built.outputs.cache-hit }}
+
+    steps:
+      - name: Decide lane & commit
+        id: decide
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT_LANE: ${{ inputs.lane }}
+          SHA: ${{ github.sha }}
+          REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          case "$EVENT" in
+            push)
+              echo "lane=release" >> "$GITHUB_OUTPUT"
+              echo "ref=$SHA" >> "$GITHUB_OUTPUT"
+              ;;
+            schedule)
+              # 스케줄은 master 기준으로 실행되므로 develop 의 최신 커밋을 직접 찾아 빌드한다.
+              echo "lane=beta" >> "$GITHUB_OUTPUT"
+              echo "ref=$(gh api "repos/$REPO/commits/develop" --jq .sha)" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "lane=$INPUT_LANE" >> "$GITHUB_OUTPUT"
+              echo "ref=$SHA" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
+      # 스케줄 실행에서 이미 TestFlight 에 올린 develop 커밋이면 macOS 러너를 띄우지 않는다.
+      - name: Check already uploaded
+        id: built
+        if: github.event_name == 'schedule'
+        uses: actions/cache/restore@v4
+        with:
+          path: .testflight-built
+          key: testflight-${{ steps.decide.outputs.ref }}
+          lookup-only: true
+
+  deploy:
+    name: Build & Upload (${{ needs.prepare.outputs.lane }})
+    needs: prepare
+    if: needs.prepare.outputs.already-built != 'true'
+    runs-on: macos-26
+    # Kotlin/Native Release 빌드 + (release 는) 빌드 처리 대기·심사 제출까지 오래 걸린다.
+    timeout-minutes: 150
+    env:
+      LC_ALL: en_US.UTF-8
+      LANG: en_US.UTF-8
+
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.ref }}
+
+      # 로컬 개발 환경과 같은 Xcode 로 맞춘다. 로컬 Xcode 를 올리면 여기도 같이 올린다.
+      - name: Select Xcode 26.2
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app
+
+      # Xcode 빌드 단계에서 ./gradlew embedAndSignAppleFrameworkForXcode 가 돈다.
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: temurin
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Restore secrets
+        env:
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          for name in LOCAL_PROPERTIES ASC_KEY_P8_BASE64 ASC_KEY_ID ASC_ISSUER_ID; do
+            if [ -z "${!name}" ]; then
+              echo "::error::GitHub Secret '$name' 이 등록되지 않았습니다. docs/CI_CD.md 참고"
+              exit 1
+            fi
+          done
+          # composeApp/build.gradle.kts 가 구성 단계에서 local.properties 키를 읽으므로 iOS 빌드에도 필요하다.
+          printf '%s' "$LOCAL_PROPERTIES" > local.properties
+          printf '%s' "$ASC_KEY_P8_BASE64" | base64 -d > "$RUNNER_TEMP/AuthKey.p8"
+          echo "ASC_KEY_PATH=$RUNNER_TEMP/AuthKey.p8" >> "$GITHUB_ENV"
+
+      - name: Cache Pods
+        uses: actions/cache@v4
+        with:
+          path: iosApp/Pods
+          key: pods-${{ runner.os }}-${{ hashFiles('iosApp/Podfile.lock') }}
+
+      - name: Install Pods
+        working-directory: iosApp
+        run: pod install
+
+      - name: Build & Upload
+        env:
+          LANE: ${{ needs.prepare.outputs.lane }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: bundle exec fastlane ios "$LANE"
+
+      - name: Upload IPA & dSYM
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-${{ needs.prepare.outputs.lane }}
+          path: |
+            build/ios/*.ipa
+            build/ios/*.dSYM.zip
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # 스케줄로 올린 develop 커밋을 기록해 다음 날 같은 커밋이면 건너뛴다.
+  mark-uploaded:
+    name: Mark develop commit uploaded
+    needs: [prepare, deploy]
+    if: github.event_name == 'schedule' && needs.deploy.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write marker
+        env:
+          REF: ${{ needs.prepare.outputs.ref }}
+        run: echo "$REF" > .testflight-built
+
+      - name: Save marker
+        uses: actions/cache/save@v4
+        with:
+          path: .testflight-built
+          key: testflight-${{ needs.prepare.outputs.ref }}
