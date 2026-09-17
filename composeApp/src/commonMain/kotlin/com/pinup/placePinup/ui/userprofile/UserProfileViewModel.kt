@@ -135,7 +135,7 @@ class UserProfileViewModel (
 
     fun deleteRequestPinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = deleteRequestPinBuddyUseCase(uiState.value.member.profile.memberId),
+            response = deleteRequestPinBuddyUseCase(currentFriendRequestId()),
             successCallback = {
                 updateUserProfile()
             }
@@ -234,9 +234,10 @@ class UserProfileViewModel (
         )
     }
 
-    // 핀버디 목록에서 넘어온 nav 인자를 우선 사용하고, 그 외 진입은 프로필 조회 응답의 friendRequestId 를 사용한다.
+    // 요청 취소/수락/거절 API 는 memberId 가 아닌 friendRequestId 를 받는다.
+    // 프로필 조회 응답(PENDING/RECEIVED 일 때 내려옴)을 우선 사용한다. 같은 화면에서 재신청하면 id 가 바뀌어 nav 인자는 낡기 때문.
     private fun currentFriendRequestId(): Int =
-        friendRequestId.takeIf { it != -1 } ?: uiState.value.member.friendRequestId ?: -1
+        uiState.value.member.friendRequestId ?: friendRequestId
 
     fun acceptPinBuddy() = viewModelScope.launch {
         resultResponse(
