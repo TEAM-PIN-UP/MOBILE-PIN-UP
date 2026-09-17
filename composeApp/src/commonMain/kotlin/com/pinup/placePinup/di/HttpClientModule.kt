@@ -105,9 +105,9 @@ val httpClientModule = module {
                 // 여기서 append하면 Auth가 어차피 remove 후 덮어쓰므로 토큰 소스만 이원화된다.
                 contentType(ContentType.Application.Json.withCharset(Charsets.UTF_8))
             }
+        }.also { client ->
+            if (isDebugBuild()) logRequestBody(client)
         }
-        if (isDebugBuild()) logRequestBody(client)
-
     }
 
     single {
