@@ -78,8 +78,11 @@ class UserProfileViewModel (
     private fun getUserId() = viewModelScope.launch {
         resultResponse(
             response = searchUserUseCase(memberName),
-            successCallback = {
-                initUserProfile(it[0].profile.memberId)
+            successCallback = { users ->
+                // 닉네임 검색은 부분 일치(감자 -> 양감자)라 첫 번째 결과가 다른 유저일 수 있으므로 정확히 같은 닉네임만 고른다.
+                // (닉네임은 중복 불가) 결과가 없으면(탈퇴/닉네임 변경) 조회하지 않는다.
+                users.firstOrNull { it.profile.nickname == memberName }
+                    ?.let { initUserProfile(it.profile.memberId) }
             }
         )
     }
