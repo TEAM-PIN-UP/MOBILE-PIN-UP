@@ -53,6 +53,8 @@ class UserProfileViewModel (
     private val postUserBlockUseCase: PostUserBlockUseCase,
     private val postUserUnBlockUseCase: PostUserUnBlockUseCase
 ) : BaseViewModel<UserProfileUiState, UiEvent>(UserProfileUiState()) {
+    // nav 인자. 이름으로 진입(피드/지도/핀로그 작성자 탭)하면 memberId 가 -1, 핀버디 목록 외 진입은 friendRequestId 가 -1 이므로
+    // 프로필 조회 이후의 동작은 uiState.member 의 값을 사용한다.
     val memberId = savedStateHandle.get<Int>(MEMBER_ID) ?: -1
     val friendRequestId = savedStateHandle.get<Int>(FRIEND_REQUEST_ID) ?: -1
     val memberName = savedStateHandle.get<String>(MEMBER_NAME) ?: ""
@@ -111,7 +113,7 @@ class UserProfileViewModel (
 
     private fun updateUserProfile() = viewModelScope.launch {
         resultResponse(
-            response = getMemberInfoUseCase(memberId),
+            response = getMemberInfoUseCase(uiState.value.member.profile.memberId),
             successCallback = {
                 updateState {
                     copy(
@@ -124,7 +126,7 @@ class UserProfileViewModel (
 
     fun requestPinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = requestPinBuddyUseCase(memberId),
+            response = requestPinBuddyUseCase(uiState.value.member.profile.memberId),
             successCallback = {
                 updateUserProfile()
             }
@@ -133,7 +135,7 @@ class UserProfileViewModel (
 
     fun deleteRequestPinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = deleteRequestPinBuddyUseCase(memberId),
+            response = deleteRequestPinBuddyUseCase(uiState.value.member.profile.memberId),
             successCallback = {
                 updateUserProfile()
             }
@@ -142,7 +144,7 @@ class UserProfileViewModel (
 
     fun deletePinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = deletePinBuddyUseCase(memberId.toString()),
+            response = deletePinBuddyUseCase(uiState.value.member.profile.memberId.toString()),
             successCallback = {
                 updateUserProfile()
             }
@@ -166,7 +168,7 @@ class UserProfileViewModel (
 
     private fun handleSuccessLikeChanged(id: Int) = viewModelScope.launch {
         resultResponse(
-            response = getFeedUseCase(id, 1, memberId = memberId, keyword = null),
+            response = getFeedUseCase(id, 1, memberId = uiState.value.member.profile.memberId, keyword = null),
             successCallback = { result ->
                 updateState {
                     copy(
@@ -232,9 +234,13 @@ class UserProfileViewModel (
         )
     }
 
+    // 핀버디 목록에서 넘어온 nav 인자를 우선 사용하고, 그 외 진입은 프로필 조회 응답의 friendRequestId 를 사용한다.
+    private fun currentFriendRequestId(): Int =
+        friendRequestId.takeIf { it != -1 } ?: uiState.value.member.friendRequestId ?: -1
+
     fun acceptPinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = acceptPinBuddyUseCase(friendRequestId),
+            response = acceptPinBuddyUseCase(currentFriendRequestId()),
             successCallback = {
                 initUserProfile(uiState.value.member.profile.memberId)
             }
@@ -243,7 +249,7 @@ class UserProfileViewModel (
 
     fun rejectPinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = rejectPinBuddyUseCase(friendRequestId),
+            response = rejectPinBuddyUseCase(currentFriendRequestId()),
             successCallback = {
                 initUserProfile(uiState.value.member.profile.memberId)
             }
