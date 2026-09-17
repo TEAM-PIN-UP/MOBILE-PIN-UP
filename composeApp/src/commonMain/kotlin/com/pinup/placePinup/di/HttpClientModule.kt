@@ -40,8 +40,10 @@ import org.koin.dsl.module
 import kotlin.reflect.typeOf
 
 val httpClientModule = module {
-    single {
-        val client = HttpClient {
+    // HttpClient를 별도 정의로 노출한다 — 로그아웃 시 Auth 플러그인의 토큰 캐시를
+    // 비우려면(clearToken) 클라이언트 인스턴스 자체에 접근할 수 있어야 한다.
+    single<HttpClient> {
+        HttpClient {
             val membersLocalDataSource: MembersLocalDataSource = get()
             install(ContentNegotiation) {
                 json(
@@ -64,8 +66,18 @@ val httpClientModule = module {
 
             install(Auth) {
                 bearer {
+                    // 토큰 적재는 Auth 플러그인이 담당한다(suspend 컨텍스트라 DataStore를 정상 await).
+                    // 예전엔 defaultRequest에서 runBlocking으로 읽어 붙였는데, defaultRequest는
+                    // 요청을 시작한 코루틴(대개 Main)에서 실행되므로 모든 API 호출이 메인 스레드를
+                    // 디스크 I/O만큼 정지시켰다. 게다가 Auth 플러그인이 그 헤더를 지우고 자기
+                    // 캐시로 덮어쓰기 때문에 로그아웃 후에도 이전 계정 토큰이 나가는 버그가 있었다.
+                    loadTokens {
+                        val access = membersLocalDataSource.getAccessToken()
+                        if (access.isBlank()) null
+                        else BearerTokens(access, membersLocalDataSource.getRefreshToken())
+                    }
                     refreshTokens {
-                        val refreshToken = runBlocking { membersLocalDataSource.getRefreshToken() }
+                        val refreshToken = membersLocalDataSource.getRefreshToken()
                         val authApi: AuthApi = getKtorfit().createAuthApi()
                         val response =
                             authApi.refreshToken("Bearer $refreshToken").mapSuccessData().getSuccessOrNull()
@@ -85,20 +97,21 @@ val httpClientModule = module {
                 }
             }
             defaultRequest {
-                val accessToken = runBlocking { membersLocalDataSource.getAccessToken() }
-                headers {
-                    append("Authorization", "Bearer $accessToken")
-                }
+                // Authorization은 Auth 플러그인이 붙인다(위 loadTokens/refreshTokens).
+                // 여기서 append하면 Auth가 어차피 remove 후 덮어쓰므로 토큰 소스만 이원화된다.
                 contentType(ContentType.Application.Json.withCharset(Charsets.UTF_8))
             }
         }
 
+    }
+
+    single {
         val json = Json {
             ignoreUnknownKeys = true
         }
         Ktorfit.Builder()
             .baseUrl("http://101.79.30.115:8080/")
-            .httpClient(client)
+            .httpClient(get<HttpClient>())
             .converterFactories(PResultConverterFactory(json))
             .build()
     }

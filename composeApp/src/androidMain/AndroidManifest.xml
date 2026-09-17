@@ -24,6 +24,7 @@
         android:theme="@style/Theme.PinUp">
         <activity
             android:exported="true"
+            android:theme="@style/Theme.PinUp.Starting"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mnc|colorMode|density|fontScale|fontWeightAdjustment|keyboard|layoutDirection|locale|mcc|navigation|smallestScreenSize|touchscreen|uiMode"
             android:name=".MainActivity">
             <intent-filter>

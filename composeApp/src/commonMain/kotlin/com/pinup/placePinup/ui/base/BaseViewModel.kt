@@ -24,6 +24,30 @@ abstract class BaseViewModel<STATE: UiState, EVENT : UiEvent>(
     val uiEvent: SharedFlow<EVENT>
         get() = _uiEvent.asSharedFlow()
 
+    private val _isLoading = MutableStateFlow(false)
+    /** 서버 통신 중 로딩 다이얼로그 노출 여부. [withLoading] 으로만 바뀐다. */
+    val isLoading: StateFlow<Boolean>
+        get() = _isLoading.asStateFlow()
+
+    // 겹쳐 호출돼도 마지막 작업이 끝날 때 내리기 위한 카운터.
+    // viewModelScope(Main) 안에서만 호출하므로 동기화하지 않는다.
+    private var loadingCount = 0
+
+    /**
+     * [block] 이 도는 동안 로딩 상태를 켠다.
+     * 성공·실패뿐 아니라 예외(응답 파싱 실패 등)로 끝나도 반드시 내려서 다이얼로그가 남지 않게 한다.
+     */
+    protected suspend fun <T> withLoading(block: suspend () -> T): T {
+        loadingCount++
+        _isLoading.value = true
+        try {
+            return block()
+        } finally {
+            loadingCount--
+            if (loadingCount == 0) _isLoading.value = false
+        }
+    }
+
     protected fun updateState(
         state: STATE.() -> STATE
     ) {

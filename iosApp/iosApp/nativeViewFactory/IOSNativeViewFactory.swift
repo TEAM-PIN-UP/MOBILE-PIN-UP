@@ -122,7 +122,6 @@ class PlaceLeafMarkerUpdater: NSObject, NMCLeafMarkerUpdater {
             print("[하이] updateLeafMarker called but key cast failed: \(String(describing: info.key))")
             return
         }
-        print("[하이] updateLeafMarker name=\(key.name) lat=\(key.position.lat) lng=\(key.position.lng) group=\(key.placeCategory.group) mapView=\(String(describing: marker.mapView))")
 
         // 카테고리 그룹별 색상 마커
         if let img = markerImage(for: key.placeCategory.group) {
@@ -153,7 +152,6 @@ class PlaceLeafMarkerUpdater: NSObject, NMCLeafMarkerUpdater {
 class PlaceClusterMarkerUpdater: NSObject, NMCClusterMarkerUpdater {
     func updateClusterMarker(_ info: NMCClusterMarkerInfo, _ marker: NMFMarker) {
         let count = Int(info.size)
-        print("[하이] updateClusterMarker count=\(count) lat=\(info.position.lat) lng=\(info.position.lng) mapView=\(String(describing: marker.mapView))")
         marker.iconImage = NMFOverlayImage(image: makeClusterImage(count: count))
         marker.width = 40
         marker.height = 40
@@ -345,10 +343,10 @@ struct NaverMap: UIViewRepresentable {
 
         if let p = position, p.isValid {
             let target = NMGLatLng(lat: p.latitude, lng: p.longitude)
-            view.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(target, zoom: 14.0)))
+            view.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(target, zoom: Self.defaultZoom)))
         } else {
             let target = NMGLatLng(lat: 37.5666102, lng: 126.9783881)
-            view.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(target, zoom: 14.0)))
+            view.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(target, zoom: Self.defaultZoom)))
         }
 
         // ── 클러스터러 생성 ───────────────────────────────────────────────────────
@@ -383,13 +381,30 @@ struct NaverMap: UIViewRepresentable {
 
         // Kotlin 이 최소 줌을 지정한 경우(장소 포커싱)엔 이미 더 확대돼 있으면 현재 줌을 유지한다.
         let requestedZoom = cameraZoom?.doubleValue
-        let targetZoom = requestedZoom.map { max($0, uiView.mapView.cameraPosition.zoom) } ?? Self.defaultZoom
+        // 요청 줌이 없거나(내 위치 추적 등) 현재보다 작으면 줌은 건드리지 않는다.
+        // 이전 구현은 요청 줌이 없을 때 defaultZoom(14)으로 덮어써서, 위치 추적 중 GPS 가
+        // 갱신될 때마다(MapViewModel.updateCameraPosition 은 cameraZoom 을 null 로 둔다)
+        // 사용자가 확대·축소해 둔 줌이 14 로 튕겼다. Android 는 이 경우 scrollTo 만 한다.
+        let zoomToApply = requestedZoom.flatMap { $0 > uiView.mapView.cameraPosition.zoom ? $0 : nil }
 
         if let cp = cameraPosition, cp.isValid,
+           // 사용자가 핀치/드래그 중이면 프로그램 카메라 이동이 제스처와 싸우므로 건너뛴다.
+           !context.coordinator.isUserGesturing,
            context.coordinator.shouldApplyCamera(to: cp, requestedZoom: requestedZoom, on: uiView.mapView) {
-            let pos = NMFCameraPosition(NMGLatLng(lat: cp.latitude, lng: cp.longitude), zoom: targetZoom)
-            let update = NMFCameraUpdate(position: pos)
+            let target = NMGLatLng(lat: cp.latitude, lng: cp.longitude)
+            let update: NMFCameraUpdate
+            if let zoom = zoomToApply {
+                update = NMFCameraUpdate(position: NMFCameraPosition(target, zoom: zoom))
+            } else {
+                update = NMFCameraUpdate(scrollTo: target)
+            }
             update.animation = .easeIn
+            // 상세·핀츠 시트가 떠 있으면 대상 좌표를 '시트 위로 보이는 영역'의 중앙(높이 1/4 지점)에
+            // 오도록 화면 좌표 pivot 으로 보정한다. Android 의 DETAIL_FOCUS_PIVOT_Y 와 동일 값.
+            // (기존 위도 -0.0078 고정 오프셋은 특정 줌에서만 맞아 제거됨 — MapViewModel 참고)
+            if placeDetailUiState.detailPlace != nil || isShowPinch {
+                update.pivot = CGPoint(x: 0.5, y: 0.25)
+            }
             uiView.mapView.moveCamera(update)
             context.coordinator.lastAppliedCamera = cp
             context.coordinator.lastAppliedZoom = requestedZoom
@@ -483,7 +498,6 @@ struct NaverMap: UIViewRepresentable {
                 }
                 m.mapView = uiView.mapView
                 context.coordinator.leafMarkers.append(m)
-                print("[하이] NaverMap direct-marker name=\(r.name) lat=\(r.latitude) lng=\(r.longitude) group=\(category.group)")
             }
         }
     }
@@ -519,6 +533,27 @@ struct NaverMap: UIViewRepresentable {
         var lastClusterIds: Set<String> = []
         var lastSelectedId: String? = nil
 
+        /// 마지막으로 Kotlin 에 알린 이동 상태. 이동 중 프레임마다 중복 통지하지 않기 위한 캐시.
+        private var lastEmittedMoving: Bool?
+        /// 제스처가 시작된 시각. mapViewCameraIdle 에서 nil 로 되돌린다.
+        private var gestureStartedAt: Date?
+        /// idle 콜백을 놓쳐도 프로그램 카메라 이동이 영영 막히지 않도록 두는 상한.
+        private static let gestureGraceInterval: TimeInterval = 2.0
+
+        /// 사용자가 핀치/드래그로 지도를 조작하는 중인지. 조작 중에는 프로그램 카메라 이동을 보류한다.
+        var isUserGesturing: Bool {
+            guard let startedAt = gestureStartedAt else { return false }
+            return Date().timeIntervalSince(startedAt) < Self.gestureGraceInterval
+        }
+
+        func markGestureStarted() {
+            gestureStartedAt = Date()
+        }
+
+        func markGestureEnded() {
+            gestureStartedAt = nil
+        }
+
         init(onCameraStateChange: @escaping (CameraState) -> Void) {
             self.onCameraStateChange = onCameraStateChange
         }
@@ -543,6 +578,13 @@ struct NaverMap: UIViewRepresentable {
         }
 
         private func emit(_ mapView: NMFMapView, moving: Bool, reason: Int) {
+            // cameraIsChanging 은 카메라가 움직이는 매 프레임 호출된다. 그때마다 Kotlin StateFlow 를
+            // 갱신하면 mapUiState -> SwiftUI 재구성 -> updateUIView 가 60fps 로 돌면서 KMP 브릿지가
+            // 메인 스레드를 잡아먹어 핀치 줌이 끊긴다. 이동 중에는 상태가 바뀌는 첫 프레임만 알리고,
+            // 실제로 필요한 최종 bounds 는 mapViewCameraIdle 에서 보낸다.
+            if moving, lastEmittedMoving == true { return }
+            lastEmittedMoving = moving
+
             let b = mapView.contentBounds
             onCameraStateChange(
                 CameraState(
@@ -561,6 +603,7 @@ struct NaverMap: UIViewRepresentable {
         }
 
         func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
+            if reason == NMFMapChangedByGesture { markGestureStarted() }
             emit(mapView, moving: true, reason: reason)
         }
 
@@ -573,6 +616,8 @@ struct NaverMap: UIViewRepresentable {
         }
 
         func mapViewCameraIdle(_ mapView: NMFMapView) {
+            markGestureEnded()
+            lastEmittedMoving = false
             let b = mapView.contentBounds
             onCameraStateChange(
                 CameraState(

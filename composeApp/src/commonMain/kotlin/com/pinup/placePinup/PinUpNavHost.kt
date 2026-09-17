@@ -15,7 +15,7 @@ import com.pinup.placePinup.event.DetailPlaceEventBus
 import com.pinup.placePinup.extentions.jsonToArg
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.ui.addpinbuddy.AddPinBuddyRoute
-import com.pinup.placePinup.ui.article.detail.ArticleDetailRoute
+import com.pinup.placePinup.ui.component.NotDevelopScreen
 import com.pinup.placePinup.ui.findAccount.changePassword.ChangePasswordRoute
 import com.pinup.placePinup.ui.findAccount.findId.FindIdRoute
 import com.pinup.placePinup.ui.findAccount.findPassword.FindPasswordEmailRoute
@@ -24,9 +24,6 @@ import com.pinup.placePinup.ui.login.compose.LoginRoute
 import com.pinup.placePinup.ui.login.model.SNSType
 import com.pinup.placePinup.ui.login.model.SNSUserInfo
 import com.pinup.placePinup.ui.main.compose.MainNavHost
-import com.pinup.placePinup.ui.my.pinch.PintsRoute
-import com.pinup.placePinup.ui.my.pinch.detail.PinchDetailRoute
-import com.pinup.placePinup.ui.my.pinch.write.PinchWriteRoute
 import com.pinup.placePinup.ui.my.scrap.ScrapRoute
 import com.pinup.placePinup.ui.notification.NotificationRoute
 import com.pinup.placePinup.ui.onboarding.OnboardingRoute
@@ -288,20 +285,11 @@ fun PinUpNavHost(
             )
         }
 
+        // 아티클 준비중 처리. 되돌릴 때는 ArticleDetailRoute 로 복구하면 된다.
         composable<PinUpAppDestination.ArticleDetail> {
-            ArticleDetailRoute(
-                onClickBack = {
+            NotDevelopScreen(
+                onBackPressed = {
                     navHostController.popBackStack()
-                },
-                onClickPlaceDetail = {
-                    navHostController.navigate(PinUpAppDestination.PlaceDetail(it)) {
-                        restoreState = true
-                    }
-                },
-                onClickArticle = {
-                    navHostController.navigate(PinUpAppDestination.ArticleDetail(it)) {
-                        restoreState = true
-                    }
                 }
             )
         }
@@ -336,24 +324,20 @@ fun PinUpNavHost(
             )
         }
 
+        // 마이핀츠 준비중 처리. 되돌릴 때는 PintsRoute 로 복구하면 된다.
         composable<PinUpAppDestination.Pints> {
-            PintsRoute(
+            NotDevelopScreen(
                 onBackPressed = {
                     navHostController.popBackStack()
-                },
-                onMovePintsDetail = {
-                    navHostController.navigate(PinUpAppDestination.PinchDetail(it))
-                },
+                }
             )
         }
 
+        // 마이핀츠 준비중 처리. 되돌릴 때는 PinchDetailRoute 로 복구하면 된다.
         composable<PinUpAppDestination.PinchDetail> {
-            PinchDetailRoute(
+            NotDevelopScreen(
                 onBackPressed = {
                     navHostController.popBackStack()
-                },
-                onClickEdit = {
-                    navHostController.navigate(PinUpAppDestination.PinchWrite(it))
                 }
             )
         }
@@ -408,15 +392,11 @@ fun PinUpNavHost(
             )
         }
 
+        // 마이핀츠 준비중 처리. 되돌릴 때는 PinchWriteRoute 로 복구하면 된다.
         composable<PinUpAppDestination.PinchWrite> {
-            PinchWriteRoute(
-                navHostController = navHostController,
+            NotDevelopScreen(
                 onBackPressed = {
                     navHostController.popBackStack()
-                },
-                onMovePintsDetail = {
-                    navHostController.popBackStack()
-                    navHostController.navigate(PinUpAppDestination.PinchDetail(it))
                 }
             )
         }

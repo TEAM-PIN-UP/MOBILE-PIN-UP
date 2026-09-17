@@ -51,8 +51,10 @@ class NaverMapViewModel: ObservableObject {
     // MARK: - Android와 1:1로 대응되는 액션(패스스루)
 
     /// 마커 클릭 → 상세 조회
+    /// Kotlin 의 기본 인자(reviewId = -1)는 Swift 로 넘어오지 않으므로 직접 넘긴다.
+    /// (Android 의 마커 탭 경로도 reviewId 없이 호출한다)
     func onPlaceClick(kakaoPlaceId: String) {
-        viewModel.getDetailPlace(kakaoPlaceId: kakaoPlaceId)
+        viewModel.getDetailPlace(kakaoPlaceId: kakaoPlaceId, reviewId: -1)
     }
 
     /// 카메라 상태 변경 콜백

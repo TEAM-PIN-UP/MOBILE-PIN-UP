@@ -316,10 +316,10 @@ class MapViewModel (
                     updateState {
                         copy(
                             placeDetailUiState = PlaceDetailUiState(detail),
-                            // 카메라를 장소보다 남쪽으로 살짝 내려, 핀이 하단 상세 시트 위 영역에 오도록 한다.
-                            // 이 오프셋은 PLACE_FOCUS(줌16, 80dp=100m) 기준 약 220m. (기존 0.0078은 줌14 기준이라
-                            //  줌16에서는 핀이 화면 밖으로 밀려 "엉뚱한 곳"으로 보이던 문제를 바로잡음)
-                            cameraPosition = Position(detail.mapPlace.latitude - 0.002, detail.mapPlace.longitude),
+                            // 시트 위 가시 영역 보정은 플랫폼 지도 레이어의 화면 좌표 pivot이 담당한다.
+                            // (Android: NaverMap.android.kt의 DETAIL_FOCUS_PIVOT_Y / iOS: NMFCameraUpdate.pivot)
+                            // 위도 고정 오프셋(0.0078, 0.002 등)은 특정 줌에서만 맞으므로 쓰지 않는다.
+                            cameraPosition = Position(detail.mapPlace.latitude, detail.mapPlace.longitude),
                             // 해당 장소가 클러스터에 묶이지 않고 개별 핀으로 보이는 축척까지 확대한다.
                             cameraZoom = MapZoom.PLACE_FOCUS,
                             isFocusLocation = false,
@@ -483,7 +483,7 @@ class MapViewModel (
             successCallback = {
                 updateState {
                     copy(
-                        cameraPosition = Position(it.pintsPlaceList[0].latitude - 0.0078, it.pintsPlaceList[0].longitude),
+                        cameraPosition = Position(it.pintsPlaceList[0].latitude, it.pintsPlaceList[0].longitude),
                         isFocusLocation = false,
                         isDetailClicked = true,
                         pinchUiState = pinchUiState.copy(

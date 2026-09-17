@@ -52,6 +52,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.splashscreen)
             // Koin support for Android
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
@@ -140,8 +141,8 @@ android {
         applicationId = "com.pinup.placePinup"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 25
-        versionName = "1.1.2"
+        versionCode = 26
+        versionName = "1.1.3"
         multiDexEnabled = true
 
         buildConfigField(
@@ -183,6 +184,10 @@ android {
     buildTypes {
         getByName("release") {
             isDebuggable = false
+            // R8 코드 축소·난독화. 켜기 전에는 dex 266,458 메서드가 무손실로 실려 나갔다
+            // (참조하던 proguard-rules.pro 파일 자체가 존재하지 않아 규칙도 비어 있었다).
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
