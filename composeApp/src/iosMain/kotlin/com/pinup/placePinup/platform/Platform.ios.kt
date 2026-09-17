@@ -36,6 +36,10 @@ actual fun hLog(message: String) {
     return println(message)
 }
 
+// 같은 패키지의 Platform 인터페이스와 이름이 겹쳐 kotlin.native.Platform 은 전체 경로로 참조한다.
+@OptIn(kotlin.experimental.ExperimentalNativeApi::class)
+actual fun isDebugBuild(): Boolean = kotlin.native.Platform.isDebugBinary
+
 actual fun getPlatformName(): String = PLATFORM_IOS
 actual fun dataStorePreferences(): DataStore<Preferences> {
     return createDataStore(

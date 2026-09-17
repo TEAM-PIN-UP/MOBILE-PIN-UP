@@ -9,6 +9,7 @@ import com.pinup.placePinup.domain.model.getSuccessOrNull
 import com.pinup.placePinup.domain.model.mapSuccessData
 import com.pinup.placePinup.event.LogoutEventBus
 import com.pinup.placePinup.platform.hLog
+import com.pinup.placePinup.platform.isDebugBuild
 import com.pinup.placePinup.remote.api.AuthApi
 import com.pinup.placePinup.remote.api.createAuthApi
 import de.jensklingenberg.ktorfit.Ktorfit
@@ -16,6 +17,7 @@ import de.jensklingenberg.ktorfit.converter.Converter
 import de.jensklingenberg.ktorfit.converter.KtorfitResult
 import de.jensklingenberg.ktorfit.converter.TypeData
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
@@ -24,10 +26,12 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.plugin
 import io.ktor.client.request.headers
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
+import io.ktor.http.content.TextContent
 import io.ktor.http.contentType
 import io.ktor.http.withCharset
 import io.ktor.serialization.kotlinx.json.json
@@ -92,6 +96,7 @@ val httpClientModule = module {
                 contentType(ContentType.Application.Json.withCharset(Charsets.UTF_8))
             }
         }
+        if (isDebugBuild()) logRequestBody(client)
 
         val json = Json {
             ignoreUnknownKeys = true
@@ -101,6 +106,17 @@ val httpClientModule = module {
             .httpClient(client)
             .converterFactories(PResultConverterFactory(json))
             .build()
+    }
+}
+
+// 디버그 빌드에서만 요청 body 를 남긴다. (응답 body 는 PResultConverterFactory 의 kLog 가 남김)
+// Ktor Logging 의 BODY/ALL 레벨은 3.0.3 에서 응답 body 관찰 중 호출이 끝나지 않아 앱이 스플래시에서 멈추므로 쓰지 않는다.
+private fun logRequestBody(client: HttpClient) {
+    client.plugin(HttpSend).intercept { request ->
+        (request.body as? TextContent)?.let {
+            hLog("REQUEST BODY: ${request.method.value} ${request.url.buildString()}\n${it.text}")
+        }
+        execute(request)
     }
 }
 

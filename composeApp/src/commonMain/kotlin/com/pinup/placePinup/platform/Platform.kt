@@ -18,6 +18,7 @@ expect fun openBrowser(url: String, context: PlatformContext)
 expect fun getPlatformName(): String
 expect fun getRealPathFromUri(contentUri: String): String?
 expect fun hLog(message: String)
+expect fun isDebugBuild(): Boolean
 expect fun dataStorePreferences(): DataStore<Preferences>
 expect fun pxToDp(px: Float): Float
 
