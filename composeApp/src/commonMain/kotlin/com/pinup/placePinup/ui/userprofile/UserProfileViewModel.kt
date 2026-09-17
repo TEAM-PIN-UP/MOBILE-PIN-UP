@@ -53,6 +53,8 @@ class UserProfileViewModel (
     private val postUserBlockUseCase: PostUserBlockUseCase,
     private val postUserUnBlockUseCase: PostUserUnBlockUseCase
 ) : BaseViewModel<UserProfileUiState, UiEvent>(UserProfileUiState()) {
+    // nav 인자. 이름으로 진입(피드/지도/핀로그 작성자 탭)하면 memberId 가 -1, 핀버디 목록 외 진입은 friendRequestId 가 -1 이므로
+    // 프로필 조회 이후의 동작은 uiState.member 의 값을 사용한다.
     val memberId = savedStateHandle.get<Int>(MEMBER_ID) ?: -1
     val friendRequestId = savedStateHandle.get<Int>(FRIEND_REQUEST_ID) ?: -1
     val memberName = savedStateHandle.get<String>(MEMBER_NAME) ?: ""
@@ -76,8 +78,11 @@ class UserProfileViewModel (
     private fun getUserId() = viewModelScope.launch {
         resultResponse(
             response = searchUserUseCase(memberName),
-            successCallback = {
-                initUserProfile(it[0].profile.memberId)
+            successCallback = { users ->
+                // 닉네임 검색은 부분 일치(감자 -> 양감자)라 첫 번째 결과가 다른 유저일 수 있으므로 정확히 같은 닉네임만 고른다.
+                // (닉네임은 중복 불가) 결과가 없으면(탈퇴/닉네임 변경) 조회하지 않는다.
+                users.firstOrNull { it.profile.nickname == memberName }
+                    ?.let { initUserProfile(it.profile.memberId) }
             }
         )
     }
@@ -111,7 +116,7 @@ class UserProfileViewModel (
 
     private fun updateUserProfile() = viewModelScope.launch {
         resultResponse(
-            response = getMemberInfoUseCase(memberId),
+            response = getMemberInfoUseCase(uiState.value.member.profile.memberId),
             successCallback = {
                 updateState {
                     copy(
@@ -124,7 +129,7 @@ class UserProfileViewModel (
 
     fun requestPinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = requestPinBuddyUseCase(memberId),
+            response = requestPinBuddyUseCase(uiState.value.member.profile.memberId),
             successCallback = {
                 updateUserProfile()
             }
@@ -133,7 +138,7 @@ class UserProfileViewModel (
 
     fun deleteRequestPinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = deleteRequestPinBuddyUseCase(memberId),
+            response = deleteRequestPinBuddyUseCase(currentFriendRequestId()),
             successCallback = {
                 updateUserProfile()
             }
@@ -142,7 +147,7 @@ class UserProfileViewModel (
 
     fun deletePinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = deletePinBuddyUseCase(memberId.toString()),
+            response = deletePinBuddyUseCase(uiState.value.member.profile.memberId.toString()),
             successCallback = {
                 updateUserProfile()
             }
@@ -166,7 +171,7 @@ class UserProfileViewModel (
 
     private fun handleSuccessLikeChanged(id: Int) = viewModelScope.launch {
         resultResponse(
-            response = getFeedUseCase(id, 1, memberId = memberId, keyword = null),
+            response = getFeedUseCase(id, 1, memberId = uiState.value.member.profile.memberId, keyword = null),
             successCallback = { result ->
                 updateState {
                     copy(
@@ -232,9 +237,14 @@ class UserProfileViewModel (
         )
     }
 
+    // 요청 취소/수락/거절 API 는 memberId 가 아닌 friendRequestId 를 받는다.
+    // 프로필 조회 응답(PENDING/RECEIVED 일 때 내려옴)을 우선 사용한다. 같은 화면에서 재신청하면 id 가 바뀌어 nav 인자는 낡기 때문.
+    private fun currentFriendRequestId(): Int =
+        uiState.value.member.friendRequestId ?: friendRequestId
+
     fun acceptPinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = acceptPinBuddyUseCase(friendRequestId),
+            response = acceptPinBuddyUseCase(currentFriendRequestId()),
             successCallback = {
                 initUserProfile(uiState.value.member.profile.memberId)
             }
@@ -243,7 +253,7 @@ class UserProfileViewModel (
 
     fun rejectPinBuddy() = viewModelScope.launch {
         resultResponse(
-            response = rejectPinBuddyUseCase(friendRequestId),
+            response = rejectPinBuddyUseCase(currentFriendRequestId()),
             successCallback = {
                 initUserProfile(uiState.value.member.profile.memberId)
             }
