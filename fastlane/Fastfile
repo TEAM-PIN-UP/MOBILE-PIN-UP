@@ -1,0 +1,110 @@
+require "shellwords"
+
+default_platform(:android)
+
+ANDROID_PACKAGE = "com.pinup.placePinup"
+IOS_APP_ID = "com.pinup.pinup.PinUp"
+IOS_TEAM_ID = "422LM88VY2"
+
+platform :android do
+  # 필요한 환경 변수
+  #   PLAY_STORE_JSON_KEY_PATH   Play Console 서비스 계정 JSON 키 경로
+  #   ANDROID_KEYSTORE_PATH      업로드 키스토어 경로 (composeApp/build.gradle.kts 가 읽는다)
+  #   ANDROID_KEYSTORE_PASSWORD / ANDROID_KEY_ALIAS / ANDROID_KEY_PASSWORD
+  desc "Release AAB 를 빌드해 Play Console 에 올린다. 예) fastlane android deploy track:internal"
+  lane :deploy do |options|
+    track = options[:track] || "internal"
+    json_key = ENV.fetch("PLAY_STORE_JSON_KEY_PATH")
+
+    # 수동으로 올린 빌드와도 겹치지 않도록 모든 트랙에서 가장 큰 versionCode 다음 번호를 쓴다.
+    version_codes = %w[internal alpha beta production].flat_map do |t|
+      google_play_track_version_codes(package_name: ANDROID_PACKAGE, track: t, json_key: json_key)
+    rescue StandardError => e
+      UI.important("#{t} 트랙 versionCode 조회 실패: #{e.message}")
+      []
+    end
+    # 이미 출시된 앱이라 비어 있으면 권한/키 문제다. 1 로 올리면 업로드가 거절되므로 여기서 멈춘다.
+    UI.user_error!("Play Console 에서 versionCode 를 읽지 못했습니다. 서비스 계정 권한을 확인하세요.") if version_codes.empty?
+    version_code = version_codes.max + 1
+    UI.message("versionCode #{version_code} 로 빌드합니다 (track: #{track})")
+
+    gradle(
+      task: ":composeApp:bundle",
+      build_type: "Release",
+      properties: { "pinup.versionCode" => version_code }
+    )
+
+    upload_to_play_store(
+      package_name: ANDROID_PACKAGE,
+      json_key: json_key,
+      track: track,
+      aab: "composeApp/build/outputs/bundle/release/composeApp-release.aab",
+      # R8 난독화 스택트레이스를 Play Console 에서 풀어 보기 위해 매핑도 같이 올린다.
+      mapping: "composeApp/build/outputs/mapping/release/mapping.txt",
+      # 프로덕션은 초안으로만 올리고, 실제 출시는 Play Console 에서 사람이 누른다.
+      release_status: track == "production" ? "draft" : "completed",
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end
+
+platform :ios do
+  # 필요한 환경 변수
+  #   ASC_KEY_PATH    App Store Connect API 키(.p8) 절대 경로
+  #   ASC_KEY_ID / ASC_ISSUER_ID
+  desc "Release 아카이브를 만들어 TestFlight 에 올린다. 예) fastlane ios beta"
+  lane :beta do
+    key_path = File.expand_path(ENV.fetch("ASC_KEY_PATH"))
+    key_id = ENV.fetch("ASC_KEY_ID")
+    issuer_id = ENV.fetch("ASC_ISSUER_ID")
+
+    api_key = app_store_connect_api_key(
+      key_id: key_id,
+      issuer_id: issuer_id,
+      key_filepath: key_path
+    )
+
+    marketing_version = get_version_number(xcodeproj: "iosApp/iosApp.xcodeproj", target: "iosApp")
+    build_number = latest_testflight_build_number(
+      api_key: api_key,
+      app_identifier: IOS_APP_ID,
+      initial_build_number: 0
+    ) + 1
+    UI.message("#{marketing_version} (#{build_number}) 로 빌드합니다")
+
+    # 프로젝트가 자동 서명이라, 인증서/프로파일은 API 키로 Xcode 가 받아오게 한다.
+    auth_args = [
+      "-allowProvisioningUpdates",
+      "-authenticationKeyPath #{key_path.shellescape}",
+      "-authenticationKeyID #{key_id}",
+      "-authenticationKeyIssuerID #{issuer_id}"
+    ].join(" ")
+
+    build_app(
+      workspace: "iosApp/iosApp.xcworkspace",
+      scheme: "iosApp",
+      configuration: "Release",
+      export_method: "app-store",
+      output_directory: "build/ios",
+      clean: true,
+      # 알림 확장(PinUpNotificationService)은 버전 1.0 / 빌드 1 로 앱과 달라 업로드 시 불일치 경고가 난다.
+      # 앱과 확장 모두 같은 값으로 덮어쓴다.
+      xcargs: "#{auth_args} CURRENT_PROJECT_VERSION=#{build_number} MARKETING_VERSION=#{marketing_version}",
+      export_xcargs: auth_args,
+      export_options: {
+        signingStyle: "automatic",
+        teamID: IOS_TEAM_ID
+      }
+    )
+
+    upload_to_testflight(
+      api_key: api_key,
+      app_identifier: IOS_APP_ID,
+      # 처리 완료까지 기다리면 러너 시간을 수십 분 더 쓰므로 업로드만 하고 끝낸다.
+      skip_waiting_for_build_processing: true
+    )
+  end
+end

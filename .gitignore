@@ -198,3 +198,8 @@ composeApp/release/
 
 # CocoaPods dependencies
 iosApp/Pods/
+# fastlane
+fastlane/report.xml
+fastlane/README.md
+fastlane/test_output/
+/build/ios/
