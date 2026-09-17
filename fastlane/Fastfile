@@ -16,6 +16,17 @@ platform :android do
     track = options[:track] || "internal"
     json_key = ENV.fetch("PLAY_STORE_JSON_KEY_PATH")
 
+    if track == "production"
+      # 버전 이름을 안 올리고 master 에 머지하면 같은 버전 이름으로 새 코드가 출시된다. 올리기 전에 막는다.
+      # Play 의 기본 출시 이름은 "versionCode (versionName)" 형식이다.
+      gradle_file = File.read(File.expand_path("../composeApp/build.gradle.kts", __dir__))
+      version_name = gradle_file[/versionName = "([^"]+)"/, 1]
+      released = google_play_track_release_names(package_name: ANDROID_PACKAGE, track: "production", json_key: json_key)
+      if released.any? { |name| name.include?("(#{version_name})") }
+        UI.user_error!("versionName #{version_name} 은(는) 이미 프로덕션에 출시돼 있습니다. 버전을 올린 뒤 master 에 머지하세요.")
+      end
+    end
+
     # 수동으로 올린 빌드와도 겹치지 않도록 모든 트랙에서 가장 큰 versionCode 다음 번호를 쓴다.
     version_codes = %w[internal alpha beta production].flat_map do |t|
       google_play_track_version_codes(package_name: ANDROID_PACKAGE, track: t, json_key: json_key)
@@ -41,8 +52,8 @@ platform :android do
       aab: "composeApp/build/outputs/bundle/release/composeApp-release.aab",
       # R8 난독화 스택트레이스를 Play Console 에서 풀어 보기 위해 매핑도 같이 올린다.
       mapping: "composeApp/build/outputs/mapping/release/mapping.txt",
-      # 프로덕션은 초안으로만 올리고, 실제 출시는 Play Console 에서 사람이 누른다.
-      release_status: track == "production" ? "draft" : "completed",
+      # 프로덕션도 바로 전체 출시로 올린다. Google 검토가 끝나면 공개된다.
+      release_status: "completed",
       skip_upload_metadata: true,
       skip_upload_changelogs: true,
       skip_upload_images: true,
@@ -55,8 +66,43 @@ platform :ios do
   # 필요한 환경 변수
   #   ASC_KEY_PATH    App Store Connect API 키(.p8) 절대 경로
   #   ASC_KEY_ID / ASC_ISSUER_ID
-  desc "Release 아카이브를 만들어 TestFlight 에 올린다. 예) fastlane ios beta"
+  desc "Release 아카이브를 만들어 TestFlight 에 올린다 (develop). 예) fastlane ios beta"
   lane :beta do
+    build = build_ios
+
+    upload_to_testflight(
+      api_key: build[:api_key],
+      app_identifier: IOS_APP_ID,
+      # 처리 완료까지 기다리면 러너 시간을 수십 분 더 쓰므로 업로드만 하고 끝낸다.
+      skip_waiting_for_build_processing: true
+    )
+  end
+
+  desc "Release 아카이브를 App Store 에 올리고 심사 제출, 승인 시 자동 출시한다 (master). 예) fastlane ios release"
+  lane :release do
+    build = build_ios
+
+    upload_to_app_store(
+      api_key: build[:api_key],
+      app_identifier: IOS_APP_ID,
+      app_version: build[:marketing_version],
+      ipa: lane_context[SharedValues::IPA_OUTPUT_PATH],
+      # '이 버전의 새로운 기능' 문구만 올린다. 스크린샷·설명 등 나머지 메타데이터는 건드리지 않는다.
+      # 출시 전에 fastlane/metadata/ios/ko/release_notes.txt 를 수정한다.
+      metadata_path: "fastlane/metadata/ios",
+      skip_metadata: false,
+      skip_screenshots: true,
+      submit_for_review: true,
+      automatic_release: true,
+      # CI 에서는 HTML 미리보기 확인 프롬프트를 띄우지 않는다.
+      force: true,
+      # precheck 는 API 키로 인앱 결제 검사를 못 해서 끈다.
+      run_precheck_before_submit: false,
+      submission_information: { add_id_info_uses_idfa: false }
+    )
+  end
+
+  private_lane :build_ios do
     key_path = File.expand_path(ENV.fetch("ASC_KEY_PATH"))
     key_id = ENV.fetch("ASC_KEY_ID")
     issuer_id = ENV.fetch("ASC_ISSUER_ID")
@@ -64,10 +110,19 @@ platform :ios do
     api_key = app_store_connect_api_key(
       key_id: key_id,
       issuer_id: issuer_id,
-      key_filepath: key_path
+      key_filepath: key_path,
+      set_spaceship_token: true
     )
 
     marketing_version = get_version_number(xcodeproj: "iosApp/iosApp.xcodeproj", target: "iosApp")
+
+    # App Store 에 이미 출시된 버전과 같거나 낮으면 App Store Connect 가 업로드를 거절한다.
+    # 40분 넘게 빌드한 뒤 실패하지 않도록 빌드 전에 막는다.
+    live_version = Spaceship::ConnectAPI::App.find(IOS_APP_ID)&.get_live_app_store_version&.version_string
+    if live_version && Gem::Version.new(marketing_version) <= Gem::Version.new(live_version)
+      UI.user_error!("앱 버전 #{marketing_version} 이(가) App Store 출시 버전(#{live_version}) 이하입니다. 버전을 올린 뒤 다시 실행하세요.")
+    end
+
     build_number = latest_testflight_build_number(
       api_key: api_key,
       app_identifier: IOS_APP_ID,
@@ -100,11 +155,6 @@ platform :ios do
       }
     )
 
-    upload_to_testflight(
-      api_key: api_key,
-      app_identifier: IOS_APP_ID,
-      # 처리 완료까지 기다리면 러너 시간을 수십 분 더 쓰므로 업로드만 하고 끝낸다.
-      skip_waiting_for_build_processing: true
-    )
+    { api_key: api_key, marketing_version: marketing_version }
   end
 end

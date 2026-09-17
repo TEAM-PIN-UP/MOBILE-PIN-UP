@@ -1,12 +1,22 @@
 name: Release Android
 
-# v* 태그를 올리면 Play Console 내부 테스트(internal) 트랙으로 배포한다.
-# 다른 트랙은 Actions 탭에서 수동 실행(workflow_dispatch)으로 고른다.
+# develop 에 코드가 올라오면 Play Console 내부 테스트(internal) 트랙으로,
+# master 에 올라오면 프로덕션 트랙(전체 출시)으로 배포한다.
 on:
+  push:
+    branches:
+      - develop
+      - master
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "iosApp/**"
+      - "fastlane/metadata/ios/**"
+      - ".github/workflows/release-ios.yml"
   workflow_dispatch:
     inputs:
       track:
-        description: "Play Console 트랙 (production 은 초안으로만 올라감)"
+        description: "Play Console 트랙"
         type: choice
         options:
           - internal
@@ -14,13 +24,11 @@ on:
           - beta
           - production
         default: internal
-  push:
-    tags:
-      - "v*"
 
 concurrency:
-  group: release-android
-  cancel-in-progress: false
+  group: release-android-${{ github.ref_name }}
+  # develop 은 연달아 푸시되면 이전 빌드를 취소하고 최신 커밋만 올린다. master(프로덕션)는 끝까지 돌린다.
+  cancel-in-progress: ${{ github.ref_name == 'develop' }}
 
 jobs:
   deploy:
@@ -72,7 +80,8 @@ jobs:
 
       - name: Build & Upload
         env:
-          TRACK: ${{ inputs.track || 'internal' }}
+          # 수동 실행은 고른 트랙, master 푸시는 production, 그 외(develop)는 internal
+          TRACK: ${{ inputs.track || (github.ref_name == 'master' && 'production') || 'internal' }}
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
