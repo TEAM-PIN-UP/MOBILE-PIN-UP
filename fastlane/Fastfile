@@ -1,5 +1,13 @@
 require "shellwords"
 
+# xcodebuild 의 'Compile Kotlin Framework' 스크립트 단계는 Gradle 을 거쳐 `pod install` 을 부른다.
+# bundle exec 로 fastlane 을 돌리면 BUNDLE_GEMFILE/RUBYOPT 가 그대로 상속돼
+# 번들에 없는 cocoapods 를 찾다가 "can't find executable pod for gem cocoapods" 로 실패한다.
+# 빌드 동안만 번들러 환경을 걷어낸다.
+def without_bundler_env(&block)
+  defined?(Bundler) ? Bundler.with_unbundled_env(&block) : block.call
+end
+
 default_platform(:android)
 
 ANDROID_PACKAGE = "com.pinup.placePinup"
@@ -138,22 +146,24 @@ platform :ios do
       "-authenticationKeyIssuerID #{issuer_id}"
     ].join(" ")
 
-    build_app(
-      workspace: "iosApp/iosApp.xcworkspace",
-      scheme: "iosApp",
-      configuration: "Release",
-      export_method: "app-store",
-      output_directory: "build/ios",
-      clean: true,
-      # 알림 확장(PinUpNotificationService)은 버전 1.0 / 빌드 1 로 앱과 달라 업로드 시 불일치 경고가 난다.
-      # 앱과 확장 모두 같은 값으로 덮어쓴다.
-      xcargs: "#{auth_args} CURRENT_PROJECT_VERSION=#{build_number} MARKETING_VERSION=#{marketing_version}",
-      export_xcargs: auth_args,
-      export_options: {
-        signingStyle: "automatic",
-        teamID: IOS_TEAM_ID
-      }
-    )
+    without_bundler_env do
+      build_app(
+        workspace: "iosApp/iosApp.xcworkspace",
+        scheme: "iosApp",
+        configuration: "Release",
+        export_method: "app-store",
+        output_directory: "build/ios",
+        clean: true,
+        # 알림 확장(PinUpNotificationService)은 버전 1.0 / 빌드 1 로 앱과 달라 업로드 시 불일치 경고가 난다.
+        # 앱과 확장 모두 같은 값으로 덮어쓴다.
+        xcargs: "#{auth_args} CURRENT_PROJECT_VERSION=#{build_number} MARKETING_VERSION=#{marketing_version}",
+        export_xcargs: auth_args,
+        export_options: {
+          signingStyle: "automatic",
+          teamID: IOS_TEAM_ID
+        }
+      )
+    end
 
     { api_key: api_key, marketing_version: marketing_version }
   end
