@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.article
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,10 +37,10 @@ import com.pinup.placePinup.ui.component.BottomBar
 import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_search
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -78,7 +79,7 @@ fun ArticleScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = Texts.Article.TITLE,
+                text = stringResource(Res.string.article_title),
                 style = Typography.T1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -107,7 +108,7 @@ fun ArticleScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = Texts.FEED.EMPTY_FEED,
+                    text = stringResource(Res.string.feed_empty_feed),
                     color = Colors.Gray400,
                     style = Typography.B1.copy(
                         fontWeight = FontWeight.SemiBold

@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.my
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -62,7 +64,6 @@ import com.pinup.placePinup.ui.component.RoundedBox
 import com.pinup.placePinup.ui.component.ScrapItemView
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -89,6 +90,7 @@ fun MyScreen(
     onClickPinLog: () -> Unit = {},
     onClickDetail: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
     onClickShare: () -> Unit = {},
     onClickMoreScrap: () -> Unit = {},
     onMovePlaceDetail: (String) -> Unit = {},
@@ -189,7 +191,8 @@ fun MyScreen(
                         },
                         onClickPinLog = onClickPinLog,
                         onClickLike = onClickLike,
-                        onClickDetail = onClickDetail
+                        onClickDetail = onClickDetail,
+                        onClickPlace = onClickPlace
                     )
                 } else {
                     this.MyScrapList(
@@ -318,7 +321,7 @@ private fun ProfileItem(
                     Text(
                         modifier = Modifier
                             .padding(top = 4.dp),
-                        text = Texts.Word.PINLOG,
+                        text = stringResource(Res.string.word_pinlog),
                         color = Colors.Gray400,
                         style = Typography.B3.copy(
                             fontWeight = FontWeight.SemiBold
@@ -346,7 +349,7 @@ private fun ProfileItem(
                     Text(
                         modifier = Modifier
                             .padding(top = 4.dp),
-                        text = Texts.PROFILE.AVERAGE_STAR_RATING,
+                        text = stringResource(Res.string.profile_average_star_rating),
                         color = Colors.Gray400,
                         style = Typography.B3.copy(
                             fontWeight = FontWeight.SemiBold
@@ -378,7 +381,7 @@ private fun ProfileItem(
                     Text(
                         modifier = Modifier
                             .padding(top = 4.dp),
-                        text = Texts.Word.PIN_BUDDY,
+                        text = stringResource(Res.string.word_pin_buddy),
                         color = Colors.Gray400,
                         style = Typography.B3.copy(
                             fontWeight = FontWeight.SemiBold
@@ -434,7 +437,7 @@ private fun ProfileItem(
                     Text(
                         modifier = Modifier
                             .padding(start = 6.dp),
-                        text = Texts.PROFILE.SHARE_PROFILE,
+                        text = stringResource(Res.string.profile_share_profile),
                         style = Typography.L1.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
@@ -468,7 +471,7 @@ private fun ProfileItem(
                     Text(
                         modifier = Modifier
                             .padding(start = 6.dp),
-                        text = Texts.Setting.PROFILE_SETTING,
+                        text = stringResource(Res.string.setting_profile_setting),
                         style = Typography.L1.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
@@ -504,7 +507,7 @@ private fun ContentView(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 12.dp, bottom = 11.dp),
-                text = Texts.Word.PINLOG,
+                text = stringResource(Res.string.word_pinlog),
                 style = if (pagerState.value == 0) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -535,7 +538,7 @@ private fun ContentView(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 12.dp, bottom = 11.dp),
-                text = Texts.PROFILE.PROFILE_MY,
+                text = stringResource(Res.string.profile_my),
                 style = if (pagerState.value == 1) Typography.B1.copy(fontWeight = FontWeight.SemiBold) else Typography.T2.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -563,6 +566,7 @@ fun LazyListScope.MyPinLogList(
     onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
     onClickDetail: (Int) -> Unit = {},
     onClickPinLog: () -> Unit = {},
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
 ) {
     if (reviewList.isEmpty()) {
         item {
@@ -581,6 +585,7 @@ fun LazyListScope.MyPinLogList(
                 onClickMenu = onClickMenu,
                 onClickLike = onClickLike,
                 onClickDetail = onClickDetail,
+                onClickPlace = onClickPlace,
             )
 
             PHorizontalDivider()
@@ -603,7 +608,7 @@ private fun ReviewEmptyScreen(
         Spacer(modifier = Modifier.height(116.dp))
 
         Text(
-            text = Texts.PROFILE.EMPTY_MY_PINLOG,
+            text = stringResource(Res.string.profile_empty_my_pinlog),
             color = Colors.Gray400,
             style = Typography.B1.copy(
                 fontWeight = FontWeight.Medium
@@ -621,7 +626,7 @@ private fun ReviewEmptyScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = Texts.PROFILE.WRITE_FIRST_PINLOG,
+                text = stringResource(Res.string.profile_write_first_pinlog),
                 color = Colors.Gray600,
                 style = Typography.B2.copy(
                     fontWeight = FontWeight.Medium
@@ -670,7 +675,7 @@ fun LazyListScope.MyScrapList(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = Texts.Word.SCRAP,
+                text = stringResource(Res.string.word_scrap),
                 color = Colors.Gray500,
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold
@@ -706,7 +711,7 @@ fun LazyListScope.MyScrapList(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = Texts.PROFILE.EMPTY_SCRAP,
+                        text = stringResource(Res.string.profile_empty_scrap),
                         style = Typography.B3.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
@@ -724,7 +729,7 @@ fun LazyListScope.MyScrapList(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = Texts.PROFILE.GO_PINLOG,
+                            text = stringResource(Res.string.profile_go_pinlog),
                             style = Typography.L1.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),
@@ -799,7 +804,7 @@ fun LazyListScope.MyScrapList(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = Texts.Word.PINCH,
+                text = stringResource(Res.string.word_pinch),
                 color = Colors.Gray500,
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold
@@ -838,7 +843,7 @@ fun LazyListScope.MyScrapList(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = Texts.PROFILE.EMPTY_PINCH(member.profile.nickname),
+                        text = stringResource(Res.string.profile_empty_pinch, member.profile.nickname),
                         style = Typography.B3.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
@@ -856,7 +861,7 @@ fun LazyListScope.MyScrapList(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = Texts.PROFILE.GO_PINCH_CREATE,
+                            text = stringResource(Res.string.profile_go_pinch_create),
                             style = Typography.L1.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),

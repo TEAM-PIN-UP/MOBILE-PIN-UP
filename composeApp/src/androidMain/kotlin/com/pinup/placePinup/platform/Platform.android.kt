@@ -12,6 +12,9 @@ import androidx.core.net.toUri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import coil3.PlatformContext
+import com.google.firebase.messaging.FirebaseMessaging
+import com.pinup.placePinup.BuildConfig
+import kotlinx.coroutines.tasks.await
 import org.koin.java.KoinJavaComponent
 
 class AndroidPlatform : Platform {
@@ -43,6 +46,8 @@ actual fun getPlatformName(): String = PLATFORM_ANDROID
 actual fun hLog(message: String) {
     Log.d("jsh", message)
 }
+
+actual fun isDebugBuild(): Boolean = BuildConfig.DEBUG
 
 actual fun dataStorePreferences(): DataStore<Preferences> {
     val context: Context = KoinJavaComponent.getKoin().get()

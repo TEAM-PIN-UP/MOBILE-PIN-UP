@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.setting
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -29,11 +30,11 @@ import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.login.model.SNSType
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.Const
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_chevron_right
 
 @Composable
@@ -57,7 +58,7 @@ fun SettingScreen(
         TitleBar(
             modifier = Modifier
                 .padding(start = 20.dp),
-            title = Texts.Word.SETTING,
+            title = stringResource(Res.string.word_setting),
             onLeftButtonClick = {
                 onBackPressed()
             }
@@ -73,7 +74,7 @@ fun SettingScreen(
             Text(
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                text = Texts.Setting.PROFILE_SETTING_TITLE,
+                text = stringResource(Res.string.setting_profile_setting_title),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -81,13 +82,13 @@ fun SettingScreen(
             )
 
             MenuBar(
-                text = Texts.Setting.PROFILE_INFO,
+                text = stringResource(Res.string.setting_profile_info),
                 content = {
                     Column(
                         horizontalAlignment = Alignment.End
                     ) {
                         Text(
-                            text = "SNS 로그인(${snsType?.value})",
+                            text = stringResource(Res.string.setting_sns_login_type, snsType?.value ?: ""),
                             style = Typography.L1.copy(
                                 fontWeight = FontWeight.Medium
                             ),
@@ -109,7 +110,7 @@ fun SettingScreen(
             )
 
             MenuBar(
-                text = Texts.Setting.CHANGE_PASSWORD,
+                text = stringResource(Res.string.setting_change_password),
                 onClick = {
                     if (snsType == SNSType.PINUP) onChangedPassword()
                 }
@@ -120,7 +121,7 @@ fun SettingScreen(
             Text(
                 modifier = Modifier
                     .padding(start = 20.dp),
-                text = Texts.Setting.CS_TITLE,
+                text = stringResource(Res.string.setting_cs_title),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -128,7 +129,7 @@ fun SettingScreen(
             )
 
             MenuBar(
-                text = Texts.Setting.QA,
+                text = stringResource(Res.string.setting_qa),
                 onClick = {
                     openBrowser(
                         context = context,
@@ -138,7 +139,7 @@ fun SettingScreen(
             )
 
             MenuBar(
-                text = Texts.Setting.SUGGEST,
+                text = stringResource(Res.string.setting_suggest),
                 onClick = {
                     openBrowser(
                         context = context,
@@ -148,7 +149,7 @@ fun SettingScreen(
             )
 
             MenuBar(
-                text = Texts.Setting.SERVICE_TERM,
+                text = stringResource(Res.string.setting_service_term),
                 onClick = {
                     openBrowser(
                         context = context,
@@ -158,7 +159,7 @@ fun SettingScreen(
             )
 
             MenuBar(
-                text = Texts.Setting.PERSONAL_TERM,
+                text = stringResource(Res.string.setting_personal_term),
                 onClick = {
                     openBrowser(
                         context = context,
@@ -172,7 +173,7 @@ fun SettingScreen(
             Text(
                 modifier = Modifier
                     .padding(start = 20.dp),
-                text = Texts.Word.ETC,
+                text = stringResource(Res.string.word_etc),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -180,7 +181,7 @@ fun SettingScreen(
             )
 
             MenuBar(
-                text = Texts.Setting.VERSION,
+                text = stringResource(Res.string.setting_version),
                 content = {
                     Text(
                         text = "v.1.0",
@@ -207,7 +208,7 @@ fun SettingScreen(
                 Text(
                     modifier = Modifier
                         .padding(vertical = 20.dp),
-                    text = Texts.Setting.LOGOUT,
+                    text = stringResource(Res.string.setting_logout),
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -229,7 +230,7 @@ fun SettingScreen(
                 Text(
                     modifier = Modifier
                         .padding(vertical = 20.dp),
-                    text = Texts.Setting.UNREGISTER,
+                    text = stringResource(Res.string.setting_unregister),
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -241,10 +242,10 @@ fun SettingScreen(
 
     if (isShowLogoutDialog.value) {
         PDialog(
-            titleText = Texts.Setting.LOGOUT_DIALOG_TITLE,
-            descriptionText = Texts.Setting.LOGOUT_DIALOG_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Setting.LOGOUT,
+            titleText = stringResource(Res.string.setting_logout_dialog_title),
+            descriptionText = stringResource(Res.string.setting_logout_dialog_description),
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.setting_logout),
             onLeftButtonClick = {
                 isShowLogoutDialog.value = false
             },

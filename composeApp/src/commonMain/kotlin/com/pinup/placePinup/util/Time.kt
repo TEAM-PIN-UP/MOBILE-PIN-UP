@@ -41,6 +41,10 @@ private val dtRegex = Regex(
 /** 7일 미만: ~분전/시간전/일전, 7일 이상: yy.MM.dd */
 fun relativeOrDate(
     input: String,
+    justNow: String = "방금 전",
+    minuteSuffix: String = "분 전",
+    hourSuffix: String = "시간 전",
+    daySuffix: String = "일 전",
     now: Instant = Clock.System.now(),
     tz: TimeZone = TimeZone.currentSystemDefault()
 ): String {
@@ -64,17 +68,20 @@ fun relativeOrDate(
         return "$yy.$mm.$dd"
     }
 
-    val suffix = "전"
     return when {
-        sec < 60L      -> "방금 $suffix"
-        sec < 3600L    -> "${sec / 60}분$suffix"
-        sec < DAY      -> "${sec / 3600}시간$suffix"
-        else           -> "${sec / DAY}일$suffix"
+        sec < 60L      -> justNow
+        sec < 3600L    -> "${sec / 60}$minuteSuffix"
+        sec < DAY      -> "${sec / 3600}$hourSuffix"
+        else           -> "${sec / DAY}$daySuffix"
     }
 }
 
 fun relativeOrDate(
     input: List<Int>,
+    justNow: String = "방금 전",
+    minuteSuffix: String = "분 전",
+    hourSuffix: String = "시간 전",
+    daySuffix: String = "일 전",
     now: Instant = Clock.System.now(),
     tz: TimeZone = TimeZone.currentSystemDefault()
 ): String {
@@ -94,11 +101,10 @@ fun relativeOrDate(
         return "$yy.$mm.$dd"
     }
 
-    val suffix = "전"
     return when {
-        sec < 60L   -> "방금 $suffix"
-        sec < 3600L -> "${sec / 60}분$suffix"
-        sec < DAY   -> "${sec / 3600}시간$suffix"
-        else        -> "${sec / DAY}일$suffix"
+        sec < 60L   -> justNow
+        sec < 3600L -> "${sec / 60}$minuteSuffix"
+        sec < DAY   -> "${sec / 3600}$hourSuffix"
+        else        -> "${sec / DAY}$daySuffix"
     }
 }

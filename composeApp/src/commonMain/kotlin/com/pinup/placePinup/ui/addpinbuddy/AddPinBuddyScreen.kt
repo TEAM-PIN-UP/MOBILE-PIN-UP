@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.addpinbuddy
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -36,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import com.pinup.placePinup.domain.model.RelationType
 import com.pinup.placePinup.extentions.clickableWithNoRipple
-import com.pinup.placePinup.ui.theme.Texts
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 
@@ -126,7 +128,7 @@ fun AddPinBuddyScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = Texts.FEED.RECENT_SEARCH,
+                    text = stringResource(Res.string.feed_recent_search),
                     color = Colors.Gray800,
                     style = Typography.B2.copy(
                         fontWeight = FontWeight.Medium
@@ -180,7 +182,7 @@ fun AddPinBuddyScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = Texts.PROFILE.SEARCH_RESULT,
+                        text = stringResource(Res.string.profile_search_result),
                         style = Typography.B2.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -203,7 +205,7 @@ fun AddPinBuddyScreen(
                             Text(
                                 modifier = Modifier
                                     .padding(top = 12.dp),
-                                text = "검색 결과가 없어요",
+                                text = stringResource(Res.string.search_no_result),
                                 style = Typography.H3,
                                 color = Colors.Neutral800
                             )
@@ -211,7 +213,7 @@ fun AddPinBuddyScreen(
                             Text(
                                 modifier = Modifier
                                     .padding(top = 6.dp),
-                                text = "검색어를 확인해주세요.",
+                                text = stringResource(Res.string.search_check_keyword),
                                 style = Typography.B3,
                                 color = Colors.Neutral500
                             )
@@ -266,7 +268,7 @@ fun FriendButton() {
             Spacer(modifier = Modifier.width(6.dp))
 
             Text(
-                text = Texts.Word.PIN_BUDDY,
+                text = stringResource(Res.string.word_pin_buddy),
                 color = Colors.Gray800,
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold
@@ -295,7 +297,7 @@ fun AlreadyRequestButton() {
             Spacer(modifier = Modifier.width(6.dp))
 
             Text(
-                text = Texts.PROFILE.ALREADY_REQUEST_PIN_BUDDY,
+                text = stringResource(Res.string.profile_already_request_pin_buddy),
                 color = Colors.Gray800,
                 style = Typography.L1.copy(
                     fontWeight = FontWeight.SemiBold

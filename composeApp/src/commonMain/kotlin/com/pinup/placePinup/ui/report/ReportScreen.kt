@@ -20,9 +20,9 @@ import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pinup.composeapp.generated.resources.*
 
 @Composable
@@ -31,6 +31,30 @@ fun ReportScreen(
     onBackPressed : () -> Unit = {},
     onReportClick : (String) -> Unit = {}
 ) {
+    val title = when (reportType) {
+        ReportType.COMMENT -> stringResource(Res.string.report_type_comment)
+        ReportType.PINLOG -> stringResource(Res.string.report_type_pinlog)
+        ReportType.USER -> stringResource(Res.string.report_type_user)
+    }
+    val description = when (reportType) {
+        ReportType.COMMENT -> stringResource(Res.string.report_description_comment)
+        ReportType.PINLOG -> stringResource(Res.string.report_description_pinlog)
+        ReportType.USER -> stringResource(Res.string.report_description_user)
+    }
+    val reasons = when (reportType) {
+        ReportType.COMMENT, ReportType.PINLOG -> listOf(
+            stringResource(Res.string.report_reason_harmful_content),
+            stringResource(Res.string.report_reason_false_info),
+            stringResource(Res.string.report_reason_hate_speech),
+            stringResource(Res.string.report_reason_etc),
+        )
+        ReportType.USER -> listOf(
+            stringResource(Res.string.report_reason_user_impersonation),
+            stringResource(Res.string.report_reason_user_harmful),
+            stringResource(Res.string.report_reason_etc),
+        )
+    }
+
     Column(
         modifier = Modifier
             .padding(horizontal = 20.dp)
@@ -38,7 +62,7 @@ fun ReportScreen(
     ) {
         TitleBar(
             onLeftButtonClick = onBackPressed,
-            title = Texts.Report.getReportTitle(reportType.title)
+            title = title
         )
 
         PHorizontalDivider()
@@ -46,7 +70,7 @@ fun ReportScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = Texts.Report.getDescription(reportType),
+            text = description,
             style = Typography.B3.copy(
                 fontWeight = FontWeight.SemiBold
             ),
@@ -57,7 +81,7 @@ fun ReportScreen(
 
         PHorizontalDivider()
 
-        Texts.Report.getReportReason(reportType).forEach {
+        reasons.forEach {
             Row(
                 modifier = Modifier
                     .clickableWithNoRipple {

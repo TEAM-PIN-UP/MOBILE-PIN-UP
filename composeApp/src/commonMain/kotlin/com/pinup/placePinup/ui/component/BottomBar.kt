@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.component
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -6,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,7 +35,6 @@ import com.pinup.placePinup.extentions.clickableSingleWithNoRipple
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -79,7 +81,7 @@ fun BottomBar(
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = Texts.PinLog.WRITE_PINLOG,
+                            text = stringResource(Res.string.pin_log_write_pinlog),
                             color = Colors.Gray600,
                             style = Typography.B3.copy(
                                 fontWeight = FontWeight.SemiBold
@@ -106,7 +108,7 @@ fun BottomBar(
                         Spacer(modifier = Modifier.width(8.dp))
 
                         Text(
-                            text = Texts.Pinch.CREATE_MY_PINCH,
+                            text = stringResource(Res.string.pinch_create_my),
                             color = Colors.Gray600,
                             style = Typography.B3.copy(
                                 fontWeight = FontWeight.SemiBold
@@ -181,7 +183,7 @@ fun BottomBar(
 }
 
 @Composable
-fun BottomBarMenuItem(
+fun RowScope.BottomBarMenuItem(
     selectedMenu: MainDestination,
     selectedMode: Boolean = false,
     myMenu: MainDestination,
@@ -206,22 +208,22 @@ fun BottomBarMenuItem(
     }
 
     val text = when(myMenu){
-        MainDestination.Article -> Texts.Word.ARTICLE
-        MainDestination.Feed -> Texts.Word.FEED
-        MainDestination.Map -> Texts.Word.PIN_MAP
-        MainDestination.My -> Texts.Word.MY
+        MainDestination.Article -> stringResource(Res.string.word_article)
+        MainDestination.Feed -> stringResource(Res.string.word_feed)
+        MainDestination.Map -> stringResource(Res.string.word_pin_map)
+        MainDestination.My -> stringResource(Res.string.word_my)
         is MainDestination.Upload -> ""
     }
 
     Column(
         modifier = Modifier
+            .weight(1f)
             .padding(vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
         if (myMenu is MainDestination.Upload) {
             Image(
                 modifier = Modifier
-                    .padding(horizontal = 25.dp)
                     .background(Colors.White)
                     .clickableWithNoRipple {
                         onUploadClick()
@@ -237,7 +239,6 @@ fun BottomBarMenuItem(
         else if (myMenu != MainDestination.My) {
             Image(
                 modifier = Modifier
-                    .padding(horizontal = 25.dp)
                     .background(Colors.White)
                     .clickableWithNoRipple {
                         if (myMenu is MainDestination.Upload) return@clickableWithNoRipple
@@ -253,10 +254,11 @@ fun BottomBarMenuItem(
         } else {
             ProfileImageView(
                 modifier = Modifier
-                    .padding(horizontal = 25.dp)
+                    .padding(bottom = 2.dp)
                     .clickableWithNoRipple {
                         onBottomMenuClick(myMenu)
                     },
+                size = 22.dp,
                 imgUrl = imageUrl,
                 cornerColor = if(selectedMenu == myMenu) Colors.Main else Colors.Transparency
             )

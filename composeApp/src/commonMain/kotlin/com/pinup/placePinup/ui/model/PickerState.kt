@@ -15,8 +15,6 @@ class PickerState<T>(
     var selectedItem by mutableStateOf(initialItem)
 }
 
-enum class DateType(val value: String) {
-    YEAR("년"),
-    MONTH("월"),
-    DATE("일")
+enum class DateType {
+    YEAR, MONTH, DATE
 }

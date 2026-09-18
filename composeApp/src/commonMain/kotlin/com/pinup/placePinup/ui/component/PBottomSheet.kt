@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -85,6 +86,19 @@ fun PBottomSheet(
         }
     }
 
+    // 지도 밖(핀로그 상세 등)에서 focusPlace 로 진입해 상세가 열리는 경우,
+    // 진입 시점의 카메라 이동(isMoving) 토글 타이밍과 무관하게 시트를 half 로 올린다.
+    // halfHeight 를 key 에 포함: 진입 시점에 부모 레이아웃이 아직 측정되지 않아 halfHeight==0 이면
+    // 측정 완료로 halfHeight 가 갱신될 때 다시 실행돼 시트가 확실히 올라온다(간헐적 미상승 방지).
+    LaunchedEffect(isDetailClicked, halfHeight) {
+        if (isDetailClicked && halfHeight > hiddenHeight) {
+            realHeight = halfHeight
+            // 시트를 올린 뒤 신호를 소비한다. (제스처 게이팅으로 isMoving 이 안 떠 소비가 안 되면,
+            //  뒤로가기 등으로 재구성될 때 isDetailClicked 가 남아 내용이 빈 시트를 다시 띄우는 문제 방지)
+            consumeDetailClicked()
+        }
+    }
+
     LaunchedEffect(isFocusSearch){
         if (isFocusSearch) realHeight = expandedHeight
     }
@@ -109,6 +123,7 @@ fun PBottomSheet(
 
     Column(
         modifier = modifier
+            .fillMaxWidth()
             .height(height)
             .background(
                 color = Colors.White,

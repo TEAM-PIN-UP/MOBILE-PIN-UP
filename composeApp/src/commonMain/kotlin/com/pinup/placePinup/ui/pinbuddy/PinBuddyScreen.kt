@@ -1,4 +1,6 @@
 package com.pinup.placePinup.ui.pinbuddy
+import pinup.composeapp.generated.resources.Res
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,20 +44,24 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.*
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
-import com.pinup.placePinup.ui.theme.Texts
+import com.pinup.placePinup.domain.model.PagingPinBuddy
+import com.pinup.placePinup.domain.model.PagingPinBuddyRequest
+import com.pinup.placePinup.extentions.ScrollToEndCallback
+import kotlinx.collections.immutable.toPersistentList
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PinBuddyScreen(
-    pinBuddies: PersistentList<Profile>,
-    sentPinBuddyRequests: PersistentList<PinBuddyRequest>,
-    receivePinBuddyRequests: PersistentList<PinBuddyRequest>,
+    pinBuddies: PagingPinBuddy,
+    sentPinBuddyRequests: PagingPinBuddyRequest,
+    receivePinBuddyRequests: PagingPinBuddyRequest,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
     onDeletePinBuddy: (Int) -> Unit = {},
@@ -67,10 +73,18 @@ fun PinBuddyScreen(
     scope: CoroutineScope = rememberCoroutineScope(),
     onRefresh: () -> Unit = {},
     isRefreshing: Boolean = false,
+    getMorePinBuddy: () -> Unit,
+    getMoreReceivePinBuddy: () -> Unit,
+    getMoreSentPinBuddy: () -> Unit,
 ) {
     val isShowCompleteDialog = remember { mutableStateOf<Pair<Boolean, Int?>>(false to null) }
-    val pages = remember { listOf(Texts.Word.PIN_BUDDY, Texts.PROFILE.RECEIVE_REQUEST , Texts.PROFILE.SENT_REQUEST) }
-    val listSize = listOf(pinBuddies.size, receivePinBuddyRequests.size, sentPinBuddyRequests.size)
+    val pinBuddyLabel = stringResource(Res.string.word_pin_buddy)
+    val receiveRequestLabel = stringResource(Res.string.profile_receive_request)
+    val sentRequestLabel = stringResource(Res.string.profile_sent_request)
+    val pages = remember(pinBuddyLabel, receiveRequestLabel, sentRequestLabel) {
+        listOf(pinBuddyLabel, receiveRequestLabel, sentRequestLabel)
+    }
+    val listSize = listOf(pinBuddies.totalElements, receivePinBuddyRequests.totalElements, sentPinBuddyRequests.totalElements)
     val pagerState = rememberPagerState{ pages.size }
     val pullRefreshState = rememberPullRefreshState(
         refreshing = isRefreshing,
@@ -93,7 +107,7 @@ fun PinBuddyScreen(
             TitleBar(
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                title = Texts.Word.PIN_BUDDY,
+                title = stringResource(Res.string.word_pin_buddy),
                 onLeftButtonClick = onBackPressed,
                 rightIcon = painterResource(Res.drawable.ic_search),
                 onRightButtonClick = onClickSearch
@@ -133,7 +147,7 @@ fun PinBuddyScreen(
                                 textAlign = TextAlign.Center
                             )
 
-                            if (receivePinBuddyRequests.isNotEmpty()) {
+                            if (receivePinBuddyRequests.pinBuddyRequests.isNotEmpty()) {
                                 Image(
                                     painter = painterResource(Res.drawable.ic_new_alarm),
                                     contentDescription = "new pinBuddy request"
@@ -163,26 +177,29 @@ fun PinBuddyScreen(
                 when (it) {
                     0 -> {
                         PinBuddyList(
-                            pinBuddies = pinBuddies,
+                            pinBuddies = pinBuddies.profiles.toPersistentList(),
                             onProfileClick = onProfileClick,
                             onDeletePinBuddy = { memberId ->
                                 isShowCompleteDialog.value = true to memberId
                             },
+                            getMorePinBuddy = getMorePinBuddy
                         )
                     }
                     1 -> {
                         ReceivePinBuddyRequestList(
-                            receivePinBuddyRequests = receivePinBuddyRequests,
+                            receivePinBuddyRequests = receivePinBuddyRequests.pinBuddyRequests.toPersistentList(),
                             onProfileClick = onProfileClick,
                             onAcceptClick = onAcceptClick,
                             onRejectClick = onRejectClick,
+                            getMoreReceivePinBuddy = getMoreReceivePinBuddy
                         )
                     }
                     else -> {
                         SentPinBuddyRequestList(
-                            sentPinBuddyRequests = sentPinBuddyRequests,
+                            sentPinBuddyRequests = sentPinBuddyRequests.pinBuddyRequests.toPersistentList(),
                             onProfileClick = onProfileClick,
                             onDeletePinBuddyRequest = onDeletePinBuddyRequest,
+                            getMoreSentPinBuddy = getMoreSentPinBuddy
                         )
                     }
                 }
@@ -198,10 +215,10 @@ fun PinBuddyScreen(
 
     if (isShowCompleteDialog.value.first) {
         PDialog(
-            titleText = Texts.PROFILE.DIALOG_DELETE_PIN_BUDDY_TITLE,
-            descriptionText = Texts.PROFILE.DIALOG_DELETE_PIN_BUDDY_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_DELETE,
+            titleText = stringResource(Res.string.profile_dialog_delete_pin_buddy_title),
+            descriptionText = stringResource(Res.string.profile_dialog_delete_pin_buddy_description),
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
                 isShowCompleteDialog.value = false to null
             },
@@ -220,7 +237,14 @@ private fun PinBuddyList(
     pinBuddies: PersistentList<Profile>,
     onProfileClick: (Int, Int) -> Unit,
     onDeletePinBuddy: (Int) -> Unit,
+    getMorePinBuddy: () -> Unit,
 ) {
+    val scrollState = rememberLazyListState()
+
+    ScrollToEndCallback(scrollState) {
+        getMorePinBuddy()
+    }
+
     if (pinBuddies.isEmpty()) {
         Column(
             modifier = Modifier
@@ -236,7 +260,7 @@ private fun PinBuddyList(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = Texts.PROFILE.EMPTY_PIN_BUDDY,
+                text = stringResource(Res.string.profile_empty_pin_buddy),
                 color = Colors.Gray400,
                 style = Typography.B1.copy(
                     fontWeight = FontWeight.SemiBold
@@ -246,6 +270,7 @@ private fun PinBuddyList(
         }
     } else {
         LazyColumn(
+            state = scrollState,
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .padding(top = 24.dp),
@@ -271,7 +296,7 @@ private fun PinBuddyList(
                             Text(
                                 modifier = Modifier
                                     .padding(vertical = 8.dp, horizontal = 12.dp),
-                                text = Texts.Word.DELETE,
+                                text = stringResource(Res.string.word_delete),
                                 color = Colors.Gray500,
                                 style = Typography.L1.copy(
                                     fontWeight = FontWeight.SemiBold
@@ -294,7 +319,14 @@ private fun SentPinBuddyRequestList(
     sentPinBuddyRequests: PersistentList<PinBuddyRequest>,
     onProfileClick: (Int, Int) -> Unit,
     onDeletePinBuddyRequest: (Int) -> Unit,
+    getMoreSentPinBuddy: () -> Unit,
 ) {
+    val scrollState = rememberLazyListState()
+
+    ScrollToEndCallback(scrollState) {
+        getMoreSentPinBuddy()
+    }
+
     if (sentPinBuddyRequests.isEmpty()) {
         Column(
             modifier = Modifier
@@ -310,7 +342,7 @@ private fun SentPinBuddyRequestList(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = Texts.PROFILE.EMPTY_SENT_PIN_BUDDY,
+                text = stringResource(Res.string.profile_empty_sent_pin_buddy),
                 color = Colors.Gray400,
                 style = Typography.B1.copy(
                     fontWeight = FontWeight.SemiBold
@@ -320,6 +352,7 @@ private fun SentPinBuddyRequestList(
         }
     } else {
         LazyColumn(
+            state = scrollState,
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .padding(top = 24.dp),
@@ -345,7 +378,7 @@ private fun SentPinBuddyRequestList(
                             Text(
                                 modifier = Modifier
                                     .padding(vertical = 8.dp, horizontal = 12.dp),
-                                text = Texts.PROFILE.CANCEL_SENT_REQUEST,
+                                text = stringResource(Res.string.profile_cancel_sent_request),
                                 color = Colors.Gray500,
                                 style = Typography.L1.copy(
                                     fontWeight = FontWeight.SemiBold
@@ -369,7 +402,14 @@ private fun ReceivePinBuddyRequestList(
     onProfileClick: (Int, Int) -> Unit,
     onRejectClick: (Int) -> Unit,
     onAcceptClick: (Int) -> Unit,
+    getMoreReceivePinBuddy: () -> Unit,
 ) {
+    val scrollState = rememberLazyListState()
+
+    ScrollToEndCallback(scrollState) {
+        getMoreReceivePinBuddy()
+    }
+
     if (receivePinBuddyRequests.isEmpty()) {
         Column(
             modifier = Modifier
@@ -385,7 +425,7 @@ private fun ReceivePinBuddyRequestList(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = Texts.PROFILE.EMPTY_RECEIVE_PIN_BUDDY,
+                text = stringResource(Res.string.profile_empty_receive_pin_buddy),
                 color = Colors.Gray400,
                 style = Typography.B1.copy(
                     fontWeight = FontWeight.SemiBold
@@ -421,7 +461,7 @@ private fun ReceivePinBuddyRequestList(
                                 Text(
                                     modifier = Modifier
                                         .padding(vertical = 8.dp, horizontal = 12.dp),
-                                    text = Texts.Word.ACCEPT,
+                                    text = stringResource(Res.string.word_accept),
                                     color = Colors.Gray100,
                                     style = Typography.L1.copy(
                                         fontWeight = FontWeight.SemiBold
@@ -443,7 +483,7 @@ private fun ReceivePinBuddyRequestList(
                                 Text(
                                     modifier = Modifier
                                         .padding(vertical = 8.dp, horizontal = 12.dp),
-                                    text = Texts.Word.REFUSE,
+                                    text = stringResource(Res.string.word_refuse),
                                     color = Colors.Gray500,
                                     style = Typography.L1.copy(
                                         fontWeight = FontWeight.SemiBold

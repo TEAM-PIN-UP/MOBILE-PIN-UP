@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.feed
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,7 +12,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.feed.search.FeedSearchScreen
 import com.pinup.placePinup.ui.main.compose.MainDestination
-import com.pinup.placePinup.ui.theme.Texts
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -42,10 +44,10 @@ fun FeedRoute(
 
     if (isShowDeleteDialog.value) {
         PDialog(
-            titleText = Texts.PinLog.DELETE_DIALOG_TITLE,
-            descriptionText = Texts.PinLog.DELETE_DIALOG_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_DELETE,
+            titleText = stringResource(Res.string.pin_log_delete_dialog_title),
+            descriptionText = stringResource(Res.string.pin_log_delete_dialog_description),
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
                 isShowDeleteDialog.value = false
             },
@@ -74,7 +76,11 @@ fun FeedRoute(
             onClickDelete = viewModel::deleteReview,
             onClickDetail = onClickDetail,
             onClickLike = viewModel::likeChanged,
-            onMoveUserProfile = viewModel::onProfileClick
+            onMoveUserProfile = viewModel::onProfileClick,
+            onClickPlace = { kakaoPlaceId, reviewId ->
+                viewModel.moveToPlaceOnMap(kakaoPlaceId, reviewId)
+                onClickBottomNav(MainDestination.Map)
+            },
         )
     } else {
         FeedScreen(
@@ -93,6 +99,10 @@ fun FeedRoute(
             },
             onClickDetail = onClickDetail,
             onClickLike = viewModel::likeChanged,
+            onClickPlace = { kakaoPlaceId, reviewId ->
+                viewModel.moveToPlaceOnMap(kakaoPlaceId, reviewId)
+                onClickBottomNav(MainDestination.Map)
+            },
             onRefresh = viewModel::refreshView,
             onMoveUserProfile = viewModel::onProfileClick
         )

@@ -7,10 +7,13 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.placePinup.platform.ContextFactory
 import com.pinup.placePinup.ui.component.PDialog
+import com.pinup.placePinup.ui.login.sns.rememberKakaoShareStrings
 import com.pinup.placePinup.ui.main.compose.MainDestination
-import com.pinup.placePinup.ui.theme.Texts
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun MyRoute(
@@ -28,10 +31,15 @@ fun MyRoute(
     onMovePints: (Int) -> Unit = {},
     onMovePinchWrite: () -> Unit = {},
     onMovePintsDetail: (Int) -> Unit = {},
+    onMoveNotification: () -> Unit = {},
 ) {
     val uiState = myViewModel.uiState.collectAsStateWithLifecycle()
     val isShowDeleteDialog = remember { mutableStateOf(false) }
     val isClickedFeedId = remember { mutableStateOf(-1) }
+    val kakaoStrings = rememberKakaoShareStrings(uiState.value.member.profile.nickname)
+    val onClickShare = remember(kakaoStrings) {
+        { myViewModel.shareMyProfile(kakaoStrings.title, kakaoStrings.content, kakaoStrings.button) }
+    }
 
     LifecycleResumeEffect(Unit) {
         myViewModel.initMyInfo()
@@ -40,10 +48,10 @@ fun MyRoute(
 
     if (isShowDeleteDialog.value) {
         PDialog(
-            titleText = Texts.PinLog.DELETE_DIALOG_TITLE,
-            descriptionText = Texts.PinLog.DELETE_DIALOG_DESCRIPTION,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_DELETE,
+            titleText = stringResource(Res.string.pin_log_delete_dialog_title),
+            descriptionText = stringResource(Res.string.pin_log_delete_dialog_description),
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_delete),
             onLeftButtonClick = {
                 isShowDeleteDialog.value = false
             },
@@ -60,6 +68,7 @@ fun MyRoute(
         scrapList = uiState.value.scrapList,
         pinchPageAble = uiState.value.pinchPageAble,
         isRefreshing = uiState.value.isRefreshing,
+        onAlarmClick = onMoveNotification,
         onProfileModifyClick = onProfileModifyClick,
         onMovePinBuddy = onMovePinBuddy,
         onSettingClick = onMoveSetting,
@@ -74,7 +83,11 @@ fun MyRoute(
         onClickPinLog = onClickPinLog,
         onClickLike = myViewModel::likeChanged,
         onClickDetail = onClickDetail,
-        onClickShare = myViewModel::shareMyProfile,
+        onClickPlace = { kakaoPlaceId, reviewId ->
+            myViewModel.moveToPlaceOnMap(kakaoPlaceId, reviewId)
+            onClickBottomNav(MainDestination.Map)
+        },
+        onClickShare = onClickShare,
         onClickMoreScrap = onClickMoreScrap,
         onMovePlaceDetail = onMovePlaceDetail,
         onMovePints = onMovePints,

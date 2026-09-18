@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.component
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.pinup.placePinup.domain.model.Review
+import com.pinup.placePinup.extentions.clickableSingleWithNoRipple
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Texts
@@ -36,6 +38,7 @@ import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.relativeOrDate
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_comment
 import pinup.composeapp.generated.resources.ic_heart_off
 import pinup.composeapp.generated.resources.ic_heat_on
@@ -49,8 +52,13 @@ fun FeedView(
     onClickMenu: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onClickDetail: (Int) -> Unit = {},
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
     onMoveUserProfile: (String) -> Unit = {}
 ) {
+    val justNow = stringResource(Res.string.time_just_now)
+    val minuteSuffix = stringResource(Res.string.time_minute_suffix)
+    val hourSuffix = stringResource(Res.string.time_hour_suffix)
+    val daySuffix = stringResource(Res.string.time_day_suffix)
     var isOverflow by remember { mutableStateOf(false) }
     val pagerState = rememberPagerState(pageCount = { item.reviewImageUrls?.size ?: 0})
 
@@ -92,7 +100,7 @@ fun FeedView(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = relativeOrDate(item.createdAt),
+                    text = relativeOrDate(item.createdAt, justNow, minuteSuffix, hourSuffix, daySuffix),
                     style = Typography.L2.copy(
                         fontWeight = FontWeight.Medium
                     ),
@@ -116,7 +124,10 @@ fun FeedView(
 
         RoundedBox(
             modifier = Modifier
-                .padding(start = 20.dp),
+                .padding(start = 20.dp)
+                .clickableWithNoRipple {
+                    if (item.kakaoPlaceId.isNotBlank()) onClickPlace(item.kakaoPlaceId, item.id)
+                },
             cornerColor = Colors.Main,
         ) {
             Row(
@@ -168,16 +179,18 @@ fun FeedView(
                     }
                 }
 
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                ) {
-                    PagerIndicator(
-                        page = pagerState.pageCount,
-                        selectedPage = pagerState.currentPage
-                    )
+                if (item.reviewImageUrls.size != 1) {
+                    Column(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                    ) {
+                        PagerIndicator(
+                            page = pagerState.pageCount,
+                            selectedPage = pagerState.currentPage
+                        )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
             }
 
@@ -209,7 +222,7 @@ fun FeedView(
                    .clickableWithNoRipple {
                        onClickDetail(item.id)
                    },
-               text = Texts.Word.SEE_MORE,
+               text = stringResource(Res.string.word_see_more),
                style = Typography.B3.copy(
                    fontWeight = FontWeight.Medium
                ),
@@ -227,7 +240,7 @@ fun FeedView(
         ) {
             Image(
                 modifier = Modifier
-                    .clickableWithNoRipple {
+                    .clickableSingleWithNoRipple {
                         onClickLike(item.id, item.isLikedByUser)
                     },
                 painter = painterResource(if (item.isLikedByUser) Res.drawable.ic_heat_on else Res.drawable.ic_heart_off),

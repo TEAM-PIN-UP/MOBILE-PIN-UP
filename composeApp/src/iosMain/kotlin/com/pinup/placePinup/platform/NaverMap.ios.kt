@@ -27,13 +27,15 @@ actual fun PlatformNaverMap(
     placeDetailUiState: PlaceDetailUiState,
     isShowPinch: Boolean,
     cameraPosition: Position?,
+    cameraZoom: Double?,
     onPlaceClick: (String) -> Unit,
     onCameraStateChange: (CameraState) -> Unit,
     onMapClick: () -> Unit
 ) {
     val factory = LocalNativeViewFactory.current
-    LaunchedEffect(key1 = cameraPosition) {
-        hLog("cameraPosition>>> $cameraPosition")
+    // 카메라 이동/줌은 네이티브(MapView.swift)가 viewModel.mapUiState 를 직접 구독해 처리한다.
+    LaunchedEffect(key1 = cameraPosition, key2 = cameraZoom) {
+        hLog("cameraPosition>>> $cameraPosition, cameraZoom>>> $cameraZoom")
     }
 
     //TODO 네이버 맵에도 터치 이벤트 달아야 함.

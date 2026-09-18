@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.component
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -17,7 +20,6 @@ import com.pinup.placePinup.domain.model.AuthorInfo
 import com.pinup.placePinup.domain.model.Comment
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.relativeOrDate
 
@@ -30,6 +32,11 @@ fun CommentView(
     onClickProfile: (String) -> Unit = {},
     onReplyClick: (Int) -> Unit = {},
 ) {
+    val justNow = stringResource(Res.string.time_just_now)
+    val minuteSuffix = stringResource(Res.string.time_minute_suffix)
+    val hourSuffix = stringResource(Res.string.time_hour_suffix)
+    val daySuffix = stringResource(Res.string.time_day_suffix)
+
     Row(
         modifier = modifier
     ) {
@@ -63,7 +70,7 @@ fun CommentView(
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Text(
-                    text = relativeOrDate(comment.createdAt),
+                    text = relativeOrDate(comment.createdAt, justNow, minuteSuffix, hourSuffix, daySuffix),
                     style = Typography.L2.copy(
                         fontWeight = FontWeight.Medium
                     ),
@@ -78,6 +85,7 @@ fun CommentView(
                     .combinedClickable(
                         onClick = {},
                         onLongClick = {
+                            if (!comment.isOwn) return@combinedClickable
                             onClickMenu(comment.isOwn, comment.id, comment.content, comment.author)
                         }
                     ),
@@ -95,7 +103,7 @@ fun CommentView(
                     .clickableWithNoRipple {
                         onReplyClick(comment.id)
                     },
-                text = Texts.Word.DO_REPLY_COMMENT,
+                text = stringResource(Res.string.word_do_reply_comment),
                 style = Typography.B3.copy(
                     fontWeight = FontWeight.Medium
                 ),
@@ -139,7 +147,7 @@ fun CommentView(
                                 Spacer(modifier = Modifier.width(4.dp))
 
                                 Text(
-                                    text = relativeOrDate(it.createdAt),
+                                    text = relativeOrDate(it.createdAt, justNow, minuteSuffix, hourSuffix, daySuffix),
                                     style = Typography.L2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),
@@ -153,7 +161,10 @@ fun CommentView(
                                 modifier = Modifier
                                     .combinedClickable(
                                         onClick = {},
-                                        onLongClick = { onClickMenu(comment.isOwn, comment.id, comment.content, comment.author) },
+                                        onLongClick = {
+                                            if (!comment.isOwn) return@combinedClickable
+                                            onClickMenu(comment.isOwn, comment.id, comment.content, comment.author)
+                                        },
                                     ),
                                 text = it.content,
                                 style = Typography.B3.copy(

@@ -33,6 +33,7 @@ import com.pinup.placePinup.ui.placeDetail.PlaceDetailViewModel
 import com.pinup.placePinup.ui.profilesetting.ProfileSettingViewModel
 import com.pinup.placePinup.ui.setting.unregister.UnRegisterViewModel
 import com.pinup.placePinup.ui.image.DetailImageViewModel
+import com.pinup.placePinup.ui.notification.NotificationViewModel
 import com.pinup.placePinup.ui.report.ReportViewModel
 
 val viewModelModule = module {
@@ -68,4 +69,5 @@ val viewModelModule = module {
     viewModelOf(::PinchDetailViewModel)
     viewModelOf(::DetailImageViewModel)
     viewModelOf(::ReportViewModel)
+    viewModelOf(::NotificationViewModel)
 }

@@ -33,15 +33,19 @@ class ReportViewModel (
         }
     }
 
-    fun report(reason: String) {
-        when(reportType) {
-            COMMENT -> reportComment(reason)
-            PINLOG -> reportPinlog(reason)
-            USER -> reportUser(reason)
+    fun report(reason: String) = viewModelScope.launch {
+        // 사유 항목은 누르자마자 신고가 나가므로 응답 전에 다시 누르면 신고가 두 번 저장된다. 요청 중엔 막는다.
+        if (isLoading.value) return@launch
+        withLoading {
+            when(reportType) {
+                COMMENT -> reportComment(reason)
+                PINLOG -> reportPinlog(reason)
+                USER -> reportUser(reason)
+            }
         }
     }
 
-    private fun reportUser(reason: String) = viewModelScope.launch {
+    private suspend fun reportUser(reason: String) {
         val request = ReportUserRequest(
             reportedUserId = targetId,
             reason = reason
@@ -53,7 +57,7 @@ class ReportViewModel (
         )
     }
 
-    private fun reportComment(reason: String) = viewModelScope.launch {
+    private suspend fun reportComment(reason: String) {
         val request = ReportCommentRequest(
             commentId = targetId,
             reason = reason
@@ -65,7 +69,7 @@ class ReportViewModel (
         )
     }
 
-    private fun reportPinlog(reason: String) = viewModelScope.launch {
+    private suspend fun reportPinlog(reason: String) {
         val request = ReportPinlogRequest(
             pintsId = targetId,
             reason = reason

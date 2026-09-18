@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.pinlogDetail
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -63,14 +64,13 @@ import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.component.bottomSheet.ReportBlockMenuBottomSheet
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
-import com.pinup.placePinup.ui.theme.Texts.PinLog.COMMENT_REPLY_HINT
 import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.toShortDateXd
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_comment
 import pinup.composeapp.generated.resources.ic_comment_upload
 import pinup.composeapp.generated.resources.ic_heart_off
@@ -208,7 +208,7 @@ fun PinlogDetailScreen(
                 TitleBar(
                     modifier = Modifier
                         .padding(start = 20.dp),
-                    title = Texts.PinLog.DETAIL_TITLE,
+                    title = stringResource(Res.string.pin_log_detail_title),
                     onLeftButtonClick = onBackPressed
                 )
 
@@ -252,7 +252,7 @@ fun PinlogDetailScreen(
                                     Spacer(modifier = Modifier.height(6.dp))
 
                                     Text(
-                                        text = "${toShortDateXd(pinlogDetail.visitedDate)} 방문",
+                                        text = stringResource(Res.string.review_visited_date, toShortDateXd(pinlogDetail.visitedDate)),
                                         style = Typography.L2.copy(
                                             fontWeight = FontWeight.Medium
                                         ),
@@ -309,7 +309,7 @@ fun PinlogDetailScreen(
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Text(
-                                            text = Texts.Word.PINLOG,
+                                            text = stringResource(Res.string.word_pinlog),
                                             style = Typography.L2.copy(
                                                 fontWeight = FontWeight.Medium
                                             ),
@@ -367,7 +367,7 @@ fun PinlogDetailScreen(
                                     Spacer(modifier = Modifier.weight(1f))
 
                                     Text(
-                                        text = "${pinlogDetail.createdAt[0]}.${pinlogDetail.createdAt[1]}.${pinlogDetail.createdAt[2]} 작성",
+                                        text = stringResource(Res.string.review_written_date, "${pinlogDetail.createdAt[0]}.${pinlogDetail.createdAt[1]}.${pinlogDetail.createdAt[2]}"),
                                         style = Typography.L2.copy(
                                             fontWeight = FontWeight.Medium
                                         ),
@@ -402,16 +402,18 @@ fun PinlogDetailScreen(
                                             }
                                         }
 
-                                        Column(
-                                            modifier = Modifier
-                                                .align(Alignment.BottomCenter)
-                                        ) {
-                                            PagerIndicator(
-                                                page = pagerState.pageCount,
-                                                selectedPage = pagerState.currentPage
-                                            )
+                                        if (pinlogDetail.reviewImageUrls.size != 1) {
+                                            Column(
+                                                modifier = Modifier
+                                                    .align(Alignment.BottomCenter)
+                                            ) {
+                                                PagerIndicator(
+                                                    page = pagerState.pageCount,
+                                                    selectedPage = pagerState.currentPage
+                                                )
 
-                                            Spacer(modifier = Modifier.height(8.dp))
+                                                Spacer(modifier = Modifier.height(8.dp))
+                                            }
                                         }
                                     }
                                 }
@@ -484,7 +486,7 @@ fun PinlogDetailScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Text(
-                                    text = Texts.Word.COMMENT + " " + pinlogDetail.commentCount.toString(),
+                                    text = stringResource(Res.string.word_comment) + " " + pinlogDetail.commentCount.toString(),
                                     style = Typography.T2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),
@@ -570,7 +572,7 @@ fun PinlogDetailScreen(
                             ),
                             singleLine = false,
                             onValueChange = onValueChange,
-                            placeholder = if(replyId == null) Texts.PinLog.COMMENT_HINT else COMMENT_REPLY_HINT,
+                            placeholder = if(replyId == null) stringResource(Res.string.pin_log_comment_hint) else stringResource(Res.string.pin_log_comment_reply_hint),
                             placeholderStyle = Typography.B3.copy(
                                 fontWeight = FontWeight.Medium
                             ),

@@ -121,19 +121,36 @@ class WriteReviewViewModel (
     }
 
     fun uploadImage(imgPath: ByteArray) = viewModelScope.launch {
+        updateState { copy(isUploading = true) }
         resultResponse(
             response = imageUploadUseCase(
                 type = ImageUploadType.REVIEWS,
                 image = imgPath
             ),
-            successCallback = ::addImage
+            successCallback = ::addImage,
+            errorCallback = { updateState { copy(isUploading = false) } }
+        )
+    }
+
+    fun uploadCameraImage(imgPath: ByteArray) = viewModelScope.launch {
+        emitEvent(WriteReviewUiEvent.FinishCamera)
+        updateState { copy(isUploading = true) }
+
+        resultResponse(
+            response = imageUploadUseCase(
+                type = ImageUploadType.REVIEWS,
+                image = imgPath
+            ),
+            successCallback = ::addImage,
+            errorCallback = { updateState { copy(isUploading = false) } }
         )
     }
 
     private fun addImage(imgPath: String) = viewModelScope.launch {
         updateState {
             copy(
-                imagePaths = imagePaths + imgPath
+                imagePaths = imagePaths + imgPath,
+                isUploading = false
             )
         }
     }
@@ -164,11 +181,15 @@ class WriteReviewViewModel (
     }
 
     fun uploadPinLog() = viewModelScope.launch {
-        if (reviewId != 0) {
-            editPinlog()
-            return@launch
+        // 응답 전에 다시 누르면 같은 핀로그가 두 번 저장되므로 요청 중엔 막는다.
+        if (isLoading.value) return@launch
+        withLoading {
+            if (reviewId != 0) editPinlog() else registerPinlog()
         }
-        val place = uiState.value.selectedPlace ?: return@launch
+    }
+
+    private suspend fun registerPinlog() {
+        val place = uiState.value.selectedPlace ?: return
         val request = AddReviewRequest(
             reviewRequest = ReviewRequest(
                 content = uiState.value.content,
@@ -196,7 +217,7 @@ class WriteReviewViewModel (
         )
     }
 
-    private fun editPinlog() = viewModelScope.launch {
+    private suspend fun editPinlog() {
         val request = ReviewRequest(
             content = uiState.value.content,
             starRating = uiState.value.starRating,
@@ -219,7 +240,8 @@ data class WriteReviewUiState(
     val starRating: Double = 0.0,
     val content: String = "",
     val imagePaths: List<String> = emptyList(),
-    val clickedImage: String = ""
+    val clickedImage: String = "",
+    val isUploading: Boolean = false
 ) : UiState {
     val isEnableRegister: Boolean = (starRating != 0.0) && (content.length >= 10)
 }
@@ -228,4 +250,5 @@ sealed interface WriteReviewUiEvent : UiEvent {
     data object MoveWriteReview : WriteReviewUiEvent
     data object SuccessWriteReview : WriteReviewUiEvent
     data object SuccessEditReview : WriteReviewUiEvent
+    data object FinishCamera : WriteReviewUiEvent
 }

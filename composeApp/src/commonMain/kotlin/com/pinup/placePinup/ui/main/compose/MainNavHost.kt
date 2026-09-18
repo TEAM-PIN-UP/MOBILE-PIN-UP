@@ -5,6 +5,7 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -14,14 +15,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.pinup.placePinup.domain.model.FCMType
+import com.pinup.placePinup.event.DetailPlaceEventBus
 import com.pinup.placePinup.platform.ContextFactory
-import com.pinup.placePinup.ui.article.ArticleRoute
+import com.pinup.placePinup.platform.FcmBridgeStore
 import com.pinup.placePinup.ui.feed.FeedRoute
+import com.pinup.placePinup.ui.component.NotDevelopTabScreen
 import com.pinup.placePinup.ui.main.MainViewModel
 import com.pinup.placePinup.ui.map.MapRoute
 import com.pinup.placePinup.ui.my.MyRoute
 import kotlinx.serialization.Serializable
 import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.article_title
 
 @Composable
 fun MainNavHost(
@@ -47,10 +54,26 @@ fun MainNavHost(
     onClickArticle: (Int) -> Unit = {},
     onMovePints: (Int) -> Unit = {},
     onMoveDetailImage: (Int, List<String>) -> Unit = {_,_ -> },
+    onMoveNotification: () -> Unit = {},
 ) {
     val uiState = mainViewModel.uiState.collectAsStateWithLifecycle()
     val selectedMenuBar = remember { mutableStateOf<MainDestination>(MainDestination.Map) }
     val currentDestination = navHostController.currentBackStackEntryAsState().value?.destination
+    val focusPlace by DetailPlaceEventBus.focusPlace.collectAsStateWithLifecycle()
+    val focusReviewId by DetailPlaceEventBus.focusReviewId.collectAsStateWithLifecycle()
+
+    // 지도 밖에서 장소 센터링 요청이 들어오면 어느 탭에 있든 지도 탭으로 전환한다.
+    LaunchedEffect(focusPlace) {
+        if (focusPlace == null) return@LaunchedEffect
+        navHostController.navigate(MainDestination.Map) {
+            launchSingleTop = true
+            restoreState = true
+            popUpTo(navHostController.graph.startDestinationId) {
+                saveState = true
+            }
+        }
+    }
+
     LaunchedEffect(currentDestination) {
         if (MainDestination.Map::class.qualifiedName == currentDestination?.route) {
             selectedMenuBar.value = MainDestination.Map
@@ -65,7 +88,7 @@ fun MainNavHost(
 
     LaunchedEffect(userId) {
         if (userId == -1) return@LaunchedEffect
-        if (userId== uiState.value.myId) {
+        if (userId == uiState.value.myId) {
             navHostController.navigate(MainDestination.My) {
                 launchSingleTop = true
                 restoreState = true
@@ -77,6 +100,55 @@ fun MainNavHost(
             onMoveUserProfileWithId(userId)
         }
         updateUserId(-1)
+    }
+
+    LaunchedEffect(mainViewModel.isMyPage) {
+        if (mainViewModel.isMyPage) {
+            navHostController.navigate(MainDestination.My) {
+                launchSingleTop = true
+                restoreState = true
+                popUpTo(navHostController.graph.startDestinationId) {
+                    saveState = true
+                }
+            }
+            mainViewModel.isMyPage = false
+        } else {
+            return@LaunchedEffect
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        FcmBridgeStore.pending.collect {
+            if (it == null) return@collect
+            val (type, targetId) = it
+
+            when (FCMType.of(type)) {
+                FCMType.FRIEND_LOG_SAME_PLACE,
+                FCMType.FRIEND_LOG_CREATED -> onMovePlaceDetail(targetId.toString())
+                FCMType.MEMORY_REMINDER,
+                FCMType.LOG_LIKE,
+                FCMType.LOG_COMMENT -> onMovePinlogDetail(targetId)
+                FCMType.FRIEND_REQUEST -> onMovePinBuddy()
+                FCMType.FRIEND_REQUEST_ACCEPTED -> onMoveUserProfileWithId(targetId)
+                FCMType.SUMMARY_WEEKLY,
+                FCMType.SUMMARY_MONTHLY -> {
+                    navHostController.navigate(MainDestination.My) {
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(navHostController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                    }
+                }
+                FCMType.FEATURE_UPDATE,
+                FCMType.ANNIVERSARY,
+                FCMType.WEEKLY_RECOMMENDATION, //TODO 아티클로 보내는듯
+                FCMType.DAILY_LOG_REMINDER,
+                FCMType.WEEKLY_LOG_REMINDER,
+                FCMType.DORMANT_USER_REENGAGEMENT -> {}
+            }
+            FcmBridgeStore.consume()
+        }
     }
 
     Column {
@@ -92,6 +164,9 @@ fun MainNavHost(
         ) {
             composable<MainDestination.Map> {
                 MapRoute(
+                    focusPlaceId = focusPlace,
+                    focusReviewId = focusReviewId,
+                    onConsumeFocusPlace = DetailPlaceEventBus::consumeFocusPlace,
                     onBottomMenuClick = {
                         if (it is MainDestination.Upload) {
                             if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()
@@ -112,6 +187,9 @@ fun MainNavHost(
                     onMoveWriteReview = onMoveNewWriteReview,
                     onMoveUserProfile = {
                         onMoveUserProfileWithName(it)
+                    },
+                    onMoveUserProfileWithId = {
+                        onMoveUserProfileWithId(it)
                     },
                     onClickArticle = onClickArticle
                 )
@@ -144,9 +222,14 @@ fun MainNavHost(
                 )
             }
 
+            // 아티클 준비중 처리: 하단 탭은 그대로 두고 진입 시 준비중 화면만 보여준다.
+            // 되돌릴 때는 아래 블록을 ArticleRoute(onClickBottomNav = ..., onClickDetail = onClickArticleDetail) 로 되돌리면 된다.
             composable<MainDestination.Article> {
-                ArticleRoute(
-                    onClickBottomNav = {
+                NotDevelopTabScreen(
+                    selectedMenu = MainDestination.Article,
+                    profileImage = uiState.value.profileImage,
+                    title = stringResource(Res.string.article_title),
+                    onBottomMenuClick = {
                         if (it is MainDestination.Upload) {
                             if (it.isPinlogWrite) onMoveWriteReview(0) else onMovePinchWrite()
                         } else {
@@ -158,8 +241,7 @@ fun MainNavHost(
                                 }
                             }
                         }
-                    },
-                    onClickDetail = onClickArticleDetail
+                    }
                 )
             }
 
@@ -198,6 +280,7 @@ fun MainNavHost(
                     onMovePlaceDetail = onMovePlaceDetail,
                     onMovePinchWrite = onMovePinchWrite,
                     onMovePintsDetail = onMovePintsDetail,
+                    onMoveNotification = onMoveNotification
                 )
             }
         }

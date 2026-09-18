@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.pinup.placePinup.ui.component.LoadingDialog
 import com.pinup.placePinup.ui.login.model.SNSType
 import com.pinup.placePinup.ui.signup.SignUpUiEvent
 import com.pinup.placePinup.ui.signup.SignUpViewModel
@@ -20,6 +21,7 @@ fun SignUpRoute(
     signUpViewModel: SignUpViewModel = koinViewModel()
 ) {
     val uiState = signUpViewModel.uiState.collectAsStateWithLifecycle()
+    val isLoading = signUpViewModel.isLoading.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         signUpViewModel.uiEvent.collectLatest {
@@ -50,4 +52,8 @@ fun SignUpRoute(
         onSignUpClick = signUpViewModel::signUp,
         onBackPressed = onBackPressed
     )
+
+    if (isLoading.value) {
+        LoadingDialog()
+    }
 }

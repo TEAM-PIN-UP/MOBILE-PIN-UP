@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.pinup.placePinup.platform.ContextFactory
+import com.pinup.placePinup.ui.component.LoadingDialog
 import org.koin.compose.viewmodel.koinViewModel
 import com.pinup.placePinup.ui.login.LoginUiEvent
 import com.pinup.placePinup.ui.login.LoginViewModel
@@ -29,6 +30,7 @@ fun LoginRoute(
     viewModel: LoginViewModel = koinViewModel(parameters = { parametersOf(contextFactory) })
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val toast = rememberToastState()
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collectLatest {
@@ -60,5 +62,9 @@ fun LoginRoute(
             .padding(top = 24.dp, start = 20.dp, end = 20.dp),
         state = toast
     )
+
+    if (isLoading) {
+        LoadingDialog()
+    }
 
 }

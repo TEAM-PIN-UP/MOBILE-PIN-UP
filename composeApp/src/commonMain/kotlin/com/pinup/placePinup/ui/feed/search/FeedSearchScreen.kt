@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.feed.search
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,12 +46,12 @@ import com.pinup.placePinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_back
 import pinup.composeapp.generated.resources.ic_cancel_300
 import pinup.composeapp.generated.resources.ic_close
@@ -73,6 +74,7 @@ fun FeedSearchScreen(
     onClickDetail: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = {_, _ -> },
     onMoveUserProfile: (String) -> Unit = {},
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
 ) {
 
     val scope: CoroutineScope = rememberCoroutineScope()
@@ -176,7 +178,7 @@ fun FeedSearchScreen(
                     modifier = Modifier.padding(horizontal = 20.dp)
                 ) {
                     Text(
-                        text = Texts.FEED.RECENT_SEARCH,
+                        text = stringResource(Res.string.feed_recent_search),
                         color = Colors.Gray800,
                         style = Typography.B2.copy(
                             fontWeight = FontWeight.Medium
@@ -243,7 +245,8 @@ fun FeedSearchScreen(
                             },
                             onClickLike = onClickLike,
                             onClickDetail = onClickDetail,
-                            onMoveUserProfile = onMoveUserProfile
+                            onMoveUserProfile = onMoveUserProfile,
+                            onClickPlace = onClickPlace
                         )
 
                         PHorizontalDivider(modifier = Modifier.height(10.dp))

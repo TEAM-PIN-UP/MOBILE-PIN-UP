@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.feed
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,12 +44,12 @@ import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.component.PinlogMenuBottomSheet
 import com.pinup.placePinup.ui.main.compose.MainDestination
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_search
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -64,6 +65,7 @@ fun FeedScreen(
     onClickDelete: (Int) -> Unit = {},
     onClickDetail: (Int) -> Unit = {},
     onClickLike: (Int, Boolean) -> Unit = { _, _ -> },
+    onClickPlace: (String, Int) -> Unit = { _, _ -> },
     onRefresh: () -> Unit = {},
     onMoveUserProfile: (String) -> Unit = {},
 ) {
@@ -115,7 +117,7 @@ fun FeedScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = Texts.Word.FEED,
+                    text = stringResource(Res.string.word_feed),
                     style = Typography.T1.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
@@ -144,7 +146,7 @@ fun FeedScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = Texts.FEED.EMPTY_FEED,
+                        text = stringResource(Res.string.feed_empty_feed),
                         color = Colors.Gray400,
                         style = Typography.B1.copy(
                             fontWeight = FontWeight.SemiBold
@@ -181,6 +183,7 @@ fun FeedScreen(
                                 },
                                 onClickLike = onClickLike,
                                 onClickDetail = onClickDetail,
+                                onClickPlace = onClickPlace,
                                 onMoveUserProfile = onMoveUserProfile
                             )
 
@@ -209,7 +212,14 @@ fun FeedScreen(
             BottomBar(
                 selectedMenu = MainDestination.Feed,
                 profileImage = profile,
-                onBottomMenuClick = onClickBottomNav,
+                onBottomMenuClick = { destination ->
+                    if (destination == MainDestination.Feed) {
+                        // 이미 피드 화면일 때 피드 메뉴를 다시 누르면 맨 위로 이동
+                        scope.launch { scrollState.animateScrollToItem(0) }
+                    } else {
+                        onClickBottomNav(destination)
+                    }
+                },
                 onSizeChanged = { bottomBarHeight = it }
             )
         }

@@ -9,6 +9,7 @@ import com.pinup.placePinup.domain.model.getSuccessOrNull
 import com.pinup.placePinup.domain.model.mapSuccessData
 import com.pinup.placePinup.event.LogoutEventBus
 import com.pinup.placePinup.platform.hLog
+import com.pinup.placePinup.platform.isDebugBuild
 import com.pinup.placePinup.remote.api.AuthApi
 import com.pinup.placePinup.remote.api.createAuthApi
 import de.jensklingenberg.ktorfit.Ktorfit
@@ -16,6 +17,7 @@ import de.jensklingenberg.ktorfit.converter.Converter
 import de.jensklingenberg.ktorfit.converter.KtorfitResult
 import de.jensklingenberg.ktorfit.converter.TypeData
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
@@ -24,10 +26,12 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.plugin
 import io.ktor.client.request.headers
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
+import io.ktor.http.content.TextContent
 import io.ktor.http.contentType
 import io.ktor.http.withCharset
 import io.ktor.serialization.kotlinx.json.json
@@ -40,8 +44,10 @@ import org.koin.dsl.module
 import kotlin.reflect.typeOf
 
 val httpClientModule = module {
-    single {
-        val client = HttpClient {
+    // HttpClient를 별도 정의로 노출한다 — 로그아웃 시 Auth 플러그인의 토큰 캐시를
+    // 비우려면(clearToken) 클라이언트 인스턴스 자체에 접근할 수 있어야 한다.
+    single<HttpClient> {
+        HttpClient {
             val membersLocalDataSource: MembersLocalDataSource = get()
             install(ContentNegotiation) {
                 json(
@@ -64,8 +70,18 @@ val httpClientModule = module {
 
             install(Auth) {
                 bearer {
+                    // 토큰 적재는 Auth 플러그인이 담당한다(suspend 컨텍스트라 DataStore를 정상 await).
+                    // 예전엔 defaultRequest에서 runBlocking으로 읽어 붙였는데, defaultRequest는
+                    // 요청을 시작한 코루틴(대개 Main)에서 실행되므로 모든 API 호출이 메인 스레드를
+                    // 디스크 I/O만큼 정지시켰다. 게다가 Auth 플러그인이 그 헤더를 지우고 자기
+                    // 캐시로 덮어쓰기 때문에 로그아웃 후에도 이전 계정 토큰이 나가는 버그가 있었다.
+                    loadTokens {
+                        val access = membersLocalDataSource.getAccessToken()
+                        if (access.isBlank()) null
+                        else BearerTokens(access, membersLocalDataSource.getRefreshToken())
+                    }
                     refreshTokens {
-                        val refreshToken = runBlocking { membersLocalDataSource.getRefreshToken() }
+                        val refreshToken = membersLocalDataSource.getRefreshToken()
                         val authApi: AuthApi = getKtorfit().createAuthApi()
                         val response =
                             authApi.refreshToken("Bearer $refreshToken").mapSuccessData().getSuccessOrNull()
@@ -85,22 +101,35 @@ val httpClientModule = module {
                 }
             }
             defaultRequest {
-                val accessToken = runBlocking { membersLocalDataSource.getAccessToken() }
-                headers {
-                    append("Authorization", "Bearer $accessToken")
-                }
+                // Authorization은 Auth 플러그인이 붙인다(위 loadTokens/refreshTokens).
+                // 여기서 append하면 Auth가 어차피 remove 후 덮어쓰므로 토큰 소스만 이원화된다.
                 contentType(ContentType.Application.Json.withCharset(Charsets.UTF_8))
             }
+        }.also { client ->
+            if (isDebugBuild()) logRequestBody(client)
         }
+    }
 
+    single {
         val json = Json {
             ignoreUnknownKeys = true
         }
         Ktorfit.Builder()
-            .baseUrl("http://43.200.161.96:8080/")
-            .httpClient(client)
+            .baseUrl("http://133.186.212.6:8080/")
+            .httpClient(get<HttpClient>())
             .converterFactories(PResultConverterFactory(json))
             .build()
+    }
+}
+
+// 디버그 빌드에서만 요청 body 를 남긴다. (응답 body 는 PResultConverterFactory 의 kLog 가 남김)
+// Ktor Logging 의 BODY/ALL 레벨은 3.0.3 에서 응답 body 관찰 중 호출이 끝나지 않아 앱이 스플래시에서 멈추므로 쓰지 않는다.
+private fun logRequestBody(client: HttpClient) {
+    client.plugin(HttpSend).intercept { request ->
+        (request.body as? TextContent)?.let {
+            hLog("REQUEST BODY: ${request.method.value} ${request.url.buildString()}\n${it.text}")
+        }
+        execute(request)
     }
 }
 
@@ -132,7 +161,7 @@ fun getKtorfit(): Ktorfit {
         ignoreUnknownKeys = true
     }
     return Ktorfit.Builder()
-        .baseUrl("http://43.200.161.96:8080/")
+        .baseUrl("http://133.186.212.6:8080/")
         .httpClient(client)
         .converterFactories(PResultConverterFactory(json))
         .build()

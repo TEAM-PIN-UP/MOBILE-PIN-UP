@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.my.scrap
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,13 +41,13 @@ import com.pinup.placePinup.ui.component.SortBottomSheet
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.model.ChipState
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_alarm
 import pinup.composeapp.generated.resources.ic_chevron_bottom
 import pinup.composeapp.generated.resources.ic_right_arrow
@@ -97,7 +98,7 @@ fun ScrapScreen(
             TitleBar(
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                title = Texts.Word.SCRAP,
+                title = stringResource(Res.string.word_scrap),
                 onLeftButtonClick = onBackPressed,
             )
 
@@ -125,7 +126,7 @@ fun ScrapScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = sortType.text,
+                            text = stringResource(sortType.textRes),
                             style = Typography.B4
                         )
 
@@ -163,7 +164,7 @@ fun ScrapScreen(
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = Texts.PROFILE.EMPTY_SCRAP,
+                        text = stringResource(Res.string.profile_empty_scrap),
                         style = Typography.B1.copy(
                             fontWeight = FontWeight.SemiBold
                         ),
@@ -181,7 +182,7 @@ fun ScrapScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = Texts.PROFILE.GO_PINLOG,
+                            text = stringResource(Res.string.profile_go_pinlog),
                             style = Typography.B2.copy(
                                 fontWeight = FontWeight.SemiBold
                             ),

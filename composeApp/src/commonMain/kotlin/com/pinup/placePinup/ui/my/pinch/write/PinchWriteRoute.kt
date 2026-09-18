@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.my.pinch.write
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -8,8 +11,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.pinup.placePinup.domain.model.Place
 import com.pinup.placePinup.domain.model.Position
+import com.pinup.placePinup.ui.component.LoadingDialog
 import com.pinup.placePinup.ui.component.PDialog
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.util.Const
 import dev.icerock.moko.geo.compose.BindLocationTrackerEffect
 import dev.icerock.moko.geo.compose.LocationTrackerAccuracy
@@ -32,6 +35,7 @@ fun PinchWriteRoute(
     )
     val viewModel: PinchWriteViewModel = koinViewModel(parameters = { parametersOf(locationTrackerFactory.createLocationTracker()) })
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val isLoading = viewModel.isLoading.collectAsStateWithLifecycle()
     val isShowCompleteDialog = remember { mutableStateOf(false to 0) }
 
     LaunchedEffect(Unit) {
@@ -69,15 +73,20 @@ fun PinchWriteRoute(
         moveItem = viewModel::moveItem,
         onClickDelete = viewModel::deletePinch,
         onPlaceClick = viewModel::updatePlace,
-        registerPints = viewModel::registerPints
+        registerPints = viewModel::registerPints,
+        initCollectLocation = viewModel::initCollectLocation
     )
+
+    if (isLoading.value) {
+        LoadingDialog()
+    }
 
     if (isShowCompleteDialog.value.first) {
         PDialog(
-            titleText = Texts.Pinch.PINTS_WRITE_COMPLETE_DIALOG_TITLE,
-            descriptionText = Texts.Pinch.PINTS_WRITE_COMPLETE_DIALOG_CONTENT,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_CONFiRM,
+            titleText = stringResource(Res.string.pinch_write_complete_dialog_title),
+            descriptionText = stringResource(Res.string.pinch_write_complete_dialog_content),
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_confirm),
             onLeftButtonClick = {
                 isShowCompleteDialog.value = false to isShowCompleteDialog.value.second
                 onBackPressed()

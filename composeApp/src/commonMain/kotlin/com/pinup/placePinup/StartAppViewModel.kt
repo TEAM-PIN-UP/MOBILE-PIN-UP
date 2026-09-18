@@ -2,6 +2,8 @@ package com.pinup.placePinup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pinup.placePinup.domain.model.UpdateMessage
+import com.pinup.placePinup.domain.model.UpdateStore
 import com.pinup.placePinup.domain.usecase.LogoutUseCase
 import com.pinup.placePinup.event.LogoutEventBus
 import com.pinup.placePinup.platform.KakaoDeepLinkStore
@@ -38,7 +40,7 @@ class StartAppViewModel(
                 _uiState.update {
                     it.copy(
                         alertState = it.alertState.copy(
-                            title = message ?: "세션이 만료되어 로그아웃 되었습니다.\n다시 로그인 해주세요.",
+                            title = message ?: "",
                             isShow = true
                         )
                     )
@@ -82,11 +84,30 @@ class StartAppViewModel(
         }
         KakaoDeepLinkStore.onNewParams(userId.toString())
     }
+
+    fun dismissUpdateDialog() {
+        _uiState.update {
+            it.copy(
+                updateDialogState = UpdateDialogState.NoUpdate
+            )
+        }
+    }
+
+    fun remindLaterUpdateDialog() {
+        // TODO 다음에 하기 처리
+
+        _uiState.update {
+            it.copy(
+                updateDialogState = UpdateDialogState.NoUpdate
+            )
+        }
+    }
 }
 
 data class StartAppUiState(
     val isLogin: Boolean? = null,
     val alertState: AlertState = AlertState(),
+    val updateDialogState: UpdateDialogState = UpdateDialogState.Loading,
     val userId: Int = -1,
     val errorMessage: String = "",
 )
@@ -99,4 +120,45 @@ data class AlertState(
     val rightButtonText: String = "",
     val onLeftButtonClick: () -> Unit = {},
     val onRightButtonClick: () -> Unit = {},
+)
+
+sealed interface UpdateDialogState {
+    data object Loading : UpdateDialogState
+    data object NoUpdate : UpdateDialogState
+    data class UpdateRequired(
+        val type: UpdateType,
+        val message: UpdateMessage,
+        val store: UpdateStore
+    ) : UpdateDialogState
+}
+
+enum class UpdateType {
+    OPTIONAL, FORCE
+}
+
+// TODO API 연동 후 삭제 예정
+val dummyForceUpdateState = UpdateDialogState.UpdateRequired(
+    type = UpdateType.FORCE,
+    message = UpdateMessage(
+        title = "",
+        body = ""
+    ),
+    store = UpdateStore(
+        url = "https://play.google.com/store/apps/details?id=com.pinup.placePinup",
+        market = "playstore",
+        packageNameOrBundleId = "com.pinup.placePinup"
+    )
+)
+
+val dummyOptionalUpdateState = UpdateDialogState.UpdateRequired(
+    type = UpdateType.OPTIONAL,
+    message = UpdateMessage(
+        title = "",
+        body = ""
+    ),
+    store = UpdateStore(
+        url = "https://play.google.com/store/apps/details?id=com.pinup.placePinup",
+        market = "playstore",
+        packageNameOrBundleId = "com.pinup.placePinup"
+    )
 )

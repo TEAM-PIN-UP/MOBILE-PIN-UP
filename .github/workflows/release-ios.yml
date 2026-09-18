@@ -1,0 +1,110 @@
+name: Release iOS
+
+# develop 에 코드가 올라오면 TestFlight 로,
+# master 에 올라오면 App Store 에 올리고 심사 제출한다 (승인되면 자동 출시).
+on:
+  push:
+    branches:
+      - develop
+      - master
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - "composeApp/src/androidMain/**"
+      - "fastlane/metadata/android/**"
+      - ".github/workflows/release-android.yml"
+  workflow_dispatch:
+    inputs:
+      lane:
+        description: "beta = TestFlight 업로드, release = App Store 심사 제출"
+        type: choice
+        options:
+          - beta
+          - release
+        default: beta
+
+concurrency:
+  group: release-ios-${{ github.ref_name }}
+  # develop 은 연달아 푸시되면 이전 빌드를 취소하고 최신 커밋만 올린다. master(심사 제출)는 끝까지 돌린다.
+  cancel-in-progress: ${{ github.ref_name == 'develop' }}
+
+jobs:
+  deploy:
+    name: Build & Upload to App Store Connect
+    runs-on: macos-26
+    # Kotlin/Native Release 빌드 + (release 는) 빌드 처리 대기·심사 제출까지 오래 걸린다.
+    timeout-minutes: 150
+    env:
+      LC_ALL: en_US.UTF-8
+      LANG: en_US.UTF-8
+
+    steps:
+      - name: Check out Repository
+        uses: actions/checkout@v4
+
+      # 로컬 개발 환경과 같은 Xcode 로 맞춘다. 로컬 Xcode 를 올리면 여기도 같이 올린다.
+      - name: Select Xcode 26.2
+        run: sudo xcode-select -s /Applications/Xcode_26.2.app
+
+      # Xcode 빌드 단계에서 ./gradlew embedAndSignAppleFrameworkForXcode 가 돈다.
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: temurin
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+          bundler-cache: true
+
+      - name: Restore secrets
+        env:
+          LOCAL_PROPERTIES: ${{ secrets.LOCAL_PROPERTIES }}
+          ASC_KEY_P8_BASE64: ${{ secrets.ASC_KEY_P8_BASE64 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          for name in LOCAL_PROPERTIES ASC_KEY_P8_BASE64 ASC_KEY_ID ASC_ISSUER_ID; do
+            if [ -z "${!name}" ]; then
+              echo "::error::GitHub Secret '$name' 이 등록되지 않았습니다. docs/CI_CD.md 참고"
+              exit 1
+            fi
+          done
+          # composeApp/build.gradle.kts 가 구성 단계에서 local.properties 키를 읽으므로 iOS 빌드에도 필요하다.
+          printf '%s' "$LOCAL_PROPERTIES" > local.properties
+          printf '%s' "$ASC_KEY_P8_BASE64" | base64 -d > "$RUNNER_TEMP/AuthKey.p8"
+          echo "ASC_KEY_PATH=$RUNNER_TEMP/AuthKey.p8" >> "$GITHUB_ENV"
+
+      - name: Cache Pods
+        uses: actions/cache@v4
+        with:
+          path: iosApp/Pods
+          key: pods-${{ runner.os }}-${{ hashFiles('iosApp/Podfile.lock') }}
+
+      - name: Install Pods
+        working-directory: iosApp
+        run: pod install
+
+      - name: Build & Upload
+        env:
+          # 수동 실행은 고른 레인, master 푸시는 release(심사 제출), 그 외(develop)는 beta(TestFlight)
+          LANE: ${{ inputs.lane || (github.ref_name == 'master' && 'release') || 'beta' }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: bundle exec fastlane ios "$LANE"
+
+      - name: Upload IPA & dSYM
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-release
+          path: |
+            build/ios/*.ipa
+            build/ios/*.dSYM.zip
+          if-no-files-found: ignore
+          retention-days: 14

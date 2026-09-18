@@ -6,13 +6,31 @@ import KakaoSDKAuth
 import KakaoSDKCommon
 import NidThirdPartyLogin
 import NMapsMap
+import FirebaseMessaging
+import UserNotifications
 
-class AppDelegate: NSObject, UIApplicationDelegate {
+class AppDelegate: NSObject, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {
   func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
       FirebaseApp.configure()
       KakaoSDK.initSDK(appKey: "25ad8729a58b6d767f7e48a2d359d54b")
-      NidOAuth.shared.initialize()
+      Messaging.messaging().delegate = self
+      
+      UNUserNotificationCenter.current().delegate = self
+      UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
+          if let error = error {
+              print("Notification permission error:", error)
+              return
+          }
+          print("Notification permission granted:", granted)
+
+          
+          DispatchQueue.main.async {
+              UIApplication.shared.registerForRemoteNotifications()
+          }
+      }
+
+    NidOAuth.shared.initialize()
     return true
   }
     
@@ -51,6 +69,65 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return false
     }
     
+    func application(_ application: UIApplication,
+                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        Messaging.messaging().apnsToken = deviceToken
+    }
+
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        guard let fcmToken else { return }
+        FCMLinkBridge().setFcmIos(token: fcmToken)
+        print("FCM Token:", fcmToken)
+        if let tokenData = Messaging.messaging().apnsToken {
+            let hex = tokenData.map { String(format: "%02x", $0) }.joined()
+            print("✅ APNs token (hex): \(hex)")
+        } else {
+            print("⚠️ APNs token is nil")
+        }
+
+    }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("Receive silent push>", userInfo)
+        completionHandler(.newData)
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+        let userInfo = notification.request.content.userInfo
+        print(userInfo)
+        
+        
+        if #available(iOS 14.0, *) {
+            return [.sound, .banner, .list]
+        } else {
+            return []
+        }
+    }
+    
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        let userInfo = response.notification.request.content.userInfo
+        print("🔔 notification tapped userInfo:", userInfo)
+        let type = (userInfo["type"] as? String) ?? "UNKNOWN"
+        var targetId: Int = -1
+        if let id = userInfo["targetId"] as? Int {
+            targetId = id
+        } else if let idStr = userInfo["targetId"] as? String {
+            targetId = Int(idStr) ?? -1
+        }
+        if targetId != -1 {
+            print("✅ Parsing Success: type=\(type), targetId=\(targetId)")
+            FCMLinkBridge().updatePending(type: type, id: Int32(targetId))
+        } else {
+            print("⚠️ targetId 파싱 실패 또는 데이터 없음")
+        }
+
+        completionHandler()
+    }
+    
     func handleKakaoShareUrl(_ url: URL) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
         let queryItems = components.queryItems else { return false }
@@ -61,9 +138,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             params[item.name] = item.value ?? ""
         }
 
-        // KAKAO_USER_ID 값 꺼내보기
         if let userId = params["userId"] {
-            print("예아 userId")
             KakaoLinkBridge().onOpenFromKakao(userId: userId)
             return true
         } else {

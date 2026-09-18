@@ -43,11 +43,9 @@ class PinchWriteViewModel (
         if (pintsId != 0) {
             getPintsDetail()
         }
-
-        initCollectLocation()
     }
 
-    private fun initCollectLocation() = viewModelScope.launch {
+    fun initCollectLocation() = viewModelScope.launch {
         locationTracker.startTracking()
         locationTracker.getLocationsFlow()
             .distinctUntilChanged()
@@ -163,6 +161,8 @@ class PinchWriteViewModel (
     }
 
     fun registerPints() = viewModelScope.launch {
+        // 응답 전에 다시 누르면 같은 핀츠가 두 번 저장되므로 요청 중엔 막는다.
+        if (isLoading.value) return@launch
         val request = ModifyPintsRequest(
             title = uiState.value.title,
             content = uiState.value.description,
@@ -180,12 +180,14 @@ class PinchWriteViewModel (
         )
         hLog(request.toString())
 
-        resultResponse(
-            response = if (pintsId != 0) editPintsUseCase(pintsId, request) else registerPintsUseCase(request),
-            successCallback = {
-                emitEvent(PinchWriteUiEvent.SuccessModify(it))
-            }
-        )
+        withLoading {
+            resultResponse(
+                response = if (pintsId != 0) editPintsUseCase(pintsId, request) else registerPintsUseCase(request),
+                successCallback = {
+                    emitEvent(PinchWriteUiEvent.SuccessModify(it))
+                }
+            )
+        }
     }
 
     fun moveItem(from: Int, to: Int) {

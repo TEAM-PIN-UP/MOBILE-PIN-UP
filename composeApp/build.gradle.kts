@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktorfit)
+    alias(libs.plugins.googleServices)
 }
 
 kotlin {
@@ -51,6 +52,7 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.splashscreen)
             // Koin support for Android
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
@@ -66,6 +68,9 @@ kotlin {
             implementation(libs.kakao.user)
             // naver login
             implementation(libs.naver.oauth)
+            // firebase
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.messaging)
 
             implementation(libs.camera.camera2)
             implementation(libs.camera.lifecycle)
@@ -117,6 +122,9 @@ kotlin {
             implementation(libs.file.picker)
 
             implementation(libs.web.view)
+
+            // image zoomable
+            implementation(libs.zoomable)
         }
         iosMain.dependencies {
             // ktor
@@ -133,8 +141,10 @@ android {
         applicationId = "com.pinup.placePinup"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 17
-        versionName = "1.0.8"
+        // CI(fastlane)는 Play Console 에 올라간 가장 큰 versionCode + 1 을 -Ppinup.versionCode 로 넘긴다.
+        // 로컬 빌드는 아래 기본값을 쓴다.
+        versionCode = providers.gradleProperty("pinup.versionCode").orNull?.toInt() ?: 26
+        versionName = "1.1.3"
         multiDexEnabled = true
 
         buildConfigField(
@@ -173,9 +183,29 @@ android {
             excludes += "/META-INF/DEPENDENCIES"
         }
     }
+    // 업로드 키 서명. CI 에서만 환경 변수로 키스토어를 넘기고,
+    // 값이 없으면(로컬) 서명 설정을 붙이지 않아 기존처럼 Android Studio 에서 직접 서명한다.
+    val releaseKeystorePath = System.getenv("ANDROID_KEYSTORE_PATH")
+    signingConfigs {
+        if (releaseKeystorePath != null) {
+            create("release") {
+                storeFile = file(releaseKeystorePath)
+                storePassword = System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("ANDROID_KEY_ALIAS")
+                keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
+            }
+        }
+    }
     buildTypes {
         getByName("release") {
+            if (releaseKeystorePath != null) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             isDebuggable = false
+            // R8 코드 축소·난독화. 켜기 전에는 dex 266,458 메서드가 무손실로 실려 나갔다
+            // (참조하던 proguard-rules.pro 파일 자체가 존재하지 않아 규칙도 비어 있었다).
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

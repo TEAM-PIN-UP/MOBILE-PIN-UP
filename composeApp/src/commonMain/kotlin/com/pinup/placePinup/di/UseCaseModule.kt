@@ -30,6 +30,7 @@ val useCaseModule = module {
     single<GetFindIdByNicknameUseCase> { GetFindIdByNicknameUseCase(get()) }
     single<GetMemberInfoUseCase> { GetMemberInfoUseCase(get()) }
     single<GetMyProfileUseCase> { GetMyProfileUseCase(get()) }
+    single<GetNotificationUseCase> { GetNotificationUseCase(get()) }
     single<GetPhotoReviewsUseCase> { GetPhotoReviewsUseCase(get()) }
     single<GetPinBuddiesUseCase> { GetPinBuddiesUseCase(get()) }
     single<GetPinlogDetailUseCase> { GetPinlogDetailUseCase(get()) }
@@ -42,23 +43,27 @@ val useCaseModule = module {
     single<GetSentPinBuddyRequestsUseCase> { GetSentPinBuddyRequestsUseCase(get()) }
     single<GetTextReviewsUseCase> { GetTextReviewsUseCase(get()) }
     single<IsLoginUseCase> { IsLoginUseCase(get(), get(), get()) }
+    single<PostAllReadNotificationUseCase> { PostAllReadNotificationUseCase(get()) }
     single<PostCommentUseCase> { PostCommentUseCase(get()) }
     single<PostEmailVerifyUseCase> { PostEmailVerifyUseCase(get()) }
     single<PostImageUploadUseCase> { PostImageUploadUseCase(get()) }
+    single<PostReadNotificationUseCase> { PostReadNotificationUseCase(get()) }
     single<PostReviewLikeChangeUseCase> { PostReviewLikeChangeUseCase(get()) }
     single<PostSendVerifyCodeUseCase> { PostSendVerifyCodeUseCase(get()) }
     single<PostTemporaryPasswordUseCase> { PostTemporaryPasswordUseCase(get()) }
+    single<PostSetDeviceTokenUseCase> { PostSetDeviceTokenUseCase(get()) }
+    single<RegisterDeviceTokenUseCase> { RegisterDeviceTokenUseCase(get()) }
     single<PostSeveralImagesUploadUseCase> { PostSeveralImagesUploadUseCase(get()) }
     single<SocialLoginUseCase> { SocialLoginUseCase(get(), get(), get()) }
     single<EmailLoginUseCase> { EmailLoginUseCase(get(), get(), get()) }
-    single<LogoutUseCase> { LogoutUseCase(get(), get()) }
+    single<LogoutUseCase> { LogoutUseCase(get(), get(), get()) }
     single<RegisterReviewUseCase> { RegisterReviewUseCase(get()) }
     single<RegisterPintsUseCase> { RegisterPintsUseCase(get()) }
     single<RejectPinBuddyUseCase> { RejectPinBuddyUseCase(get()) }
     single<RequestPinBuddyUseCase> { RequestPinBuddyUseCase(get()) }
     single<SaveRecentSearchUseCase> { SaveRecentSearchUseCase(get()) }
     single<SaveRecentPinBuddySearchUseCase> { SaveRecentPinBuddySearchUseCase(get()) }
-    single<SaveTokenUseCase> { SaveTokenUseCase(get()) }
+    single<SaveTokenUseCase> { SaveTokenUseCase(get(), get()) }
     single<SaveUserInfoUseCase> { SaveUserInfoUseCase(get()) }
     single<SearchPlacesUseCase> { SearchPlacesUseCase(get()) }
     single<SearchUserUseCase> { SearchUserUseCase(get()) }

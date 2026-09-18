@@ -11,7 +11,6 @@ import com.kakao.sdk.template.model.FeedTemplate
 import com.kakao.sdk.template.model.Link
 import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.login.sns.KaKaoShareController
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.util.Const
 
 class AndroidKaKaoShareController: KaKaoShareController {
@@ -19,8 +18,11 @@ class AndroidKaKaoShareController: KaKaoShareController {
         context: Any,
         memberId: Int,
         memberName: String,
+        shareTitle: String,
+        shareContent: String,
+        shareButton: String,
     ) {
-        val feedTemplate = getFeed(memberId, memberName)
+        val feedTemplate = getFeed(memberId, shareTitle, shareContent, shareButton)
         if (ShareClient.instance.isKakaoTalkSharingAvailable(context as Context)) {
             ShareClient.instance.shareDefault(context, feedTemplate) { sharingResult, error ->
                 if (error != null) {
@@ -49,12 +51,12 @@ class AndroidKaKaoShareController: KaKaoShareController {
         }
     }
 
-    private fun getFeed(memberId: Int, memberName: String): FeedTemplate {
+    private fun getFeed(memberId: Int, shareTitle: String, shareContent: String, shareButton: String): FeedTemplate {
         return FeedTemplate(
             content =
                 Content(
-                    title = Texts.Kakao.getProfileShareTitle(memberName),
-                    description = Texts.Kakao.getProfileShareContent(memberName),
+                    title = shareTitle,
+                    description = shareContent,
                     imageUrl = "https://lh3.googleusercontent.com/d/1ui1iK7vFLd1wj8KuiCgXMQo3YFGMd4w-",
                     link = Link(
                         androidExecutionParams = mapOf(Const.ShareKey.KAKAO_USER_ID to memberId.toString()),
@@ -64,7 +66,7 @@ class AndroidKaKaoShareController: KaKaoShareController {
             buttons =
                 listOf(
                     Button(
-                        Texts.Kakao.PROFILE_SHARE_BUTTON,
+                        shareButton,
                         Link(
                             androidExecutionParams = mapOf(Const.ShareKey.KAKAO_USER_ID to memberId.toString()),
                             iosExecutionParams = mapOf(Const.ShareKey.KAKAO_USER_ID to memberId.toString())

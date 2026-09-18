@@ -21,6 +21,7 @@ import com.pinup.placePinup.ui.model.ChipState
 import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun Chips(
@@ -35,7 +36,7 @@ fun Chips(
     ) {
         items(chipStates) { chipState ->
             Chip(
-                text = chipState.text,
+                text = chipState.textRes?.let { stringResource(it) } ?: chipState.text,
                 isSelected = chipState.isSelected,
                 icon = chipState.icon?.let { painterResource(it) },
                 onClick = { onClick(chipState) },

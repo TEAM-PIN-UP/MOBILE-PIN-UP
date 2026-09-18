@@ -14,14 +14,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.pinup.placePinup.ui.component.CameraView
+import com.pinup.placePinup.ui.component.LoadingDialog
 import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.reviewwrite.WriteReviewUiEvent
 import com.pinup.placePinup.ui.reviewwrite.WriteReviewViewModel
 import com.pinup.placePinup.ui.reviewwrite.searchplace.SearchPlaceRoute
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.pin_log_dialog_body
+import pinup.composeapp.generated.resources.pin_log_dialog_title
+import pinup.composeapp.generated.resources.word_do_confirm
+import pinup.composeapp.generated.resources.word_do_return
 
 @Composable
 fun WriteReviewNavHost(
@@ -31,6 +38,7 @@ fun WriteReviewNavHost(
     onMoveDetailPlace: (Int) -> Unit,
 ) {
     val uiState = writeReviewViewModel.uiState.collectAsStateWithLifecycle()
+    val isLoading = writeReviewViewModel.isLoading.collectAsStateWithLifecycle()
     val navHostController = rememberNavController()
     val isShowCompleteDialog = remember { mutableStateOf(false) }
 
@@ -46,6 +54,10 @@ fun WriteReviewNavHost(
                     }
 
                     WriteReviewUiEvent.SuccessEditReview -> onBackPressed()
+
+                    WriteReviewUiEvent.FinishCamera -> {
+                        navHostController.popBackStack(WriteReviewDestination.Camera, inclusive = true)
+                    }
                 }
             }
     }
@@ -106,27 +118,42 @@ fun WriteReviewNavHost(
                         myRating = uiState.value.starRating,
                         isEnableButton = uiState.value.isEnableRegister,
                         clickedImage = uiState.value.clickedImage,
+                        isUploading = uiState.value.isUploading,
                         onValueChange = writeReviewViewModel::updateContent,
                         onRemoveImage = writeReviewViewModel::removeImage,
                         onAddImage = writeReviewViewModel::uploadImage,
                         onClickImage = writeReviewViewModel::onClickedImage,
                         onRatingSelected = writeReviewViewModel::updateRating,
                         onRegisterClick = writeReviewViewModel::uploadPinLog,
+                        onClickCamera = {
+                            navHostController.navigate(WriteReviewDestination.Camera)
+                        },
                         onBackPressed = {
                             if (writeReviewViewModel.reviewId != 0) onBackPressed() else navHostController.popBackStack()
                         }
                     )
                 }
             }
+
+            composable<WriteReviewDestination.Camera> {
+                CameraView(
+                    onCapture = writeReviewViewModel::uploadCameraImage,
+                    onDismiss = { navHostController.popBackStack() },
+                )
+            }
         }
+    }
+
+    if (isLoading.value) {
+        LoadingDialog()
     }
 
     if (isShowCompleteDialog.value) {
         PDialog(
-            titleText = Texts.PinLog.PINLOG_DIALOG_TITLE,
-            descriptionText = Texts.PinLog.PINLOG_DIALOG_BODY,
-            leftButtonText = Texts.Word.DO_RETURN,
-            rightButtonText = Texts.Word.DO_CONFiRM,
+            titleText = stringResource(Res.string.pin_log_dialog_title),
+            descriptionText = stringResource(Res.string.pin_log_dialog_body),
+            leftButtonText = stringResource(Res.string.word_do_return),
+            rightButtonText = stringResource(Res.string.word_do_confirm),
             onLeftButtonClick = {
                 isShowCompleteDialog.value = false
                 onCompleteAndBackPressed()
@@ -148,4 +175,6 @@ sealed interface WriteReviewDestination {
     data object SelectDate : WriteReviewDestination
     @Serializable
     data object WriteReview : WriteReviewDestination
+    @Serializable
+    data object Camera : WriteReviewDestination
 }

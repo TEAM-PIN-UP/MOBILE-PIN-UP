@@ -100,22 +100,20 @@ class ProfileSettingViewModel(
             profileImageUrl = profile
         )
 
-        hLog(request.toString())
-
         resultResponse(
             response = editProfileUseCase(request),
             successCallback = {
-                updateMyProfile()
+                updateMyProfile(profile)
                 emitEvent(ProfileSettingUiEvent.SuccessChangeProfile)
             }
         )
     }
 
-    private fun updateMyProfile() = viewModelScope.launch {
+    private fun updateMyProfile(profile: String) = viewModelScope.launch {
         getMyProfileUseCase().collectLatest {
             val userInfo = it.copy(
                 nickname = uiState.value.nickName,
-                profileUrl = uiState.value.profileUrl
+                profileUrl = profile
             )
             saveUserInfoUseCase(userInfo)
         }

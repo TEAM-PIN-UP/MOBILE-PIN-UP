@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.my.pinch.write
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,10 +31,13 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ExposedDropdownMenuBox
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,19 +60,33 @@ import com.pinup.placePinup.domain.model.Position
 import com.pinup.placePinup.extentions.clickableWithNoRipple
 import com.pinup.placePinup.extentions.longPressDrag
 import com.pinup.placePinup.platform.PinchNaverMap
+import com.pinup.placePinup.platform.hLog
 import com.pinup.placePinup.ui.component.IndexedRoundedTextField
 import com.pinup.placePinup.ui.component.PButton
+import com.pinup.placePinup.ui.component.PDialog
 import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.component.RoundedBox
 import com.pinup.placePinup.ui.component.RoundedTextField
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import com.pinup.placePinup.util.dragModifier
 import com.pinup.placePinup.util.rememberDragAndDropListState
+import dev.icerock.moko.permissions.DeniedAlwaysException
+import dev.icerock.moko.permissions.DeniedException
+import dev.icerock.moko.permissions.Permission
+import dev.icerock.moko.permissions.PermissionState
+import dev.icerock.moko.permissions.PermissionsController
+import dev.icerock.moko.permissions.RequestCanceledException
+import dev.icerock.moko.permissions.compose.BindEffect
+import dev.icerock.moko.permissions.compose.PermissionsControllerFactory
+import dev.icerock.moko.permissions.compose.rememberPermissionsControllerFactory
+import dev.icerock.moko.permissions.location.LOCATION
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_map_off
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -89,7 +107,9 @@ fun PinchWriteScreen(
     moveItem: (Int, Int) -> Unit = { _, _ -> },
     onPlaceClick: (Place, Int) -> Unit = { _, _ -> },
     registerPints: () -> Unit = {},
+    initCollectLocation: () -> Unit = {},
 ) {
+    val scope: CoroutineScope = rememberCoroutineScope()
 
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -105,6 +125,43 @@ fun PinchWriteScreen(
     var bottomBarHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
 
+    val permissionFactory: PermissionsControllerFactory = rememberPermissionsControllerFactory()
+    val permissionsController: PermissionsController = remember(permissionFactory) {
+        permissionFactory.createPermissionsController()
+    }
+    BindEffect(permissionsController)
+    val isPermissionGranted = remember { mutableStateOf(false) }
+    val isShowPermissionDialog = remember { mutableStateOf(false) }
+    val isFocus = remember { mutableStateOf(false) }
+
+    fun requestPermission() {
+        scope.launch {
+            try {
+                permissionsController.providePermission(Permission.LOCATION)
+            } catch (exc: RequestCanceledException) {
+                hLog("RequestCanceledException")
+                isShowPermissionDialog.value = true
+            } catch (exc: DeniedException) {
+                hLog("DeniedException")
+                isShowPermissionDialog.value = true
+            } catch (exc: DeniedAlwaysException) {
+                hLog("DeniedAlwaysException")
+                isShowPermissionDialog.value = true
+            }
+        }
+    }
+
+    LaunchedEffect(permissionsController) {
+        isPermissionGranted.value = permissionsController.isPermissionGranted(Permission.LOCATION)
+        hLog("처음 권한 확인 >>> ${isPermissionGranted.value}")
+        if (isPermissionGranted.value) {
+            initCollectLocation()
+            requestPermission()
+        } else {
+            requestPermission()
+        }
+    }
+
     Column(
         modifier = Modifier
             .background(
@@ -118,7 +175,7 @@ fun PinchWriteScreen(
             .padding(horizontal = 20.dp)
     ) {
         TitleBar(
-            title = Texts.Pinch.PINCH_WRITE,
+            title = stringResource(Res.string.pinch_write),
             onLeftButtonClick = onBackPressed,
         )
 
@@ -131,6 +188,10 @@ fun PinchWriteScreen(
                 Box(modifier = Modifier.width(IntrinsicSize.Min)) {
                     BasicTextField(
                         modifier = Modifier
+                            .onFocusChanged { state ->
+                                isFocus.value = state.hasFocus
+                                if (state.hasFocus) keyboard?.show()
+                            }
                             .focusRequester(focusRequester),
                         value = title,
                         onValueChange = onTitleChanged,
@@ -140,16 +201,17 @@ fun PinchWriteScreen(
                         ),
                         singleLine = true,
                     )
+
                 }
 
-                if (title.isEmpty()) {
+                if (title.isEmpty() && !isFocus.value) {
                     Text(
                         modifier = Modifier
                             .clickableWithNoRipple {
                                 focusRequester.requestFocus()
-                                keyboard?.show()
+                                //keyboard?.show()
                             },
-                        text = Texts.Pinch.TITLE_HINT,
+                        text = stringResource(Res.string.pinch_title_hint),
                         style = Typography.H1.copy(fontWeight = FontWeight.SemiBold),
                         color = Colors.Gray500,
                         maxLines = 1,
@@ -160,7 +222,7 @@ fun PinchWriteScreen(
             Spacer(Modifier.width(6.dp))
 
             Text(
-                text = "작성일자 $createdAt",
+                text = stringResource(Res.string.pinch_created_date, createdAt),
                 style = Typography.L2.copy(fontWeight = FontWeight.Medium),
                 color = Colors.Gray500
             )
@@ -172,7 +234,7 @@ fun PinchWriteScreen(
         RoundedTextField(
             text = description,
             onValueChange = onDescriptionChanged,
-            placeholder = Texts.Pinch.DESCRIPTION_HINT,
+            placeholder = stringResource(Res.string.pinch_description_hint),
             textStyle = Typography.B2.copy(
                 fontWeight = FontWeight.Medium
             ),
@@ -211,7 +273,7 @@ fun PinchWriteScreen(
             Spacer(modifier = Modifier.width(9.dp))
 
             Text(
-                text = Texts.Pinch.PLACE_LIST,
+                text = stringResource(Res.string.pinch_place_list),
                 style = Typography.T1.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
@@ -277,7 +339,7 @@ fun PinchWriteScreen(
                                     text = item.name,
                                     onValueChange = { onNameChanged(index, it) },
                                     index = index,
-                                    placeholder = "${index + 1}. 장소명",
+                                    placeholder = stringResource(Res.string.pinch_place_name_hint, index + 1),
                                     placeholderStyle = Typography.B2.copy(
                                         fontWeight = FontWeight.Medium
                                     ),
@@ -305,7 +367,7 @@ fun PinchWriteScreen(
                             ) {
                                 Text(
                                     modifier = Modifier.padding(vertical = 7.dp, horizontal = 17.dp),
-                                    text = Texts.Word.DELETE,
+                                    text = stringResource(Res.string.word_delete),
                                     color = Colors.White,
                                     style = Typography.L3.copy(fontWeight = FontWeight.SemiBold),
                                     textAlign = TextAlign.Center
@@ -382,7 +444,7 @@ fun PinchWriteScreen(
             PButton(
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                text = Texts.Pinch.CREATE_PINCH,
+                text = stringResource(Res.string.pinch_create),
                 onClick = {
                     registerPints()
                 },
@@ -392,5 +454,21 @@ fun PinchWriteScreen(
             Spacer(modifier = Modifier.height(39.dp))
         }
 
+    }
+
+    if (isShowPermissionDialog.value) {
+        PDialog(
+            titleText = stringResource(Res.string.permission_location_title),
+            descriptionText = stringResource(Res.string.permission_location_description),
+            leftButtonText = stringResource(Res.string.word_cancel),
+            rightButtonText = stringResource(Res.string.word_confirm),
+            onLeftButtonClick = {
+                isShowPermissionDialog.value = false
+            },
+            onRightButtonClick = {
+                isShowPermissionDialog.value = false
+                permissionsController.openAppSettings()
+            },
+        )
     }
 }

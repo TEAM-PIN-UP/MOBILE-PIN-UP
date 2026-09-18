@@ -1,4 +1,5 @@
 package com.pinup.placePinup.ui.reviewwrite.compose
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,6 +38,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
 import pinup.composeapp.generated.resources.ic_arrow_right_800
 import pinup.composeapp.generated.resources.ic_back
 import pinup.composeapp.generated.resources.ic_calendar
@@ -75,14 +77,16 @@ fun SelectDateScreen(
                 .padding(horizontal = 20.dp)
         ) {
             TitleBar(
-                title = Texts.PinLog.WRITE_PINLOG,
+                title = stringResource(Res.string.pin_log_write_pinlog),
                 onLeftButtonClick = onBackPressed
             )
 
             Spacer(modifier = Modifier.height(38.dp))
 
+            val selectDatePrefix = stringResource(Res.string.pin_log_select_date_prefix)
+            val selectDateSuffix = stringResource(Res.string.pin_log_select_date_suffix)
             Text(
-                text = Texts.PinLog.getSelectDateTitle(placeName),
+                text = Texts.PinLog.getSelectDateTitle(placeName, selectDatePrefix, selectDateSuffix),
                 style = Typography.D2.copy(
                     fontWeight = FontWeight.Bold
                 )
@@ -108,7 +112,7 @@ fun SelectDateScreen(
                         modifier = Modifier
                             .padding(vertical = 16.dp)
                             .padding(start = 20.dp),
-                        text = selectedDate.ifEmpty { Texts.PinLog.SELECT_DATE_HINT },
+                        text = selectedDate.ifEmpty { stringResource(Res.string.pin_log_select_date_hint) },
                         style = Typography.B2.copy(
                             fontWeight = FontWeight.Medium
                         ),
@@ -129,7 +133,7 @@ fun SelectDateScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             PButton(
-                text = Texts.Word.NEXT,
+                text = stringResource(Res.string.word_next),
                 isEnable = selectedDate.isNotEmpty(),
                 onClick = {
                     onClickNext()
@@ -174,7 +178,7 @@ fun DatePickerScreen(
         Spacer(modifier = Modifier.height(22.dp))
 
         PButton(
-            text = Texts.Word.CONFIRM,
+            text = stringResource(Res.string.word_confirm),
             isEnable = true,
             onClick = {
                 onSelectedDate(selectedDate)

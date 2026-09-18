@@ -23,17 +23,17 @@ import com.pinup.placePinup.ui.theme.Colors
 import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import pinup.composeapp.generated.resources.Res
-import pinup.composeapp.generated.resources.ic_apple_login
-import pinup.composeapp.generated.resources.ic_email_login
-import pinup.composeapp.generated.resources.ic_google_login
-import pinup.composeapp.generated.resources.ic_kakao_login
-import pinup.composeapp.generated.resources.ic_naver_login
+import pinup.composeapp.generated.resources.*
 
 @Composable
 fun ChoiceSignUpScreen(
     onClickSnsLogin : (SNSType) -> Unit = { },
 ) {
+    val onboardingPrefix = stringResource(Res.string.onboarding_title_prefix)
+    val onboardingHighlight = stringResource(Res.string.onboarding_title_highlight)
+    val onboardingLoginText = stringResource(Res.string.onboarding_login_text)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -45,7 +45,7 @@ fun ChoiceSignUpScreen(
 
         Text(
             modifier = Modifier,
-            text = Texts.Onboarding.ONBOARDING_LOGIN_TITLE,
+            text = Texts.Onboarding.getLoginTitle(onboardingPrefix, onboardingHighlight),
             style = Typography.D2
         )
 
@@ -53,7 +53,7 @@ fun ChoiceSignUpScreen(
 
         Text(
             modifier = Modifier,
-            text = Texts.Onboarding.ONBOARDING_LOGIN_TEXT,
+            text = onboardingLoginText,
             style = Typography.B1.copy(
                 fontWeight = FontWeight.Medium
             ),

@@ -1,4 +1,7 @@
 package com.pinup.placePinup.ui.my.pinch
+import pinup.composeapp.generated.resources.Res
+import pinup.composeapp.generated.resources.*
+import org.jetbrains.compose.resources.stringResource
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +29,6 @@ import com.pinup.placePinup.ui.component.PHorizontalDivider
 import com.pinup.placePinup.ui.component.PinchItemView
 import com.pinup.placePinup.ui.component.TitleBar
 import com.pinup.placePinup.ui.theme.Colors
-import com.pinup.placePinup.ui.theme.Texts
 import com.pinup.placePinup.ui.theme.Typography
 
 @Composable
@@ -53,7 +55,7 @@ fun PintsScreen(
         TitleBar(
             modifier = Modifier
                 .padding(horizontal = 20.dp),
-            title = Texts.Word.PINCH,
+            title = stringResource(Res.string.word_pinch),
             onLeftButtonClick = onBackPressed,
         )
 
@@ -83,7 +85,7 @@ fun PintsScreen(
                 Text(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    text = Texts.PROFILE.EMPTY_USER_PINTS,
+                    text = stringResource(Res.string.profile_empty_user_pints),
                     style = Typography.B1.copy(
                         fontWeight = FontWeight.Medium
                     ),
