@@ -156,8 +156,10 @@ platform :ios do
         clean: true,
         # 알림 확장(PinUpNotificationService)은 버전 1.0 / 빌드 1 로 앱과 달라 업로드 시 불일치 경고가 난다.
         # 앱과 확장 모두 같은 값으로 덮어쓴다.
+        # gym 은 export 명령에 export_xcargs 와 xcargs 를 모두 붙인다.
+        # 둘 다 인증 인자를 넣으면 "-authenticationKeyPath may only be provided once" 로 실패하므로
+        # xcargs 한 곳에만 둔다. (export 에도 그대로 전달된다)
         xcargs: "#{auth_args} CURRENT_PROJECT_VERSION=#{build_number} MARKETING_VERSION=#{marketing_version}",
-        export_xcargs: auth_args,
         export_options: {
           signingStyle: "automatic",
           teamID: IOS_TEAM_ID
