@@ -4,15 +4,14 @@ GitHub Actions + fastlane 으로 브랜치에 따라 자동 배포한다.
 
 | 브랜치 | Android (`release-android.yml`) | iOS (`release-ios.yml`) |
 |---|---|---|
-| `develop` | 푸시(머지)마다 Play Console **내부 테스트(internal)** | 매일 03:00 KST, develop 에 새 커밋이 있을 때만 **TestFlight** |
+| `develop` | 푸시(머지)마다 Play Console **내부 테스트(internal)** | 푸시(머지)마다 **TestFlight** |
 | `master` | 푸시(머지)마다 **프로덕션 전체 출시** (Google 검토 후 공개) | 푸시(머지)마다 **App Store 심사 제출**, 승인되면 자동 출시 |
 | 수동 | Actions → Release Android → Run workflow (트랙 선택) | Actions → Release iOS → Run workflow (`beta` / `release` 선택) |
 
-- iOS develop 빌드를 하루 1번으로 둔 이유: 저장소가 private 이라 macOS 러너가 Linux 보다 약 10배 비싸고, iOS 빌드 한 번이 40~60분 걸린다.
+- 저장소가 public 이라 GitHub 호스팅 표준 러너(macOS 포함)를 무료로 쓴다. private 으로 되돌리면 macOS 러너가 Linux 의 약 10배로 차감되므로 iOS 트리거를 다시 줄여야 한다.
 - 문서(`*.md`, `docs/`)만 바뀐 푸시는 배포하지 않는다. `iosApp/` 만 바뀌면 Android 는, `composeApp/src/androidMain/` 만 바뀌면 iOS 는 건너뛴다.
-- develop 에 연달아 푸시하면 Android 는 진행 중인 이전 빌드를 취소하고 최신 커밋만 올린다.
+- develop 에 연달아 푸시하면 진행 중인 이전 빌드를 취소하고 최신 커밋만 올린다. master 는 취소하지 않는다.
 - 기존 `pinup-ci-for-test.yml`(모든 푸시에 debug 빌드)은 그대로다.
-- 스케줄(iOS 야간 빌드)은 **master 에 있는 워크플로 파일** 기준으로 돈다. 워크플로를 바꾸면 master 까지 머지돼야 반영된다.
 
 ## 버전 규칙 (중요)
 
