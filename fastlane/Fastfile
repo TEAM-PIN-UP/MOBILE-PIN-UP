@@ -26,11 +26,12 @@ platform :android do
 
     if track == "production"
       # 버전 이름을 안 올리고 master 에 머지하면 같은 버전 이름으로 새 코드가 출시된다. 올리기 전에 막는다.
-      # Play 의 기본 출시 이름은 "versionCode (versionName)" 형식이다.
+      # 출시 이름은 올린 경로에 따라 다르다. fastlane(CI)이 올리면 versionName 그대로("1.1.3"),
+      # Play Console 에서 직접 올리면 "versionCode (versionName)"("25 (1.1.2)") 형식이다.
       gradle_file = File.read(File.expand_path("../composeApp/build.gradle.kts", __dir__))
       version_name = gradle_file[/versionName = "([^"]+)"/, 1]
       released = google_play_track_release_names(package_name: ANDROID_PACKAGE, track: "production", json_key: json_key)
-      if released.any? { |name| name.include?("(#{version_name})") }
+      if released.any? { |name| name == version_name || name.include?("(#{version_name})") }
         UI.user_error!("versionName #{version_name} 은(는) 이미 프로덕션에 출시돼 있습니다. 버전을 올린 뒤 master 에 머지하세요.")
       end
     end
