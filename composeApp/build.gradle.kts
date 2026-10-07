@@ -143,8 +143,8 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         // CI(fastlane)는 Play Console 에 올라간 가장 큰 versionCode + 1 을 -Ppinup.versionCode 로 넘긴다.
         // 로컬 빌드는 아래 기본값을 쓴다.
-        versionCode = providers.gradleProperty("pinup.versionCode").orNull?.toInt() ?: 26
-        versionName = "1.1.3"
+        versionCode = providers.gradleProperty("pinup.versionCode").orNull?.toInt() ?: 30
+        versionName = "1.1.4"
         multiDexEnabled = true
 
         buildConfigField(
