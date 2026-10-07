@@ -65,6 +65,28 @@ private func markerImage(for group: ComposeApp.CategoryGroup) -> UIImage? {
     }
 }
 
+// MARK: - 마커 이미지 캐시
+// 같은 이미지는 NMFOverlayImage 를 재사용해야 텍스처가 중복 생성되지 않는다(Naver 권장).
+// 클러스터가 합쳐지고 펼쳐질 때마다 업데이터가 불리므로 매번 새로 그리지 않게 캐시한다.
+// 마커 업데이터는 메인 스레드에서만 불리므로 동기화하지 않는다.
+private var placeOverlayImageCache: [String: NMFOverlayImage] = [:]
+private var clusterOverlayImageCache: [Int: NMFOverlayImage] = [:]
+
+private func placeOverlayImage(for group: ComposeApp.CategoryGroup) -> NMFOverlayImage? {
+    if let cached = placeOverlayImageCache[group.name] { return cached }
+    guard let image = markerImage(for: group) else { return nil }
+    let overlay = NMFOverlayImage(image: image)
+    placeOverlayImageCache[group.name] = overlay
+    return overlay
+}
+
+private func clusterOverlayImage(count: Int) -> NMFOverlayImage {
+    if let cached = clusterOverlayImageCache[count] { return cached }
+    let overlay = NMFOverlayImage(image: makeClusterImage(count: count))
+    clusterOverlayImageCache[count] = overlay
+    return overlay
+}
+
 // MARK: - NMCClusteringKey 구현
 // ⚠️ NMCClusteringKey 는 ObjC 프로토콜이고 NSCopying 을 포함함.
 // Swift 에서 다음 두 가지가 필수:
@@ -76,14 +98,12 @@ private func markerImage(for group: ComposeApp.CategoryGroup) -> UIImage? {
 class PlaceClusteringKey: NSObject, NMCClusteringKey, NSCopying {
     @objc let kakaoPlaceId: String
     @objc let name: String
-    @objc let isSelected: Bool
     let placeCategory: ComposeApp.Category
     @objc let position: NMGLatLng
 
-    init(kakaoPlaceId: String, name: String, isSelected: Bool, placeCategory: ComposeApp.Category, lat: Double, lng: Double) {
+    init(kakaoPlaceId: String, name: String, placeCategory: ComposeApp.Category, lat: Double, lng: Double) {
         self.kakaoPlaceId = kakaoPlaceId
         self.name = name
-        self.isSelected = isSelected
         self.placeCategory = placeCategory
         self.position = NMGLatLng(lat: lat, lng: lng)
         super.init()
@@ -100,7 +120,6 @@ class PlaceClusteringKey: NSObject, NMCClusteringKey, NSCopying {
         return PlaceClusteringKey(
             kakaoPlaceId: kakaoPlaceId,
             name: name,
-            isSelected: isSelected,
             placeCategory: placeCategory,
             lat: position.lat,
             lng: position.lng
@@ -118,19 +137,17 @@ class PlaceLeafMarkerUpdater: NSObject, NMCLeafMarkerUpdater {
     }
 
     func updateLeafMarker(_ info: NMCLeafMarkerInfo, _ marker: NMFMarker) {
-        guard let key = info.key as? PlaceClusteringKey else {
-            print("[하이] updateLeafMarker called but key cast failed: \(String(describing: info.key))")
-            return
-        }
+        guard let key = info.key as? PlaceClusteringKey else { return }
 
         // 카테고리 그룹별 색상 마커
-        if let img = markerImage(for: key.placeCategory.group) {
-            marker.iconImage = NMFOverlayImage(image: img)
-        } else {
-            print("[하이] updateLeafMarker markerImage(for:) returned nil for group=\(key.placeCategory.group)")
+        if let image = placeOverlayImage(for: key.placeCategory.group) {
+            marker.iconImage = image
         }
-        marker.width = 36
-        marker.height = 36
+        // ic_my_location 의 시각적 원 크기(지름 14pt)와 비슷하게.
+        // ic_place_circle_*.imageset 은 viewport 18 안에 원 지름 12 비율이라
+        // 22pt 로 그리면 시각 원이 약 14pt.
+        marker.width = 22
+        marker.height = 22
         marker.anchor = CGPoint(x: 0.5, y: 0.5)
 
         // Android 와 동일한 캡션 설정
@@ -149,10 +166,13 @@ class PlaceLeafMarkerUpdater: NSObject, NMCLeafMarkerUpdater {
 }
 
 // MARK: - Cluster 마커 업데이터
-class PlaceClusterMarkerUpdater: NSObject, NMCClusterMarkerUpdater {
-    func updateClusterMarker(_ info: NMCClusterMarkerInfo, _ marker: NMFMarker) {
-        let count = Int(info.size)
-        marker.iconImage = NMFOverlayImage(image: makeClusterImage(count: count))
+// 기본 구현을 상속해 '탭하면 클러스터가 펼쳐지는 줌까지 확대' 동작(Android 기본 동작과 동일)을 그대로 쓰고,
+// 아이콘과 캡션만 앱 디자인으로 덮어쓴다.
+class PlaceClusterMarkerUpdater: NMCDefaultClusterMarkerUpdater {
+    override func updateClusterMarker(_ info: NMCClusterMarkerInfo, _ marker: NMFMarker) {
+        super.updateClusterMarker(info, marker)
+        // 개수는 아이콘 안에 그리므로 기본 캡션(개수 텍스트)은 비운다.
+        marker.iconImage = clusterOverlayImage(count: Int(info.size))
         marker.width = 40
         marker.height = 40
         marker.anchor = CGPoint(x: 0.5, y: 0.5)
@@ -360,7 +380,6 @@ struct NaverMap: UIViewRepresentable {
         builder.maxZoom = Self.maxClusteringZoom
         let clusterer = builder.build()
         clusterer.mapView = view.mapView
-        print("[하이] Clusterer built and attached to mapView=\(String(describing: view.mapView))")
 
         // ✅ leafUpdater + clusterUpdater 모두 Coordinator에 강한 참조 보관
         //    (ARC가 해제하면 클러스터링이 깨지는 버그 방지)
@@ -444,61 +463,17 @@ struct NaverMap: UIViewRepresentable {
                 }
             }
         } else {
-            // ── 일반 모드 (클러스터링 우회 - 직접 NMFMarker 로 표시) ─────────────────
-            // NMCClusterer 가 KMP 환경의 Swift↔ObjC generic bridge 에서 leaf/cluster
-            // updater 를 dispatch 하지 못하는 문제가 있어, 클러스터러를 mapView 에서
-            // 떼고 직접 NMFMarker 를 그린다.
+            // ── 일반 모드: 장소 핀을 클러스터러로 표시 ───────────────────────────────
+            // 줌 15(축척 200m) 이하에서는 가까운 핀이 개수 원으로 묶이고, 16부터는 모두 개별 핀으로 보인다.
             clearMarker()
             context.coordinator.clearPolyline()
 
-            // 클러스터러는 화면에서 분리 (간섭 방지)
-            if context.coordinator.clusterer?.mapView != nil {
-                context.coordinator.clusterer?.mapView = nil
+            guard let clusterer = context.coordinator.clusterer else { return }
+            // 핀츠 모드에서 떼어 둔 클러스터러를 다시 붙인다.
+            if clusterer.mapView == nil {
+                clusterer.mapView = uiView.mapView
             }
-
-            let selectedPlaceId = placeDetailUiState.detailPlace?.mapPlace.kakaoPlaceId
-            let places = searchUiState.reviewedPlaces
-
-            // 데이터 변화가 없으면 스킵
-            let newIds = Set(places.map { $0.kakaoPlaceId })
-            guard newIds != context.coordinator.lastClusterIds
-                    || selectedPlaceId != context.coordinator.lastSelectedId
-            else { return }
-            context.coordinator.lastClusterIds = newIds
-            context.coordinator.lastSelectedId = selectedPlaceId
-
-            // 기존 leaf 마커 제거
-            context.coordinator.leafMarkers.forEach { $0.mapView = nil }
-            context.coordinator.leafMarkers.removeAll()
-
-            print("[하이] NaverMap direct-marker mode total=\(places.count)")
-            for r in places {
-                let category = r.placeCategory
-                let m = NMFMarker()
-                m.position = NMGLatLng(lat: r.latitude, lng: r.longitude)
-                if let img = markerImage(for: category.group) {
-                    m.iconImage = NMFOverlayImage(image: img)
-                }
-                // ic_my_location 의 시각적 원 크기(지름 14pt)와 비슷하게.
-                // ic_place_circle_*.imageset 은 viewport 18 안에 원 지름 12 비율이라
-                // 22pt 로 그리면 시각 원이 약 14pt.
-                m.width = 22
-                m.height = 22
-                m.anchor = CGPoint(x: 0.5, y: 0.5)
-                m.captionText = r.name
-                m.captionColor = .white
-                m.captionHaloColor = UIColor(red: 60/255, green: 60/255, blue: 60/255, alpha: 1.0)
-                m.captionTextSize = 10
-                m.captionOffset = 4
-                m.captionRequestedWidth = 240
-                let pid = r.kakaoPlaceId
-                m.touchHandler = { [weak coordinator = context.coordinator] _ in
-                    coordinator?.onPlaceClick?(pid)
-                    return true
-                }
-                m.mapView = uiView.mapView
-                context.coordinator.leafMarkers.append(m)
-            }
+            context.coordinator.syncClusterer(with: searchUiState.reviewedPlaces)
         }
     }
 
@@ -526,12 +501,34 @@ struct NaverMap: UIViewRepresentable {
         var leafUpdater: PlaceLeafMarkerUpdater?
         var clusterUpdater: PlaceClusterMarkerUpdater?
 
-        // 클러스터링 우회: 직접 NMFMarker 로 그릴 때 보관
-        var leafMarkers: [NMFMarker] = []
+        /// 지금 클러스터러에 올라가 있는 키 (장소 id → 키).
+        private var clusterKeys: [String: PlaceClusteringKey] = [:]
 
-        // 불필요한 재렌더링 방지 캐시
-        var lastClusterIds: Set<String> = []
-        var lastSelectedId: String? = nil
+        /// 장소 목록을 클러스터러에 반영한다. 지도 이동 후 목록이 갱신될 때마다 전부 지웠다 다시 넣으면
+        /// 모든 핀이 깜빡이므로, 새로 생긴 장소만 넣고 사라진 장소만 뺀다.
+        func syncClusterer(with places: [ReviewedPlace]) {
+            guard let clusterer else { return }
+            let newIds = Set(places.map { $0.kakaoPlaceId })
+            let currentIds = Set(clusterKeys.keys)
+            guard newIds != currentIds else { return }
+
+            let removed = currentIds.subtracting(newIds).compactMap { clusterKeys.removeValue(forKey: $0) }
+            if !removed.isEmpty {
+                clusterer.removeAll(removed)
+            }
+
+            for place in places where clusterKeys[place.kakaoPlaceId] == nil {
+                let key = PlaceClusteringKey(
+                    kakaoPlaceId: place.kakaoPlaceId,
+                    name: place.name,
+                    placeCategory: place.placeCategory,
+                    lat: place.latitude,
+                    lng: place.longitude
+                )
+                clusterKeys[place.kakaoPlaceId] = key
+                clusterer.add(key, nil)
+            }
+        }
 
         /// 마지막으로 Kotlin 에 알린 이동 상태. 이동 중 프레임마다 중복 통지하지 않기 위한 캐시.
         private var lastEmittedMoving: Bool?
